@@ -1,14 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿namespace CSharpLatest;
+
 using System.Collections.Immutable;
 using System.Linq;
-using System.Threading;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
-
-namespace CSharpLatest;
 
 [DiagnosticAnalyzer(LanguageNames.CSharp)]
 public class CSharpLatestAnalyzer : DiagnosticAnalyzer

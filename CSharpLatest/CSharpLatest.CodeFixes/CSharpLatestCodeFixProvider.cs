@@ -1,5 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿namespace CSharpLatest;
+
 using System.Collections.Immutable;
 using System.Composition;
 using System.Linq;
@@ -10,12 +10,8 @@ using Microsoft.CodeAnalysis.CodeActions;
 using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Microsoft.CodeAnalysis.Rename;
-using Microsoft.CodeAnalysis.Text;
 using Microsoft.CodeAnalysis.Formatting;
 using Microsoft.CodeAnalysis.Simplification;
-
-namespace CSharpLatest;
 
 [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(CSharpLatestCodeFixProvider)), Shared]
 public class CSharpLatestCodeFixProvider : CodeFixProvider

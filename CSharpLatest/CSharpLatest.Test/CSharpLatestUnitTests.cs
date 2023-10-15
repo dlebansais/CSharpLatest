@@ -1,10 +1,10 @@
-﻿using System.Threading.Tasks;
+﻿namespace CSharpLatest.Test;
+
+using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using VerifyCS = CSharpLatest.Test.CSharpCodeFixVerifier<
     CSharpLatest.CSharpLatestAnalyzer,
     CSharpLatest.CSharpLatestCodeFixProvider>;
-
-namespace CSharpLatest.Test;
 
 [TestClass]
 public class CSharpLatestUnitTest
