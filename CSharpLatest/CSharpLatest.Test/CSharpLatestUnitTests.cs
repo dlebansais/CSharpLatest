@@ -4,25 +4,25 @@ using VerifyCS = CSharpLatest.Test.CSharpCodeFixVerifier<
     CSharpLatest.CSharpLatestAnalyzer,
     CSharpLatest.CSharpLatestCodeFixProvider>;
 
-namespace CSharpLatest.Test
+namespace CSharpLatest.Test;
+
+[TestClass]
+public class CSharpLatestUnitTest
 {
-    [TestClass]
-    public class CSharpLatestUnitTest
+    //No diagnostics expected to show up
+    [TestMethod]
+    public async Task TestMethod1()
     {
-        //No diagnostics expected to show up
-        [TestMethod]
-        public async Task TestMethod1()
-        {
-            var test = @"";
+        var test = @"";
 
-            await VerifyCS.VerifyAnalyzerAsync(test);
-        }
+        await VerifyCS.VerifyAnalyzerAsync(test);
+    }
 
-        //Diagnostic and CodeFix both triggered and checked for
-        [TestMethod]
-        public async Task TestMethod2()
-        {
-            var test = @"
+    //Diagnostic and CodeFix both triggered and checked for
+    [TestMethod]
+    public async Task TestMethod2()
+    {
+        var test = @"
     using System;
     using System.Collections.Generic;
     using System.Linq;
@@ -37,7 +37,7 @@ namespace CSharpLatest.Test
         }
     }";
 
-            var fixtest = @"
+        var fixtest = @"
     using System;
     using System.Collections.Generic;
     using System.Linq;
@@ -52,8 +52,7 @@ namespace CSharpLatest.Test
         }
     }";
 
-            var expected = VerifyCS.Diagnostic("CSharpLatest").WithLocation(0).WithArguments("TypeName");
-            await VerifyCS.VerifyCodeFixAsync(test, expected, fixtest);
-        }
+        var expected = VerifyCS.Diagnostic("CSharpLatest").WithLocation(0).WithArguments("TypeName");
+        await VerifyCS.VerifyCodeFixAsync(test, expected, fixtest);
     }
 }

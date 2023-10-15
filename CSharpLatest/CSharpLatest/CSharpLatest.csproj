@@ -1,8 +1,10 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
 		<TargetFramework>netstandard2.0</TargetFramework>
 		<IsPackable>false</IsPackable>
+		<LangVersion>11</LangVersion>
+		<Nullable>enable</Nullable>
 
 		<!-- Avoid ID conflicts with the package project. -->
 		<PackageId>*$(MSBuildProjectFile)*</PackageId>

@@ -1,4 +1,5 @@
-﻿using Microsoft.CodeAnalysis.CodeRefactorings;
+﻿using System;
+using Microsoft.CodeAnalysis.CodeRefactorings;
 using Microsoft.CodeAnalysis.CSharp.Testing;
 using Microsoft.CodeAnalysis.Testing.Verifiers;
 
@@ -13,10 +14,9 @@ namespace CSharpLatest.Test
             {
                 SolutionTransforms.Add((solution, projectId) =>
                 {
-                    var compilationOptions = solution.GetProject(projectId).CompilationOptions;
-                    compilationOptions = compilationOptions.WithSpecificDiagnosticOptions(
-                        compilationOptions.SpecificDiagnosticOptions.SetItems(CSharpVerifierHelper.NullableWarnings));
-                    solution = solution.WithProjectCompilationOptions(projectId, compilationOptions);
+                    var compilationOptions = solution.GetProject(projectId)?.CompilationOptions;
+                    compilationOptions = compilationOptions?.WithSpecificDiagnosticOptions(compilationOptions.SpecificDiagnosticOptions.SetItems(CSharpVerifierHelper.NullableWarnings));
+                    solution = solution.WithProjectCompilationOptions(projectId, compilationOptions ?? throw new NullReferenceException());
 
                     return solution;
                 });
