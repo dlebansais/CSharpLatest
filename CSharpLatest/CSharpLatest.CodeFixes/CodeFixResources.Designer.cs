@@ -63,9 +63,18 @@ namespace CSharpLatest {
         /// <summary>
         ///   Looks up a localized string similar to Make constant.
         /// </summary>
-        internal static string CodeFixTitle {
+        internal static string CSL1000CodeFixTitle {
             get {
-                return ResourceManager.GetString("CodeFixTitle", resourceCulture);
+                return ResourceManager.GetString("CSL1000CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Change to &apos;is null&apos;.
+        /// </summary>
+        internal static string CSL1001CodeFixTitle {
+            get {
+                return ResourceManager.GetString("CSL1001CodeFixTitle", resourceCulture);
             }
         }
     }

@@ -63,27 +63,54 @@ namespace CSharpLatest {
         /// <summary>
         ///   Looks up a localized string similar to Variables that are not modified should be made constants..
         /// </summary>
-        internal static string AnalyzerDescription {
+        internal static string CSL1000AnalyzerDescription {
             get {
-                return ResourceManager.GetString("AnalyzerDescription", resourceCulture);
+                return ResourceManager.GetString("CSL1000AnalyzerDescription", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Variable &apos;{0}&apos; can be made constant.
         /// </summary>
-        internal static string AnalyzerMessageFormat {
+        internal static string CSL1000AnalyzerMessageFormat {
             get {
-                return ResourceManager.GetString("AnalyzerMessageFormat", resourceCulture);
+                return ResourceManager.GetString("CSL1000AnalyzerMessageFormat", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Variable can be made constant.
         /// </summary>
-        internal static string AnalyzerTitle {
+        internal static string CSL1000AnalyzerTitle {
             get {
-                return ResourceManager.GetString("AnalyzerTitle", resourceCulture);
+                return ResourceManager.GetString("CSL1000AnalyzerTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use &apos;is null&apos; syntax instead of &apos;== null&apos;..
+        /// </summary>
+        internal static string CSL1001AnalyzerDescription {
+            get {
+                return ResourceManager.GetString("CSL1001AnalyzerDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &apos;{0}&apos; can be changed to &apos;is null&apos;.
+        /// </summary>
+        internal static string CSL1001AnalyzerMessageFormat {
+            get {
+                return ResourceManager.GetString("CSL1001AnalyzerMessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Expression can be changed to &apos;is null&apos;.
+        /// </summary>
+        internal static string CSL1001AnalyzerTitle {
+            get {
+                return ResourceManager.GetString("CSL1001AnalyzerTitle", resourceCulture);
             }
         }
     }

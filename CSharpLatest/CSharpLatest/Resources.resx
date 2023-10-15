@@ -117,16 +117,28 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="AnalyzerDescription" xml:space="preserve">
+  <data name="CSL1000AnalyzerDescription" xml:space="preserve">
     <value>Variables that are not modified should be made constants.</value>
     <comment>An optional longer localizable description of the diagnostic.</comment>
   </data>
-  <data name="AnalyzerMessageFormat" xml:space="preserve">
+  <data name="CSL1000AnalyzerMessageFormat" xml:space="preserve">
     <value>Variable '{0}' can be made constant</value>
     <comment>The format-able message the diagnostic displays.</comment>
   </data>
-  <data name="AnalyzerTitle" xml:space="preserve">
+  <data name="CSL1000AnalyzerTitle" xml:space="preserve">
     <value>Variable can be made constant</value>
+    <comment>The title of the diagnostic.</comment>
+  </data>
+  <data name="CSL1001AnalyzerDescription" xml:space="preserve">
+    <value>Use 'is null' syntax instead of '== null'.</value>
+    <comment>An optional longer localizable description of the diagnostic.</comment>
+  </data>
+  <data name="CSL1001AnalyzerMessageFormat" xml:space="preserve">
+    <value>'{0}' can be changed to 'is null'</value>
+    <comment>The format-able message the diagnostic displays.</comment>
+  </data>
+  <data name="CSL1001AnalyzerTitle" xml:space="preserve">
+    <value>Expression can be changed to 'is null'</value>
     <comment>The title of the diagnostic.</comment>
   </data>
 </root>
