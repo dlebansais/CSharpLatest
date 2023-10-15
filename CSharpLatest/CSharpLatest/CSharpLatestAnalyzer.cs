@@ -40,14 +40,52 @@ public class CSharpLatestAnalyzer : DiagnosticAnalyzer
         if (localDeclaration.Modifiers.Any(SyntaxKind.ConstKeyword))
             return;
 
+        TypeSyntax variableTypeName = localDeclaration.Declaration.Type;
+        ITypeSymbol? variableType = context.SemanticModel.GetTypeInfo(variableTypeName, context.CancellationToken).ConvertedType;
+
+        // Ensure that all variables in the local declaration have initializers that
+        // are assigned with constant values.
+        foreach (VariableDeclaratorSyntax variable in localDeclaration.Declaration.Variables)
+        {
+            EqualsValueClauseSyntax? initializer = variable.Initializer;
+            if (initializer is null)
+                return;
+
+            Optional<object?> constantValue = context.SemanticModel.GetConstantValue(initializer.Value, context.CancellationToken);
+            if (!constantValue.HasValue)
+                return;
+
+            if (variableType is not null)
+            {
+                // Ensure that the initializer value can be converted to the type of the local declaration without a user-defined conversion.
+                Conversion conversion = context.SemanticModel.ClassifyConversion(initializer.Value, variableType);
+                if (!conversion.Exists || conversion.IsUserDefined)
+                    return;
+
+                // Special cases:
+                //  * If the constant value is a string, the type of the local declaration must be System.String.
+                //  * If the constant value is null, the type of the local declaration must be a reference type.
+                if (constantValue.Value is string)
+                {
+                    if (variableType.SpecialType != SpecialType.System_String)
+                        return;
+                }
+                else if (variableType.IsReferenceType && constantValue.Value is not null)
+                    return;
+            }
+        }
+
         // Perform data flow analysis on the local declaration.
         DataFlowAnalysis? dataFlowAnalysis = context.SemanticModel.AnalyzeDataFlow(localDeclaration);
 
-        // Retrieve the local symbol for each variable in the local declaration and ensure that it is not written outside of the data flow analysis region.
-        VariableDeclaratorSyntax variable = localDeclaration.Declaration.Variables.Single();
-        ISymbol? variableSymbol = context.SemanticModel.GetDeclaredSymbol(variable, context.CancellationToken);
-        if (dataFlowAnalysis is not null && variableSymbol is not null && dataFlowAnalysis.WrittenOutside.Contains(variableSymbol))
-            return;
+        foreach (VariableDeclaratorSyntax variable in localDeclaration.Declaration.Variables)
+        {
+            // Retrieve the local symbol for each variable in the local declaration
+            // and ensure that it is not written outside of the data flow analysis region.
+            ISymbol? variableSymbol = context.SemanticModel.GetDeclaredSymbol(variable, context.CancellationToken);
+            if (dataFlowAnalysis is not null && variableSymbol is not null && dataFlowAnalysis.WrittenOutside.Contains(variableSymbol))
+                return;
+        }
 
         context.ReportDiagnostic(Diagnostic.Create(Rule, context.Node.GetLocation(), localDeclaration.Declaration.Variables.First().Identifier.ValueText));
     }
