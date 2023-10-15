@@ -34,5 +34,21 @@ public class CSharpLatestAnalyzer : DiagnosticAnalyzer
 
     private void AnalyzeNode(SyntaxNodeAnalysisContext context)
     {
+        var localDeclaration = (LocalDeclarationStatementSyntax)context.Node;
+
+        // make sure the declaration isn't already const:
+        if (localDeclaration.Modifiers.Any(SyntaxKind.ConstKeyword))
+            return;
+
+        // Perform data flow analysis on the local declaration.
+        DataFlowAnalysis dataFlowAnalysis = context.SemanticModel.AnalyzeDataFlow(localDeclaration);
+
+        // Retrieve the local symbol for each variable in the local declaration and ensure that it is not written outside of the data flow analysis region.
+        VariableDeclaratorSyntax variable = localDeclaration.Declaration.Variables.Single();
+        ISymbol variableSymbol = context.SemanticModel.GetDeclaredSymbol(variable, context.CancellationToken);
+        if (dataFlowAnalysis.WrittenOutside.Contains(variableSymbol))
+            return;
+
+        context.ReportDiagnostic(Diagnostic.Create(Rule, context.Node.GetLocation(), localDeclaration.Declaration.Variables.First().Identifier.ValueText));
     }
 }
