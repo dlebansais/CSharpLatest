@@ -8,7 +8,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 [DiagnosticAnalyzer(LanguageNames.CSharp)]
-public class CSharpLatestAnalyzer : DiagnosticAnalyzer
+public class CSL1000Analyzer : DiagnosticAnalyzer
 {
     public const string DiagnosticId = "CSL1000";
 

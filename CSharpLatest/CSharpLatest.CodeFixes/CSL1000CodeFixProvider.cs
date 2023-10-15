@@ -13,12 +13,12 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Formatting;
 using Microsoft.CodeAnalysis.Simplification;
 
-[ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(CSharpLatestCodeFixProvider)), Shared]
-public class CSharpLatestCodeFixProvider : CodeFixProvider
+[ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(CSL1000CodeFixProvider)), Shared]
+public class CSL1000CodeFixProvider : CodeFixProvider
 {
     public sealed override ImmutableArray<string> FixableDiagnosticIds
     {
-        get { return ImmutableArray.Create(CSharpLatestAnalyzer.DiagnosticId); }
+        get { return ImmutableArray.Create(CSL1000Analyzer.DiagnosticId); }
     }
 
     public sealed override FixAllProvider GetFixAllProvider()

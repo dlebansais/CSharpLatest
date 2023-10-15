@@ -3,11 +3,11 @@
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using VerifyCS = CSharpLatest.Test.CSharpCodeFixVerifier<
-    CSharpLatest.CSharpLatestAnalyzer,
-    CSharpLatest.CSharpLatestCodeFixProvider>;
+    CSharpLatest.CSL1000Analyzer,
+    CSharpLatest.CSL1000CodeFixProvider>;
 
 [TestClass]
-public class CSharpLatestUnitTest
+public class CSL1000UnitTests
 {
     [TestMethod]
     public async Task LocalIntCouldBeConstant_Diagnostic()
