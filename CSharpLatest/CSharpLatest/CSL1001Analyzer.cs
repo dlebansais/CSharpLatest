@@ -30,14 +30,51 @@ public class CSL1001Analyzer : DiagnosticAnalyzer
 
     private void AnalyzeNode(SyntaxNodeAnalysisContext context)
     {
-        var binaryExpression = (BinaryExpressionSyntax)context.Node;
+        var BinaryExpression = (BinaryExpressionSyntax)context.Node;
 
-        // make sure the comparison is with null
-        if (binaryExpression.Right is not LiteralExpressionSyntax literalExpressionRight)
+        // Check whether the comparison is '== null'.
+        if (BinaryExpression.Right is not LiteralExpressionSyntax literalExpressionRight)
             return;
-        if (!literalExpressionRight.IsKind( SyntaxKind.NullLiteralExpression))
+        if (!BinaryExpression.OperatorToken.IsKind(SyntaxKind.EqualsEqualsToken))
+            return;
+        if (!literalExpressionRight.IsKind(SyntaxKind.NullLiteralExpression))
             return;
 
-        context.ReportDiagnostic(Diagnostic.Create(Rule, context.Node.GetLocation(), "??!= " + literalExpressionRight.ToString()));
+        // If the == oprator is overloaded, 'is null' behaves differently. Do not replace.
+        if (IsEqualsOverloaded(context, BinaryExpression.Left, referenceTypeOnly: true))
+            return;
+
+        context.ReportDiagnostic(Diagnostic.Create(Rule, context.Node.GetLocation(), $"{BinaryExpression.OperatorToken} {literalExpressionRight}"));
+    }
+
+    private static bool IsEqualsOverloaded(SyntaxNodeAnalysisContext context, ExpressionSyntax expression, bool referenceTypeOnly)
+    {
+        ITypeSymbol? ExpressionType = context.SemanticModel.GetTypeInfo(expression, context.CancellationToken).Type;
+        if (ExpressionType is not null && (!referenceTypeOnly || ExpressionType.IsReferenceType))
+            return IsEqualsOverloaded(context, ExpressionType);
+
+        return false;
+    }
+
+    private static bool IsEqualsOverloaded(SyntaxNodeAnalysisContext context, ITypeSymbol expressionType)
+    {
+        foreach (var Symbol in expressionType.GetMembers())
+            if (!Symbol.IsImplicitlyDeclared && IsOverloadOfEquals(context, Symbol))
+                return true;
+
+        return false;
+    }
+
+    private static bool IsOverloadOfEquals(SyntaxNodeAnalysisContext context, ISymbol symbol)
+    {
+        foreach (var SyntaxReference in symbol.DeclaringSyntaxReferences)
+        {
+            SyntaxNode Declaration = SyntaxReference.GetSyntax(context.CancellationToken);
+
+            if (Declaration is OperatorDeclarationSyntax OperatorDeclaration && OperatorDeclaration.OperatorToken.IsKind(SyntaxKind.EqualsEqualsToken))
+                return true;
+        }
+
+        return false;
     }
 }
