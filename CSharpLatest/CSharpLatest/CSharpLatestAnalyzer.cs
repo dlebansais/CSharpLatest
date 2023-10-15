@@ -13,7 +13,7 @@ namespace CSharpLatest;
 [DiagnosticAnalyzer(LanguageNames.CSharp)]
 public class CSharpLatestAnalyzer : DiagnosticAnalyzer
 {
-    public const string DiagnosticId = "CSharpLatest";
+    public const string DiagnosticId = "CSL1000";
 
     private static readonly LocalizableString Title = new LocalizableResourceString(nameof(Resources.AnalyzerTitle), Resources.ResourceManager, typeof(Resources));
     private static readonly LocalizableString MessageFormat = new LocalizableResourceString(nameof(Resources.AnalyzerMessageFormat), Resources.ResourceManager, typeof(Resources));
@@ -41,12 +41,12 @@ public class CSharpLatestAnalyzer : DiagnosticAnalyzer
             return;
 
         // Perform data flow analysis on the local declaration.
-        DataFlowAnalysis dataFlowAnalysis = context.SemanticModel.AnalyzeDataFlow(localDeclaration);
+        DataFlowAnalysis? dataFlowAnalysis = context.SemanticModel.AnalyzeDataFlow(localDeclaration);
 
         // Retrieve the local symbol for each variable in the local declaration and ensure that it is not written outside of the data flow analysis region.
         VariableDeclaratorSyntax variable = localDeclaration.Declaration.Variables.Single();
-        ISymbol variableSymbol = context.SemanticModel.GetDeclaredSymbol(variable, context.CancellationToken);
-        if (dataFlowAnalysis.WrittenOutside.Contains(variableSymbol))
+        ISymbol? variableSymbol = context.SemanticModel.GetDeclaredSymbol(variable, context.CancellationToken);
+        if (dataFlowAnalysis is not null && variableSymbol is not null && dataFlowAnalysis.WrittenOutside.Contains(variableSymbol))
             return;
 
         context.ReportDiagnostic(Diagnostic.Create(Rule, context.Node.GetLocation(), localDeclaration.Declaration.Variables.First().Identifier.ValueText));

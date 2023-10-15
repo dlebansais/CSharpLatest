@@ -39,15 +39,18 @@ public class CSharpLatestCodeFixProvider : CodeFixProvider
         var diagnosticSpan = diagnostic.Location.SourceSpan;
 
         // Find the type declaration identified by the diagnostic.
-        var declaration = root.FindToken(diagnosticSpan.Start).Parent.AncestorsAndSelf().OfType<LocalDeclarationStatementSyntax>().First();
+        var declaration = root?.FindToken(diagnosticSpan.Start).Parent?.AncestorsAndSelf().OfType<LocalDeclarationStatementSyntax>().First();
 
-        // Register a code action that will invoke the fix.
-        context.RegisterCodeFix(
-            CodeAction.Create(
-                title: CodeFixResources.CodeFixTitle,
-                createChangedDocument: c => MakeConstAsync(context.Document, declaration, c),
-                equivalenceKey: nameof(CodeFixResources.CodeFixTitle)),
-            diagnostic);
+        if (declaration is not null)
+        {
+            // Register a code action that will invoke the fix.
+            context.RegisterCodeFix(
+                CodeAction.Create(
+                    title: CodeFixResources.CodeFixTitle,
+                    createChangedDocument: c => MakeConstAsync(context.Document, declaration, c),
+                    equivalenceKey: nameof(CodeFixResources.CodeFixTitle)),
+                diagnostic);
+        }
     }
 
     private static async Task<Document> MakeConstAsync(Document document,
@@ -74,10 +77,15 @@ public class CSharpLatestCodeFixProvider : CodeFixProvider
         LocalDeclarationStatementSyntax formattedLocal = newLocal.WithAdditionalAnnotations(Formatter.Annotation);
 
         // Replace the old local declaration with the new local declaration.
-        SyntaxNode oldRoot = await document.GetSyntaxRootAsync(cancellationToken).ConfigureAwait(false);
-        SyntaxNode newRoot = oldRoot.ReplaceNode(localDeclaration, formattedLocal);
+        SyntaxNode? oldRoot = await document.GetSyntaxRootAsync(cancellationToken).ConfigureAwait(false);
+        SyntaxNode? newRoot = oldRoot?.ReplaceNode(localDeclaration, formattedLocal);
 
         // Return document with transformed tree.
-        return document.WithSyntaxRoot(newRoot);
+        Document Result = document;
+
+        if (newRoot is not null)
+            Result = document.WithSyntaxRoot(newRoot);
+
+        return Result;
     }
 }
