@@ -5,14 +5,14 @@
 		<Nullable>enable</Nullable>
 		<LangVersion>11</LangVersion>
 		<GenerateDocumentationFile>true</GenerateDocumentationFile>
-		<Version>0.0.4</Version>
+		<Version>0.0.5</Version>
 		<Authors>David Le Bansais</Authors>
 		<Company />
 		<Product />
 		<Description>Roslyn-based analysis of C# code to suggest the use of features in the latest version of the language</Description>
 		<Copyright>Copyright © 2023 David Le Bansais</Copyright>
-		<AssemblyVersion>0.0.4.4</AssemblyVersion>
-		<FileVersion>0.0.4.4</FileVersion>
+		<AssemblyVersion>0.0.5.5</AssemblyVersion>
+		<FileVersion>0.0.5.5</FileVersion>
 		<RepositoryUrl>https://github.com/dlebansais/CSharpLatest</RepositoryUrl>
 		<NeutralLanguage>en-US</NeutralLanguage>
 		<RootNamespace>CSharpLatest</RootNamespace>
@@ -35,9 +35,13 @@
 		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
 		<PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.7.0" />
-		<PackageReference Include="dlebansais.RoslynHelpers" Version="0.0.3" />
+		<PackageReference Include="dlebansais.RoslynHelpers" Version="0.0.3" GeneratePathProperty="true" />
 	</ItemGroup>
 
+	<ItemGroup>
+		<None Include="$(Pkgdlebansais_RoslynHelpers)\lib\netstandard2.0\RoslynHelpers.dll" CopyToOutputDirectory="PreserveNewest" />
+	</ItemGroup>
+	
 	<ItemGroup>
 		<Compile Update="Resources.Designer.cs" DesignTime="True" AutoGen="True" DependentUpon="Resources.resx" />
 		<EmbeddedResource Update="Resources.resx" Generator="ResXFileCodeGenerator" LastGenOutput="Resources.Designer.cs" />
