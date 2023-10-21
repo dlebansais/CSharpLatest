@@ -47,8 +47,6 @@ after_build:
   - ps: $version_tag = $version_tag.Trim()
   - ps: $env:VERSION_TAG = $version_tag
   - echo Version is "%VERSION_TAG%"
-  - dir CSharpLatest.Package\bin\Debug
-  - dir CSharpLatest.Package\bin\Release
 
 before_test:
   - nuget install OpenCover -Version %opencover_version% -OutputDirectory packages
