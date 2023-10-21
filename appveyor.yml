@@ -67,10 +67,7 @@ after_test:
   - if '%CONFIGURATION%' == 'Debug' if '%APPVEYOR_REPO_BRANCH%' == 'master' .\packages\CodecovUploader.%codecov_version%\Tools\codecov.exe -f "Coverage-%APPVEYOR_PROJECT_NAME%.xml"
 
 artifacts:
-  - path: $(APPVEYOR_PROJECT_NAME).Package\bin\Debug\$(PACKAGE_PREFIX).$(APPVEYOR_PROJECT_NAME)-Debug.*.nupkg
-    name: $(APPVEYOR_PROJECT_NAME)-Package-Debug
-    type: NuGetPackage
-  - path: $(APPVEYOR_PROJECT_NAME).Package\bin\Debug\$(PACKAGE_PREFIX).$(APPVEYOR_PROJECT_NAME).*.nupkg
+  - path: $(APPVEYOR_PROJECT_NAME).Package\bin\Release\$(PACKAGE_PREFIX).$(APPVEYOR_PROJECT_NAME).*.nupkg
     name: $(APPVEYOR_PROJECT_NAME)-Package-Release
     type: NuGetPackage
 
@@ -83,16 +80,6 @@ deploy:
     on:
       branch: deployment
       configuration: Release
-  - provider: NuGet
-    server: https://nuget.pkg.github.com/dlebansais/index.json
-    symbol_server: https://nuget.pkg.github.com/dlebansais/index.json
-    artifact: $(APPVEYOR_PROJECT_NAME)-Package-Debug
-    username: dlebansais
-    api_key:
-      secure: mknFmVMr6KwG8AMwKaSrDH30g+usOXvXQMqEKDES4g4X+dBDLDk3g3/x3Al3vcDl
-    on:
-      branch: deployment
-      configuration: Debug
   - provider: NuGet
     server: https://nuget.pkg.github.com/dlebansais/index.json
     artifact: $(APPVEYOR_PROJECT_NAME)-Package-Release
