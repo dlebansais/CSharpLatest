@@ -41,7 +41,7 @@ build:
 
 after_build:
   - ps: |-
-        $xml = [xml](Get-Content .\$env:APPVEYOR_PROJECT_NAME\$env:APPVEYOR_PROJECT_NAME.csproj)
+        $xml = [xml](Get-Content .\$env:APPVEYOR_PROJECT_NAME.Analyzers\$env:APPVEYOR_PROJECT_NAME.Analyzers.csproj)
   - ps: $version = $xml.Project.PropertyGroup.Version
   - ps: set version_tag v$version
   - ps: $version_tag = $version_tag.Trim()
