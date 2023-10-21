@@ -24,8 +24,8 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\CSharpLatest.CodeFixes\CSharpLatest.CodeFixes.csproj" />
-		<ProjectReference Include="..\CSharpLatest\CSharpLatest.csproj" />
+		<ProjectReference Include="..\..\CSharpLatest.CodeFixes\CSharpLatest.CodeFixes.csproj" />
+		<ProjectReference Include="..\..\CSharpLatest.Analyzers\CSharpLatest.Analyzers.csproj" />
 	</ItemGroup>
 
 </Project>

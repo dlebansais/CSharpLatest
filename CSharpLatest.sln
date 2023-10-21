@@ -3,15 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.7.34018.315
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSharpLatest", "CSharpLatest\CSharpLatest\CSharpLatest.csproj", "{42BE307E-351A-426D-95F7-4B35452F0AE3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CSharpLatest.Analyzers", "CSharpLatest.Analyzers\CSharpLatest.Analyzers.csproj", "{42BE307E-351A-426D-95F7-4B35452F0AE3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSharpLatest.CodeFixes", "CSharpLatest\CSharpLatest.CodeFixes\CSharpLatest.CodeFixes.csproj", "{18EED95C-5BF4-413C-95C5-E3B87C3431FC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CSharpLatest.CodeFixes", "CSharpLatest.CodeFixes\CSharpLatest.CodeFixes.csproj", "{18EED95C-5BF4-413C-95C5-E3B87C3431FC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSharpLatest.Package", "CSharpLatest\CSharpLatest.Package\CSharpLatest.Package.csproj", "{5F2D6806-6B5B-4878-B7BF-15BF8352D078}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CSharpLatest.Package", "CSharpLatest.Package\CSharpLatest.Package.csproj", "{5F2D6806-6B5B-4878-B7BF-15BF8352D078}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSharpLatest.Test", "CSharpLatest\CSharpLatest.Test\CSharpLatest.Test.csproj", "{E8F2BAD7-5F69-4033-851C-F989CDA31BDB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CSharpLatest.Test", "Test\CSharpLatest.Test\CSharpLatest.Test.csproj", "{E8F2BAD7-5F69-4033-851C-F989CDA31BDB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSharpLatest.Vsix", "CSharpLatest\CSharpLatest.Vsix\CSharpLatest.Vsix.csproj", "{371F52C5-CBD9-4A5A-8CE5-8AC2A30023A3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CSharpLatest.Vsix", "Test\CSharpLatest.Vsix\CSharpLatest.Vsix.csproj", "{371F52C5-CBD9-4A5A-8CE5-8AC2A30023A3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

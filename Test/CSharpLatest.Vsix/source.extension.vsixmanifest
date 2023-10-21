@@ -3,7 +3,7 @@
   <Metadata>
     <Identity Id="CSharpLatest.18f8deee-2167-4f38-ba98-d6951c10388b" Version="1.0" Language="en-US" Publisher="DLB"/>
     <DisplayName>CSharpLatest</DisplayName>
-    <Description xml:space="preserve">This is a sample diagnostic extension for the .NET Compiler Platform ("Roslyn").</Description>
+    <Description xml:space="preserve">Roslyn-based analysis of C# code to suggest the use of features in the latest version of the language.</Description>
   </Metadata>
   <Installation>
     <InstallationTarget Id="Microsoft.VisualStudio.Community" Version="[15.0,)" />
@@ -12,8 +12,8 @@
     <Dependency Id="Microsoft.Framework.NDP" DisplayName="Microsoft .NET Framework" d:Source="Manual" Version="[4.5,)" />
   </Dependencies>
   <Assets>
-    <Asset Type="Microsoft.VisualStudio.MefComponent" d:Source="Project" d:ProjectName="CSharpLatest" Path="|CSharpLatest|"/>
-    <Asset Type="Microsoft.VisualStudio.Analyzer" d:Source="Project" d:ProjectName="CSharpLatest" Path="|CSharpLatest|"/>
+    <Asset Type="Microsoft.VisualStudio.MefComponent" d:Source="Project" d:ProjectName="CSharpLatest.Analyzers" Path="|CSharpLatest.Analyzers|"/>
+    <Asset Type="Microsoft.VisualStudio.Analyzer" d:Source="Project" d:ProjectName="CSharpLatest.Analyzers" Path="|CSharpLatest.Analyzers|"/>
     <Asset Type="Microsoft.VisualStudio.MefComponent" d:Source="Project" d:ProjectName="CSharpLatest.CodeFixes" Path="|CSharpLatest.CodeFixes|"/>
     <Asset Type="Microsoft.VisualStudio.Analyzer" d:Source="Project" d:ProjectName="CSharpLatest.CodeFixes" Path="|CSharpLatest.CodeFixes|"/>
   </Assets>

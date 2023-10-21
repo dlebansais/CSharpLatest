@@ -7,9 +7,15 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 using RoslynHelpers;
 
+/// <summary>
+/// Analyzer for rule CLS1001: Use 'is null' syntax instead of '== null'.
+/// </summary>
 [DiagnosticAnalyzer(LanguageNames.CSharp)]
 public class CSL1001Analyzer : DiagnosticAnalyzer
 {
+    /// <summary>
+    /// Diagnostic ID for this rule.
+    /// </summary>
     public const string DiagnosticId = "CSL1001";
 
     private static readonly LocalizableString Title = new LocalizableResourceString(nameof(Resources.CSL1001AnalyzerTitle), Resources.ResourceManager, typeof(Resources));
@@ -19,8 +25,15 @@ public class CSL1001Analyzer : DiagnosticAnalyzer
 
     private static readonly DiagnosticDescriptor Rule = new DiagnosticDescriptor(DiagnosticId, Title, MessageFormat, Category, DiagnosticSeverity.Warning, isEnabledByDefault: true, description: Description);
 
+    /// <summary>
+    /// Gets the list of supported diagnostic.
+    /// </summary>
     public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics { get { return ImmutableArray.Create(Rule); } }
 
+    /// <summary>
+    /// Initializes the rule analyzer.
+    /// </summary>
+    /// <param name="context">The analysis context.</param>
     public override void Initialize(AnalysisContext context)
     {
         context.ConfigureGeneratedCodeAnalysis(GeneratedCodeAnalysisFlags.None);

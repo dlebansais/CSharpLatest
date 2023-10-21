@@ -9,27 +9,28 @@
 	</PropertyGroup>
 
 	<PropertyGroup>
-		<PackageId>CSharpLatest</PackageId>
-		<PackageVersion>1.0.0.0</PackageVersion>
-		<Authors>DLB</Authors>
-		<PackageLicenseUrl>http://LICENSE_URL_HERE_OR_DELETE_THIS_LINE</PackageLicenseUrl>
-		<PackageProjectUrl>http://PROJECT_URL_HERE_OR_DELETE_THIS_LINE</PackageProjectUrl>
-		<PackageIconUrl>http://ICON_URL_HERE_OR_DELETE_THIS_LINE</PackageIconUrl>
-		<RepositoryUrl>http://REPOSITORY_URL_HERE_OR_DELETE_THIS_LINE</RepositoryUrl>
+		<PackageId>dlebansais.CSharpLatest</PackageId>
+		<PackageVersion>0.0.3.3</PackageVersion>
+		<Authors>David Le Bansais</Authors>
+		<Company />
+		<Product />
+		<PackageProjectUrl>https://github.com/dlebansais/CSharpLatest</PackageProjectUrl>
+		<RepositoryUrl>https://github.com/dlebansais/CSharpLatest</RepositoryUrl>
+		<PackageIcon>main.png</PackageIcon>
+		<PackageLicenseExpression>0BSD</PackageLicenseExpression>
+		<PackageReadmeFile>README-short.md</PackageReadmeFile>
 		<PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
-		<Description>CSharpLatest</Description>
-		<PackageReleaseNotes>Summary of changes made in this release of the package.</PackageReleaseNotes>
-		<Copyright>Copyright</Copyright>
-		<PackageTags>CSharpLatest, analyzers</PackageTags>
+		<Description>Roslyn-based analysis of C# code to suggest the use of features in the latest version of the language</Description>
+		<Copyright>Copyright © 2023 David Le Bansais</Copyright>
+		<PackageTags>roslyn, analyzers</PackageTags>
 		<DevelopmentDependency>true</DevelopmentDependency>
 		<NoPackageAnalysis>true</NoPackageAnalysis>
-
 		<TargetsForTfmSpecificContentInPackage>$(TargetsForTfmSpecificContentInPackage);_AddAnalyzersToOutput</TargetsForTfmSpecificContentInPackage>
 	</PropertyGroup>
 
 	<ItemGroup>
 		<ProjectReference Include="..\CSharpLatest.CodeFixes\CSharpLatest.CodeFixes.csproj" />
-		<ProjectReference Include="..\CSharpLatest\CSharpLatest.csproj" />
+		<ProjectReference Include="..\CSharpLatest.Analyzers\CSharpLatest.Analyzers.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -38,7 +39,9 @@
 
 	<Target Name="_AddAnalyzersToOutput">
 		<ItemGroup>
-			<TfmSpecificPackageFile Include="$(OutputPath)\CSharpLatest.dll" PackagePath="analyzers/dotnet/cs" />
+			<TfmSpecificPackageFile Include="main.png" PackagePath="" />
+			<TfmSpecificPackageFile Include="README-short.md" PackagePath="" />
+			<TfmSpecificPackageFile Include="$(OutputPath)\CSharpLatest.Analyzers.dll" PackagePath="analyzers/dotnet/cs" />
 			<TfmSpecificPackageFile Include="$(OutputPath)\CSharpLatest.CodeFixes.dll" PackagePath="analyzers/dotnet/cs" />
 		</ItemGroup>
 	</Target>
