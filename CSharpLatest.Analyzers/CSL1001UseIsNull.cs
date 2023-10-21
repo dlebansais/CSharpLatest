@@ -11,7 +11,7 @@ using RoslynHelpers;
 /// Analyzer for rule CLS1001: Use 'is null' syntax instead of '== null'.
 /// </summary>
 [DiagnosticAnalyzer(LanguageNames.CSharp)]
-public class CSL1001Analyzer : DiagnosticAnalyzer
+public class CSL1001UseIsNull : DiagnosticAnalyzer
 {
     /// <summary>
     /// Diagnostic ID for this rule.

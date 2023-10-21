@@ -11,7 +11,7 @@ using Microsoft.CodeAnalysis.Diagnostics;
 /// Analyzer for rule CLS1000: Variables that are not modified should be made constants.
 /// </summary>
 [DiagnosticAnalyzer(LanguageNames.CSharp)]
-public class CSL1000Analyzer : DiagnosticAnalyzer
+public class CSL1000VariableshouldBeMadeConstant : DiagnosticAnalyzer
 {
     /// <summary>
     /// Diagnostic ID for this rule.

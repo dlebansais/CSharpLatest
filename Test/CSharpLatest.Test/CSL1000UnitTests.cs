@@ -3,7 +3,7 @@
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using VerifyCS = CSharpLatest.Test.CSharpCodeFixVerifier<
-    CSharpLatest.CSL1000Analyzer,
+    CSharpLatest.CSL1000VariableshouldBeMadeConstant,
     CSharpLatest.CSL1000CodeFixProvider>;
 
 [TestClass]

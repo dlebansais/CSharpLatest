@@ -17,7 +17,7 @@ public class CSL1001CodeFixProvider : CodeFixProvider
 {
     public sealed override ImmutableArray<string> FixableDiagnosticIds
     {
-        get { return ImmutableArray.Create(CSL1001Analyzer.DiagnosticId); }
+        get { return ImmutableArray.Create(CSL1001UseIsNull.DiagnosticId); }
     }
 
     public sealed override FixAllProvider GetFixAllProvider()

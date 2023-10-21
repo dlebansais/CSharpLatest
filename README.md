@@ -23,6 +23,7 @@ To uninstall this analyzer, in Visual Studio:
  
 ## List of diagnostics
 
-| Code   | Diagnostic                                         |
-| ------ | -------------------------------------------------- |
-| [CSL0001](doc/CSL0001.md) | Use `is null` instead of `== null` |
+| Code                      | Diagnostic                                                |
+| ------------------------- | --------------------------------------------------------- |
+| [CSL0000](doc/CSL0000.md) | Variables that are not modified should be made constants. |
+| [CSL0001](doc/CSL0001.md) | Use `is null` instead of `== null`                        |
