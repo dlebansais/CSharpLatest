@@ -7,7 +7,7 @@ using VerifyCS = CSharpLatest.Test.CSharpCodeFixVerifier<
     CSharpLatest.CSL1002CodeFixProvider>;
 
 [TestClass]
-public class CSL1002UnitTests
+public partial class CSL1002UnitTests
 {
     [TestMethod]
     public async Task SystemType_Diagnostic()

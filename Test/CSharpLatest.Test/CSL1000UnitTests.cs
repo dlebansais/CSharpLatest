@@ -7,7 +7,7 @@ using VerifyCS = CSharpLatest.Test.CSharpCodeFixVerifier<
     CSharpLatest.CSL1000CodeFixProvider>;
 
 [TestClass]
-public class CSL1000UnitTests
+public partial class CSL1000UnitTests
 {
     [TestMethod]
     public async Task LocalIntCouldBeConstant_Diagnostic()

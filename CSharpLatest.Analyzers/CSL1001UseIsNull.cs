@@ -44,15 +44,18 @@ public class CSL1001UseIsNull : DiagnosticAnalyzer
 
     private void AnalyzeNode(SyntaxNodeAnalysisContext context)
     {
-        var BinaryExpression = (BinaryExpressionSyntax)context.Node;
+        AnalyzerTools.AssertSyntaxRequirements<BinaryExpressionSyntax>(context, AnalyzeVerifiedNode, 
+            (context) => ((BinaryExpressionSyntax)context.Node).OperatorToken.IsKind(SyntaxKind.EqualsEqualsToken));
+    }
+
+    private void AnalyzeVerifiedNode(SyntaxNodeAnalysisContext context, BinaryExpressionSyntax BinaryExpression)
+    {
         var RightExpression = BinaryExpression.Right;
         var OperatorToken = BinaryExpression.OperatorToken;
         var LeftExpression = BinaryExpression.Left;
 
         // Check whether the comparison is '== null'.
         if (RightExpression is not LiteralExpressionSyntax literalExpressionRight)
-            return;
-        if (!OperatorToken.IsKind(SyntaxKind.EqualsEqualsToken))
             return;
         if (!literalExpressionRight.IsKind(SyntaxKind.NullLiteralExpression))
             return;
