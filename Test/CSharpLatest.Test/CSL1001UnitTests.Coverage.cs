@@ -1,6 +1,7 @@
 ﻿namespace CSharpLatest.Test;
 
 using System.Threading.Tasks;
+using Microsoft.CodeAnalysis.Testing;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using VerifyCS = CSharpLatest.Test.CSharpCodeFixVerifier<
     CSharpLatest.CSL1001UseIsNull,
@@ -31,7 +32,7 @@ class Program
     }
 
     [TestMethod]
-    public async Task NotEqualToLiteral_NoDiagnostic()
+    public async Task NotEqualToNull_NoDiagnostic()
     {
         await VerifyCS.VerifyAnalyzerAsync(@"
 #nullable enable
@@ -53,7 +54,7 @@ class Program
     }
 
     [TestMethod]
-    public async Task NotEqualToNull_NoDiagnostic()
+    public async Task NotEqualToLiteral_NoDiagnostic()
     {
         await VerifyCS.VerifyAnalyzerAsync(@"
 #nullable enable
@@ -71,5 +72,49 @@ class Program
     }
 }
 ");
+    }
+
+    [TestMethod]
+    public async Task UnknownEqualsEqualsOperator_Diagnostic()
+    {
+        await VerifyCS.VerifyAnalyzerAsync(@"
+#nullable enable
+
+using System;
+
+class Program
+{
+    static void Main(string[] args)
+    {
+        if (x == null)
+            Console.WriteLine(string.Empty);
+    }
+}
+", DiagnosticResult.CompilerError("CS0103").WithSpan(10, 13, 10, 14).WithArguments("x"));
+    }
+
+    [TestMethod]
+    public async Task StructEqualsEqualsOperator_NoDiagnostic()
+    {
+        await VerifyCS.VerifyAnalyzerAsync(@"
+#nullable enable
+
+using System;
+
+class Program
+{
+    static void Main(string[] args)
+    {
+        Foo x;
+
+        if (x == null)
+            Console.WriteLine(string.Empty);
+    }
+}
+
+struct Foo
+{
+}
+", DiagnosticResult.CompilerError("CS0019").WithSpan(12, 13, 12, 22).WithArguments("==", "Foo", "<null>"));
     }
 }
