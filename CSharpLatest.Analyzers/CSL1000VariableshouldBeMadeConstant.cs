@@ -55,8 +55,8 @@ public class CSL1000VariableshouldBeMadeConstant : DiagnosticAnalyzer
         if (localDeclaration.Modifiers.Any(SyntaxKind.ConstKeyword))
             return;
 
-        TypeSyntax variableTypeName = localDeclaration.Declaration.Type;
-        ITypeSymbol? VariableType = variableTypeName.GetTypeValidType(context);
+        TypeSyntax VariableTypeName = localDeclaration.Declaration.Type;
+        ITypeSymbol? VariableType = VariableTypeName.GetTypeValidType(context);
 
         // Ensure that all variables in the local declaration have initializers that are assigned with constant values.
         foreach (VariableDeclaratorSyntax variable in localDeclaration.Declaration.Variables)
@@ -66,11 +66,11 @@ public class CSL1000VariableshouldBeMadeConstant : DiagnosticAnalyzer
         // Gets the data flow analysis performed on the local declaration during the analysis assertion phase.
         DataFlowAnalysis DataFlowAnalysis = ((DataFlowAnalysisAssertion<LocalDeclarationStatementSyntax>)analysisAssertions.First()).DataFlowAnalysis;
 
-        foreach (VariableDeclaratorSyntax variable in localDeclaration.Declaration.Variables)
+        foreach (VariableDeclaratorSyntax Variable in localDeclaration.Declaration.Variables)
         {
             // Retrieve the local symbol for each variable in the local declaration and ensure that it is not written outside of the data flow analysis region.
-            ISymbol? variableSymbol = context.SemanticModel.GetDeclaredSymbol(variable, context.CancellationToken);
-            if (variableSymbol is not null && DataFlowAnalysis.WrittenOutside.Contains(variableSymbol))
+            ISymbol VariableSymbol = GetDeclaredSymbol(context, Variable);
+            if (DataFlowAnalysis.WrittenOutside.Contains(VariableSymbol))
                 return;
         }
 
@@ -107,5 +107,14 @@ public class CSL1000VariableshouldBeMadeConstant : DiagnosticAnalyzer
         }
 
         return true;
+    }
+
+    private static ISymbol GetDeclaredSymbol(SyntaxNodeAnalysisContext context, VariableDeclaratorSyntax variable)
+    {
+        ISymbol? VariableSymbol = context.SemanticModel.GetDeclaredSymbol(variable, context.CancellationToken);
+
+        Debug.Assert(VariableSymbol is not null);
+
+        return VariableSymbol!;
     }
 }

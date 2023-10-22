@@ -1,7 +1,6 @@
 ﻿namespace CSharpLatest.Test;
 
 using System.Threading.Tasks;
-using Microsoft.CodeAnalysis.Testing;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using VerifyCS = CSharpLatest.Test.CSharpCodeFixVerifier<
     CSharpLatest.CSL1000VariableshouldBeMadeConstant,
@@ -38,10 +37,10 @@ class Program
 {
     static void Main()
     {
-        var i = new();
+        var i = {|CS8754:new()|};
         Console.WriteLine(i++);
     }
 }
-", DiagnosticResult.CompilerError("CS8754").WithSpan(8, 17, 8, 22).WithArguments("new()"));
+");
     }
 }

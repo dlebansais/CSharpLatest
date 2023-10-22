@@ -57,6 +57,7 @@ foreach($analyzersPath in $analyzersPaths)
                 }
                 catch
                 {
+                    # Ignore error
                 }
             }
         }

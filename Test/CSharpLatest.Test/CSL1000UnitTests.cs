@@ -157,6 +157,22 @@ class Program
     }
 
     [TestMethod]
+    public async Task ConstantIsNotNull_NoDiagnostic()
+    {
+        await VerifyCS.VerifyAnalyzerAsync(@"
+using System;
+
+class Program
+{
+    static void Main()
+    {
+        object s = 0;
+    }
+}
+");
+    }
+
+    [TestMethod]
     public async Task StringCouldBeConstant_Diagnostic()
     {
         await VerifyCS.VerifyCodeFixAsync(@"
@@ -229,6 +245,32 @@ class Program
     static void Main()
     {
         const string item = ""abc"";
+    }
+}
+");
+    }
+
+    [TestMethod]
+    public async Task NullStringCouldBeConstant_Diagnostic()
+    {
+        await VerifyCS.VerifyCodeFixAsync(@"
+using System;
+
+class Program
+{
+    static void Main()
+    {
+        [|string s = null;|]
+    }
+}
+", @"
+using System;
+
+class Program
+{
+    static void Main()
+    {
+        const string s = null;
     }
 }
 ");

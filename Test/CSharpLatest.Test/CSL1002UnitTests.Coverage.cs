@@ -1,7 +1,6 @@
 ﻿namespace CSharpLatest.Test;
 
 using System.Threading.Tasks;
-using Microsoft.CodeAnalysis.Testing;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using VerifyCS = CSharpLatest.Test.CSharpCodeFixVerifier<
     CSharpLatest.CSL1002UseIsNotNull,
@@ -86,11 +85,11 @@ class Program
 {
     static void Main(string[] args)
     {
-        if (x != null)
+        if ({|CS0103:x|} != null)
             Console.WriteLine(string.Empty);
     }
 }
-", DiagnosticResult.CompilerError("CS0103").WithSpan(10, 13, 10, 14).WithArguments("x"));
+");
     }
 
     [TestMethod]
@@ -107,7 +106,7 @@ class Program
     {
         Foo x;
 
-        if (x != null)
+        if ({|CS0019:x != null|})
             Console.WriteLine(string.Empty);
     }
 }
@@ -115,6 +114,6 @@ class Program
 struct Foo
 {
 }
-", DiagnosticResult.CompilerError("CS0019").WithSpan(12, 13, 12, 22).WithArguments("!=", "Foo", "<null>"));
+");
     }
 }
