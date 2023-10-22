@@ -44,8 +44,11 @@ public class CSL1000VariableshouldBeMadeConstant : DiagnosticAnalyzer
 
     private void AnalyzeNode(SyntaxNodeAnalysisContext context)
     {
-        var localDeclaration = (LocalDeclarationStatementSyntax)context.Node;
+        AnalyzerTools.AssertSyntaxRequirements<LocalDeclarationStatementSyntax>(context, AnalyzeVerifiedNode);
+    }
 
+    private void AnalyzeVerifiedNode(SyntaxNodeAnalysisContext context, LocalDeclarationStatementSyntax localDeclaration)
+    {
         // make sure the declaration isn't already const:
         if (localDeclaration.Modifiers.Any(SyntaxKind.ConstKeyword))
             return;
