@@ -57,6 +57,10 @@ public class CSL1002CodeFixProvider : CodeFixProvider
         SyntaxToken OperatorToken = binaryExpression.OperatorToken;
         SyntaxTriviaList LeadingTrivia = OperatorToken.LeadingTrivia;
 
+        // Save the trailing trivia in the expression right part.
+        ExpressionSyntax RightExpression = binaryExpression.Right;
+        SyntaxTriviaList TrailingTrivia = RightExpression.GetTrailingTrivia();
+
         // Produce the new expression.
         LiteralExpressionSyntax NullExpression = SyntaxFactory.LiteralExpression(SyntaxKind.NullLiteralExpression);
         PatternSyntax NullPattern = SyntaxFactory.ConstantPattern(NullExpression);
@@ -64,6 +68,7 @@ public class CSL1002CodeFixProvider : CodeFixProvider
         UnaryPatternSyntax NotNullPattern = SyntaxFactory.UnaryPattern(NotKeywordToken, NullPattern);
         SyntaxToken IsToken = SyntaxFactory.Token(LeadingTrivia, SyntaxKind.IsKeyword, SyntaxFactory.TriviaList(SyntaxFactory.ElasticMarker));
         IsPatternExpressionSyntax NewExpression = SyntaxFactory.IsPatternExpression(binaryExpression.Left, IsToken, NotNullPattern);
+        NewExpression = NewExpression.WithTrailingTrivia(TrailingTrivia);
 
         // Add an annotation to format the new local declaration.
         IsPatternExpressionSyntax FormattedExpression = NewExpression.WithAdditionalAnnotations(Formatter.Annotation);

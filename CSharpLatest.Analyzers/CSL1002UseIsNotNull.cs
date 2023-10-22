@@ -45,17 +45,20 @@ public class CSL1002UseIsNotNull : DiagnosticAnalyzer
     private void AnalyzeNode(SyntaxNodeAnalysisContext context)
     {
         var BinaryExpression = (BinaryExpressionSyntax)context.Node;
+        var RightExpression = BinaryExpression.Right;
+        var OperatorToken = BinaryExpression.OperatorToken;
+        var LeftExpression = BinaryExpression.Left;
 
         // Check whether the comparison is '!= null'.
-        if (BinaryExpression.Right is not LiteralExpressionSyntax literalExpressionRight)
+        if (RightExpression is not LiteralExpressionSyntax literalExpressionRight)
             return;
-        if (!BinaryExpression.OperatorToken.IsKind(SyntaxKind.ExclamationEqualsToken))
+        if (!OperatorToken.IsKind(SyntaxKind.ExclamationEqualsToken))
             return;
         if (!literalExpressionRight.IsKind(SyntaxKind.NullLiteralExpression))
             return;
 
         // Get the expression type.
-        ITypeSymbol? ExpressionType = BinaryExpression.Left.GetExpressionValidType(context);
+        ITypeSymbol? ExpressionType = LeftExpression.GetExpressionValidType(context);
 
         // If there is an error, stop analyzing.
         if (ExpressionType is null)
@@ -69,6 +72,6 @@ public class CSL1002UseIsNotNull : DiagnosticAnalyzer
         if (!ExpressionType.IsReferenceType && ExpressionType.NullableAnnotation != NullableAnnotation.Annotated)
             return;
 
-        context.ReportDiagnostic(Diagnostic.Create(Rule, context.Node.GetLocation(), $"{BinaryExpression.OperatorToken} {literalExpressionRight}"));
+        context.ReportDiagnostic(Diagnostic.Create(Rule, context.Node.GetLocation(), $"{OperatorToken} {literalExpressionRight}"));
     }
 }

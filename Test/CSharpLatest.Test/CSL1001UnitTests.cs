@@ -259,4 +259,148 @@ class Program
 }
 ");
     }
+
+    [TestMethod]
+    public async Task Decoration1_Diagnostic()
+    {
+        await VerifyCS.VerifyCodeFixAsync(@"
+#nullable enable
+
+using System;
+
+class Program
+{
+    static void Main(string[] args)
+    {
+        string? s = args.Length > 0 ? null : ""test"";
+
+        if (/*XYZ*/[|s == null|])
+            Console.WriteLine(string.Empty);
+    }
+}
+", @"
+#nullable enable
+
+using System;
+
+class Program
+{
+    static void Main(string[] args)
+    {
+        string? s = args.Length > 0 ? null : ""test"";
+
+        if (/*XYZ*/s is null)
+            Console.WriteLine(string.Empty);
+    }
+}
+");
+    }
+
+    [TestMethod]
+    public async Task Decoration2_Diagnostic()
+    {
+        await VerifyCS.VerifyCodeFixAsync(@"
+#nullable enable
+
+using System;
+
+class Program
+{
+    static void Main(string[] args)
+    {
+        string? s = args.Length > 0 ? null : ""test"";
+
+        if ([|s/*XYZ*/ == null|])
+            Console.WriteLine(string.Empty);
+    }
+}
+", @"
+#nullable enable
+
+using System;
+
+class Program
+{
+    static void Main(string[] args)
+    {
+        string? s = args.Length > 0 ? null : ""test"";
+
+        if (s/*XYZ*/ is null)
+            Console.WriteLine(string.Empty);
+    }
+}
+");
+    }
+
+    [TestMethod]
+    public async Task Decoration3_NoDiagnostic()
+    {
+        await VerifyCS.VerifyCodeFixAsync(@"
+#nullable enable
+
+using System;
+
+class Program
+{
+    static void Main(string[] args)
+    {
+        string? s = args.Length > 0 ? null : ""test"";
+
+        if ([|s ==/*XYZ*/ null|])
+            Console.WriteLine(string.Empty);
+    }
+}
+", @"
+#nullable enable
+
+using System;
+
+class Program
+{
+    static void Main(string[] args)
+    {
+        string? s = args.Length > 0 ? null : ""test"";
+
+        if (s is null)
+            Console.WriteLine(string.Empty);
+    }
+}
+");
+    }
+
+    [TestMethod]
+    public async Task Decoration4_Diagnostic()
+    {
+        await VerifyCS.VerifyCodeFixAsync(@"
+#nullable enable
+
+using System;
+
+class Program
+{
+    static void Main(string[] args)
+    {
+        string? s = args.Length > 0 ? null : ""test"";
+
+        if ([|s == null|]/*XYZ*/)
+            Console.WriteLine(string.Empty);
+    }
+}
+", @"
+#nullable enable
+
+using System;
+
+class Program
+{
+    static void Main(string[] args)
+    {
+        string? s = args.Length > 0 ? null : ""test"";
+
+        if (s is null/*XYZ*/)
+            Console.WriteLine(string.Empty);
+    }
+}
+");
+    }
 }
