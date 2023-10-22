@@ -2,6 +2,11 @@
 
 Roslyn-based analysis of C# code to suggest the use of features in the latest version of the language.
 
+[![Build status](https://ci.appveyor.com/api/projects/status/bqxani5j890cufgm?svg=true)](https://ci.appveyor.com/project/dlebansais/csharplatest)
+[![codecov](https://codecov.io/gh/dlebansais/CSharpLatest/graph/badge.svg?token=oFfnLirFJg)](https://codecov.io/gh/dlebansais/CSharpLatest)
+[![CodeFactor](https://www.codefactor.io/repository/github/dlebansais/csharplatest/badge)](https://www.codefactor.io/repository/github/dlebansais/csharplatest)
+[![NuGet](https://img.shields.io/nuget/v/dlebansais.CSharpLatest.svg)](https://www.nuget.org/packages/dlebansais.CSharpLatest)
+
 ## How to install
 
 To install this analyzer, in Visual Studio:

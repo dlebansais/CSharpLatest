@@ -9,6 +9,28 @@ using VerifyCS = CSharpLatest.Test.CSharpCodeFixVerifier<
 public partial class CSL1001UnitTests
 {
     [TestMethod]
+    public async Task CoverageDirective_NoDiagnostic()
+    {
+        await VerifyCS.VerifyAnalyzerAsync(@"
+#define COVERAGE_A25BDFABDDF8402785EB75AD812DA952
+#nullable enable
+
+using System;
+
+class Program
+{
+    static void Main(string[] args)
+    {
+        string? s = args.Length > 0 ? null : ""test"";
+
+        if (s == null)
+            Console.WriteLine(string.Empty);
+    }
+}
+");
+    }
+
+    [TestMethod]
     public async Task NotEqualToLiteral_NoDiagnostic()
     {
         await VerifyCS.VerifyAnalyzerAsync(@"

@@ -6,6 +6,10 @@ using Microsoft.CodeAnalysis.Diagnostics;
 
 internal static class AnalyzerTools
 {
+    // Define this symbol in unit tests to simulate an assertion failure.
+    // This will test branches that can only execute in future versions of C#.
+    private const string CoverageDirectivePrefix = "#define COVERAGE_A25BDFABDDF8402785EB75AD812DA952";
+
     /// <summary>
     /// Asserts that the analyzed node is of the expected type and satisfies requirements, then executes <paramref name="continueAction"/>.
     /// </summary>
@@ -18,7 +22,12 @@ internal static class AnalyzerTools
     {
         var ValidNode = context.Node as T;
 
-        if (ValidNode is not null && assertions.TrueForAll(context))
+        string? FirstDirectiveText = context.SemanticModel.SyntaxTree.GetRoot().GetFirstDirective()?.GetText().ToString();
+        bool IsCoverageContext = FirstDirectiveText is not null && FirstDirectiveText.StartsWith(CoverageDirectivePrefix);
+        bool AreAllAssertionsTrue = assertions.TrueForAll(context);
+        bool IsValid = !IsCoverageContext && AreAllAssertionsTrue;
+
+        if (ValidNode is not null && IsValid)
             continueAction(context, ValidNode);
     }
 

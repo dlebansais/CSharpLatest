@@ -62,4 +62,3 @@ echo ERROR: %TESTPROJECTNAME%.dll not built (both Debug and Release are required
 goto end
 
 :end
-del *.log
