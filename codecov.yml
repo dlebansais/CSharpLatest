@@ -17,6 +17,7 @@ coverage:
     project: true
 ignore:
   - "./Test/**"
+  - "Resources.Designer.cs"
 parsers:
   gcov:
     branch_detection:
