@@ -47,6 +47,7 @@ foreach($analyzersPath in $analyzersPaths)
     $languageAnalyzersPath = join-path $analyzersPath $languageFolder
     if (Test-Path $languageAnalyzersPath)
     {
+        $error = "None"
         foreach ($analyzerFilePath in Get-ChildItem -Path "$languageAnalyzersPath\*.dll" -Exclude *.resources.dll)
         {
             if($project.Object.AnalyzerReferences)
@@ -57,7 +58,7 @@ foreach($analyzersPath in $analyzersPaths)
                 }
                 catch
                 {
-                    # Ignore error
+                    $error = "Not removed"
                 }
             }
         }

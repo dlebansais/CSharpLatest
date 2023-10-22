@@ -57,6 +57,8 @@ public class CSL1000VariableshouldBeMadeConstant : DiagnosticAnalyzer
 
         TypeSyntax VariableTypeName = localDeclaration.Declaration.Type;
         ITypeSymbol? VariableType = VariableTypeName.GetTypeValidType(context);
+        if (VariableType is null)
+            return;
 
         // Ensure that all variables in the local declaration have initializers that are assigned with constant values.
         foreach (VariableDeclaratorSyntax variable in localDeclaration.Declaration.Variables)
@@ -77,7 +79,7 @@ public class CSL1000VariableshouldBeMadeConstant : DiagnosticAnalyzer
         context.ReportDiagnostic(Diagnostic.Create(Rule, context.Node.GetLocation(), localDeclaration.Declaration.Variables.First().Identifier.ValueText));
     }
 
-    private bool IsVariableAssignedToConstantValue(SyntaxNodeAnalysisContext context, ITypeSymbol? variableType, VariableDeclaratorSyntax variable)
+    private bool IsVariableAssignedToConstantValue(SyntaxNodeAnalysisContext context, ITypeSymbol variableType, VariableDeclaratorSyntax variable)
     {
         EqualsValueClauseSyntax? initializer = variable.Initializer;
         if (initializer is null)
@@ -87,24 +89,21 @@ public class CSL1000VariableshouldBeMadeConstant : DiagnosticAnalyzer
         if (!constantValue.HasValue)
             return false;
 
-        if (variableType is not null)
-        {
-            // Ensure that the initializer value can be converted to the type of the local declaration without a user-defined conversion.
-            Conversion conversion = context.SemanticModel.ClassifyConversion(initializer.Value, variableType);
-            if (!conversion.Exists || conversion.IsUserDefined)
-                return false;
+        // Ensure that the initializer value can be converted to the type of the local declaration without a user-defined conversion.
+        Conversion conversion = context.SemanticModel.ClassifyConversion(initializer.Value, variableType);
+        if (!conversion.Exists || conversion.IsUserDefined)
+            return false;
 
-            // Special cases:
-            //  * If the constant value is a string, the type of the local declaration must be System.String.
-            //  * If the constant value is null, the type of the local declaration must be a reference type.
-            if (constantValue.Value is string)
-            {
-                if (variableType.SpecialType != SpecialType.System_String)
-                    return false;
-            }
-            else if (variableType.IsReferenceType && constantValue.Value is not null)
+        // Special cases:
+        //  * If the constant value is a string, the type of the local declaration must be System.String.
+        //  * If the constant value is null, the type of the local declaration must be a reference type.
+        if (constantValue.Value is string)
+        {
+            if (variableType.SpecialType != SpecialType.System_String)
                 return false;
         }
+        else if (variableType.IsReferenceType && constantValue.Value is not null)
+            return false;
 
         return true;
     }
