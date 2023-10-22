@@ -19,9 +19,9 @@ public class CSL1000VariableshouldBeMadeConstant : DiagnosticAnalyzer
     /// </summary>
     public const string DiagnosticId = "CSL1000";
 
-    private static readonly LocalizableString Title = new LocalizableResourceString(nameof(Resources.CSL1000AnalyzerTitle), Resources.ResourceManager, typeof(Resources));
-    private static readonly LocalizableString MessageFormat = new LocalizableResourceString(nameof(Resources.CSL1000AnalyzerMessageFormat), Resources.ResourceManager, typeof(Resources));
-    private static readonly LocalizableString Description = new LocalizableResourceString(nameof(Resources.CSL1000AnalyzerDescription), Resources.ResourceManager, typeof(Resources));
+    private static readonly LocalizableString Title = new LocalizableResourceString(nameof(AnalyzerResources.CSL1000AnalyzerTitle), AnalyzerResources.ResourceManager, typeof(AnalyzerResources));
+    private static readonly LocalizableString MessageFormat = new LocalizableResourceString(nameof(AnalyzerResources.CSL1000AnalyzerMessageFormat), AnalyzerResources.ResourceManager, typeof(AnalyzerResources));
+    private static readonly LocalizableString Description = new LocalizableResourceString(nameof(AnalyzerResources.CSL1000AnalyzerDescription), AnalyzerResources.ResourceManager, typeof(AnalyzerResources));
     private const string Category = "Usage";
 
     private static readonly DiagnosticDescriptor Rule = new DiagnosticDescriptor(DiagnosticId, Title, MessageFormat, Category, DiagnosticSeverity.Warning, isEnabledByDefault: true, description: Description);

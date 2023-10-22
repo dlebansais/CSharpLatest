@@ -57,7 +57,6 @@ foreach($analyzersPath in $analyzersPaths)
                 }
                 catch
                 {
-
                 }
             }
         }

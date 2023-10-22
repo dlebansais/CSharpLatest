@@ -18,9 +18,9 @@ public class CSL1002UseIsNotNull : DiagnosticAnalyzer
     /// </summary>
     public const string DiagnosticId = "CSL1002";
 
-    private static readonly LocalizableString Title = new LocalizableResourceString(nameof(Resources.CSL1002AnalyzerTitle), Resources.ResourceManager, typeof(Resources));
-    private static readonly LocalizableString MessageFormat = new LocalizableResourceString(nameof(Resources.CSL1002AnalyzerMessageFormat), Resources.ResourceManager, typeof(Resources));
-    private static readonly LocalizableString Description = new LocalizableResourceString(nameof(Resources.CSL1002AnalyzerDescription), Resources.ResourceManager, typeof(Resources));
+    private static readonly LocalizableString Title = new LocalizableResourceString(nameof(AnalyzerResources.CSL1002AnalyzerTitle), AnalyzerResources.ResourceManager, typeof(AnalyzerResources));
+    private static readonly LocalizableString MessageFormat = new LocalizableResourceString(nameof(AnalyzerResources.CSL1002AnalyzerMessageFormat), AnalyzerResources.ResourceManager, typeof(AnalyzerResources));
+    private static readonly LocalizableString Description = new LocalizableResourceString(nameof(AnalyzerResources.CSL1002AnalyzerDescription), AnalyzerResources.ResourceManager, typeof(AnalyzerResources));
     private const string Category = "Usage";
 
     private static readonly DiagnosticDescriptor Rule = new DiagnosticDescriptor(DiagnosticId, Title, MessageFormat, Category, DiagnosticSeverity.Warning, isEnabledByDefault: true, description: Description);
