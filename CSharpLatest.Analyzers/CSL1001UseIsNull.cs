@@ -44,11 +44,11 @@ public class CSL1001UseIsNull : DiagnosticAnalyzer
 
     private void AnalyzeNode(SyntaxNodeAnalysisContext context)
     {
-        AnalyzerTools.AssertSyntaxRequirements<BinaryExpressionSyntax>(context, AnalyzeVerifiedNode, 
-            (context) => ((BinaryExpressionSyntax)context.Node).OperatorToken.IsKind(SyntaxKind.EqualsEqualsToken));
+        AnalyzerTools.AssertSyntaxRequirements<BinaryExpressionSyntax>(context, AnalyzeVerifiedNode,
+            new SimpleAnalysisAssertion(context => ((BinaryExpressionSyntax)context.Node).OperatorToken.IsKind(SyntaxKind.EqualsEqualsToken)));
     }
 
-    private void AnalyzeVerifiedNode(SyntaxNodeAnalysisContext context, BinaryExpressionSyntax binaryExpression)
+    private void AnalyzeVerifiedNode(SyntaxNodeAnalysisContext context, BinaryExpressionSyntax binaryExpression, IAnalysisAssertion[] analysisAssertions)
     {
         var RightExpression = binaryExpression.Right;
         var OperatorToken = binaryExpression.OperatorToken;

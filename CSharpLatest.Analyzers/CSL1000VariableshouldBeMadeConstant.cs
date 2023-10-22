@@ -1,6 +1,7 @@
 ﻿namespace CSharpLatest;
 
 using System.Collections.Immutable;
+using System.Diagnostics;
 using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -45,10 +46,10 @@ public class CSL1000VariableshouldBeMadeConstant : DiagnosticAnalyzer
 
     private void AnalyzeNode(SyntaxNodeAnalysisContext context)
     {
-        AnalyzerTools.AssertSyntaxRequirements<LocalDeclarationStatementSyntax>(context, AnalyzeVerifiedNode);
+        AnalyzerTools.AssertSyntaxRequirements<LocalDeclarationStatementSyntax>(context, AnalyzeVerifiedNode, new DataFlowAnalysisAssertion<LocalDeclarationStatementSyntax>());
     }
 
-    private void AnalyzeVerifiedNode(SyntaxNodeAnalysisContext context, LocalDeclarationStatementSyntax localDeclaration)
+    private void AnalyzeVerifiedNode(SyntaxNodeAnalysisContext context, LocalDeclarationStatementSyntax localDeclaration, IAnalysisAssertion[] analysisAssertions)
     {
         // Make sure the declaration isn't already const.
         if (localDeclaration.Modifiers.Any(SyntaxKind.ConstKeyword))
@@ -62,14 +63,14 @@ public class CSL1000VariableshouldBeMadeConstant : DiagnosticAnalyzer
             if (!IsVariableAssignedToConstantValue(context, VariableType, variable))
                 return;
 
-        // Perform data flow analysis on the local declaration.
-        DataFlowAnalysis? dataFlowAnalysis = context.SemanticModel.AnalyzeDataFlow(localDeclaration);
+        // Gets the data flow analysis performed on the local declaration during the analysis assertion phase.
+        DataFlowAnalysis DataFlowAnalysis = ((DataFlowAnalysisAssertion<LocalDeclarationStatementSyntax>)analysisAssertions.First()).DataFlowAnalysis;
 
         foreach (VariableDeclaratorSyntax variable in localDeclaration.Declaration.Variables)
         {
             // Retrieve the local symbol for each variable in the local declaration and ensure that it is not written outside of the data flow analysis region.
             ISymbol? variableSymbol = context.SemanticModel.GetDeclaredSymbol(variable, context.CancellationToken);
-            if (dataFlowAnalysis is not null && variableSymbol is not null && dataFlowAnalysis.WrittenOutside.Contains(variableSymbol))
+            if (variableSymbol is not null && DataFlowAnalysis.WrittenOutside.Contains(variableSymbol))
                 return;
         }
 
