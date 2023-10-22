@@ -113,5 +113,32 @@ namespace CSharpLatest {
                 return ResourceManager.GetString("CSL1001AnalyzerTitle", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use &apos;is not null&apos; syntax instead of &apos;!= null&apos;..
+        /// </summary>
+        internal static string CSL1002AnalyzerDescription {
+            get {
+                return ResourceManager.GetString("CSL1002AnalyzerDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &apos;{0}&apos; can be changed to &apos;is not null&apos;.
+        /// </summary>
+        internal static string CSL1002AnalyzerMessageFormat {
+            get {
+                return ResourceManager.GetString("CSL1002AnalyzerMessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Expression can be changed to &apos;is not null&apos;.
+        /// </summary>
+        internal static string CSL1002AnalyzerTitle {
+            get {
+                return ResourceManager.GetString("CSL1002AnalyzerTitle", resourceCulture);
+            }
+        }
     }
 }

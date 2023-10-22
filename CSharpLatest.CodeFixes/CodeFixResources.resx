@@ -125,4 +125,8 @@
     <value>Change to 'is null'</value>
     <comment>The title of the code fix.</comment>
   </data>
+  <data name="CSL1002CodeFixTitle" xml:space="preserve">
+    <value>Change to 'is not null'</value>
+    <comment>The title of the code fix.</comment>
+  </data>
 </root>

@@ -12,12 +12,12 @@ using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Formatting;
 
-[ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(CSL1001CodeFixProvider)), Shared]
-public class CSL1001CodeFixProvider : CodeFixProvider
+[ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(CSL1002CodeFixProvider)), Shared]
+public class CSL1002CodeFixProvider : CodeFixProvider
 {
     public sealed override ImmutableArray<string> FixableDiagnosticIds
     {
-        get { return ImmutableArray.Create(CSL1001UseIsNull.DiagnosticId); }
+        get { return ImmutableArray.Create(CSL1002UseIsNotNull.DiagnosticId); }
     }
 
     public sealed override FixAllProvider GetFixAllProvider()
@@ -40,14 +40,14 @@ public class CSL1001CodeFixProvider : CodeFixProvider
             // Register a code action that will invoke the fix.
             context.RegisterCodeFix(
                 CodeAction.Create(
-                    title: CodeFixResources.CSL1001CodeFixTitle,
-                    createChangedDocument: c => ChangeToIsNullAsync(context.Document, Expression, c),
-                    equivalenceKey: nameof(CodeFixResources.CSL1001CodeFixTitle)),
+                    title: CodeFixResources.CSL1002CodeFixTitle,
+                    createChangedDocument: c => ChangeToIsNotNullAsync(context.Document, Expression, c),
+                    equivalenceKey: nameof(CodeFixResources.CSL1002CodeFixTitle)),
                 Diagnostic);
         }
     }
 
-    private static async Task<Document> ChangeToIsNullAsync(Document document,
+    private static async Task<Document> ChangeToIsNotNullAsync(Document document,
         BinaryExpressionSyntax binaryExpression,
         CancellationToken cancellationToken)
     {
@@ -60,8 +60,10 @@ public class CSL1001CodeFixProvider : CodeFixProvider
         // Produce the new expression.
         LiteralExpressionSyntax NullExpression = SyntaxFactory.LiteralExpression(SyntaxKind.NullLiteralExpression);
         PatternSyntax NullPattern = SyntaxFactory.ConstantPattern(NullExpression);
+        SyntaxToken NotKeywordToken = SyntaxFactory.Token(SyntaxKind.NotKeyword);
+        UnaryPatternSyntax NotNullPattern = SyntaxFactory.UnaryPattern(NotKeywordToken, NullPattern);
         SyntaxToken IsToken = SyntaxFactory.Token(LeadingTrivia, SyntaxKind.IsKeyword, SyntaxFactory.TriviaList(SyntaxFactory.ElasticMarker));
-        IsPatternExpressionSyntax NewExpression = SyntaxFactory.IsPatternExpression(binaryExpression.Left, IsToken, NullPattern);
+        IsPatternExpressionSyntax NewExpression = SyntaxFactory.IsPatternExpression(binaryExpression.Left, IsToken, NotNullPattern);
 
         // Add an annotation to format the new local declaration.
         IsPatternExpressionSyntax FormattedExpression = NewExpression.WithAdditionalAnnotations(Formatter.Annotation);

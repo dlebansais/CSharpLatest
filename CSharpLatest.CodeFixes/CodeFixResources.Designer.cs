@@ -77,5 +77,14 @@ namespace CSharpLatest {
                 return ResourceManager.GetString("CSL1001CodeFixTitle", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Change to &apos;is not null&apos;.
+        /// </summary>
+        internal static string CSL1002CodeFixTitle {
+            get {
+                return ResourceManager.GetString("CSL1002CodeFixTitle", resourceCulture);
+            }
+        }
     }
 }

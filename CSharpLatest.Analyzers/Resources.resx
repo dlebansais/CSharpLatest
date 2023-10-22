@@ -141,4 +141,16 @@
     <value>Expression can be changed to 'is null'</value>
     <comment>The title of the diagnostic.</comment>
   </data>
+  <data name="CSL1002AnalyzerDescription" xml:space="preserve">
+    <value>Use 'is not null' syntax instead of '!= null'.</value>
+    <comment>An optional longer localizable description of the diagnostic.</comment>
+  </data>
+  <data name="CSL1002AnalyzerMessageFormat" xml:space="preserve">
+    <value>'{0}' can be changed to 'is not null'</value>
+    <comment>The format-able message the diagnostic displays.</comment>
+  </data>
+  <data name="CSL1002AnalyzerTitle" xml:space="preserve">
+    <value>Expression can be changed to 'is not null'</value>
+    <comment>The title of the diagnostic.</comment>
+  </data>
 </root>
