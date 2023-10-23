@@ -27,3 +27,4 @@ To uninstall this analyzer, in Visual Studio:
 | ------- | --------------------------------------------------------- |
 | CSL1000 | Variables that are not modified should be made constants. |
 | CSL1001 | Use `is null` instead of `== null`                        |
+| CSL1002 | Use `is not null` instead of `!= null`                    |
