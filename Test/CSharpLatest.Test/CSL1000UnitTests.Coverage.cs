@@ -26,6 +26,23 @@ class Program
     }
 
     [TestMethod]
+    public async Task OldLanguageVersion_NoDiagnostic()
+    {
+        await VerifyCS.VerifyAnalyzerAsync(@"
+using System;
+
+class Program
+{
+    static void Main()
+    {
+        int i = 0;
+        Console.WriteLine(i);
+    }
+}
+", Microsoft.CodeAnalysis.CSharp.LanguageVersion.CSharp1);
+    }
+
+    [TestMethod]
     public async Task InvalidDeclaration_NoDiagnostic()
     {
         await VerifyCS.VerifyAnalyzerAsync(@"

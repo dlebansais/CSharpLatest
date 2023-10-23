@@ -23,7 +23,14 @@ public class CSL1002UseIsNotNull : DiagnosticAnalyzer
     private static readonly LocalizableString Description = new LocalizableResourceString(nameof(AnalyzerResources.CSL1002AnalyzerDescription), AnalyzerResources.ResourceManager, typeof(AnalyzerResources));
     private const string Category = "Usage";
 
-    private static readonly DiagnosticDescriptor Rule = new DiagnosticDescriptor(DiagnosticId, Title, MessageFormat, Category, DiagnosticSeverity.Warning, isEnabledByDefault: true, description: Description);
+    private static readonly DiagnosticDescriptor Rule = new DiagnosticDescriptor(DiagnosticId,
+                                                                                 Title,
+                                                                                 MessageFormat,
+                                                                                 Category,
+                                                                                 DiagnosticSeverity.Warning,
+                                                                                 isEnabledByDefault: true,
+                                                                                 description: Description,
+                                                                                 AnalyzerTools.GetHelpLink(DiagnosticId));
 
     /// <summary>
     /// Gets the list of supported diagnostic.
@@ -44,7 +51,7 @@ public class CSL1002UseIsNotNull : DiagnosticAnalyzer
 
     private void AnalyzeNode(SyntaxNodeAnalysisContext context)
     {
-        AnalyzerTools.AssertSyntaxRequirements<BinaryExpressionSyntax>(context, AnalyzeVerifiedNode,
+        AnalyzerTools.AssertSyntaxRequirements<BinaryExpressionSyntax>(context, LanguageVersion.CSharp7, AnalyzeVerifiedNode,
             new SimpleAnalysisAssertion(context => ((BinaryExpressionSyntax)context.Node).OperatorToken.IsKind(SyntaxKind.ExclamationEqualsToken)));
     }
 

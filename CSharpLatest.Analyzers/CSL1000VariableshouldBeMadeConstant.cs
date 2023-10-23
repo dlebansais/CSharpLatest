@@ -25,7 +25,16 @@ public class CSL1000VariableshouldBeMadeConstant : DiagnosticAnalyzer
     private static readonly LocalizableString Description = new LocalizableResourceString(nameof(AnalyzerResources.CSL1000AnalyzerDescription), AnalyzerResources.ResourceManager, typeof(AnalyzerResources));
     private const string Category = "Usage";
 
-    private static readonly DiagnosticDescriptor Rule = new DiagnosticDescriptor(DiagnosticId, Title, MessageFormat, Category, DiagnosticSeverity.Warning, isEnabledByDefault: true, description: Description);
+    private static readonly DiagnosticDescriptor Rule = new DiagnosticDescriptor(DiagnosticId,
+                                                                                 Title,
+                                                                                 MessageFormat,
+                                                                                 Category,
+                                                                                 DiagnosticSeverity.Warning,
+                                                                                 isEnabledByDefault: true,
+                                                                                 description: Description,
+                                                                                 AnalyzerTools.GetHelpLink(DiagnosticId));
+
+    private const LanguageVersion MinimumVersionAnalyzed = LanguageVersion.CSharp4;
 
     /// <summary>
     /// Gets the list of supported diagnostic.
@@ -46,7 +55,7 @@ public class CSL1000VariableshouldBeMadeConstant : DiagnosticAnalyzer
 
     private void AnalyzeNode(SyntaxNodeAnalysisContext context)
     {
-        AnalyzerTools.AssertSyntaxRequirements<LocalDeclarationStatementSyntax>(context, AnalyzeVerifiedNode, new DataFlowAnalysisAssertion<LocalDeclarationStatementSyntax>());
+        AnalyzerTools.AssertSyntaxRequirements<LocalDeclarationStatementSyntax>(context, MinimumVersionAnalyzed, AnalyzeVerifiedNode, new DataFlowAnalysisAssertion<LocalDeclarationStatementSyntax>());
     }
 
     private void AnalyzeVerifiedNode(SyntaxNodeAnalysisContext context, LocalDeclarationStatementSyntax localDeclaration, IAnalysisAssertion[] analysisAssertions)
