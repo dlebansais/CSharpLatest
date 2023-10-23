@@ -66,13 +66,6 @@ public class CSL1002CodeFixProvider : CodeFixProvider
         IsPatternExpressionSyntax FormattedExpression = NewExpression.WithAdditionalAnnotations(Formatter.Annotation);
 
         // Replace the old expression with the new expression.
-        SyntaxNode? OldRoot = await document.GetSyntaxRootAsync(cancellationToken).ConfigureAwait(false);
-        SyntaxNode? NewRoot = OldRoot?.ReplaceNode(binaryExpression, FormattedExpression);
-
-        // Return document with transformed tree.
-        if (NewRoot is not null)
-            Result = document.WithSyntaxRoot(NewRoot);
-
-        return Result;
+        return await document.WithReplacedNode(cancellationToken, binaryExpression, FormattedExpression);
     }
 }

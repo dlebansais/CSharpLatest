@@ -111,7 +111,6 @@ public class CSL1000VariableshouldBeMadeConstant : DiagnosticAnalyzer
     private static ISymbol GetDeclaredSymbol(SyntaxNodeAnalysisContext context, VariableDeclaratorSyntax variable)
     {
         ISymbol? VariableSymbol = context.SemanticModel.GetDeclaredSymbol(variable, context.CancellationToken);
-
         Debug.Assert(VariableSymbol is not null);
 
         return VariableSymbol!;

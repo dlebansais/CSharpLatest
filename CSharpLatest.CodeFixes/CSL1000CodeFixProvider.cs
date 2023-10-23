@@ -2,6 +2,7 @@
 
 using System.Collections.Immutable;
 using System.Composition;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -59,18 +60,18 @@ public class CSL1000CodeFixProvider : CodeFixProvider
         TypeSyntax VariableTypeName = VariableDeclaration.Type;
         if (VariableTypeName.IsVar)
         {
-            SemanticModel? SemanticModel = await document.GetSemanticModelAsync(cancellationToken).ConfigureAwait(false);
+            SemanticModel SemanticModel = await CodeFixTools.GetSemanticModel(document, cancellationToken);
 
             // Special case: Ensure that 'var' isn't actually an alias to another type
             // (e.g. using var = System.String).
-            IAliasSymbol? AliasInfo = SemanticModel?.GetAliasInfo(VariableTypeName, cancellationToken);
+            IAliasSymbol? AliasInfo = SemanticModel.GetAliasInfo(VariableTypeName, cancellationToken);
             if (AliasInfo is null)
             {
                 // Retrieve the type inferred for var.
-                ITypeSymbol? VariableType = SemanticModel.GetTypeInfo(VariableTypeName, cancellationToken).ConvertedType;
+                ITypeSymbol VariableType = CodeFixTools.GetVarConvertedType(SemanticModel, VariableTypeName, cancellationToken);
 
                 // Special case: Ensure that 'var' isn't actually a type named 'var'.
-                if (VariableType is not null && VariableType.Name != "var")
+                if (VariableType.Name != "var")
                 {
                     // Create a new TypeSyntax for the inferred type. Be careful
                     // to keep any leading and trailing trivia from the var keyword.
@@ -95,15 +96,6 @@ public class CSL1000CodeFixProvider : CodeFixProvider
         LocalDeclarationStatementSyntax FormattedLocal = NewLocal.WithAdditionalAnnotations(Formatter.Annotation);
 
         // Replace the old local declaration with the new local declaration.
-        SyntaxNode? OldRoot = await document.GetSyntaxRootAsync(cancellationToken).ConfigureAwait(false);
-        SyntaxNode? NewRoot = OldRoot?.ReplaceNode(localDeclaration, FormattedLocal);
-
-        // Return document with transformed tree.
-        Document Result = document;
-
-        if (NewRoot is not null)
-            Result = document.WithSyntaxRoot(NewRoot);
-
-        return Result;
+        return await document.WithReplacedNode(cancellationToken, localDeclaration, FormattedLocal);
     }
 }
