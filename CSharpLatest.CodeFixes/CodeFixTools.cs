@@ -14,13 +14,17 @@ internal static class CodeFixTools
     public static async Task<(Diagnostic, T)> FindNodeToFix<T>(CodeFixContext context)
         where T : CSharpSyntaxNode
     {
-        var Root = await context.Document.GetSyntaxRootAsync(context.CancellationToken).ConfigureAwait(false);
+        SyntaxNode? Root = await context.Document.GetSyntaxRootAsync(context.CancellationToken).ConfigureAwait(false);
+        Debug.Assert(Root is not null);
 
         var Diagnostic = context.Diagnostics.First();
         var DiagnosticSpan = Diagnostic.Location.SourceSpan;
 
+        var Parent = Root!.FindToken(DiagnosticSpan.Start).Parent;
+        Debug.Assert(Parent is not null);
+
         // Find the type declaration identified by the diagnostic.
-        var Node = Root?.FindToken(DiagnosticSpan.Start).Parent?.AncestorsAndSelf().OfType<T>().First();
+        var Node = Parent!.AncestorsAndSelf().OfType<T>().First();
         Debug.Assert(Node is not null);
 
         return (Diagnostic, Node!);

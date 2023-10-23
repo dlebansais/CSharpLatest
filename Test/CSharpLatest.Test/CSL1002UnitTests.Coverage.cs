@@ -2,9 +2,7 @@
 
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using VerifyCS = CSharpLatest.Test.CSharpCodeFixVerifier<
-    CSharpLatest.CSL1002UseIsNotNull,
-    CSharpLatest.CSL1002CodeFixProvider>;
+using VerifyCS = CSharpCodeFixVerifier<CSL1002UseIsNotNull, CSL1002CodeFixProvider>;
 
 public partial class CSL1002UnitTests
 {
