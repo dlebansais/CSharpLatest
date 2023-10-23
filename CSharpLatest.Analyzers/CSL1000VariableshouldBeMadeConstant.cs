@@ -34,8 +34,6 @@ public class CSL1000VariableshouldBeMadeConstant : DiagnosticAnalyzer
                                                                                  description: Description,
                                                                                  AnalyzerTools.GetHelpLink(DiagnosticId));
 
-    private const LanguageVersion MinimumVersionAnalyzed = LanguageVersion.CSharp4;
-
     /// <summary>
     /// Gets the list of supported diagnostic.
     /// </summary>
@@ -55,7 +53,7 @@ public class CSL1000VariableshouldBeMadeConstant : DiagnosticAnalyzer
 
     private void AnalyzeNode(SyntaxNodeAnalysisContext context)
     {
-        AnalyzerTools.AssertSyntaxRequirements<LocalDeclarationStatementSyntax>(context, MinimumVersionAnalyzed, AnalyzeVerifiedNode, new DataFlowAnalysisAssertion<LocalDeclarationStatementSyntax>());
+        AnalyzerTools.AssertSyntaxRequirements<LocalDeclarationStatementSyntax>(context, AnalyzerTools.MinimumVersionAnalyzed, AnalyzeVerifiedNode, new DataFlowAnalysisAssertion<LocalDeclarationStatementSyntax>());
     }
 
     private void AnalyzeVerifiedNode(SyntaxNodeAnalysisContext context, LocalDeclarationStatementSyntax localDeclaration, IAnalysisAssertion[] analysisAssertions)

@@ -6,6 +6,9 @@ using Microsoft.CodeAnalysis.Diagnostics;
 
 internal static class AnalyzerTools
 {
+    // The minimum version of the language we care about.
+    public const LanguageVersion MinimumVersionAnalyzed = LanguageVersion.CSharp4;
+
     // Define this symbol in unit tests to simulate an assertion failure.
     // This will test branches that can only execute in future versions of C#.
     private const string CoverageDirectivePrefix = "#define COVERAGE_A25BDFABDDF8402785EB75AD812DA952";
