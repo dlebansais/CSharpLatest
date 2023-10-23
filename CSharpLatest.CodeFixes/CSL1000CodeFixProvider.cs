@@ -28,92 +28,81 @@ public class CSL1000CodeFixProvider : CodeFixProvider
 
     public sealed override async Task RegisterCodeFixesAsync(CodeFixContext context)
     {
-        var root = await context.Document.GetSyntaxRootAsync(context.CancellationToken).ConfigureAwait(false);
+        // Find the declaration identified by the diagnostic.
+        var (Diagnostic, Declaration) = await CodeFixTools.FindNodeToFix<LocalDeclarationStatementSyntax>(context);
 
-        var diagnostic = context.Diagnostics.First();
-        var diagnosticSpan = diagnostic.Location.SourceSpan;
-
-        // Find the type declaration identified by the diagnostic.
-        var declaration = root?.FindToken(diagnosticSpan.Start).Parent?.AncestorsAndSelf().OfType<LocalDeclarationStatementSyntax>().First();
-
-        if (declaration is not null)
-        {
-            // Register a code action that will invoke the fix.
-            context.RegisterCodeFix(
-                CodeAction.Create(
-                    title: CodeFixResources.CSL1000CodeFixTitle,
-                    createChangedDocument: c => MakeConstAsync(context.Document, declaration, c),
-                    equivalenceKey: nameof(CodeFixResources.CSL1000CodeFixTitle)),
-                diagnostic);
-        }
+        // Register a code action that will invoke the fix.
+        context.RegisterCodeFix(
+            CodeAction.Create(
+                title: CodeFixResources.CSL1000CodeFixTitle,
+                createChangedDocument: c => MakeConstAsync(context.Document, Declaration, c),
+                equivalenceKey: nameof(CodeFixResources.CSL1000CodeFixTitle)),
+            Diagnostic);
     }
 
-    private static async Task<Document> MakeConstAsync(Document document,
-        LocalDeclarationStatementSyntax localDeclaration,
-        CancellationToken cancellationToken)
+    private static async Task<Document> MakeConstAsync(Document document, LocalDeclarationStatementSyntax localDeclaration, CancellationToken cancellationToken)
     {
         // Remove the leading trivia from the local declaration.
-        SyntaxToken firstToken = localDeclaration.GetFirstToken();
-        SyntaxTriviaList leadingTrivia = firstToken.LeadingTrivia;
-        LocalDeclarationStatementSyntax trimmedLocal = localDeclaration.ReplaceToken(
-            firstToken, firstToken.WithLeadingTrivia(SyntaxTriviaList.Empty));
+        SyntaxToken FirstToken = localDeclaration.GetFirstToken();
+        SyntaxTriviaList LeadingTrivia = FirstToken.LeadingTrivia;
+        LocalDeclarationStatementSyntax TrimmedLocal = localDeclaration.ReplaceToken(FirstToken, FirstToken.WithLeadingTrivia(SyntaxTriviaList.Empty));
 
         // Create a const token with the leading trivia.
-        SyntaxToken constToken = SyntaxFactory.Token(leadingTrivia, SyntaxKind.ConstKeyword, SyntaxFactory.TriviaList(SyntaxFactory.ElasticMarker));
+        SyntaxToken ConstToken = SyntaxFactory.Token(LeadingTrivia, SyntaxKind.ConstKeyword, SyntaxFactory.TriviaList(SyntaxFactory.ElasticMarker));
 
         // Insert the const token into the modifiers list, creating a new modifiers list.
-        SyntaxTokenList newModifiers = trimmedLocal.Modifiers.Insert(0, constToken);
+        SyntaxTokenList NewModifiers = TrimmedLocal.Modifiers.Insert(0, ConstToken);
 
         // If the type of the declaration is 'var', create a new type name
         // for the inferred type.
-        VariableDeclarationSyntax variableDeclaration = localDeclaration.Declaration;
-        TypeSyntax variableTypeName = variableDeclaration.Type;
-        if (variableTypeName.IsVar)
+        VariableDeclarationSyntax VariableDeclaration = localDeclaration.Declaration;
+        TypeSyntax VariableTypeName = VariableDeclaration.Type;
+        if (VariableTypeName.IsVar)
         {
-            SemanticModel? semanticModel = await document.GetSemanticModelAsync(cancellationToken).ConfigureAwait(false);
+            SemanticModel? SemanticModel = await document.GetSemanticModelAsync(cancellationToken).ConfigureAwait(false);
 
             // Special case: Ensure that 'var' isn't actually an alias to another type
             // (e.g. using var = System.String).
-            IAliasSymbol? aliasInfo = semanticModel?.GetAliasInfo(variableTypeName, cancellationToken);
-            if (aliasInfo is null)
+            IAliasSymbol? AliasInfo = SemanticModel?.GetAliasInfo(VariableTypeName, cancellationToken);
+            if (AliasInfo is null)
             {
                 // Retrieve the type inferred for var.
-                ITypeSymbol? type = semanticModel.GetTypeInfo(variableTypeName, cancellationToken).ConvertedType;
+                ITypeSymbol? VariableType = SemanticModel.GetTypeInfo(VariableTypeName, cancellationToken).ConvertedType;
 
                 // Special case: Ensure that 'var' isn't actually a type named 'var'.
-                if (type is not null && type.Name != "var")
+                if (VariableType is not null && VariableType.Name != "var")
                 {
                     // Create a new TypeSyntax for the inferred type. Be careful
                     // to keep any leading and trailing trivia from the var keyword.
-                    TypeSyntax typeName = SyntaxFactory.ParseTypeName(type.ToDisplayString())
-                        .WithLeadingTrivia(variableTypeName.GetLeadingTrivia())
-                        .WithTrailingTrivia(variableTypeName.GetTrailingTrivia());
+                    TypeSyntax TypeName = SyntaxFactory.ParseTypeName(VariableType.ToDisplayString())
+                                                       .WithLeadingTrivia(VariableTypeName.GetLeadingTrivia())
+                                                       .WithTrailingTrivia(VariableTypeName.GetTrailingTrivia());
 
                     // Add an annotation to simplify the type name.
-                    TypeSyntax simplifiedTypeName = typeName.WithAdditionalAnnotations(Simplifier.Annotation);
+                    TypeSyntax SimplifiedTypeName = TypeName.WithAdditionalAnnotations(Simplifier.Annotation);
 
                     // Replace the type in the variable declaration.
-                    variableDeclaration = variableDeclaration.WithType(simplifiedTypeName);
+                    VariableDeclaration = VariableDeclaration.WithType(SimplifiedTypeName);
                 }
             }
         }
         
         // Produce the new local declaration.
-        LocalDeclarationStatementSyntax newLocal = trimmedLocal.WithModifiers(newModifiers)
-                                   .WithDeclaration(variableDeclaration);
+        LocalDeclarationStatementSyntax NewLocal = TrimmedLocal.WithModifiers(NewModifiers)
+                                                               .WithDeclaration(VariableDeclaration);
 
         // Add an annotation to format the new local declaration.
-        LocalDeclarationStatementSyntax formattedLocal = newLocal.WithAdditionalAnnotations(Formatter.Annotation);
+        LocalDeclarationStatementSyntax FormattedLocal = NewLocal.WithAdditionalAnnotations(Formatter.Annotation);
 
         // Replace the old local declaration with the new local declaration.
-        SyntaxNode? oldRoot = await document.GetSyntaxRootAsync(cancellationToken).ConfigureAwait(false);
-        SyntaxNode? newRoot = oldRoot?.ReplaceNode(localDeclaration, formattedLocal);
+        SyntaxNode? OldRoot = await document.GetSyntaxRootAsync(cancellationToken).ConfigureAwait(false);
+        SyntaxNode? NewRoot = OldRoot?.ReplaceNode(localDeclaration, FormattedLocal);
 
         // Return document with transformed tree.
         Document Result = document;
 
-        if (newRoot is not null)
-            Result = document.WithSyntaxRoot(newRoot);
+        if (NewRoot is not null)
+            Result = document.WithSyntaxRoot(NewRoot);
 
         return Result;
     }

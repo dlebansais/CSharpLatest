@@ -275,4 +275,66 @@ class Program
 }
 ");
     }
+
+    [TestMethod]
+    public async Task StringIsAliased_Diagnostic()
+    {
+        await VerifyCS.VerifyCodeFixAsync(@"
+using System;
+using var = System.String;
+
+class Program
+{
+    static void Main()
+    {
+        [|var s = ""abc"";|]
+    }
+}
+", @"
+using System;
+using var = System.String;
+
+class Program
+{
+    static void Main()
+    {
+        const var s = ""abc"";
+    }
+}
+");
+    }
+
+    [TestMethod]
+    public async Task VarIsType_Diagnostic()
+    {
+        await VerifyCS.VerifyCodeFixAsync(@"
+using System;
+
+class Program
+{
+    static void Main()
+    {
+        [|var s = null;|]
+    }
+}
+
+class var
+{
+}
+", @"
+using System;
+
+class Program
+{
+    static void Main()
+    {
+        const var s = null;
+    }
+}
+
+class var
+{
+}
+");
+    }
 }

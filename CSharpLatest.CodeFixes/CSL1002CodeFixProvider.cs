@@ -27,24 +27,16 @@ public class CSL1002CodeFixProvider : CodeFixProvider
 
     public sealed override async Task RegisterCodeFixesAsync(CodeFixContext context)
     {
-        var Root = await context.Document.GetSyntaxRootAsync(context.CancellationToken).ConfigureAwait(false);
-
-        var Diagnostic = context.Diagnostics.First();
-        var DiagnosticSpan = Diagnostic.Location.SourceSpan;
-
         // Find the expression identified by the diagnostic.
-        var Expression = Root?.FindToken(DiagnosticSpan.Start).Parent?.AncestorsAndSelf().OfType<BinaryExpressionSyntax>().First();
+        var (Diagnostic, Expression) = await CodeFixTools.FindNodeToFix<BinaryExpressionSyntax>(context);
 
-        if (Expression is not null)
-        {
-            // Register a code action that will invoke the fix.
-            context.RegisterCodeFix(
-                CodeAction.Create(
-                    title: CodeFixResources.CSL1002CodeFixTitle,
-                    createChangedDocument: c => ChangeToIsNotNullAsync(context.Document, Expression, c),
-                    equivalenceKey: nameof(CodeFixResources.CSL1002CodeFixTitle)),
-                Diagnostic);
-        }
+        // Register a code action that will invoke the fix.
+        context.RegisterCodeFix(
+            CodeAction.Create(
+                title: CodeFixResources.CSL1002CodeFixTitle,
+                createChangedDocument: c => ChangeToIsNotNullAsync(context.Document, Expression, c),
+                equivalenceKey: nameof(CodeFixResources.CSL1002CodeFixTitle)),
+            Diagnostic);
     }
 
     private static async Task<Document> ChangeToIsNotNullAsync(Document document,

@@ -41,13 +41,14 @@ if($languageFolder -eq "")
     return
 }
 
+$errorText = "None"
+
 foreach($analyzersPath in $analyzersPaths)
 {
     # Uninstall language specific analyzers.
     $languageAnalyzersPath = join-path $analyzersPath $languageFolder
     if (Test-Path $languageAnalyzersPath)
     {
-        $error = "None"
         foreach ($analyzerFilePath in Get-ChildItem -Path "$languageAnalyzersPath\*.dll" -Exclude *.resources.dll)
         {
             if($project.Object.AnalyzerReferences)
@@ -58,7 +59,7 @@ foreach($analyzersPath in $analyzersPaths)
                 }
                 catch
                 {
-                    $error = "Not removed"
+                    $errorText = "Not removed"
                 }
             }
         }
