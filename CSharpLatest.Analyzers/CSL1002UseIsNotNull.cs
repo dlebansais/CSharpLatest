@@ -51,7 +51,7 @@ public class CSL1002UseIsNotNull : DiagnosticAnalyzer
 
     private void AnalyzeNode(SyntaxNodeAnalysisContext context)
     {
-        AnalyzerTools.AssertSyntaxRequirements<BinaryExpressionSyntax>(context, LanguageVersion.CSharp7, AnalyzeVerifiedNode,
+        AnalyzerTools.AssertSyntaxRequirements<BinaryExpressionSyntax>(context, LanguageVersion.CSharp9, AnalyzeVerifiedNode,
             new SimpleAnalysisAssertion(context => ((BinaryExpressionSyntax)context.Node).OperatorToken.IsKind(SyntaxKind.ExclamationEqualsToken)));
     }
 
