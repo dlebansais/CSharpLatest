@@ -3,7 +3,7 @@
 	<PropertyGroup>
 		<TargetFramework>netstandard2.0</TargetFramework>
 		<Nullable>enable</Nullable>
-		<LangVersion>11</LangVersion>
+		<LangVersion>12</LangVersion>
 		<GenerateDocumentationFile>true</GenerateDocumentationFile>
 		<Version>0.0.7</Version>
 		<Authors>David Le Bansais</Authors>
