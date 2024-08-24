@@ -37,7 +37,7 @@ public class CSL1000VariableshouldBeMadeConstant : DiagnosticAnalyzer
     /// <summary>
     /// Gets the list of supported diagnostic.
     /// </summary>
-    public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics { get { return ImmutableArray.Create(Rule); } }
+    public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics { get { return [Rule]; } }
 
     /// <summary>
     /// Initializes the rule analyzer.
@@ -68,8 +68,8 @@ public class CSL1000VariableshouldBeMadeConstant : DiagnosticAnalyzer
             return;
 
         // Ensure that all variables in the local declaration have initializers that are assigned with constant values.
-        foreach (VariableDeclaratorSyntax variable in localDeclaration.Declaration.Variables)
-            if (!IsVariableAssignedToConstantValue(context, VariableType, variable))
+        foreach (VariableDeclaratorSyntax Variable in localDeclaration.Declaration.Variables)
+            if (!IsVariableAssignedToConstantValue(context, VariableType, Variable))
                 return;
 
         // Gets the data flow analysis performed on the local declaration during the analysis assertion phase.
@@ -88,28 +88,28 @@ public class CSL1000VariableshouldBeMadeConstant : DiagnosticAnalyzer
 
     private bool IsVariableAssignedToConstantValue(SyntaxNodeAnalysisContext context, ITypeSymbol variableType, VariableDeclaratorSyntax variable)
     {
-        EqualsValueClauseSyntax? initializer = variable.Initializer;
-        if (initializer is null)
+        EqualsValueClauseSyntax? Initializer = variable.Initializer;
+        if (Initializer is null)
             return false;
 
-        Optional<object?> constantValue = context.SemanticModel.GetConstantValue(initializer.Value, context.CancellationToken);
-        if (!constantValue.HasValue)
+        Optional<object?> ConstantValue = context.SemanticModel.GetConstantValue(Initializer.Value, context.CancellationToken);
+        if (!ConstantValue.HasValue)
             return false;
 
         // Ensure that the initializer value can be converted to the type of the local declaration without a user-defined conversion.
-        Conversion conversion = context.SemanticModel.ClassifyConversion(initializer.Value, variableType);
-        if (!conversion.Exists || conversion.IsUserDefined)
+        Conversion Conversion = context.SemanticModel.ClassifyConversion(Initializer.Value, variableType);
+        if (!Conversion.Exists || Conversion.IsUserDefined)
             return false;
 
         // Special cases:
         //  * If the constant value is a string, the type of the local declaration must be System.String.
         //  * If the constant value is null, the type of the local declaration must be a reference type.
-        if (constantValue.Value is string)
+        if (ConstantValue.Value is string)
         {
             if (variableType.SpecialType != SpecialType.System_String)
                 return false;
         }
-        else if (variableType.IsReferenceType && constantValue.Value is not null)
+        else if (variableType.IsReferenceType && ConstantValue.Value is not null)
             return false;
 
         return true;

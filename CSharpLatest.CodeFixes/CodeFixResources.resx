@@ -129,4 +129,8 @@
     <value>Change to 'is not null'</value>
     <comment>The title of the code fix.</comment>
   </data>
+  <data name="CSL1003CodeFixTitle" xml:space="preserve">
+    <value>Use a primary constructor</value>
+    <comment>The title of the code fix.</comment>
+  </data>
 </root>

@@ -35,7 +35,7 @@ public class CSL1001UseIsNull : DiagnosticAnalyzer
     /// <summary>
     /// Gets the list of supported diagnostic.
     /// </summary>
-    public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics { get { return ImmutableArray.Create(Rule); } }
+    public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics { get { return [Rule]; } }
 
     /// <summary>
     /// Initializes the rule analyzer.

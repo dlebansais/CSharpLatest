@@ -331,7 +331,7 @@ class Program
     }
 
     [TestMethod]
-    public async Task Decoration3_NoDiagnostic()
+    public async Task Decoration3_Diagnostic()
     {
         await VerifyCS.VerifyCodeFixAsync(@"
 #nullable enable

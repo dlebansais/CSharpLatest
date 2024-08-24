@@ -2,7 +2,6 @@
 
 using System.Collections.Immutable;
 using System.Composition;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.CodeAnalysis;
@@ -17,7 +16,7 @@ public class CSL1001CodeFixProvider : CodeFixProvider
 {
     public sealed override ImmutableArray<string> FixableDiagnosticIds
     {
-        get { return ImmutableArray.Create(CSL1001UseIsNull.DiagnosticId); }
+        get { return [CSL1001UseIsNull.DiagnosticId]; }
     }
 
     public sealed override FixAllProvider GetFixAllProvider()

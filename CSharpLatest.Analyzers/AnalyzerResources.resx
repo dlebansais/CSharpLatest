@@ -153,4 +153,16 @@
     <value>Expression can be changed to 'is not null'</value>
     <comment>The title of the diagnostic.</comment>
   </data>
+  <data name="CSL1003AnalyzerDescription" xml:space="preserve">
+    <value>Consider using primary contructors to simplify your code.</value>
+    <comment>An optional longer localizable description of the diagnostic.</comment>
+  </data>
+  <data name="CSL1003AnalyzerMessageFormat" xml:space="preserve">
+    <value>Consider using a primary contructor for '{0}'</value>
+    <comment>The format-able message the diagnostic displays.</comment>
+  </data>
+  <data name="CSL1003AnalyzerTitle" xml:space="preserve">
+    <value>Consider using primary contructors</value>
+    <comment>The title of the diagnostic.</comment>
+  </data>
 </root>

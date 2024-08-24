@@ -86,5 +86,14 @@ namespace CSharpLatest {
                 return ResourceManager.GetString("CSL1002CodeFixTitle", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use a primary constructor.
+        /// </summary>
+        internal static string CSL1003CodeFixTitle {
+            get {
+                return ResourceManager.GetString("CSL1003CodeFixTitle", resourceCulture);
+            }
+        }
     }
 }

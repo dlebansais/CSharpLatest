@@ -140,5 +140,32 @@ namespace CSharpLatest {
                 return ResourceManager.GetString("CSL1002AnalyzerTitle", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Consider using primary contructors to simplify your code..
+        /// </summary>
+        internal static string CSL1003AnalyzerDescription {
+            get {
+                return ResourceManager.GetString("CSL1003AnalyzerDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Consider using a primary contructor for &apos;{0}&apos;.
+        /// </summary>
+        internal static string CSL1003AnalyzerMessageFormat {
+            get {
+                return ResourceManager.GetString("CSL1003AnalyzerMessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Consider using primary contructors.
+        /// </summary>
+        internal static string CSL1003AnalyzerTitle {
+            get {
+                return ResourceManager.GetString("CSL1003AnalyzerTitle", resourceCulture);
+            }
+        }
     }
 }
