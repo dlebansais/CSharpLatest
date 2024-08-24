@@ -1,14 +1,14 @@
 ﻿using System;
 using Microsoft.CodeAnalysis.CodeRefactorings;
 using Microsoft.CodeAnalysis.CSharp.Testing;
-using Microsoft.CodeAnalysis.Testing.Verifiers;
+using Microsoft.CodeAnalysis.Testing;
 
 namespace CSharpLatest.Test
 {
     public static partial class CSharpCodeRefactoringVerifier<TCodeRefactoring>
         where TCodeRefactoring : CodeRefactoringProvider, new()
     {
-        public class Test : CSharpCodeRefactoringTest<TCodeRefactoring, MSTestVerifier>
+        public class Test : CSharpCodeRefactoringTest<TCodeRefactoring, DefaultVerifier>
         {
             public Test()
             {
