@@ -264,4 +264,141 @@ class Program
 }
 ");
     }
+
+    [TestMethod]
+    public async Task ComplexExpression1_NoDiagnostic()
+    {
+        await VerifyCS.VerifyAnalyzerAsync(@"
+#nullable enable
+
+using System;
+
+class Program
+{
+    public Program(string prop, string other)
+    {
+        Prop = prop;
+        Other = other + prop;
+    }
+
+    public string Prop { get; }
+    public string Other { get; }
+}
+");
+    }
+
+    [TestMethod]
+    public async Task ComplexExpression2_NoDiagnostic()
+    {
+        await VerifyCS.VerifyAnalyzerAsync(@"
+#nullable enable
+
+using System;
+
+class Program
+{
+    public Program(string prop, string other)
+    {
+        Prop = prop;
+        Other[0] = other;
+    }
+
+    public string Prop { get; }
+    private string[] Other = new string[1];
+}
+");
+    }
+
+    [TestMethod]
+    public async Task ComplexExpression3_NoDiagnostic()
+    {
+        await VerifyCS.VerifyAnalyzerAsync(@"
+#nullable enable
+
+using System;
+
+class Program
+{
+    public Program(string prop, string other)
+    {
+        Prop = prop;
+        Method();
+        Other = other + prop;
+    }
+
+    private void Method()
+    {
+    }
+
+    public string Prop { get; }
+    public string Other { get; }
+}
+");
+    }
+
+    [TestMethod]
+    public async Task SimpleClassWithOtherProperties_Diagnostic()
+    {
+        await VerifyCS.VerifyCodeFixAsync(@"
+#nullable enable
+
+using System;
+
+[|class Program
+{
+    public Program(string prop)
+    {
+        Prop = prop;
+    }
+
+    public string Prop { get; }
+    public string Other { get; } = string.Empty;
+}|]
+", @"
+#nullable enable
+
+using System;
+
+class Program(string prop)
+{
+    public string Prop { get; } = prop;
+    public string Other { get; } = string.Empty;
+}
+");
+    }
+
+    [TestMethod]
+    public async Task SimpleClassWithExpressionBodyConstructor_Diagnostic()
+    {
+        await VerifyCS.VerifyCodeFixAsync(@"
+#nullable enable
+
+using System;
+
+[|class Program
+{
+    public Program(string prop)
+    {
+        Prop = prop;
+    }
+
+    public Program(string prop, int other) => Prop = prop;
+
+    public string Prop { get; }
+}|]
+", @"
+#nullable enable
+
+using System;
+
+class Program(string prop)
+{
+    public Program(string prop, int other) : this(prop)
+    {
+    }
+
+    public string Prop { get; } = prop;
+}
+");
+    }
 }

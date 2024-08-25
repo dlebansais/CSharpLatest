@@ -140,8 +140,8 @@ public class CSL1003CodeFixProvider : CodeFixProvider
         var SeparatedArgumentList = SyntaxFactory.SeparatedList(Arguments);
         var ArgumentList = SyntaxFactory.ArgumentList(SeparatedArgumentList);
 
-        SyntaxToken ColonToken = SyntaxFactory.Token(SyntaxKind.ColonToken).WithLeadingTrivia(SyntaxFactory.TriviaList(new SyntaxTrivia[] { SyntaxFactory.Whitespace(" ") }));
-        SyntaxToken ThisKeyword = SyntaxFactory.Token(SyntaxKind.ThisKeyword).WithLeadingTrivia(SyntaxFactory.TriviaList(new SyntaxTrivia[] { SyntaxFactory.Whitespace(" ") }));
+        SyntaxToken ColonToken = SyntaxFactory.Token(SyntaxKind.ColonToken).WithLeadingTrivia(SyntaxFactory.TriviaList([SyntaxFactory.Whitespace(" ")]));
+        SyntaxToken ThisKeyword = SyntaxFactory.Token(SyntaxKind.ThisKeyword).WithLeadingTrivia(SyntaxFactory.TriviaList([SyntaxFactory.Whitespace(" ")]));
 
         ConstructorInitializerSyntax Initializer = SyntaxFactory.ConstructorInitializer(SyntaxKind.ThisConstructorInitializer, ColonToken, ThisKeyword, ArgumentList);
 
@@ -154,7 +154,9 @@ public class CSL1003CodeFixProvider : CodeFixProvider
         {
             List<StatementSyntax> Statements = new(Body.Statements);
 
-            for (int i = 0; i < Statements.Count; i++)
+            Debug.Assert(initialAssignments.Count <= Statements.Count);
+
+            for (int i = 0; i < initialAssignments.Count; i++)
             {
                 StatementSyntax Statement = Statements[i];
 
@@ -164,9 +166,7 @@ public class CSL1003CodeFixProvider : CodeFixProvider
                 Debug.Assert(ExpressionStatement.Expression is AssignmentExpressionSyntax);
                 AssignmentExpressionSyntax Assignment = (AssignmentExpressionSyntax)ExpressionStatement.Expression;
 
-                Debug.Assert(i < initialAssignments.Count);
                 AssignmentExpressionSyntax InitialAssignment = initialAssignments[i];
-
                 Debug.Assert(CSL1003ConsiderUsingPrimaryConstructor.IsSyntaxNodeEquivalent(Assignment, InitialAssignment));
             }
 
@@ -190,7 +190,7 @@ public class CSL1003CodeFixProvider : CodeFixProvider
             var NewStatementList = SyntaxFactory.List(new List<StatementSyntax>());
             var NewBody = SyntaxFactory.Block(NewStatementList);
 
-            NewConstructorDeclaration = NewConstructorDeclaration.WithExpressionBody(null).WithBody(NewBody);
+            NewConstructorDeclaration = NewConstructorDeclaration.WithExpressionBody(null).WithBody(NewBody).WithSemicolonToken(SyntaxFactory.Token(SyntaxKind.None));
         }
 
         return NewConstructorDeclaration;
