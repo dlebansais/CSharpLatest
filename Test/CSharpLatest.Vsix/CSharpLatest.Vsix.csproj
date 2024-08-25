@@ -3,7 +3,7 @@
   <Import Sdk="Microsoft.NET.Sdk" Project="Sdk.props" />
 
   <PropertyGroup>
-    <TargetFramework>net481</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <RootNamespace>CSharpLatest.Vsix</RootNamespace>
     <AssemblyName>CSharpLatest.Vsix</AssemblyName>
   </PropertyGroup>

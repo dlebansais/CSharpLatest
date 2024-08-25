@@ -1,5 +1,6 @@
 ﻿namespace CSharpLatest;
 
+using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Composition;
@@ -12,6 +13,7 @@ using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Formatting;
+using Microsoft.CodeAnalysis.Text;
 
 [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(CSL1003CodeFixProvider)), Shared]
 public class CSL1003CodeFixProvider : CodeFixProvider
@@ -87,8 +89,16 @@ public class CSL1003CodeFixProvider : CodeFixProvider
             {
                 if (FindPropertyInitializer(PropertyDeclaration, Assignments) is EqualsValueClauseSyntax Initializer)
                 {
+                    SyntaxTriviaList PropertyTrailingTrivia = PropertyDeclaration.GetTrailingTrivia();
                     PropertyDeclarationSyntax NewPropertyDeclaration = PropertyDeclaration.WithInitializer(Initializer);
                     NewPropertyDeclaration = NewPropertyDeclaration.WithSemicolonToken(SyntaxFactory.Token(SyntaxKind.SemicolonToken));
+                    NewPropertyDeclaration = NewPropertyDeclaration.WithTrailingTrivia(PropertyTrailingTrivia);
+
+                    DisplayTrivia(PropertyDeclaration, "PropertyDeclaration");
+                    DisplayTrivia(Initializer, "Initializer");
+                    DisplayTrivia(NewPropertyDeclaration.SemicolonToken, "NewPropertyDeclaration.SemicolonToken");
+                    DisplayTrivia(NewPropertyDeclaration, "NewPropertyDeclaration");
+
                     ConvertedMember = NewPropertyDeclaration;
                 }
             }
@@ -191,13 +201,40 @@ public class CSL1003CodeFixProvider : CodeFixProvider
 
         if (assignments.Find(assignment => assignment.Left is IdentifierNameSyntax IdentifierName && IdentifierName.Identifier.Text  == PropertyName) is AssignmentExpressionSyntax Assignment)
         {
-            SyntaxTriviaList TrailingTrivia = Assignment.GetTrailingTrivia();
-
             ExpressionSyntax Expression = Assignment.Right;
             Initializer = SyntaxFactory.EqualsValueClause(Expression);
-            Initializer = Initializer.WithTrailingTrivia(TrailingTrivia);
         }
 
         return Initializer;
+    }
+
+    private static void DisplayTrivia(SyntaxNode node, string text = "")
+    {
+        SyntaxTriviaList LeadingTrivia = node.GetLeadingTrivia();
+        SyntaxTriviaList TrailingTrivia = node.GetTrailingTrivia();
+
+        Console.WriteLine($"{text} - {TriviaText(LeadingTrivia)} - {TriviaText(TrailingTrivia)}");
+    }
+
+    private static void DisplayTrivia(SyntaxToken token, string text = "")
+    {
+        SyntaxTriviaList LeadingTrivia = token.LeadingTrivia;
+        SyntaxTriviaList TrailingTrivia = token.TrailingTrivia;
+
+        Console.WriteLine($"{text} - {TriviaText(LeadingTrivia)} - {TriviaText(TrailingTrivia)}");
+    }
+
+    private static string TriviaText(SyntaxTriviaList triviaList)
+    {
+        string Result = string.Empty;
+        foreach (var trivia in triviaList)
+            Result += TriviaText(trivia) + "#";
+
+        return Result;
+    }
+
+    private static string TriviaText(SyntaxTrivia trivia)
+    {
+        return trivia.Kind().ToString();
     }
 }
