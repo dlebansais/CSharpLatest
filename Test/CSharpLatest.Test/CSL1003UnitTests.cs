@@ -174,4 +174,94 @@ class Program(string prop)
 }/*XYZ*/
 ");
     }
+
+    [TestMethod]
+    public async Task MissingAssignment_NoDiagnostic()
+    {
+        await VerifyCS.VerifyAnalyzerAsync(@"
+#nullable enable
+
+using System;
+
+class Program
+{
+    public Program(string prop, string other)
+    {
+        Prop = prop;
+        Other = other;
+    }
+
+    public Program(string prop, string other, int more)
+    {
+        Prop = prop;
+    }
+
+    public string? Prop { get; }
+    public string? Other { get; }
+}
+");
+    }
+
+    [TestMethod]
+    public async Task MultipleConstructorsExpressionBody_Diagnostic()
+    {
+        await VerifyCS.VerifyCodeFixAsync(@"
+#nullable enable
+
+using System;
+
+[|class Program
+{
+    public Program(string prop) => Prop = prop;
+
+    public Program(string prop, int other)
+    {
+        Prop = prop;
+    }
+
+    public string Prop { get; }
+}|]
+", @"
+#nullable enable
+
+using System;
+
+class Program(string prop)
+{
+    public Program(string prop, int other) : this(prop)
+    {
+    }
+
+    public string Prop { get; } = prop;
+}
+");
+    }
+
+    [TestMethod]
+    public async Task MissingAssignmentExpressionBody_NoDiagnostic()
+    {
+        await VerifyCS.VerifyAnalyzerAsync(@"
+#nullable enable
+
+using System;
+
+class Program
+{
+    public Program(string prop, string other)
+    {
+        Prop = prop;
+        Other = other;
+    }
+
+    public Program(string prop, string other, int more) => Foo();
+
+    private void Foo()
+    {
+    }
+
+    public string? Prop { get; }
+    public string? Other { get; }
+}
+");
+    }
 }

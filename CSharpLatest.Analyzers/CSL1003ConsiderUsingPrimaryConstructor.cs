@@ -131,9 +131,7 @@ public class CSL1003ConsiderUsingPrimaryConstructor : DiagnosticAnalyzer
 
     private static bool IsSameParameter(ParameterSyntax p1, ParameterSyntax p2)
     {
-        bool IsEqual = p1.IsEquivalentTo(p2);
-
-        return IsEqual;
+        return IsSyntaxNodeEquivalent(p1, p2);
     }
 
     /// <summary>
@@ -185,15 +183,25 @@ public class CSL1003ConsiderUsingPrimaryConstructor : DiagnosticAnalyzer
             return false;
 
         for (int i =  0; i < expectedAssignments.Count; i++)
-        {
-            AssignmentExpressionSyntax Assignment = Assignments[i];
-            AssignmentExpressionSyntax ExpectedAssignment = expectedAssignments[i];
-
-            if (!Assignment.IsEquivalentTo(ExpectedAssignment))
+            if (!IsSyntaxNodeEquivalent(Assignments[i], expectedAssignments[i]))
                 return false;
-        }
 
         return true;
+    }
+
+    /// <summary>
+    /// Checks whether two <see cref="SyntaxNode"/> are equivalent.
+    /// This method ignores leading and trailing trivias.
+    /// </summary>
+    /// <param name="node1">The first assignment.</param>
+    /// <param name="node2">The second assignment.</param>
+    public static bool IsSyntaxNodeEquivalent<T>(T node1, T node2)
+        where T : SyntaxNode
+    {
+        T CleanNode1 = node1.WithoutLeadingTrivia().WithoutTrailingTrivia();
+        T CleanNode2 = node2.WithoutLeadingTrivia().WithoutTrailingTrivia();
+
+        return CleanNode1.IsEquivalentTo(CleanNode2);
     }
 
     private static (bool, List<AssignmentExpressionSyntax>) GetConstructorStartingAssignments(ConstructorDeclarationSyntax constructorDeclaration)

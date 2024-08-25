@@ -167,7 +167,7 @@ public class CSL1003CodeFixProvider : CodeFixProvider
                 Debug.Assert(i < initialAssignments.Count);
                 AssignmentExpressionSyntax InitialAssignment = initialAssignments[i];
 
-                Debug.Assert(Assignment.IsEquivalentTo(InitialAssignment));
+                Debug.Assert(CSL1003ConsiderUsingPrimaryConstructor.IsSyntaxNodeEquivalent(Assignment, InitialAssignment));
             }
 
             List<StatementSyntax> RemainingStatements = Statements.GetRange(initialAssignments.Count, Statements.Count - initialAssignments.Count);
@@ -185,7 +185,7 @@ public class CSL1003CodeFixProvider : CodeFixProvider
             Debug.Assert(initialAssignments.Count == 1);
             AssignmentExpressionSyntax InitialAssignment = initialAssignments[0];
 
-            Debug.Assert(Assignment.IsEquivalentTo(InitialAssignment));
+            Debug.Assert(CSL1003ConsiderUsingPrimaryConstructor.IsSyntaxNodeEquivalent(Assignment, InitialAssignment));
 
             var NewStatementList = SyntaxFactory.List(new List<StatementSyntax>());
             var NewBody = SyntaxFactory.Block(NewStatementList);
