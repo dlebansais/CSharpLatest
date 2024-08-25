@@ -94,11 +94,6 @@ public class CSL1003CodeFixProvider : CodeFixProvider
                     NewPropertyDeclaration = NewPropertyDeclaration.WithSemicolonToken(SyntaxFactory.Token(SyntaxKind.SemicolonToken));
                     NewPropertyDeclaration = NewPropertyDeclaration.WithTrailingTrivia(PropertyTrailingTrivia);
 
-                    DisplayTrivia(PropertyDeclaration, "PropertyDeclaration");
-                    DisplayTrivia(Initializer, "Initializer");
-                    DisplayTrivia(NewPropertyDeclaration.SemicolonToken, "NewPropertyDeclaration.SemicolonToken");
-                    DisplayTrivia(NewPropertyDeclaration, "NewPropertyDeclaration");
-
                     ConvertedMember = NewPropertyDeclaration;
                 }
             }
@@ -133,12 +128,24 @@ public class CSL1003CodeFixProvider : CodeFixProvider
     {
         Debug.Assert(constructorDeclaration.Initializer is null);
 
+        var ParameterList = constructorDeclaration.ParameterList;
+        SyntaxToken CloseParenToken = ParameterList.CloseParenToken;
+        SyntaxTriviaList CloseParenTrailingTrivia = ParameterList.CloseParenToken.TrailingTrivia;
+        var NewParameterList = ParameterList.WithoutTrailingTrivia();
+
         List<ArgumentSyntax> Arguments = thisParameters.ConvertAll(ToArgument);
         var SeparatedArgumentList = SyntaxFactory.SeparatedList(Arguments);
         var ArgumentList = SyntaxFactory.ArgumentList(SeparatedArgumentList);
-        ConstructorInitializerSyntax Initializer = SyntaxFactory.ConstructorInitializer(SyntaxKind.ThisConstructorInitializer, ArgumentList);
+
+        SyntaxToken ColonToken = SyntaxFactory.Token(SyntaxKind.ColonToken).WithLeadingTrivia(SyntaxFactory.TriviaList(new SyntaxTrivia[] { SyntaxFactory.Whitespace(" ") }));
+        SyntaxToken ThisKeyword = SyntaxFactory.Token(SyntaxKind.ThisKeyword).WithLeadingTrivia(SyntaxFactory.TriviaList(new SyntaxTrivia[] { SyntaxFactory.Whitespace(" ") }));
+
+        ConstructorInitializerSyntax Initializer = SyntaxFactory.ConstructorInitializer(SyntaxKind.ThisConstructorInitializer, ColonToken, ThisKeyword, ArgumentList);
+
+        Initializer = Initializer.WithTrailingTrivia(CloseParenTrailingTrivia);
 
         ConstructorDeclarationSyntax NewConstructorDeclaration = constructorDeclaration.WithInitializer(Initializer);
+        NewConstructorDeclaration = NewConstructorDeclaration.WithParameterList(NewParameterList);
 
         if (constructorDeclaration.Body is BlockSyntax Body)
         {
@@ -206,35 +213,5 @@ public class CSL1003CodeFixProvider : CodeFixProvider
         }
 
         return Initializer;
-    }
-
-    private static void DisplayTrivia(SyntaxNode node, string text = "")
-    {
-        SyntaxTriviaList LeadingTrivia = node.GetLeadingTrivia();
-        SyntaxTriviaList TrailingTrivia = node.GetTrailingTrivia();
-
-        Console.WriteLine($"{text} - {TriviaText(LeadingTrivia)} - {TriviaText(TrailingTrivia)}");
-    }
-
-    private static void DisplayTrivia(SyntaxToken token, string text = "")
-    {
-        SyntaxTriviaList LeadingTrivia = token.LeadingTrivia;
-        SyntaxTriviaList TrailingTrivia = token.TrailingTrivia;
-
-        Console.WriteLine($"{text} - {TriviaText(LeadingTrivia)} - {TriviaText(TrailingTrivia)}");
-    }
-
-    private static string TriviaText(SyntaxTriviaList triviaList)
-    {
-        string Result = string.Empty;
-        foreach (var trivia in triviaList)
-            Result += TriviaText(trivia) + "#";
-
-        return Result;
-    }
-
-    private static string TriviaText(SyntaxTrivia trivia)
-    {
-        return trivia.Kind().ToString();
     }
 }
