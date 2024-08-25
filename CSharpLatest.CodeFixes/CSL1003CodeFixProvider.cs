@@ -191,8 +191,11 @@ public class CSL1003CodeFixProvider : CodeFixProvider
 
         if (assignments.Find(assignment => assignment.Left is IdentifierNameSyntax IdentifierName && IdentifierName.Identifier.Text  == PropertyName) is AssignmentExpressionSyntax Assignment)
         {
+            SyntaxTriviaList TrailingTrivia = Assignment.GetTrailingTrivia();
+
             ExpressionSyntax Expression = Assignment.Right;
             Initializer = SyntaxFactory.EqualsValueClause(Expression);
+            Initializer = Initializer.WithTrailingTrivia(TrailingTrivia);
         }
 
         return Initializer;
