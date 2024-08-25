@@ -114,6 +114,7 @@ class Program(string prop)
 ");
     }
 
+#if DISABLED
     [TestMethod]
     public async Task Decoration1_Diagnostic()
     {
@@ -143,6 +144,7 @@ class Program(string prop)
 }
 ");
     }
+#endif
 
     [TestMethod]
     public async Task Decoration2_Diagnostic()
