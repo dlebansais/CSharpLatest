@@ -20,8 +20,8 @@ environment:
   package_token:
     secure: oeB0vPa3ehegduJ/WnxLssnK6wiIc8MVx0lVYeiXKT6pIz9ZDQ4ioQ55g6GYz9dW
   opencover_version: 4.7.1221
-  codecov_version: 0.2.4
-  csharp-format_version: 0.0.9
+  codecov_uploader_version: 0.7.1
+  report_generator_version: 5.2.0
   PACKAGE_PREFIX: dlebansais
 
 matrix:
@@ -50,7 +50,8 @@ after_build:
 
 before_test:
   - nuget install OpenCover -Version %opencover_version% -OutputDirectory packages
-  - nuget install CodecovUploader -Version %codecov_version% -OutputDirectory packages
+  - nuget install CodecovUploader -Version %codecov_uploader_version% -OutputDirectory packages
+  - nuget install ReportGenerator -Version %report_generator_version% -OutputDirectory packages
   - |-
     printf "dotnet test ./Test/%APPVEYOR_PROJECT_NAME%.Test/bin/%CONFIGURATION%/netcoreapp3.1/%APPVEYOR_PROJECT_NAME%.Test.dll -l console;verbosity=detailed\n" > runtests.bat
   - |-
