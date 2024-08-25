@@ -1,7 +1,10 @@
 ﻿namespace CSharpLatest;
 
+using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.Diagnostics;
+using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -65,6 +68,10 @@ public class CSL1003ConsiderUsingPrimaryConstructor : DiagnosticAnalyzer
         if (classDeclaration.ParameterList is not null)
             return;
 
+        // No diagnostic if any of the constructors calls this() or base().
+        if (classDeclaration.Members.OfType<ConstructorDeclarationSyntax>().Any(constructor => constructor.Initializer is not null))
+            return;
+
         // If the list of candidates is empty, no primary constructor can be used.
         List<ParameterSyntax> ParameterCandidates = GetParameterCandidates(classDeclaration);
         if (ParameterCandidates.Count == 0)
@@ -75,13 +82,24 @@ public class CSL1003ConsiderUsingPrimaryConstructor : DiagnosticAnalyzer
             return;
 
         // If the constructor is doing anything else than assigning properties, let's not try to second-guess the code.
-        if (!IsConstructorOnlyAssigningProperties(ConstructorCandidate))
+        (bool HasAssignmentsOnly, List<AssignmentExpressionSyntax> Assignments) = GetPropertyAssignments(classDeclaration, ConstructorCandidate);
+        if (!HasAssignmentsOnly)
             return;
+
+        // If other constructors don't do the same, let's not try to second-guess the code.
+        foreach (var Member in classDeclaration.Members)
+            if (Member is ConstructorDeclarationSyntax ConstructorDeclaration && ConstructorDeclaration != ConstructorCandidate)
+                if (!IsConstructorStartingWithAssignments(ConstructorDeclaration, Assignments))
+                    return;
 
         context.ReportDiagnostic(Diagnostic.Create(Rule, context.Node.GetLocation(), classDeclaration.Identifier.Text));
     }
 
-    private static List<ParameterSyntax> GetParameterCandidates(ClassDeclarationSyntax classDeclaration)
+    /// <summary>
+    /// Gets the list of parameters that are candidates to be in a primary constructor.
+    /// </summary>
+    /// <param name="classDeclaration">The class declaration.</param>
+    public static List<ParameterSyntax> GetParameterCandidates(ClassDeclarationSyntax classDeclaration)
     {
         List<ParameterSyntax> Result = new();
         bool IsFirstConstructor = true;
@@ -118,7 +136,13 @@ public class CSL1003ConsiderUsingPrimaryConstructor : DiagnosticAnalyzer
         return IsEqual;
     }
 
-    private static ConstructorDeclarationSyntax? GetConstructorCandidate(ClassDeclarationSyntax classDeclaration, List<ParameterSyntax> parameterCandidates)
+    /// <summary>
+    /// Gets the constructor that takes the provided list of parameters.
+    /// </summary>
+    /// <param name="classDeclaration">The class declaration.</param>
+    /// <param name="parameterCandidates">The list of parameters.</param>
+    /// <returns></returns>
+    public static ConstructorDeclarationSyntax? GetConstructorCandidate(ClassDeclarationSyntax classDeclaration, List<ParameterSyntax> parameterCandidates)
     {
         foreach (var Member in classDeclaration.Members)
             if (Member is ConstructorDeclarationSyntax ConstructorDeclaration)
@@ -128,7 +152,48 @@ public class CSL1003ConsiderUsingPrimaryConstructor : DiagnosticAnalyzer
         return null;
     }
 
-    private static bool IsConstructorOnlyAssigningProperties(ConstructorDeclarationSyntax constructorDeclaration)
+    /// <summary>
+    /// Gets the list of property assignments in the constructor.
+    /// </summary>
+    /// <param name="classDeclaration">The class declaration.</param>
+    /// <param name="constructorDeclaration">The constructor declaration.</param>
+    /// <returns><see langword="true"/> and the assignments if the constructor has no other statements; otherwise, <see langword="false"/>.</returns>
+    public static (bool, List<AssignmentExpressionSyntax>) GetPropertyAssignments(ClassDeclarationSyntax classDeclaration, ConstructorDeclarationSyntax constructorDeclaration)
+    {
+        List<AssignmentExpressionSyntax> Assignments = GetConstructorStartingAssignments(constructorDeclaration);
+
+        foreach (AssignmentExpressionSyntax Assignment in Assignments)
+        {
+            Debug.Assert(Assignment.Left is IdentifierNameSyntax);
+            IdentifierNameSyntax IdentifierName = (IdentifierNameSyntax)Assignment.Left;
+
+            if (!classDeclaration.Members.OfType<PropertyDeclarationSyntax>().Any(propertyDeclaration => propertyDeclaration.Identifier.Text == IdentifierName.Identifier.Text && propertyDeclaration.Initializer is null))
+                return (false, Assignments);
+        }
+
+        return (true, Assignments);
+    }
+
+    private static bool IsConstructorStartingWithAssignments(ConstructorDeclarationSyntax constructorDeclaration, List<AssignmentExpressionSyntax> expectedAssignments)
+    {
+        List<AssignmentExpressionSyntax> Assignments = GetConstructorStartingAssignments(constructorDeclaration);
+
+        if (Assignments.Count < expectedAssignments.Count)
+            return false;
+
+        for (int i =  0; i < expectedAssignments.Count; i++)
+        {
+            AssignmentExpressionSyntax Assignment = Assignments[i];
+            AssignmentExpressionSyntax ExpectedAssignment = expectedAssignments[i];
+
+            if (!Assignment.IsEquivalentTo(ExpectedAssignment))
+                return false;
+        }
+
+        return true;
+    }
+
+    private static List<AssignmentExpressionSyntax> GetConstructorStartingAssignments(ConstructorDeclarationSyntax constructorDeclaration)
     {
         List<AssignmentExpressionSyntax> Assignments = new();
 
@@ -137,7 +202,10 @@ public class CSL1003ConsiderUsingPrimaryConstructor : DiagnosticAnalyzer
             foreach (var Statement in Body.Statements)
             {
                 if (Statement is not ExpressionStatementSyntax ExpressionStatement || ExpressionStatement.Expression is not AssignmentExpressionSyntax Assignment)
-                    return false;
+                    break;
+
+                if (Assignment.Left is not IdentifierNameSyntax || Assignment.Right is not IdentifierNameSyntax)
+                    break;
 
                 Assignments.Add(Assignment);
             }
@@ -149,6 +217,6 @@ public class CSL1003ConsiderUsingPrimaryConstructor : DiagnosticAnalyzer
                 Assignments = new() { Assignment };
         }
 
-        return true;
+        return Assignments;
     }
 }
