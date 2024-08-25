@@ -58,4 +58,145 @@ class Program
 }
 ", Microsoft.CodeAnalysis.CSharp.LanguageVersion.CSharp11);
     }
+
+    [TestMethod]
+    public async Task ConstructorWithBase_NoDiagnostic()
+    {
+        await VerifyCS.VerifyAnalyzerAsync(@"
+#nullable enable
+
+using System;
+
+class BaseProgram
+{
+    public BaseProgram()
+    {
+    }
+}
+
+class Program : BaseProgram
+{
+    public Program(string prop) : base()
+    {
+        Prop = prop;
+    }
+
+    public string Prop { get; }
+}
+");
+    }
+
+    [TestMethod]
+    public async Task ConstructorWithOtherParameters_NoDiagnostic()
+    {
+        await VerifyCS.VerifyAnalyzerAsync(@"
+#nullable enable
+
+using System;
+
+class Program
+{
+    public Program(string prop, int other)
+    {
+        Prop = prop;
+    }
+
+    public Program(string prop, double other)
+    {
+        Prop = prop;
+    }
+
+    public string Prop { get; }
+}
+");
+    }
+
+    [TestMethod]
+    public async Task ConstructorWithOtherAssignment_NoDiagnostic()
+    {
+        await VerifyCS.VerifyAnalyzerAsync(@"
+#nullable enable
+
+using System;
+
+class Program
+{
+    public Program(string prop)
+    {
+        Prop = prop;
+    }
+
+    private string Prop;
+}
+");
+    }
+
+    [TestMethod]
+    public async Task PropertyWithInitializer_NoDiagnostic()
+    {
+        await VerifyCS.VerifyAnalyzerAsync(@"
+#nullable enable
+
+using System;
+
+class Program
+{
+    public Program(string prop)
+    {
+        Prop = prop;
+    }
+
+    public string Prop { get; } = string.Empty;
+}
+");
+    }
+
+    [TestMethod]
+    public async Task ConstructorWithOtherInstructions_NoDiagnostic()
+    {
+        await VerifyCS.VerifyAnalyzerAsync(@"
+#nullable enable
+
+using System;
+
+class Program
+{
+    public Program(string prop)
+    {
+        Prop = prop;
+        Other();
+    }
+
+    private void Other()
+    {
+    }
+
+    public string Prop { get; }
+}
+");
+    }
+
+    [TestMethod]
+    public async Task OtherConstructorWithoutAssignments_NoDiagnostic()
+    {
+        await VerifyCS.VerifyAnalyzerAsync(@"
+#nullable enable
+
+using System;
+
+class Program
+{
+    public Program(string prop)
+    {
+        Prop = prop;
+    }
+
+    public Program(string prop, int other)
+    {
+    }
+
+    public string Prop { get; }
+}
+");
+    }
 }

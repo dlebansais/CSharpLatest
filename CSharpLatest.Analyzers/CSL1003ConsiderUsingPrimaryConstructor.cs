@@ -82,8 +82,8 @@ public class CSL1003ConsiderUsingPrimaryConstructor : DiagnosticAnalyzer
             return;
 
         // If the constructor is doing anything else than assigning properties, let's not try to second-guess the code.
-        (bool HasAssignmentsOnly, List<AssignmentExpressionSyntax> Assignments) = GetPropertyAssignments(classDeclaration, ConstructorCandidate);
-        if (!HasAssignmentsOnly)
+        (bool HasPropertyAssignmentsOnly, List<AssignmentExpressionSyntax> Assignments) = GetPropertyAssignments(classDeclaration, ConstructorCandidate);
+        if (!HasPropertyAssignmentsOnly)
             return;
 
         // If other constructors don't do the same, let's not try to second-guess the code.
@@ -160,7 +160,10 @@ public class CSL1003ConsiderUsingPrimaryConstructor : DiagnosticAnalyzer
     /// <returns><see langword="true"/> and the assignments if the constructor has no other statements; otherwise, <see langword="false"/>.</returns>
     public static (bool, List<AssignmentExpressionSyntax>) GetPropertyAssignments(ClassDeclarationSyntax classDeclaration, ConstructorDeclarationSyntax constructorDeclaration)
     {
-        List<AssignmentExpressionSyntax> Assignments = GetConstructorStartingAssignments(constructorDeclaration);
+        (bool HasOtherStatements, List<AssignmentExpressionSyntax> Assignments) = GetConstructorStartingAssignments(constructorDeclaration);
+
+        if (HasOtherStatements)
+            return (false, Assignments);
 
         foreach (AssignmentExpressionSyntax Assignment in Assignments)
         {
@@ -176,7 +179,7 @@ public class CSL1003ConsiderUsingPrimaryConstructor : DiagnosticAnalyzer
 
     private static bool IsConstructorStartingWithAssignments(ConstructorDeclarationSyntax constructorDeclaration, List<AssignmentExpressionSyntax> expectedAssignments)
     {
-        List<AssignmentExpressionSyntax> Assignments = GetConstructorStartingAssignments(constructorDeclaration);
+        (bool HasOtherStatements, List<AssignmentExpressionSyntax> Assignments) = GetConstructorStartingAssignments(constructorDeclaration);
 
         if (Assignments.Count < expectedAssignments.Count)
             return false;
@@ -193,19 +196,26 @@ public class CSL1003ConsiderUsingPrimaryConstructor : DiagnosticAnalyzer
         return true;
     }
 
-    private static List<AssignmentExpressionSyntax> GetConstructorStartingAssignments(ConstructorDeclarationSyntax constructorDeclaration)
+    private static (bool, List<AssignmentExpressionSyntax>) GetConstructorStartingAssignments(ConstructorDeclarationSyntax constructorDeclaration)
     {
         List<AssignmentExpressionSyntax> Assignments = new();
+        bool HasOtherStatements = false;
 
         if (constructorDeclaration.Body is BlockSyntax Body)
         {
             foreach (var Statement in Body.Statements)
             {
                 if (Statement is not ExpressionStatementSyntax ExpressionStatement || ExpressionStatement.Expression is not AssignmentExpressionSyntax Assignment)
+                {
+                    HasOtherStatements = true;
                     break;
+                }
 
                 if (Assignment.Left is not IdentifierNameSyntax || Assignment.Right is not IdentifierNameSyntax)
+                {
+                    HasOtherStatements = true;
                     break;
+                }
 
                 Assignments.Add(Assignment);
             }
@@ -215,8 +225,10 @@ public class CSL1003ConsiderUsingPrimaryConstructor : DiagnosticAnalyzer
         {
             if (ExpressionBody.Expression is AssignmentExpressionSyntax Assignment)
                 Assignments = new() { Assignment };
+            else
+                HasOtherStatements = true;
         }
 
-        return Assignments;
+        return (HasOtherStatements, Assignments);
     }
 }
