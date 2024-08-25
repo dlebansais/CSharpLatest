@@ -193,9 +193,12 @@ class Program
 
     public Program(string prop, int other)
     {
+        Other = other;
+        Prop = prop;
     }
 
     public string Prop { get; }
+    public int Other { get; }
 }
 ");
     }
