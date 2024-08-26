@@ -131,24 +131,30 @@ public class CSL1003CodeFixProvider : CodeFixProvider
     {
         Debug.Assert(constructorDeclaration.Initializer is null);
 
-        var ParameterList = constructorDeclaration.ParameterList;
-        SyntaxToken CloseParenToken = ParameterList.CloseParenToken;
-        SyntaxTriviaList CloseParenTrailingTrivia = ParameterList.CloseParenToken.TrailingTrivia;
-        var NewParameterList = ParameterList.WithoutTrailingTrivia();
+        ConstructorDeclarationSyntax NewConstructorDeclaration = constructorDeclaration;
 
         List<ArgumentSyntax> Arguments = thisParameters.ConvertAll(ToArgument);
         var SeparatedArgumentList = SyntaxFactory.SeparatedList(Arguments);
         var ArgumentList = SyntaxFactory.ArgumentList(SeparatedArgumentList);
 
-        SyntaxToken ColonToken = SyntaxFactory.Token(SyntaxKind.ColonToken).WithLeadingTrivia(Whitespace());
+        var LeadingTrivia = constructorDeclaration.Modifiers.Count > 0 ? constructorDeclaration.Modifiers.First().LeadingTrivia : constructorDeclaration.Identifier.LeadingTrivia;
+
+        List<SyntaxTrivia> LineTriviaList = new();
+        for (int i = 0; i < LeadingTrivia.Count; i++)
+        {
+            SyntaxTrivia Trivia = LeadingTrivia[LeadingTrivia.Count - i - 1];
+
+            if (Trivia.IsKind(SyntaxKind.WhitespaceTrivia))
+                LineTriviaList.Insert(0, Trivia);
+            else
+                break;
+        }
+        LineTriviaList.Add(SyntaxFactory.Tab);
+
+        SyntaxToken ColonToken = SyntaxFactory.Token(SyntaxKind.ColonToken).WithLeadingTrivia(LineTriviaList);
         SyntaxToken ThisKeyword = SyntaxFactory.Token(SyntaxKind.ThisKeyword).WithLeadingTrivia(Whitespace());
 
         ConstructorInitializerSyntax Initializer = SyntaxFactory.ConstructorInitializer(SyntaxKind.ThisConstructorInitializer, ColonToken, ThisKeyword, ArgumentList);
-
-        //Initializer = Initializer.WithTrailingTrivia(CloseParenTrailingTrivia);
-        Initializer = Initializer.WithoutTrailingTrivia();
-
-        ConstructorDeclarationSyntax NewConstructorDeclaration = constructorDeclaration.WithParameterList(NewParameterList);
         NewConstructorDeclaration = NewConstructorDeclaration.WithInitializer(Initializer);
 
         if (constructorDeclaration.Body is BlockSyntax Body)
@@ -188,12 +194,7 @@ public class CSL1003CodeFixProvider : CodeFixProvider
 
             Debug.Assert(CSL1003ConsiderUsingPrimaryConstructor.IsSyntaxNodeEquivalent(Assignment, InitialAssignment));
 
-            var ClosingTrivia = constructorDeclaration.SemicolonToken.TrailingTrivia;
-            var NewStatementList = SyntaxFactory.List(new List<StatementSyntax>());
-            var OpenBraceToken = SyntaxFactory.Token(SyntaxKind.OpenBraceToken).WithoutTrivia().WithLeadingTrivia(ClosingTrivia).WithTrailingTrivia(ClosingTrivia);
-            var CloseBraceToken = SyntaxFactory.Token(SyntaxKind.CloseBraceToken).WithoutTrivia().WithTrailingTrivia(ClosingTrivia);
-            var NewBody = SyntaxFactory.Block(OpenBraceToken, NewStatementList, CloseBraceToken);
-
+            var NewBody = SyntaxFactory.Block();
             NewConstructorDeclaration = NewConstructorDeclaration.WithExpressionBody(null).WithBody(NewBody).WithSemicolonToken(SyntaxFactory.Token(SyntaxKind.None));
         }
 
