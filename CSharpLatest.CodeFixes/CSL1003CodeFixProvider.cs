@@ -145,10 +145,11 @@ public class CSL1003CodeFixProvider : CodeFixProvider
 
         ConstructorInitializerSyntax Initializer = SyntaxFactory.ConstructorInitializer(SyntaxKind.ThisConstructorInitializer, ColonToken, ThisKeyword, ArgumentList);
 
-        Initializer = Initializer.WithTrailingTrivia(CloseParenTrailingTrivia);
+        //Initializer = Initializer.WithTrailingTrivia(CloseParenTrailingTrivia);
+        Initializer = Initializer.WithoutTrailingTrivia();
 
-        ConstructorDeclarationSyntax NewConstructorDeclaration = constructorDeclaration.WithInitializer(Initializer);
-        NewConstructorDeclaration = NewConstructorDeclaration.WithParameterList(NewParameterList);
+        ConstructorDeclarationSyntax NewConstructorDeclaration = constructorDeclaration.WithParameterList(NewParameterList);
+        NewConstructorDeclaration = NewConstructorDeclaration.WithInitializer(Initializer);
 
         if (constructorDeclaration.Body is BlockSyntax Body)
         {
@@ -227,6 +228,6 @@ public class CSL1003CodeFixProvider : CodeFixProvider
 
     private static SyntaxTriviaList EndOfLine()
     {
-        return SyntaxFactory.TriviaList([SyntaxFactory.Whitespace("  "), SyntaxFactory.LineFeed]);
+        return SyntaxFactory.TriviaList([SyntaxFactory.SyntaxTrivia( SyntaxKind.MultiLineCommentTrivia, "/* */"), SyntaxFactory.LineFeed]);
     }
 }
