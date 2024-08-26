@@ -189,7 +189,7 @@ public class CSL1003CodeFixProvider : CodeFixProvider
 
             var NewStatementList = SyntaxFactory.List(new List<StatementSyntax>());
             var OpenBraceToken = SyntaxFactory.Token(SyntaxKind.OpenBraceToken).WithoutTrivia().WithLeadingTrivia(EndOfLine()).WithTrailingTrivia(EndOfLine());
-            var CloseBraceToken = SyntaxFactory.Token(SyntaxKind.CloseBraceToken).WithoutTrivia().WithTrailingTrivia(EndOfLine(2));
+            var CloseBraceToken = SyntaxFactory.Token(SyntaxKind.CloseBraceToken);
             var NewBody = SyntaxFactory.Block(OpenBraceToken, NewStatementList, CloseBraceToken);
 
             NewConstructorDeclaration = NewConstructorDeclaration.WithExpressionBody(null).WithBody(NewBody).WithSemicolonToken(SyntaxFactory.Token(SyntaxKind.None));
@@ -225,12 +225,8 @@ public class CSL1003CodeFixProvider : CodeFixProvider
         return SyntaxFactory.TriviaList([SyntaxFactory.Whitespace(" ")]);
     }
 
-    private static SyntaxTriviaList EndOfLine(int count = 1)
+    private static SyntaxTriviaList EndOfLine()
     {
-        List<SyntaxTrivia> EndOfLineList = new();
-        for (int i = 0; i < count; i++)
-            EndOfLineList.Add(SyntaxFactory.LineFeed);
-
-        return SyntaxFactory.TriviaList(EndOfLineList);
+        return SyntaxFactory.TriviaList([SyntaxFactory.LineFeed]);
     }
 }
