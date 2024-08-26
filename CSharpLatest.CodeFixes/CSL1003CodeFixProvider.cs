@@ -188,9 +188,10 @@ public class CSL1003CodeFixProvider : CodeFixProvider
 
             Debug.Assert(CSL1003ConsiderUsingPrimaryConstructor.IsSyntaxNodeEquivalent(Assignment, InitialAssignment));
 
+            var ClosingTrivia = constructorDeclaration.SemicolonToken.TrailingTrivia;
             var NewStatementList = SyntaxFactory.List(new List<StatementSyntax>());
-            var OpenBraceToken = SyntaxFactory.Token(SyntaxKind.OpenBraceToken).WithoutTrivia().WithLeadingTrivia(EndOfLine()).WithTrailingTrivia(EndOfLine());
-            var CloseBraceToken = SyntaxFactory.Token(SyntaxKind.CloseBraceToken).WithoutTrivia().WithTrailingTrivia(EndOfLine());
+            var OpenBraceToken = SyntaxFactory.Token(SyntaxKind.OpenBraceToken).WithoutTrivia().WithLeadingTrivia(SyntaxFactory.TriviaList([SyntaxFactory.LineFeed])).WithTrailingTrivia(SyntaxFactory.TriviaList([SyntaxFactory.LineFeed]));
+            var CloseBraceToken = SyntaxFactory.Token(SyntaxKind.CloseBraceToken).WithoutTrivia().WithTrailingTrivia(ClosingTrivia);
             var NewBody = SyntaxFactory.Block(OpenBraceToken, NewStatementList, CloseBraceToken);
 
             NewConstructorDeclaration = NewConstructorDeclaration.WithExpressionBody(null).WithBody(NewBody).WithSemicolonToken(SyntaxFactory.Token(SyntaxKind.None));
@@ -228,6 +229,6 @@ public class CSL1003CodeFixProvider : CodeFixProvider
 
     private static SyntaxTriviaList EndOfLine()
     {
-        return SyntaxFactory.TriviaList([SyntaxFactory.SyntaxTrivia( SyntaxKind.MultiLineCommentTrivia, "/* */"), SyntaxFactory.LineFeed]);
+        return SyntaxFactory.TriviaList([SyntaxFactory.LineFeed]);
     }
 }
