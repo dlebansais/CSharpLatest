@@ -140,8 +140,8 @@ public class CSL1003CodeFixProvider : CodeFixProvider
         var SeparatedArgumentList = SyntaxFactory.SeparatedList(Arguments);
         var ArgumentList = SyntaxFactory.ArgumentList(SeparatedArgumentList);
 
-        SyntaxToken ColonToken = SyntaxFactory.Token(SyntaxKind.ColonToken).WithLeadingTrivia(SyntaxFactory.TriviaList([SyntaxFactory.Whitespace(" ")]));
-        SyntaxToken ThisKeyword = SyntaxFactory.Token(SyntaxKind.ThisKeyword).WithLeadingTrivia(SyntaxFactory.TriviaList([SyntaxFactory.Whitespace(" ")]));
+        SyntaxToken ColonToken = SyntaxFactory.Token(SyntaxKind.ColonToken).WithLeadingTrivia(Whitespace());
+        SyntaxToken ThisKeyword = SyntaxFactory.Token(SyntaxKind.ThisKeyword).WithLeadingTrivia(Whitespace());
 
         ConstructorInitializerSyntax Initializer = SyntaxFactory.ConstructorInitializer(SyntaxKind.ThisConstructorInitializer, ColonToken, ThisKeyword, ArgumentList);
 
@@ -188,9 +188,8 @@ public class CSL1003CodeFixProvider : CodeFixProvider
             Debug.Assert(CSL1003ConsiderUsingPrimaryConstructor.IsSyntaxNodeEquivalent(Assignment, InitialAssignment));
 
             var NewStatementList = SyntaxFactory.List(new List<StatementSyntax>());
-            //var NewLineTrivia = SyntaxFactory.ElasticEndOfLine; // constructorDeclaration.SemicolonToken.TrailingTrivia;
-            var OpenBraceToken = SyntaxFactory.Token(SyntaxKind.OpenBraceToken).WithoutTrivia().WithLeadingTrivia(SyntaxFactory.TriviaList([SyntaxFactory.ElasticEndOfLine("\r")])).WithTrailingTrivia(SyntaxFactory.TriviaList([SyntaxFactory.ElasticEndOfLine("\r")]));
-            var CloseBraceToken = SyntaxFactory.Token(SyntaxKind.CloseBraceToken).WithoutTrivia().WithTrailingTrivia(SyntaxFactory.TriviaList([SyntaxFactory.ElasticEndOfLine("\r")]));
+            var OpenBraceToken = SyntaxFactory.Token(SyntaxKind.OpenBraceToken).WithoutTrivia().WithLeadingTrivia(EndOfLine()).WithTrailingTrivia(EndOfLine());
+            var CloseBraceToken = SyntaxFactory.Token(SyntaxKind.CloseBraceToken).WithoutTrivia().WithTrailingTrivia(EndOfLine(2));
             var NewBody = SyntaxFactory.Block(OpenBraceToken, NewStatementList, CloseBraceToken);
 
             NewConstructorDeclaration = NewConstructorDeclaration.WithExpressionBody(null).WithBody(NewBody).WithSemicolonToken(SyntaxFactory.Token(SyntaxKind.None));
@@ -219,5 +218,19 @@ public class CSL1003CodeFixProvider : CodeFixProvider
         }
 
         return Initializer;
+    }
+
+    private static SyntaxTriviaList Whitespace()
+    {
+        return SyntaxFactory.TriviaList([SyntaxFactory.Whitespace(" ")]);
+    }
+
+    private static SyntaxTriviaList EndOfLine(int count = 1)
+    {
+        List<SyntaxTrivia> EndOfLineList = new();
+        for (int i = 0; i < count; i++)
+            EndOfLineList.Add(SyntaxFactory.ElasticEndOfLine("\r"));
+
+        return SyntaxFactory.TriviaList(EndOfLineList);
     }
 }
