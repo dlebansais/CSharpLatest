@@ -48,6 +48,7 @@ public class CSL1003CodeFixProvider : CodeFixProvider
     {
         Document Result = document;
 
+        SyntaxTrivia NewLineTrivia = GetNewLineTrivia(document);
         SyntaxTriviaList LeadingTrivia = classDeclaration.GetLeadingTrivia();
 
         // Remove the trailing trivia in the identifier part.
@@ -78,7 +79,7 @@ public class CSL1003CodeFixProvider : CodeFixProvider
                 {
                     SyntaxTriviaList OtherConstructorLeadingTrivia = ConstructorDeclaration!.GetLeadingTrivia();
                     SyntaxTriviaList OtherConstructorTrailingTrivia = ConstructorDeclaration!.GetTrailingTrivia();
-                    ConstructorDeclarationSyntax NewConstructorDeclaration = ReplaceConstructor(ConstructorDeclaration, ParameterCandidates, Assignments);
+                    ConstructorDeclarationSyntax NewConstructorDeclaration = ReplaceConstructor(ConstructorDeclaration, ParameterCandidates, Assignments, NewLineTrivia);
                     ConvertedMember = NewConstructorDeclaration;
                 }
                 else
@@ -127,7 +128,7 @@ public class CSL1003CodeFixProvider : CodeFixProvider
         return await document.WithReplacedNode(cancellationToken, classDeclaration, FormattedDeclaration);
     }
 
-    private static ConstructorDeclarationSyntax ReplaceConstructor(ConstructorDeclarationSyntax constructorDeclaration, List<ParameterSyntax> thisParameters, List<AssignmentExpressionSyntax> initialAssignments)
+    private static ConstructorDeclarationSyntax ReplaceConstructor(ConstructorDeclarationSyntax constructorDeclaration, List<ParameterSyntax> thisParameters, List<AssignmentExpressionSyntax> initialAssignments, SyntaxTrivia newLineTrivia)
     {
         Debug.Assert(constructorDeclaration.Initializer is null);
 
@@ -155,6 +156,7 @@ public class CSL1003CodeFixProvider : CodeFixProvider
         SyntaxToken ThisKeyword = SyntaxFactory.Token(SyntaxKind.ThisKeyword).WithLeadingTrivia(Whitespace());
 
         ConstructorInitializerSyntax Initializer = SyntaxFactory.ConstructorInitializer(SyntaxKind.ThisConstructorInitializer, ColonToken, ThisKeyword, ArgumentList);
+        Initializer = Initializer.WithoutTrailingTrivia().WithTrailingTrivia(SyntaxFactory.TriviaList([newLineTrivia]));
         NewConstructorDeclaration = NewConstructorDeclaration.WithInitializer(Initializer);
 
         if (constructorDeclaration.Body is BlockSyntax Body)
@@ -231,5 +233,10 @@ public class CSL1003CodeFixProvider : CodeFixProvider
     private static SyntaxTriviaList EndOfLine()
     {
         return SyntaxFactory.TriviaList([SyntaxFactory.LineFeed]);
+    }
+
+    private static SyntaxTrivia GetNewLineTrivia(Document document)
+    {
+        return SyntaxFactory.SyntaxTrivia(SyntaxKind.EndOfLineTrivia, document.Project.Solution.Workspace.Options.GetOption(FormattingOptions.NewLine, LanguageNames.CSharp));
     }
 }
