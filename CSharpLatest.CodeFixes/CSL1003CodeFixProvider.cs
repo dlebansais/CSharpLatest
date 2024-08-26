@@ -49,6 +49,9 @@ public class CSL1003CodeFixProvider : CodeFixProvider
         Document Result = document;
 
         SyntaxTrivia NewLineTrivia = GetNewLineTrivia(document);
+
+        Console.WriteLine($"Length: {NewLineTrivia.Span.Length}");
+
         SyntaxTriviaList LeadingTrivia = classDeclaration.GetLeadingTrivia();
 
         // Remove the trailing trivia in the identifier part.
@@ -237,6 +240,6 @@ public class CSL1003CodeFixProvider : CodeFixProvider
 
     private static SyntaxTrivia GetNewLineTrivia(Document document)
     {
-        return SyntaxFactory.SyntaxTrivia(SyntaxKind.EndOfLineTrivia, document.Project.Solution.Workspace.Options.GetOption(FormattingOptions.NewLine, LanguageNames.CSharp));
+        return SyntaxFactory.SyntaxTrivia(SyntaxKind.WhitespaceTrivia, document.Project.Solution.Workspace.Options.GetOption(FormattingOptions.NewLine, LanguageNames.CSharp));
     }
 }
