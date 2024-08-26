@@ -229,7 +229,7 @@ public class CSL1003CodeFixProvider : CodeFixProvider
     {
         List<SyntaxTrivia> EndOfLineList = new();
         for (int i = 0; i < count; i++)
-            EndOfLineList.Add(SyntaxFactory.ElasticEndOfLine("\n"));
+            EndOfLineList.Add(SyntaxFactory.ElasticLineFeed);
 
         return SyntaxFactory.TriviaList(EndOfLineList);
     }
