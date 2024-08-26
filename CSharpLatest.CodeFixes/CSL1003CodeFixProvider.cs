@@ -189,7 +189,7 @@ public class CSL1003CodeFixProvider : CodeFixProvider
 
             var NewStatementList = SyntaxFactory.List(new List<StatementSyntax>());
             var NewLineTrivia = constructorDeclaration.SemicolonToken.TrailingTrivia;
-            var OpenBraceToken = SyntaxFactory.Token(SyntaxKind.OpenBraceToken).WithoutTrivia().WithLeadingTrivia(NewLineTrivia).WithTrailingTrivia(NewLineTrivia);
+            var OpenBraceToken = SyntaxFactory.Token(SyntaxKind.OpenBraceToken).WithoutTrivia(); //.WithLeadingTrivia(NewLineTrivia).WithTrailingTrivia(NewLineTrivia);
             var CloseBraceToken = SyntaxFactory.Token(SyntaxKind.CloseBraceToken).WithoutTrivia().WithTrailingTrivia(NewLineTrivia);
             var NewBody = SyntaxFactory.Block(OpenBraceToken, NewStatementList, CloseBraceToken);
 
