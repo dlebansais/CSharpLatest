@@ -188,9 +188,9 @@ public class CSL1003CodeFixProvider : CodeFixProvider
             Debug.Assert(CSL1003ConsiderUsingPrimaryConstructor.IsSyntaxNodeEquivalent(Assignment, InitialAssignment));
 
             var NewStatementList = SyntaxFactory.List(new List<StatementSyntax>());
-            var NewLineTrivia = constructorDeclaration.SemicolonToken.TrailingTrivia;
-            var OpenBraceToken = SyntaxFactory.Token(SyntaxKind.OpenBraceToken).WithoutTrivia(); //.WithLeadingTrivia(NewLineTrivia).WithTrailingTrivia(NewLineTrivia);
-            var CloseBraceToken = SyntaxFactory.Token(SyntaxKind.CloseBraceToken).WithoutTrivia().WithTrailingTrivia(NewLineTrivia);
+            //var NewLineTrivia = SyntaxFactory.ElasticEndOfLine; // constructorDeclaration.SemicolonToken.TrailingTrivia;
+            var OpenBraceToken = SyntaxFactory.Token(SyntaxKind.OpenBraceToken).WithoutTrivia().WithLeadingTrivia(SyntaxFactory.TriviaList([SyntaxFactory.ElasticEndOfLine("\r")])).WithTrailingTrivia(SyntaxFactory.TriviaList([SyntaxFactory.ElasticEndOfLine("\r")]));
+            var CloseBraceToken = SyntaxFactory.Token(SyntaxKind.CloseBraceToken).WithoutTrivia().WithTrailingTrivia(SyntaxFactory.TriviaList([SyntaxFactory.ElasticEndOfLine("\r")]));
             var NewBody = SyntaxFactory.Block(OpenBraceToken, NewStatementList, CloseBraceToken);
 
             NewConstructorDeclaration = NewConstructorDeclaration.WithExpressionBody(null).WithBody(NewBody).WithSemicolonToken(SyntaxFactory.Token(SyntaxKind.None));
