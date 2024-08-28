@@ -184,6 +184,9 @@ public class CSL1003CodeFixProvider : CodeFixProvider
             NewConstructorDeclaration = NewConstructorDeclaration.WithExpressionBody(null).WithSemicolonToken(SyntaxFactory.Token(SyntaxKind.None)).WithBody(NewBody);
         }
 
+        SyntaxToken ColonToken = SyntaxFactory.Token(SyntaxKind.ColonToken).WithLeadingTrivia(Whitespace());
+        SyntaxToken ThisKeyword = SyntaxFactory.Token(SyntaxKind.ThisKeyword).WithLeadingTrivia(Whitespace());
+
         List<ArgumentSyntax> Arguments = thisParameters.ConvertAll(ToArgument);
         var SeparatedArgumentList = SyntaxFactory.SeparatedList(Arguments);
         var OpenParenToken2 = SyntaxFactory.Token(SyntaxKind.OpenParenToken);
@@ -192,13 +195,9 @@ public class CSL1003CodeFixProvider : CodeFixProvider
         if (TrailingTrivia is not null)
             CloseParenToken2 = CloseParenToken2.WithTrailingTrivia(TrailingTrivia);
 
-        var ArgumentList = SyntaxFactory.ArgumentList(OpenParenToken2, SeparatedArgumentList, CloseParenToken2);
-
-        SyntaxToken ColonToken = SyntaxFactory.Token(SyntaxKind.ColonToken).WithLeadingTrivia(Whitespace());
-        SyntaxToken ThisKeyword = SyntaxFactory.Token(SyntaxKind.ThisKeyword).WithLeadingTrivia(Whitespace());
+        var ArgumentList = SyntaxFactory.ArgumentList(OpenParenToken2, SeparatedArgumentList, CloseParenToken2).WithoutTrivia();
 
         ConstructorInitializerSyntax Initializer = SyntaxFactory.ConstructorInitializer(SyntaxKind.ThisConstructorInitializer, ColonToken, ThisKeyword, ArgumentList);
-        Initializer = Initializer.WithoutTrailingTrivia();
         NewConstructorDeclaration = NewConstructorDeclaration.WithInitializer(Initializer);
 
         return NewConstructorDeclaration;
