@@ -119,9 +119,7 @@ public class CSL1003CodeFixProvider : CodeFixProvider
         var ParameterList = SyntaxFactory.ParameterList(SeparatedParameterList);
         ParameterList = ParameterList.WithTrailingTrivia(TrailingTrivia);
         NewDeclaration = NewDeclaration.WithParameterList(ParameterList);
-
-        var Keyword = SyntaxFactory.Token(classDeclaration.Keyword.Kind()).WithLeadingTrivia(LeadingTrivia);
-        NewDeclaration = NewDeclaration.WithKeyword(Keyword);
+        NewDeclaration = NewDeclaration.WithLeadingTrivia(LeadingTrivia);
 
         ClassDeclarationSyntax FormattedDeclaration = NewDeclaration.WithAdditionalAnnotations(Formatter.Annotation);
 
