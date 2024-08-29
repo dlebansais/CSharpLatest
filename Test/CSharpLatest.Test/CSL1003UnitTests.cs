@@ -419,7 +419,9 @@ using System;
 
 class Program(string prop)
 {
-    public Program(string prop, int other) : this(prop) { }
+    public Program(string prop, int other) : this(prop)
+    {
+    }
 
     public string Prop { get; } = prop;
 }

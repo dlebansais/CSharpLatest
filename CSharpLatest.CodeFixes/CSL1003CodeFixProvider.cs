@@ -196,8 +196,8 @@ public class CSL1003CodeFixProvider : CodeFixProvider
 
             // Forget the previously saved trivia and pick the one following the semicolon.
             PreservedTrailingTrivia = constructorDeclaration.SemicolonToken.TrailingTrivia;
-            var OpenBraceToken = SyntaxFactory.Token(SyntaxKind.OpenBraceToken).WithoutTrivia(); // TODO: no WithoutTrivia()?
-            var CloseBraceToken = SyntaxFactory.Token(SyntaxKind.CloseBraceToken).WithoutTrivia().WithTrailingTrivia(PreservedTrailingTrivia);
+            var OpenBraceToken = SyntaxFactory.Token(SyntaxKind.OpenBraceToken);
+            var CloseBraceToken = SyntaxFactory.Token(SyntaxKind.CloseBraceToken).WithTrailingTrivia(PreservedTrailingTrivia);
             PreservedTrailingTrivia = null;
 
             // Create an empty block body to replace the expression body and its semicolon.
@@ -221,10 +221,6 @@ public class CSL1003CodeFixProvider : CodeFixProvider
             Initializer = Initializer.WithTrailingTrivia(PreservedTrailingTrivia);
 
         NewConstructorDeclaration = NewConstructorDeclaration.WithInitializer(Initializer);
-
-        // TODO: remove?
-        var SemicolonToken = SyntaxFactory.Token(SyntaxKind.None).WithoutTrivia();
-        NewConstructorDeclaration = NewConstructorDeclaration.WithSemicolonToken(SemicolonToken);
 
         return NewConstructorDeclaration;
     }
