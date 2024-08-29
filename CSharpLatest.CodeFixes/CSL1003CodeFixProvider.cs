@@ -121,10 +121,8 @@ public class CSL1003CodeFixProvider : CodeFixProvider
         NewDeclaration = NewDeclaration.WithParameterList(ParameterList);
         NewDeclaration = NewDeclaration.WithLeadingTrivia(LeadingTrivia);
 
-        ClassDeclarationSyntax FormattedDeclaration = NewDeclaration.WithAdditionalAnnotations(Formatter.Annotation);
-
         // Replace the old expression with the new expression.
-        return await document.WithReplacedNode(cancellationToken, classDeclaration, FormattedDeclaration);
+        return await document.WithReplacedNode(cancellationToken, classDeclaration, NewDeclaration);
     }
 
     private static ConstructorDeclarationSyntax ReplaceConstructor(ConstructorDeclarationSyntax constructorDeclaration, List<ParameterSyntax> thisParameters, List<AssignmentExpressionSyntax> initialAssignments)

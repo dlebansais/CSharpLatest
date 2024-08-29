@@ -61,10 +61,7 @@ public class CSL1002CodeFixProvider : CodeFixProvider
         IsPatternExpressionSyntax NewExpression = SyntaxFactory.IsPatternExpression(binaryExpression.Left, IsToken, NotNullPattern);
         NewExpression = NewExpression.WithTrailingTrivia(TrailingTrivia);
 
-        // Add an annotation to format the new local declaration.
-        IsPatternExpressionSyntax FormattedExpression = NewExpression.WithAdditionalAnnotations(Formatter.Annotation);
-
         // Replace the old expression with the new expression.
-        return await document.WithReplacedNode(cancellationToken, binaryExpression, FormattedExpression);
+        return await document.WithReplacedNode(cancellationToken, binaryExpression, NewExpression);
     }
 }

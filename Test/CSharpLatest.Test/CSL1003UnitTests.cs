@@ -136,8 +136,7 @@ using System;
 
 using System;
 
-/*XYZ*/
-class Program(string prop)
+/*XYZ*/class Program(string prop)
 {
     public string Prop { get; } = prop;
 }
