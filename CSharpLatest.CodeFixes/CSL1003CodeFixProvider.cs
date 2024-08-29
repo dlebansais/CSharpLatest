@@ -194,11 +194,15 @@ public class CSL1003CodeFixProvider : CodeFixProvider
 
         if (TrailingTrivia is not null)
             CloseParenToken2 = CloseParenToken2.WithTrailingTrivia(TrailingTrivia);
+        CloseParenToken2 = CloseParenToken2.WithoutTrivia();
 
         var ArgumentList = SyntaxFactory.ArgumentList(OpenParenToken2, SeparatedArgumentList, CloseParenToken2).WithoutTrivia();
 
         ConstructorInitializerSyntax Initializer = SyntaxFactory.ConstructorInitializer(SyntaxKind.ThisConstructorInitializer, ColonToken, ThisKeyword, ArgumentList);
         NewConstructorDeclaration = NewConstructorDeclaration.WithInitializer(Initializer);
+
+        var SemicolonToken = SyntaxFactory.Token(SyntaxKind.None).WithoutTrivia();
+        NewConstructorDeclaration = NewConstructorDeclaration.WithSemicolonToken(SemicolonToken);
 
         return NewConstructorDeclaration;
     }
