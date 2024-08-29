@@ -173,6 +173,35 @@ class Program(string prop)
     }
 
     [TestMethod]
+    public async Task Decoration3_Diagnostic()
+    {
+        await VerifyCS.VerifyCodeFixAsync(@"
+#nullable enable
+
+using System;
+
+[|class Program/*XYZ*/
+{
+    public Program(string prop)
+    {
+        Prop = prop;
+    }
+
+    public string Prop { get; }
+}|]
+", @"
+#nullable enable
+
+using System;
+
+class Program(string prop)/*XYZ*/
+{
+    public string Prop { get; } = prop;
+}
+");
+    }
+
+    [TestMethod]
     public async Task MissingAssignment_NoDiagnostic()
     {
         await VerifyCS.VerifyAnalyzerAsync(@"
@@ -393,6 +422,42 @@ class Program(string prop)
     public Program(string prop, int other) : this(prop) { }
 
     public string Prop { get; } = prop;
+}
+");
+    }
+
+    [TestMethod]
+    public async Task NoProperty_NoDiagnostic()
+    {
+        await VerifyCS.VerifyAnalyzerAsync(@"
+#nullable enable
+
+using System;
+
+class Program
+{
+    public Program()
+    {
+    }
+}
+");
+    }
+
+    [TestMethod]
+    public async Task NoAssignment_NoDiagnostic()
+    {
+        await VerifyCS.VerifyAnalyzerAsync(@"
+#nullable enable
+
+using System;
+
+class Program
+{
+    public Program(int prop)
+    {
+    }
+
+    public int Prop { get; set; }
 }
 ");
     }

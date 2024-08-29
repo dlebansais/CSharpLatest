@@ -83,7 +83,7 @@ public class CSL1003ConsiderUsingPrimaryConstructor : DiagnosticAnalyzer
 
         // If the constructor is doing anything else than assigning properties, let's not try to second-guess the code.
         (bool HasPropertyAssignmentsOnly, List<AssignmentExpressionSyntax> Assignments) = GetPropertyAssignments(classDeclaration, ConstructorCandidate);
-        if (!HasPropertyAssignmentsOnly)
+        if (!HasPropertyAssignmentsOnly || Assignments.Count == 0)
             return;
 
         // If other constructors don't do the same, let's not try to second-guess the code.

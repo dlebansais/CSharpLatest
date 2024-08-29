@@ -48,23 +48,28 @@ public class CSL1003CodeFixProvider : CodeFixProvider
     {
         Document Result = document;
 
-        SyntaxTriviaList LeadingTrivia = classDeclaration.Keyword.LeadingTrivia;
+        // Save the leading trivia to restore it later.
+        SyntaxTriviaList PreservedClassDeclarationLeadingTrivia = classDeclaration.GetLeadingTrivia();
 
-        // Remove the trailing trivia in the identifier part.
+        // Save the trailing trivia in the identifier part to restore it as trailing trivia of the parameter list.
         SyntaxToken Identifier = classDeclaration.Identifier;
-        SyntaxTriviaList TrailingTrivia = Identifier.TrailingTrivia;
+        SyntaxTriviaList PreservedIdentifierTrailingTrivia = Identifier.TrailingTrivia;
         ClassDeclarationSyntax NewDeclaration = classDeclaration.WithIdentifier(Identifier.WithoutTrivia());
 
+        // There was no diagnostic if there is a parameter list already.
         Debug.Assert(classDeclaration.ParameterList is null);
+
+        // Gets the list of parameters for the primary constructor, and the constructor we got them from (we know it exists or there would be no diagnostic).
         List<ParameterSyntax> ParameterCandidates = CSL1003ConsiderUsingPrimaryConstructor.GetParameterCandidates(classDeclaration);
         ConstructorDeclarationSyntax? ConstructorCandidate = CSL1003ConsiderUsingPrimaryConstructor.GetConstructorCandidate(classDeclaration, ParameterCandidates);
         Debug.Assert(ConstructorCandidate != null);
 
-        SyntaxTriviaList ConstructorLeadingTrivia = ConstructorCandidate!.GetLeadingTrivia();
-        SyntaxTriviaList ConstructorTrailingTrivia = ConstructorCandidate!.GetTrailingTrivia();
+        // Get the list of assignments that are simplified as primary constructor arguments.
+        (bool HasPropertyAssignmentsOnly, List<AssignmentExpressionSyntax> Assignments) = CSL1003ConsiderUsingPrimaryConstructor.GetPropertyAssignments(classDeclaration, ConstructorCandidate!);
+        Debug.Assert(HasPropertyAssignmentsOnly);
+        Debug.Assert(Assignments.Count > 0);
 
         List<MemberDeclarationSyntax> NewMembers = new();
-        (bool HasAssignmentsOnly, List<AssignmentExpressionSyntax> Assignments) = CSL1003ConsiderUsingPrimaryConstructor.GetPropertyAssignments(classDeclaration, ConstructorCandidate!);
 
         SyntaxTriviaList? LeadingTriviaPassedOver = null;
 
@@ -117,9 +122,9 @@ public class CSL1003CodeFixProvider : CodeFixProvider
 
         var SeparatedParameterList = SyntaxFactory.SeparatedList(ParameterCandidates);
         var ParameterList = SyntaxFactory.ParameterList(SeparatedParameterList);
-        ParameterList = ParameterList.WithTrailingTrivia(TrailingTrivia);
+        ParameterList = ParameterList.WithTrailingTrivia(PreservedIdentifierTrailingTrivia);
         NewDeclaration = NewDeclaration.WithParameterList(ParameterList);
-        NewDeclaration = NewDeclaration.WithLeadingTrivia(LeadingTrivia);
+        NewDeclaration = NewDeclaration.WithLeadingTrivia(PreservedClassDeclarationLeadingTrivia);
 
         // Replace the old expression with the new expression.
         return await document.WithReplacedNode(cancellationToken, classDeclaration, NewDeclaration);
