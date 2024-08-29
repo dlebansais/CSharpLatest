@@ -196,8 +196,10 @@ public class CSL1003CodeFixProvider : CodeFixProvider
 
             // Forget the previously saved trivia and pick the one following the semicolon.
             PreservedTrailingTrivia = constructorDeclaration.SemicolonToken.TrailingTrivia;
-            var OpenBraceToken = SyntaxFactory.Token(SyntaxKind.OpenBraceToken);
-            var CloseBraceToken = SyntaxFactory.Token(SyntaxKind.CloseBraceToken).WithTrailingTrivia(PreservedTrailingTrivia);
+
+            // Use no trivia to ensure { } formatting, because the default endofline can get wrong.
+            var OpenBraceToken = SyntaxFactory.Token(SyntaxKind.OpenBraceToken).WithoutTrivia();
+            var CloseBraceToken = SyntaxFactory.Token(SyntaxKind.CloseBraceToken).WithoutTrivia().WithTrailingTrivia(PreservedTrailingTrivia);
             PreservedTrailingTrivia = null;
 
             // Create an empty block body to replace the expression body and its semicolon.
