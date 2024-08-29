@@ -48,7 +48,7 @@ public class CSL1003CodeFixProvider : CodeFixProvider
     {
         Document Result = document;
 
-        SyntaxTriviaList LeadingTrivia = classDeclaration.GetLeadingTrivia();
+        SyntaxTriviaList LeadingTrivia = classDeclaration.Keyword.LeadingTrivia;
 
         // Remove the trailing trivia in the identifier part.
         SyntaxToken Identifier = classDeclaration.Identifier;
@@ -119,7 +119,7 @@ public class CSL1003CodeFixProvider : CodeFixProvider
         var ParameterList = SyntaxFactory.ParameterList(SeparatedParameterList);
         ParameterList = ParameterList.WithTrailingTrivia(TrailingTrivia);
         NewDeclaration = NewDeclaration.WithParameterList(ParameterList);
-        NewDeclaration = NewDeclaration.WithLeadingTrivia(LeadingTrivia);
+        //NewDeclaration = NewDeclaration.WithLeadingTrivia(LeadingTrivia);
 
         ClassDeclarationSyntax FormattedDeclaration = NewDeclaration.WithAdditionalAnnotations(Formatter.Annotation);
 
