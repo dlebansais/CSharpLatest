@@ -198,7 +198,7 @@ public class CSL1003CodeFixProvider : CodeFixProvider
 
         var ArgumentList = SyntaxFactory.ArgumentList(OpenParenToken2, SeparatedArgumentList, CloseParenToken2).WithoutTrivia();
 
-        ConstructorInitializerSyntax Initializer = SyntaxFactory.ConstructorInitializer(SyntaxKind.ThisConstructorInitializer, ColonToken, ThisKeyword, ArgumentList);
+        ConstructorInitializerSyntax Initializer = SyntaxFactory.ConstructorInitializer(SyntaxKind.ThisConstructorInitializer, ColonToken, ThisKeyword, ArgumentList).WithoutTrivia();
         NewConstructorDeclaration = NewConstructorDeclaration.WithInitializer(Initializer);
 
         var SemicolonToken = SyntaxFactory.Token(SyntaxKind.None).WithoutTrivia();
