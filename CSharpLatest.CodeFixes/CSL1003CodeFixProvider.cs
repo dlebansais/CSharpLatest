@@ -191,14 +191,12 @@ public class CSL1003CodeFixProvider : CodeFixProvider
         var SeparatedArgumentList = SyntaxFactory.SeparatedList(Arguments);
         var OpenParenToken2 = SyntaxFactory.Token(SyntaxKind.OpenParenToken);
         var CloseParenToken2 = SyntaxFactory.Token(SyntaxKind.CloseParenToken);
+        var ArgumentList = SyntaxFactory.ArgumentList(OpenParenToken2, SeparatedArgumentList, CloseParenToken2);
+        ConstructorInitializerSyntax Initializer = SyntaxFactory.ConstructorInitializer(SyntaxKind.ThisConstructorInitializer, ColonToken, ThisKeyword, ArgumentList);
 
         if (TrailingTrivia is not null)
-            CloseParenToken2 = CloseParenToken2.WithTrailingTrivia(TrailingTrivia);
-        CloseParenToken2 = CloseParenToken2.WithoutTrivia();
+            Initializer = Initializer.WithTrailingTrivia(TrailingTrivia);
 
-        var ArgumentList = SyntaxFactory.ArgumentList(OpenParenToken2, SeparatedArgumentList, CloseParenToken2).WithoutTrivia();
-
-        ConstructorInitializerSyntax Initializer = SyntaxFactory.ConstructorInitializer(SyntaxKind.ThisConstructorInitializer, ColonToken, ThisKeyword, ArgumentList).WithoutTrivia();
         NewConstructorDeclaration = NewConstructorDeclaration.WithInitializer(Initializer);
 
         var SemicolonToken = SyntaxFactory.Token(SyntaxKind.None).WithoutTrivia();

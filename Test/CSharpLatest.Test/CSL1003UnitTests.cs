@@ -91,7 +91,7 @@ using System;
         Prop = prop;
     }
 
-    public Program(string prop, int other)
+    public Program(string prop, int other)/**/
     {
         Prop = prop;
     }
@@ -105,7 +105,7 @@ using System;
 
 class Program(string prop)
 {
-    public Program(string prop, int other) : this(prop)
+    public Program(string prop, int other) : this(prop)/**/
     {
     }
 
