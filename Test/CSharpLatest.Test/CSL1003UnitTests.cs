@@ -91,7 +91,7 @@ using System;
         Prop = prop;
     }
 
-    public Program(string prop, int other)/**/
+    public Program(string prop, int other)
     {
         Prop = prop;
     }
@@ -105,7 +105,7 @@ using System;
 
 class Program(string prop)
 {
-    public Program(string prop, int other) : this(prop)/**/
+    public Program(string prop, int other) : this(prop)
     {
     }
 
@@ -114,7 +114,6 @@ class Program(string prop)
 ");
     }
 
-#if DISABLED
     [TestMethod]
     public async Task Decoration1_Diagnostic()
     {
@@ -144,7 +143,6 @@ class Program(string prop)
 }
 ");
     }
-#endif
 
     [TestMethod]
     public async Task Decoration2_Diagnostic()
