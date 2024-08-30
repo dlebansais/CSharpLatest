@@ -202,6 +202,77 @@ class Program(string prop)/*XYZ*/
     }
 
     [TestMethod]
+    public async Task Decoration4_Diagnostic()
+    {
+        await VerifyCS.VerifyCodeFixAsync(@"
+#nullable enable
+
+using System;
+
+[|class Program
+{
+    public Program(string prop)
+    {
+        Prop = prop;
+    }
+
+    public Program(string prop, int other)/**/
+    {
+        Prop = prop;
+    }
+
+    public string Prop { get; }
+}|]
+", @"
+#nullable enable
+
+using System;
+
+class Program(string prop)
+{
+    public Program(string prop, int other) : this(prop)/**/
+    {
+    }
+
+    public string Prop { get; } = prop;
+}
+");
+    }
+
+    [TestMethod]
+    public async Task Decoration5_Diagnostic()
+    {
+        await VerifyCS.VerifyCodeFixAsync(@"
+#nullable enable
+
+using System;
+
+[|class Program
+{
+    public Program(string prop)
+    {
+        Prop = prop;
+    }
+
+    public Program(string prop, int other) => Prop = prop;/**/
+
+    public string Prop { get; }
+}|]
+", @"
+#nullable enable
+
+using System;
+
+class Program(string prop)
+{
+    public Program(string prop, int other) : this(prop) { }/**/
+
+    public string Prop { get; } = prop;
+}
+");
+    }
+
+    [TestMethod]
     public async Task MissingAssignment_NoDiagnostic()
     {
         await VerifyCS.VerifyAnalyzerAsync(@"
