@@ -562,4 +562,35 @@ class Program
 }
 ");
     }
+
+    [TestMethod]
+    public async Task SimpleClassWithExtraMember_Diagnostic()
+    {
+        await VerifyCS.VerifyCodeFixAsync(@"
+#nullable enable
+
+using System;
+
+[|class Program
+{
+    public Program(string prop)
+    {
+        Prop = prop;
+    }
+
+    public string Prop { get; }
+    protected int Other;
+}|]
+", @"
+#nullable enable
+
+using System;
+
+class Program(string prop)
+{
+    public string Prop { get; } = prop;
+    protected int Other;
+}
+");
+    }
 }

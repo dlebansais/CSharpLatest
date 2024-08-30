@@ -4,8 +4,13 @@
 		<TargetFramework>netcoreapp3.1</TargetFramework>
 		<LangVersion>12</LangVersion>
 		<Nullable>enable</Nullable>
-		<SuppressTfmSupportBuildWarnings>true</SuppressTfmSupportBuildWarnings>
+        <IsTestProject>true</IsTestProject>
 
+        <RootNamespace>CSharpLatest.Test</RootNamespace>
+
+        <NeutralLanguage>en-US</NeutralLanguage>
+        <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+        <SuppressTfmSupportBuildWarnings>true</SuppressTfmSupportBuildWarnings>
 		<AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
 		<GenerateBindingRedirectsOutputType>true</GenerateBindingRedirectsOutputType>
 	</PropertyGroup>
