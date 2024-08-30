@@ -363,6 +363,36 @@ class Program
     }
 
     [TestMethod]
+    public async Task ComplexExpression4_NoDiagnostic()
+    {
+        await VerifyCS.VerifyAnalyzerAsync(@"
+#nullable enable
+
+using System;
+
+class Program
+{
+    public Program(string prop, string other)
+    {
+        Prop = prop;
+
+        for (int i = 0; i < 1; i++)
+            Method();
+
+        Other = other + prop;
+    }
+
+    private void Method()
+    {
+    }
+
+    public string Prop { get; }
+    public string Other { get; }
+}
+");
+    }
+
+    [TestMethod]
     public async Task SimpleClassWithOtherProperties_Diagnostic()
     {
         await VerifyCS.VerifyCodeFixAsync(@"
