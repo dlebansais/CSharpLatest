@@ -8,9 +8,16 @@
 		<SuppressTfmSupportBuildWarnings>true</SuppressTfmSupportBuildWarnings>
 	</PropertyGroup>
 
-	<PropertyGroup>
-		<PackageId>dlebansais.CSharpLatest</PackageId>
-		<PackageVersion>1.0.0.8</PackageVersion>
+    <PropertyGroup Condition="'$(Configuration)'=='Release'">
+        <PackageId>dlebansais.CSharpLatest</PackageId>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)'=='Debug'">
+        <PackageId>dlebansais.CSharpLatest-Debug</PackageId>
+    </PropertyGroup>
+
+    <PropertyGroup>
+		<PackageVersion>1.0.1</PackageVersion>
 		<Authors>David Le Bansais</Authors>
 		<Company />
 		<Product />
