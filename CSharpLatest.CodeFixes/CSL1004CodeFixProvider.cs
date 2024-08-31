@@ -116,7 +116,7 @@ public class CSL1004CodeFixProvider : CodeFixProvider
 
         List<ParameterSyntax> PropertyParameters = Assignments.ConvertAll(assignment => ConstructorCodeFixes.ToParameter(assignment, classDeclaration));
         var SeparatedParameterList = SyntaxFactory.SeparatedList(PropertyParameters);
-        var NewParameterList = SyntaxFactory.ParameterList(SeparatedParameterList).WithTrailingTrivia(PreservedIdentifierTrailingTrivia);
+        var NewParameterList = SyntaxFactory.ParameterList(SeparatedParameterList);
 
         // Create the record.
         RecordDeclarationSyntax NewDeclaration = SyntaxFactory.RecordDeclaration(SyntaxFactory.List<AttributeListSyntax>(),
@@ -128,6 +128,9 @@ public class CSL1004CodeFixProvider : CodeFixProvider
                                                                                  baseList: null,
                                                                                  SyntaxFactory.List<TypeParameterConstraintClauseSyntax>(),
                                                                                  NewMemberList);
+
+        // Restore the identifier trailing trivia.
+        NewDeclaration = NewDeclaration.WithParameterList(NewParameterList.WithTrailingTrivia(PreservedIdentifierTrailingTrivia));
 
         // Restore the leading and trailing trivias.
         NewDeclaration = NewDeclaration.WithLeadingTrivia(PreservedClassDeclarationLeadingTrivia).WithTrailingTrivia(PreservedClassDeclarationTrailingTrivia);
