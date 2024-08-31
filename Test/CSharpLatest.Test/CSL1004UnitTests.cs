@@ -11,17 +11,17 @@ public partial class CSL1004UnitTests
     public async Task SimpleClassWithProperties_Diagnostic()
     {
         await VerifyCS.VerifyCodeFixAsync(Prologs.IsExternalInit, @"
-[|class Program
-{
-    public Program(string prop)
+    [|class Program
     {
-        Prop = prop;
-    }
+        public Program(string prop)
+        {
+            Prop = prop;
+        }
 
-    public string Prop { get; }
-}|]
+        public string Prop { get; }
+    }|]
 ", @"
-record Program(string Prop);
+    record Program(string Prop);
 ");
     }
 
@@ -100,17 +100,17 @@ class Program
     public async Task Decoration2_Diagnostic()
     {
         await VerifyCS.VerifyCodeFixAsync(Prologs.IsExternalInit, @"
-[|class Program
-{
-    public Program(string prop)
+    [|class Program
     {
-        Prop = prop;
-    }
+        public Program(string prop)
+        {
+            Prop = prop;
+        }
 
-    public string Prop { get; }
-}|]/*XYZ*/
+        public string Prop { get; }
+    }|]/*XYZ*/
 ", @"
-record Program(string Prop);/*XYZ*/
+    record Program(string Prop);/*XYZ*/
 ");
     }
 
@@ -118,17 +118,17 @@ record Program(string Prop);/*XYZ*/
     public async Task Decoration3_Diagnostic()
     {
         await VerifyCS.VerifyCodeFixAsync(Prologs.IsExternalInit, @"
-[|class Program/*XYZ*/
-{
-    public Program(string prop)
+    [|class Program/*XYZ*/
     {
-        Prop = prop;
-    }
+        public Program(string prop)
+        {
+            Prop = prop;
+        }
 
-    public string Prop { get; }
-}|]
+        public string Prop { get; }
+    }|]
 ", @"
-record Program(string Prop);
+    record Program(string Prop);
 ");
     }
 
@@ -286,18 +286,18 @@ class Program
     public async Task SimpleClassWithOtherProperties_Diagnostic()
     {
         await VerifyCS.VerifyCodeFixAsync(Prologs.IsExternalInit, @"
-[|class Program
-{
-    public Program(string prop)
+    [|class Program
     {
-        Prop = prop;
-    }
+        public Program(string prop)
+        {
+            Prop = prop;
+        }
 
-    public string Prop { get; }
-    public string Other { get; } = string.Empty;
-}|]
+        public string Prop { get; }
+        public string Other { get; } = string.Empty;
+    }|]
 ", @"
-record Program(string Prop)
+    record Program(string Prop)
 {
     public string Other { get; } = string.Empty;
 }
@@ -354,18 +354,18 @@ class Program
     public async Task SimpleClassWithExtraMember_Diagnostic()
     {
         await VerifyCS.VerifyCodeFixAsync(Prologs.IsExternalInit, @"
-[|class Program
-{
-    public Program(string prop)
+    [|class Program
     {
-        Prop = prop;
-    }
+        public Program(string prop)
+        {
+            Prop = prop;
+        }
 
-    public string Prop { get; }
-    protected int Other;
-}|]
+        public string Prop { get; }
+        protected int Other;
+    }|]
 ", @"
-record Program(string Prop)
+    record Program(string Prop)
 {
     protected int Other;
 }

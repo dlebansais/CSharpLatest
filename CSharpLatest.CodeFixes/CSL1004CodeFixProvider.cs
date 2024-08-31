@@ -11,6 +11,7 @@ using Microsoft.CodeAnalysis.CodeActions;
 using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.CodeAnalysis.Formatting;
 
 [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(CSL1004CodeFixProvider)), Shared]
 public class CSL1004CodeFixProvider : CodeFixProvider
@@ -131,14 +132,17 @@ public class CSL1004CodeFixProvider : CodeFixProvider
         // Set members.
         if (NewMemberList.Count > 0)
         {
-            NewDeclaration = NewDeclaration.WithSemicolonToken(SyntaxFactory.Token(SyntaxKind.None).WithoutTrivia());
+            NewDeclaration = NewDeclaration.WithSemicolonToken(SyntaxFactory.Token(SyntaxKind.None));
             NewDeclaration = NewDeclaration.WithOpenBraceToken(SyntaxFactory.Token(SyntaxKind.OpenBraceToken));
-            NewDeclaration = NewDeclaration.WithCloseBraceToken(SyntaxFactory.Token(SyntaxKind.CloseBraceToken));
             NewDeclaration = NewDeclaration.WithMembers(NewMemberList);
+            NewDeclaration = NewDeclaration.WithCloseBraceToken(SyntaxFactory.Token(SyntaxKind.CloseBraceToken));
         }
 
         // Restore the leading and trailing trivias.
         NewDeclaration = NewDeclaration.WithLeadingTrivia(PreservedClassDeclarationLeadingTrivia).WithTrailingTrivia(PreservedClassDeclarationTrailingTrivia);
+
+        // Add an annotation to format the new node.
+        var FormattedDeclaration = NewDeclaration.WithAdditionalAnnotations(Formatter.Annotation);
 
         // Replace the old declaration with the new declaration.
         return await document.WithReplacedNode(cancellationToken, classDeclaration, NewDeclaration);

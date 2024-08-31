@@ -43,20 +43,20 @@ class Program
     public async Task MultipleConstructors_Diagnostic()
     {
         await VerifyCS.VerifyCodeFixAsync(@"
-[|class Program
-{
-    public Program(string prop)
+    [|class Program
     {
-        Prop = prop;
-    }
+        public Program(string prop)
+        {
+            Prop = prop;
+        }
 
-    public Program(string prop, int other)
-    {
-        Prop = prop;
-    }
+        public Program(string prop, int other)
+        {
+            Prop = prop;
+        }
 
-    public string Prop { get; }
-}|]
+        public string Prop { get; }
+    }|]
 ", @"
 class Program(string prop)
 {

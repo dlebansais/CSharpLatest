@@ -90,7 +90,10 @@ public class CSL1000CodeFixProvider : CodeFixProvider
         LocalDeclarationStatementSyntax NewLocal = TrimmedLocal.WithModifiers(NewModifiers)
                                                                .WithDeclaration(VariableDeclaration);
 
+        // Add an annotation to format the new node.
+        var FormattedLocal = NewLocal.WithAdditionalAnnotations(Formatter.Annotation);
+
         // Replace the old local declaration with the new local declaration.
-        return await document.WithReplacedNode(cancellationToken, localDeclaration, NewLocal);
+        return await document.WithReplacedNode(cancellationToken, localDeclaration, FormattedLocal);
     }
 }

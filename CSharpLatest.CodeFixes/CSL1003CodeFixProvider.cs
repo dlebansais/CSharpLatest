@@ -11,6 +11,7 @@ using Microsoft.CodeAnalysis.CodeActions;
 using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.CodeAnalysis.Formatting;
 
 [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(CSL1003CodeFixProvider)), Shared]
 public class CSL1003CodeFixProvider : CodeFixProvider
@@ -126,7 +127,10 @@ public class CSL1003CodeFixProvider : CodeFixProvider
         // Restore the leading trivia.
         NewDeclaration = NewDeclaration.WithLeadingTrivia(PreservedClassDeclarationLeadingTrivia);
 
+        // Add an annotation to format the new node.
+        var FormattedDeclaration = NewDeclaration.WithAdditionalAnnotations(Formatter.Annotation);
+
         // Replace the old declaration with the new declaration.
-        return await document.WithReplacedNode(cancellationToken, classDeclaration, NewDeclaration);
+        return await document.WithReplacedNode(cancellationToken, classDeclaration, FormattedDeclaration);
     }
 }
