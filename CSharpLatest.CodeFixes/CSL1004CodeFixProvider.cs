@@ -126,7 +126,16 @@ public class CSL1004CodeFixProvider : CodeFixProvider
                                                                                  NewParameterList,
                                                                                  baseList: null,
                                                                                  SyntaxFactory.List<TypeParameterConstraintClauseSyntax>(),
-                                                                                 NewMemberList);
+                                                                                 SyntaxFactory.List<MemberDeclarationSyntax>());
+
+        // Set members.
+        if (NewMemberList.Count > 0)
+        {
+            NewDeclaration = NewDeclaration.WithSemicolonToken(SyntaxFactory.Token(SyntaxKind.None));
+            NewDeclaration = NewDeclaration.WithOpenBraceToken(SyntaxFactory.Token(SyntaxKind.OpenBraceToken));
+            NewDeclaration = NewDeclaration.WithCloseBraceToken(SyntaxFactory.Token(SyntaxKind.CloseBraceToken));
+            NewDeclaration = NewDeclaration.WithMembers(NewMemberList);
+        }
 
         // Restore the leading and trailing trivias.
         NewDeclaration = NewDeclaration.WithLeadingTrivia(PreservedClassDeclarationLeadingTrivia).WithTrailingTrivia(PreservedClassDeclarationTrailingTrivia);
