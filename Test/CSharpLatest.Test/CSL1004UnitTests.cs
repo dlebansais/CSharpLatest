@@ -8,7 +8,7 @@ using VerifyCS = CSharpCodeFixVerifier<CSL1004ConsiderUsingPrimaryConstructor, C
 public partial class CSL1004UnitTests
 {
     [TestMethod]
-    public async Task SimpleClassWithProperties_Diagnostic()
+    public async Task SimpleClassWithPropertyLast_Diagnostic()
     {
         await VerifyCS.VerifyCodeFixAsync(Prologs.IsExternalInit, @"
     [|class Program
@@ -19,6 +19,23 @@ public partial class CSL1004UnitTests
         }
 
         public string Prop { get; }
+    }|]
+", @"
+    record Program(string Prop);
+");
+    }
+    [TestMethod]
+    public async Task SimpleClassWithPropertyFirst_Diagnostic()
+    {
+        await VerifyCS.VerifyCodeFixAsync(Prologs.IsExternalInit, @"
+    [|class Program
+    {
+        public string Prop { get; }
+
+        public Program(string prop)
+        {
+            Prop = prop;
+        }
     }|]
 ", @"
     record Program(string Prop);
@@ -283,7 +300,7 @@ class Program
     }
 
     [TestMethod]
-    public async Task SimpleClassWithOtherProperties_Diagnostic()
+    public async Task SimpleClassWithOtherProperties1_Diagnostic()
     {
         await VerifyCS.VerifyCodeFixAsync(Prologs.IsExternalInit, @"
     [|class Program
@@ -295,6 +312,29 @@ class Program
 
         public string Prop { get; }
         public string Other { get; } = string.Empty;
+    }|]
+", @"
+    record Program(string Prop)
+{
+    public string Other { get; } = string.Empty;
+}
+");
+    }
+
+    [TestMethod]
+    public async Task SimpleClassWithOtherProperties2_Diagnostic()
+    {
+        await VerifyCS.VerifyCodeFixAsync(Prologs.IsExternalInit, @"
+    [|class Program
+    {
+        public string Other { get; } = string.Empty;
+
+        public Program(string prop)
+        {
+            Prop = prop;
+        }
+
+        public string Prop { get; }
     }|]
 ", @"
     record Program(string Prop)

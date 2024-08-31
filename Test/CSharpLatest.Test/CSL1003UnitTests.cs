@@ -70,6 +70,78 @@ class Program(string prop)
     }
 
     [TestMethod]
+    public async Task MultipleConstructorsWithExtraMethod_Diagnostic()
+    {
+        await VerifyCS.VerifyCodeFixAsync(@"
+    [|class Program
+    {
+        public Program(string prop)
+        {
+            Prop = prop;
+        }
+
+        public Program(string prop, int other)
+        {
+            Prop = prop;
+        }
+
+        public string Prop { get; }
+
+        private void Method()
+        {
+        }
+    }|]
+", @"
+class Program(string prop)
+{
+    public Program(string prop, int other) : this(prop)
+    {
+    }
+
+    public string Prop { get; } = prop;
+
+    private void Method()
+    {
+    }
+}
+");
+    }
+
+    [TestMethod]
+    public async Task MultipleConstructorsWithExtraProperty_Diagnostic()
+    {
+        await VerifyCS.VerifyCodeFixAsync(@"
+    [|class Program
+    {
+        public Program(string prop)
+        {
+            Prop = prop;
+        }
+
+        public Program(string prop, int other)
+        {
+            Prop = prop;
+        }
+
+        public string Prop { get; }
+
+        public int Test { get; }
+    }|]
+", @"
+class Program(string prop)
+{
+    public Program(string prop, int other) : this(prop)
+    {
+    }
+
+    public string Prop { get; } = prop;
+
+    public int Test { get; }
+}
+");
+    }
+
+    [TestMethod]
     public async Task Decoration1_Diagnostic()
     {
         await VerifyCS.VerifyCodeFixAsync(@"
