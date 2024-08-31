@@ -71,11 +71,34 @@ after_test:
   - if '%APPVEYOR_REPO_BRANCH%' == 'master' after-test.bat
 
 artifacts:
+  - path: $(APPVEYOR_PROJECT_NAME).Package\bin\Debug\$(PACKAGE_PREFIX).$(APPVEYOR_PROJECT_NAME).*.nupkg
+    name: $(APPVEYOR_PROJECT_NAME)-Package-Debug
   - path: $(APPVEYOR_PROJECT_NAME).Package\bin\Release\$(PACKAGE_PREFIX).$(APPVEYOR_PROJECT_NAME).*.nupkg
     name: $(APPVEYOR_PROJECT_NAME)-Package-Release
-    type: NuGetPackage
 
 deploy:
+  - provider: GitHub
+    release: $(VERSION_TAG)
+    description: 'Automatic deployment'
+    auth_token:
+      secure: 8IyH+0A5FwE96xWDzhXQH5zxg49+0MhTd25bUTMcc6qePhZcVmaVd6i0bsM2tT1Q
+    artifact: $(APPVEYOR_PROJECT_NAME)-Package-Release
+    draft: false
+    prerelease: false
+    on:
+      branch: deployment
+      configuration: Release
+  - provider: GitHub
+    release: $(VERSION_TAG)
+    description: 'Automatic deployment'
+    auth_token:
+      secure: 8IyH+0A5FwE96xWDzhXQH5zxg49+0MhTd25bUTMcc6qePhZcVmaVd6i0bsM2tT1Q
+    artifact: $(APPVEYOR_PROJECT_NAME)-Package-Debug
+    draft: false
+    prerelease: false
+    on:
+      branch: deployment
+      configuration: Debug
   - provider: NuGet
     artifact: $(APPVEYOR_PROJECT_NAME)-Package-Release
     skip_symbols: true
