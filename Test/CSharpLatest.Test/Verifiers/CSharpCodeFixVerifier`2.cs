@@ -59,8 +59,8 @@ namespace CSharpLatest.Test
         {
             var test = new Test
             {
-                TestCode = prolog + source,
-                FixedCode = prolog + fixedSource,
+                TestCode = (prolog + source).Replace("\r\n", "\n").Replace("\n", "\r\n"),
+                FixedCode = (prolog + fixedSource).Replace("\r\n", "\n").Replace("\n", "\r\n"),
             };
 
             test.ExpectedDiagnostics.AddRange(expected);
