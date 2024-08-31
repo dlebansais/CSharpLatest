@@ -128,8 +128,7 @@ record Program(string Prop);/*XYZ*/
     public string Prop { get; }
 }|]
 ", @"
-record Program(string Prop)/*XYZ*/
-;
+record Program(string Prop);
 ");
     }
 

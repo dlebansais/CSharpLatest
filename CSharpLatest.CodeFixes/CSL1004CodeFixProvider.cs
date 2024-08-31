@@ -52,7 +52,6 @@ public class CSL1004CodeFixProvider : CodeFixProvider
 
         // Save the trailing trivia in the identifier part to restore it as trailing trivia of the parameter list.
         SyntaxToken NewIdentifier = classDeclaration.Identifier;
-        SyntaxTriviaList PreservedIdentifierTrailingTrivia = NewIdentifier.TrailingTrivia;
         NewIdentifier = NewIdentifier.WithoutTrivia();
 
         // Replace the class keyword with the record keyword.
@@ -128,9 +127,6 @@ public class CSL1004CodeFixProvider : CodeFixProvider
                                                                                  baseList: null,
                                                                                  SyntaxFactory.List<TypeParameterConstraintClauseSyntax>(),
                                                                                  NewMemberList);
-
-        // Restore the identifier trailing trivia.
-        NewDeclaration = NewDeclaration.WithParameterList(NewParameterList.WithTrailingTrivia(PreservedIdentifierTrailingTrivia));
 
         // Restore the leading and trailing trivias.
         NewDeclaration = NewDeclaration.WithLeadingTrivia(PreservedClassDeclarationLeadingTrivia).WithTrailingTrivia(PreservedClassDeclarationTrailingTrivia);
