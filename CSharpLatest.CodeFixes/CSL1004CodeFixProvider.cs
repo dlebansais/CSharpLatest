@@ -12,12 +12,12 @@ using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
-[ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(CSL1003CodeFixProvider)), Shared]
-public class CSL1003CodeFixProvider : CodeFixProvider
+[ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(CSL1004CodeFixProvider)), Shared]
+public class CSL1004CodeFixProvider : CodeFixProvider
 {
     public sealed override ImmutableArray<string> FixableDiagnosticIds
     {
-        get { return [CSL1003ConsiderUsingPrimaryConstructor.DiagnosticId]; }
+        get { return [CSL1004ConsiderUsingPrimaryConstructor.DiagnosticId]; }
     }
 
     public sealed override FixAllProvider GetFixAllProvider()
@@ -33,35 +33,41 @@ public class CSL1003CodeFixProvider : CodeFixProvider
         // Register a code action that will invoke the fix.
         context.RegisterCodeFix(
             CodeAction.Create(
-                title: CodeFixResources.CSL1003CodeFixTitle,
-                createChangedDocument: c => ChangeToPrimaryConstructor(context.Document, Declaration, c),
-                equivalenceKey: nameof(CodeFixResources.CSL1003CodeFixTitle)),
+                title: CodeFixResources.CSL1004CodeFixTitle,
+                createChangedDocument: c => ChangeToRecord(context.Document, Declaration, c),
+                equivalenceKey: nameof(CodeFixResources.CSL1004CodeFixTitle)),
             Diagnostic);
     }
 
-    private static async Task<Document> ChangeToPrimaryConstructor(Document document,
+    private static async Task<Document> ChangeToRecord(Document document,
         ClassDeclarationSyntax classDeclaration,
         CancellationToken cancellationToken)
     {
         Document Result = document;
 
-        // Save the leading trivia to restore it later.
+        // Save the leading and trailing trivias to restore it later.
         SyntaxTriviaList PreservedClassDeclarationLeadingTrivia = classDeclaration.GetLeadingTrivia();
+        SyntaxTriviaList PreservedClassDeclarationTrailingTrivia = classDeclaration.GetTrailingTrivia();
+        var NewModifiers = classDeclaration.Modifiers;
 
         // Save the trailing trivia in the identifier part to restore it as trailing trivia of the parameter list.
         SyntaxToken NewIdentifier = classDeclaration.Identifier;
         SyntaxTriviaList PreservedIdentifierTrailingTrivia = NewIdentifier.TrailingTrivia;
-        ClassDeclarationSyntax NewDeclaration = classDeclaration.WithIdentifier(NewIdentifier.WithoutTrivia());
+        NewIdentifier = NewIdentifier.WithoutTrivia();
+
+        // Replace the class keyword with the record keyword.
+        SyntaxTriviaList PreservedClassKeywordTrailingTrivia = classDeclaration.Keyword.TrailingTrivia;
+        SyntaxToken NewKeyword = SyntaxFactory.Token(SyntaxKind.RecordKeyword).WithoutTrivia().WithTrailingTrivia(PreservedClassKeywordTrailingTrivia);
 
         // There was no diagnostic if there is a parameter list already.
         Debug.Assert(classDeclaration.ParameterList is null);
 
-        // Gets the list of parameters for the primary constructor, and the constructor we got them from (we know it exists or there would be no diagnostic).
+        // Gets the list of parameters for the record.
         List<ParameterSyntax> ParameterCandidates = ConstructorAnalysis.GetParameterCandidates(classDeclaration);
         ConstructorDeclarationSyntax? ConstructorCandidate = ConstructorAnalysis.GetConstructorCandidate(classDeclaration, ParameterCandidates);
         Debug.Assert(ConstructorCandidate != null);
 
-        // Get the list of assignments that are simplified as primary constructor arguments.
+        // Get the list of assignments that are simplified as record arguments.
         (bool HasPropertyAssignmentsOnly, List<AssignmentExpressionSyntax> Assignments) = ConstructorAnalysis.GetPropertyAssignments(classDeclaration, ConstructorCandidate!);
         Debug.Assert(HasPropertyAssignmentsOnly);
         Debug.Assert(Assignments.Count > 0);
@@ -75,30 +81,21 @@ public class CSL1003CodeFixProvider : CodeFixProvider
 
             if (Member is ConstructorDeclarationSyntax ConstructorDeclaration)
             {
-                if (ConstructorDeclaration == ConstructorCandidate)
-                {
-                    // Get the trivia to pass over to the next member, and ignore this constructor (it's a primary constructor now, and the syntax is different).
-                    PassedOverLeadingTrivia = Member.GetLeadingTrivia();
-                    ConvertedMember = null;
-                }
-                else
-                {
-                    // Get the simplified constructor.
-                    ConvertedMember = ConstructorCodeFixes.SimplifiedConstructor(ConstructorDeclaration, ParameterCandidates, Assignments);
-                }
+                // There can be only one constructor if the diagnostic is to suggest to use a record.
+                Debug.Assert(ConstructorDeclaration == ConstructorCandidate);
+
+                // Get the trivia to pass over to the next member, and ignore the constructor.
+                PassedOverLeadingTrivia = Member.GetLeadingTrivia();
+                ConvertedMember = null;
             }
             else if (Member is PropertyDeclarationSyntax PropertyDeclaration)
             {
-                // Gets the initializer if this is one of the properties to update.
-                if (ConstructorCodeFixes.FindPropertyInitializer(PropertyDeclaration, Assignments) is EqualsValueClauseSyntax Initializer)
+                // Check if this is one of the properties to update.
+                if (ConstructorCodeFixes.FindPropertyInitializer(PropertyDeclaration, Assignments) is not null)
                 {
-                    // Save the trailing trivia to restore is after the initializer we add.
-                    SyntaxTriviaList PreservedPropertyTrailingTrivia = PropertyDeclaration.GetTrailingTrivia();
-                    PropertyDeclarationSyntax NewPropertyDeclaration = PropertyDeclaration.WithInitializer(Initializer);
-                    NewPropertyDeclaration = NewPropertyDeclaration.WithSemicolonToken(SyntaxFactory.Token(SyntaxKind.SemicolonToken));
-                    NewPropertyDeclaration = NewPropertyDeclaration.WithTrailingTrivia(PreservedPropertyTrailingTrivia);
-
-                    ConvertedMember = NewPropertyDeclaration;
+                    // Get the trivia to pass over to the next member, and ignore the property.
+                    PassedOverLeadingTrivia = Member.GetLeadingTrivia();
+                    ConvertedMember = null;
                 }
             }
 
@@ -116,15 +113,24 @@ public class CSL1003CodeFixProvider : CodeFixProvider
 
         // Update the class with the modified members.
         var NewMemberList = SyntaxFactory.List(NewMembers);
-        NewDeclaration = NewDeclaration.WithMembers(NewMemberList);
 
-        // Add the primary constructor to the class.
-        var SeparatedParameterList = SyntaxFactory.SeparatedList(ParameterCandidates);
+        List<ParameterSyntax> PropertyParameters = Assignments.ConvertAll(assignment => ConstructorCodeFixes.ToParameter(assignment, classDeclaration));
+        var SeparatedParameterList = SyntaxFactory.SeparatedList(PropertyParameters);
         var NewParameterList = SyntaxFactory.ParameterList(SeparatedParameterList).WithTrailingTrivia(PreservedIdentifierTrailingTrivia);
-        NewDeclaration = NewDeclaration.WithParameterList(NewParameterList);
 
-        // Restore the leading trivia.
-        NewDeclaration = NewDeclaration.WithLeadingTrivia(PreservedClassDeclarationLeadingTrivia);
+        // Create the record.
+        RecordDeclarationSyntax NewDeclaration = SyntaxFactory.RecordDeclaration(SyntaxFactory.List<AttributeListSyntax>(),
+                                                                                 NewModifiers,
+                                                                                 NewKeyword,
+                                                                                 NewIdentifier,
+                                                                                 typeParameterList: null,
+                                                                                 NewParameterList,
+                                                                                 baseList: null,
+                                                                                 SyntaxFactory.List<TypeParameterConstraintClauseSyntax>(),
+                                                                                 NewMemberList);
+
+        // Restore the leading and trailing trivias.
+        NewDeclaration = NewDeclaration.WithLeadingTrivia(PreservedClassDeclarationLeadingTrivia).WithTrailingTrivia(PreservedClassDeclarationTrailingTrivia);
 
         // Replace the old declaration with the new declaration.
         return await document.WithReplacedNode(cancellationToken, classDeclaration, NewDeclaration);

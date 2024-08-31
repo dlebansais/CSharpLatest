@@ -133,4 +133,8 @@
     <value>Use a primary constructor</value>
     <comment>The title of the code fix.</comment>
   </data>
+  <data name="CSL1004CodeFixTitle" xml:space="preserve">
+    <value>Use a record</value>
+    <comment>The title of the code fix.</comment>
+  </data>
 </root>

@@ -10,11 +10,7 @@ public partial class CSL1002UnitTests
     [TestMethod]
     public async Task SystemType_Diagnostic()
     {
-        await VerifyCS.VerifyCodeFixAsync(@"
-#nullable enable
-
-using System;
-
+        await VerifyCS.VerifyCodeFixAsync(Prologs.Nullable, @"
 class Program
 {
     static void Main(string[] args)
@@ -26,10 +22,6 @@ class Program
     }
 }
 ", @"
-#nullable enable
-
-using System;
-
 class Program
 {
     static void Main(string[] args)
@@ -46,11 +38,7 @@ class Program
     [TestMethod]
     public async Task Replaced_NoDiagnostic()
     {
-        await VerifyCS.VerifyAnalyzerAsync(@"
-#nullable enable
-
-using System;
-
+        await VerifyCS.VerifyAnalyzerAsync(Prologs.Nullable, @"
 class Program
 {
     static void Main(string[] args)
@@ -67,11 +55,7 @@ class Program
     [TestMethod]
     public async Task ClassNoOverload_Diagnostic()
     {
-        await VerifyCS.VerifyCodeFixAsync(@"
-#nullable enable
-
-using System;
-
+        await VerifyCS.VerifyCodeFixAsync(Prologs.Nullable, @"
 class Program
 {
     static void Main(string[] args)
@@ -87,10 +71,6 @@ class Foo
 {
 }
 ", @"
-#nullable enable
-
-using System;
-
 class Program
 {
     static void Main(string[] args)
@@ -111,11 +91,7 @@ class Foo
     [TestMethod]
     public async Task ClassOverloaded_NoDiagnostic()
     {
-        await VerifyCS.VerifyAnalyzerAsync(@"
-#nullable enable
-
-using System;
-
+        await VerifyCS.VerifyAnalyzerAsync(Prologs.Nullable, @"
 class Program
 {
     static void Main(string[] args)
@@ -146,11 +122,7 @@ class Foo
     [TestMethod]
     public async Task StructNoOverload_Diagnostic()
     {
-        await VerifyCS.VerifyCodeFixAsync(@"
-#nullable enable
-
-using System;
-
+        await VerifyCS.VerifyCodeFixAsync(Prologs.Nullable, @"
 class Program
 {
     static void Main(string[] args)
@@ -166,10 +138,6 @@ struct Foo
 {
 }
 ", @"
-#nullable enable
-
-using System;
-
 class Program
 {
     static void Main(string[] args)
@@ -190,11 +158,7 @@ struct Foo
     [TestMethod]
     public async Task StructOverloaded_NoDiagnostic()
     {
-        await VerifyCS.VerifyAnalyzerAsync(@"
-#nullable enable
-
-using System;
-
+        await VerifyCS.VerifyAnalyzerAsync(Prologs.Nullable, @"
 class Program
 {
     static void Main(string[] args)
@@ -225,11 +189,7 @@ struct Foo
     [TestMethod]
     public async Task Array_Diagnostic()
     {
-        await VerifyCS.VerifyCodeFixAsync(@"
-#nullable enable
-
-using System;
-
+        await VerifyCS.VerifyCodeFixAsync(Prologs.Nullable, @"
 class Program
 {
     static void Main(string[] args)
@@ -241,10 +201,6 @@ class Program
     }
 }
 ", @"
-#nullable enable
-
-using System;
-
 class Program
 {
     static void Main(string[] args)
@@ -261,11 +217,7 @@ class Program
     [TestMethod]
     public async Task Decoration1_Diagnostic()
     {
-        await VerifyCS.VerifyCodeFixAsync(@"
-#nullable enable
-
-using System;
-
+        await VerifyCS.VerifyCodeFixAsync(Prologs.Nullable, @"
 class Program
 {
     static void Main(string[] args)
@@ -277,10 +229,6 @@ class Program
     }
 }
 ", @"
-#nullable enable
-
-using System;
-
 class Program
 {
     static void Main(string[] args)
@@ -297,11 +245,7 @@ class Program
     [TestMethod]
     public async Task Decoration2_Diagnostic()
     {
-        await VerifyCS.VerifyCodeFixAsync(@"
-#nullable enable
-
-using System;
-
+        await VerifyCS.VerifyCodeFixAsync(Prologs.Nullable, @"
 class Program
 {
     static void Main(string[] args)
@@ -313,10 +257,6 @@ class Program
     }
 }
 ", @"
-#nullable enable
-
-using System;
-
 class Program
 {
     static void Main(string[] args)
@@ -333,11 +273,7 @@ class Program
     [TestMethod]
     public async Task Decoration3_Diagnostic()
     {
-        await VerifyCS.VerifyCodeFixAsync(@"
-#nullable enable
-
-using System;
-
+        await VerifyCS.VerifyCodeFixAsync(Prologs.Nullable, @"
 class Program
 {
     static void Main(string[] args)
@@ -349,10 +285,6 @@ class Program
     }
 }
 ", @"
-#nullable enable
-
-using System;
-
 class Program
 {
     static void Main(string[] args)
@@ -369,11 +301,7 @@ class Program
     [TestMethod]
     public async Task Decoration4_Diagnostic()
     {
-        await VerifyCS.VerifyCodeFixAsync(@"
-#nullable enable
-
-using System;
-
+        await VerifyCS.VerifyCodeFixAsync(Prologs.Nullable, @"
 class Program
 {
     static void Main(string[] args)
@@ -385,10 +313,6 @@ class Program
     }
 }
 ", @"
-#nullable enable
-
-using System;
-
 class Program
 {
     static void Main(string[] args)

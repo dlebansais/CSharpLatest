@@ -11,8 +11,6 @@ public partial class CSL1000UnitTests
     public async Task LocalIntCouldBeConstant_Diagnostic()
     {
         await VerifyCS.VerifyCodeFixAsync(@"
-using System;
-
 class Program
 {
     static void Main()
@@ -22,8 +20,6 @@ class Program
     }
 }
 ", @"
-using System;
-
 class Program
 {
     static void Main()
@@ -39,8 +35,6 @@ class Program
     public async Task VariableIsAssigned_NoDiagnostic()
     {
         await VerifyCS.VerifyAnalyzerAsync(@"
-using System;
-
 class Program
 {
     static void Main()
@@ -56,8 +50,6 @@ class Program
     public async Task VariableIsAlreadyConst_NoDiagnostic()
     {
         await VerifyCS.VerifyAnalyzerAsync(@"
-using System;
-
 class Program
 {
     static void Main()
@@ -73,8 +65,6 @@ class Program
     public async Task NoInitializer_NoDiagnostic()
     {
         await VerifyCS.VerifyAnalyzerAsync(@"
-using System;
-
 class Program
 {
     static void Main()
@@ -91,8 +81,6 @@ class Program
     public async Task InitializerIsNotConstant_NoDiagnostic()
     {
         await VerifyCS.VerifyAnalyzerAsync(@"
-using System;
-
 class Program
 {
     static void Main()
@@ -108,8 +96,6 @@ class Program
     public async Task MultipleInitializers_NoDiagnostic()
     {
         await VerifyCS.VerifyAnalyzerAsync(@"
-using System;
-
 class Program
 {
     static void Main()
@@ -126,8 +112,6 @@ class Program
     public async Task DeclarationIsInvalid_NoDiagnostic()
     {
         await VerifyCS.VerifyAnalyzerAsync(@"
-using System;
-
 class Program
 {
     static void Main()
@@ -142,8 +126,6 @@ class Program
     public async Task DeclarationIsNotString_NoDiagnostic()
     {
         await VerifyCS.VerifyAnalyzerAsync(@"
-using System;
-
 class Program
 {
     static void Main()
@@ -158,8 +140,6 @@ class Program
     public async Task ConstantIsNotNull_NoDiagnostic()
     {
         await VerifyCS.VerifyAnalyzerAsync(@"
-using System;
-
 class Program
 {
     static void Main()
@@ -174,8 +154,6 @@ class Program
     public async Task StringCouldBeConstant_Diagnostic()
     {
         await VerifyCS.VerifyCodeFixAsync(@"
-using System;
-
 class Program
 {
     static void Main()
@@ -184,8 +162,6 @@ class Program
     }
 }
 ", @"
-using System;
-
 class Program
 {
     static void Main()
@@ -200,8 +176,6 @@ class Program
     public async Task VarIntDeclarationCouldBeConstant_Diagnostic()
     {
         await VerifyCS.VerifyCodeFixAsync(@"
-using System;
-
 class Program
 {
     static void Main()
@@ -210,8 +184,6 @@ class Program
     }
 }
 ", @"
-using System;
-
 class Program
 {
     static void Main()
@@ -226,8 +198,6 @@ class Program
     public async Task VarStringDeclarationCouldBeConstant_Diagnostic()
     {
         await VerifyCS.VerifyCodeFixAsync(@"
-using System;
-
 class Program
 {
     static void Main()
@@ -236,8 +206,6 @@ class Program
     }
 }
 ", @"
-using System;
-
 class Program
 {
     static void Main()
@@ -252,8 +220,6 @@ class Program
     public async Task NullStringCouldBeConstant_Diagnostic()
     {
         await VerifyCS.VerifyCodeFixAsync(@"
-using System;
-
 class Program
 {
     static void Main()
@@ -262,8 +228,6 @@ class Program
     }
 }
 ", @"
-using System;
-
 class Program
 {
     static void Main()
@@ -277,10 +241,9 @@ class Program
     [TestMethod]
     public async Task StringIsAliased_Diagnostic()
     {
-        await VerifyCS.VerifyCodeFixAsync(@"
-using System;
+        await VerifyCS.VerifyCodeFixAsync(Prologs.Default + @"
 using var = System.String;
-
+", @"
 class Program
 {
     static void Main()
@@ -289,9 +252,6 @@ class Program
     }
 }
 ", @"
-using System;
-using var = System.String;
-
 class Program
 {
     static void Main()
@@ -306,8 +266,6 @@ class Program
     public async Task VarIsType_Diagnostic()
     {
         await VerifyCS.VerifyCodeFixAsync(@"
-using System;
-
 class Program
 {
     static void Main()
@@ -320,8 +278,6 @@ class var
 {
 }
 ", @"
-using System;
-
 class Program
 {
     static void Main()

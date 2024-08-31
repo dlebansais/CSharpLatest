@@ -11,10 +11,7 @@ public partial class CSL1002UnitTests
     {
         await VerifyCS.VerifyAnalyzerAsync(@"
 #define COVERAGE_A25BDFABDDF8402785EB75AD812DA952
-#nullable enable
-
-using System;
-
+" + Prologs.Nullable, @"
 class Program
 {
     static void Main(string[] args)
@@ -32,8 +29,6 @@ class Program
     public async Task OldLanguageVersion_NoDiagnostic()
     {
         await VerifyCS.VerifyAnalyzerAsync(@"
-using System;
-
 class Program
 {
     static void Main(string[] args)
@@ -50,11 +45,7 @@ class Program
     [TestMethod]
     public async Task NotDifferentThanLiteral_NoDiagnostic()
     {
-        await VerifyCS.VerifyAnalyzerAsync(@"
-#nullable enable
-
-using System;
-
+        await VerifyCS.VerifyAnalyzerAsync(Prologs.Nullable, @"
 class Program
 {
     static void Main(string[] args)
@@ -71,11 +62,7 @@ class Program
     [TestMethod]
     public async Task NotDifferentThanNull_NoDiagnostic()
     {
-        await VerifyCS.VerifyAnalyzerAsync(@"
-#nullable enable
-
-using System;
-
+        await VerifyCS.VerifyAnalyzerAsync(Prologs.Nullable, @"
 class Program
 {
     static void Main(string[] args)
@@ -93,11 +80,7 @@ class Program
     [TestMethod]
     public async Task UnknownExclamantionEqualsOperator_Diagnostic()
     {
-        await VerifyCS.VerifyAnalyzerAsync(@"
-#nullable enable
-
-using System;
-
+        await VerifyCS.VerifyAnalyzerAsync(Prologs.Nullable, @"
 class Program
 {
     static void Main(string[] args)
@@ -112,11 +95,7 @@ class Program
     [TestMethod]
     public async Task StructExclamantionEqualsOperator_NoDiagnostic()
     {
-        await VerifyCS.VerifyAnalyzerAsync(@"
-#nullable enable
-
-using System;
-
+        await VerifyCS.VerifyAnalyzerAsync(Prologs.Nullable, @"
 class Program
 {
     static void Main(string[] args)

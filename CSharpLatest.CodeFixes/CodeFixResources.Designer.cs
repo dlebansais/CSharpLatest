@@ -95,5 +95,14 @@ namespace CSharpLatest {
                 return ResourceManager.GetString("CSL1003CodeFixTitle", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use a record.
+        /// </summary>
+        internal static string CSL1004CodeFixTitle {
+            get {
+                return ResourceManager.GetString("CSL1004CodeFixTitle", resourceCulture);
+            }
+        }
     }
 }

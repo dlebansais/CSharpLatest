@@ -11,9 +11,7 @@ public partial class CSL1000UnitTests
     {
         await VerifyCS.VerifyAnalyzerAsync(@"
 #define COVERAGE_A25BDFABDDF8402785EB75AD812DA952
-
-using System;
-
+" + Prologs.Default, @"
 class Program
 {
     static void Main()
@@ -29,8 +27,6 @@ class Program
     public async Task OldLanguageVersion_NoDiagnostic()
     {
         await VerifyCS.VerifyAnalyzerAsync(@"
-using System;
-
 class Program
 {
     static void Main()
@@ -46,8 +42,6 @@ class Program
     public async Task InvalidDeclaration_NoDiagnostic()
     {
         await VerifyCS.VerifyAnalyzerAsync(@"
-using System;
-
 class Program
 {
     static void Main()

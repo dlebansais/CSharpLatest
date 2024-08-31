@@ -167,5 +167,32 @@ namespace CSharpLatest {
                 return ResourceManager.GetString("CSL1003AnalyzerTitle", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Consider using records to simplify your code..
+        /// </summary>
+        internal static string CSL1004AnalyzerDescription {
+            get {
+                return ResourceManager.GetString("CSL1004AnalyzerDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Consider using a record for &apos;{0}&apos;.
+        /// </summary>
+        internal static string CSL1004AnalyzerMessageFormat {
+            get {
+                return ResourceManager.GetString("CSL1004AnalyzerMessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Consider using records.
+        /// </summary>
+        internal static string CSL1004AnalyzerTitle {
+            get {
+                return ResourceManager.GetString("CSL1004AnalyzerTitle", resourceCulture);
+            }
+        }
     }
 }
