@@ -80,7 +80,7 @@ deploy:
     artifact: $(APPVEYOR_PROJECT_NAME)-Package-Release
     skip_symbols: true
     api_key:
-      secure: gmxGdYXre5ryN4BlRVa0qJM++Sw86tRiKT4hpH5/OTK2daKRpeiOxFsVWpPLGJ+e
+      secure: uWTgpdAmDlZwb4//7sBgzFwN0HGnNCKpVUyRl2V7HPznoSDaa6yBar/KE6jLDZl9
     on:
       branch: deployment
       configuration: Release
