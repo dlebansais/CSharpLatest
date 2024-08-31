@@ -131,7 +131,7 @@ public class CSL1004CodeFixProvider : CodeFixProvider
         // Set members.
         if (NewMemberList.Count > 0)
         {
-            NewDeclaration = NewDeclaration.WithSemicolonToken(SyntaxFactory.Token(SyntaxKind.None));
+            NewDeclaration = NewDeclaration.WithSemicolonToken(SyntaxFactory.Token(SyntaxKind.None).WithoutTrivia());
             NewDeclaration = NewDeclaration.WithOpenBraceToken(SyntaxFactory.Token(SyntaxKind.OpenBraceToken));
             NewDeclaration = NewDeclaration.WithCloseBraceToken(SyntaxFactory.Token(SyntaxKind.CloseBraceToken));
             NewDeclaration = NewDeclaration.WithMembers(NewMemberList);
