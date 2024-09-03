@@ -1,8 +1,8 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFramework>netstandard2.1</TargetFramework>
-		<IncludeBuildOutput>false</IncludeBuildOutput>
+        <TargetFrameworks>netstandard2.0</TargetFrameworks>
+        <IncludeBuildOutput>false</IncludeBuildOutput>
 		<SuppressDependenciesWhenPacking>true</SuppressDependenciesWhenPacking>
 		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
 		<SuppressTfmSupportBuildWarnings>true</SuppressTfmSupportBuildWarnings>
@@ -17,7 +17,7 @@
     </PropertyGroup>
 
     <PropertyGroup>
-		<PackageVersion>1.0.1</PackageVersion>
+		<PackageVersion>1.0.2</PackageVersion>
 		<Authors>David Le Bansais</Authors>
 		<Company />
 		<Product />

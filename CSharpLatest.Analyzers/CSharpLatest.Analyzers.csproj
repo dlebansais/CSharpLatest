@@ -1,18 +1,18 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFramework>netstandard2.1</TargetFramework>
+		<TargetFrameworks>netstandard2.0;netstandard2.1</TargetFrameworks>
 		<Nullable>enable</Nullable>
 		<LangVersion>12</LangVersion>
 		<GenerateDocumentationFile>true</GenerateDocumentationFile>
-		<Version>1.0.1</Version>
+		<Version>1.0.2</Version>
 		<Authors>David Le Bansais</Authors>
 		<Company />
 		<Product />
 		<Description>Roslyn-based analysis of C# code to suggest the use of features in the latest version of the language</Description>
 		<Copyright>Copyright © 2024 David Le Bansais</Copyright>
-		<AssemblyVersion>1.0.1.9</AssemblyVersion>
-		<FileVersion>1.0.1.9</FileVersion>
+		<AssemblyVersion>1.0.2.10</AssemblyVersion>
+		<FileVersion>1.0.2.10</FileVersion>
 		<RepositoryUrl>https://github.com/dlebansais/CSharpLatest</RepositoryUrl>
 		<NeutralLanguage>en-US</NeutralLanguage>
 		<RootNamespace>CSharpLatest</RootNamespace>
