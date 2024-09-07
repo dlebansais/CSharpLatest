@@ -1,6 +1,7 @@
 ﻿namespace CSharpLatest;
 
 using System.Collections.Immutable;
+using Contracts;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -10,7 +11,7 @@ using Microsoft.CodeAnalysis.Diagnostics;
 /// Analyzer for rule CSL1004: Consider using primary constructor.
 /// </summary>
 [DiagnosticAnalyzer(LanguageNames.CSharp)]
-public class CSL1004ConsiderUsingPrimaryConstructor : DiagnosticAnalyzer
+public class CSL1004ConsiderUsingRecord : DiagnosticAnalyzer
 {
     /// <summary>
     /// Diagnostic ID for this rule.
@@ -22,14 +23,14 @@ public class CSL1004ConsiderUsingPrimaryConstructor : DiagnosticAnalyzer
     private static readonly LocalizableString Description = new LocalizableResourceString(nameof(AnalyzerResources.CSL1004AnalyzerDescription), AnalyzerResources.ResourceManager, typeof(AnalyzerResources));
     private const string Category = "Usage";
 
-    private static readonly DiagnosticDescriptor Rule = new DiagnosticDescriptor(DiagnosticId,
-                                                                                 Title,
-                                                                                 MessageFormat,
-                                                                                 Category,
-                                                                                 DiagnosticSeverity.Warning,
-                                                                                 isEnabledByDefault: true,
-                                                                                 description: Description,
-                                                                                 AnalyzerTools.GetHelpLink(DiagnosticId));
+    private static readonly DiagnosticDescriptor Rule = new(DiagnosticId,
+                                                            Title,
+                                                            MessageFormat,
+                                                            Category,
+                                                            DiagnosticSeverity.Warning,
+                                                            isEnabledByDefault: true,
+                                                            description: Description,
+                                                            AnalyzerTools.GetHelpLink(DiagnosticId));
 
     /// <summary>
     /// Gets the list of supported diagnostic.
@@ -42,6 +43,8 @@ public class CSL1004ConsiderUsingPrimaryConstructor : DiagnosticAnalyzer
     /// <param name="context">The analysis context.</param>
     public override void Initialize(AnalysisContext context)
     {
+        context = Contract.AssertNotNull(context);
+
         context.ConfigureGeneratedCodeAnalysis(GeneratedCodeAnalysisFlags.None);
         context.EnableConcurrentExecution();
 

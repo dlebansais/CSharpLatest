@@ -2,6 +2,7 @@
 
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.Collections.ObjectModel;
 using System.Composition;
 using System.Diagnostics;
 using System.Threading;
@@ -58,12 +59,12 @@ public class CSL1003CodeFixProvider : CodeFixProvider
         Debug.Assert(classDeclaration.ParameterList is null);
 
         // Gets the list of parameters for the primary constructor, and the constructor we got them from (we know it exists or there would be no diagnostic).
-        List<ParameterSyntax> ParameterCandidates = ConstructorAnalysis.GetParameterCandidates(classDeclaration);
+        Collection<ParameterSyntax> ParameterCandidates = ConstructorAnalysis.GetParameterCandidates(classDeclaration);
         ConstructorDeclarationSyntax? ConstructorCandidate = ConstructorAnalysis.GetConstructorCandidate(classDeclaration, ParameterCandidates);
         Debug.Assert(ConstructorCandidate != null);
 
         // Get the list of assignments that are simplified as primary constructor arguments.
-        (bool HasPropertyAssignmentsOnly, List<AssignmentExpressionSyntax> Assignments) = ConstructorAnalysis.GetPropertyAssignments(classDeclaration, ConstructorCandidate!);
+        (bool HasPropertyAssignmentsOnly, Collection<AssignmentExpressionSyntax> Assignments) = ConstructorAnalysis.GetPropertyAssignments(classDeclaration, ConstructorCandidate!);
         Debug.Assert(HasPropertyAssignmentsOnly);
         Debug.Assert(Assignments.Count > 0);
 

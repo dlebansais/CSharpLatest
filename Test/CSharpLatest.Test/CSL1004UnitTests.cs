@@ -2,7 +2,7 @@
 
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using VerifyCS = CSharpCodeFixVerifier<CSL1004ConsiderUsingPrimaryConstructor, CSL1004CodeFixProvider>;
+using VerifyCS = CSharpCodeFixVerifier<CSL1004ConsiderUsingRecord, CSL1004CodeFixProvider>;
 
 [TestClass]
 public partial class CSL1004UnitTests

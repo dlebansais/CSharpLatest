@@ -3,6 +3,7 @@
 using System.Collections.Immutable;
 using System.Diagnostics;
 using System.Linq;
+using Contracts;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -25,14 +26,14 @@ public class CSL1000VariableshouldBeMadeConstant : DiagnosticAnalyzer
     private static readonly LocalizableString Description = new LocalizableResourceString(nameof(AnalyzerResources.CSL1000AnalyzerDescription), AnalyzerResources.ResourceManager, typeof(AnalyzerResources));
     private const string Category = "Usage";
 
-    private static readonly DiagnosticDescriptor Rule = new DiagnosticDescriptor(DiagnosticId,
-                                                                                 Title,
-                                                                                 MessageFormat,
-                                                                                 Category,
-                                                                                 DiagnosticSeverity.Warning,
-                                                                                 isEnabledByDefault: true,
-                                                                                 description: Description,
-                                                                                 AnalyzerTools.GetHelpLink(DiagnosticId));
+    private static readonly DiagnosticDescriptor Rule = new(DiagnosticId,
+                                                            Title,
+                                                            MessageFormat,
+                                                            Category,
+                                                            DiagnosticSeverity.Warning,
+                                                            isEnabledByDefault: true,
+                                                            description: Description,
+                                                            AnalyzerTools.GetHelpLink(DiagnosticId));
 
     /// <summary>
     /// Gets the list of supported diagnostic.
@@ -45,6 +46,8 @@ public class CSL1000VariableshouldBeMadeConstant : DiagnosticAnalyzer
     /// <param name="context">The analysis context.</param>
     public override void Initialize(AnalysisContext context)
     {
+        context = Contract.AssertNotNull(context);
+
         context.ConfigureGeneratedCodeAnalysis(GeneratedCodeAnalysisFlags.None);
         context.EnableConcurrentExecution();
 
@@ -86,7 +89,7 @@ public class CSL1000VariableshouldBeMadeConstant : DiagnosticAnalyzer
         context.ReportDiagnostic(Diagnostic.Create(Rule, context.Node.GetLocation(), localDeclaration.Declaration.Variables.First().Identifier.ValueText));
     }
 
-    private bool IsVariableAssignedToConstantValue(SyntaxNodeAnalysisContext context, ITypeSymbol variableType, VariableDeclaratorSyntax variable)
+    private static bool IsVariableAssignedToConstantValue(SyntaxNodeAnalysisContext context, ITypeSymbol variableType, VariableDeclaratorSyntax variable)
     {
         EqualsValueClauseSyntax? Initializer = variable.Initializer;
         if (Initializer is null)

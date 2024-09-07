@@ -1,7 +1,9 @@
 ﻿namespace CSharpLatest;
 
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -15,7 +17,7 @@ public static class ConstructorCodeFixes
     /// <param name="primaryConstructorParameters">Parameters in the primary constructor.</param>
     /// <param name="initialAssignments">The list of removed assignments.</param>
     /// <returns></returns>
-    public static ConstructorDeclarationSyntax SimplifiedConstructor(ConstructorDeclarationSyntax constructorDeclaration, List<ParameterSyntax> primaryConstructorParameters, List<AssignmentExpressionSyntax> initialAssignments)
+    public static ConstructorDeclarationSyntax SimplifiedConstructor(ConstructorDeclarationSyntax constructorDeclaration, Collection<ParameterSyntax> primaryConstructorParameters, Collection<AssignmentExpressionSyntax> initialAssignments)
     {
         Debug.Assert(constructorDeclaration.Initializer is null);
 
@@ -86,7 +88,7 @@ public static class ConstructorCodeFixes
         SyntaxToken ColonToken = SyntaxFactory.Token(SyntaxKind.ColonToken).WithLeadingTrivia(Whitespace());
         SyntaxToken ThisKeyword = SyntaxFactory.Token(SyntaxKind.ThisKeyword).WithLeadingTrivia(Whitespace());
 
-        List<ArgumentSyntax> Arguments = primaryConstructorParameters.ConvertAll(ToArgument);
+        List<ArgumentSyntax> Arguments = primaryConstructorParameters.ToList().ConvertAll(ToArgument);
         var SeparatedArgumentList = SyntaxFactory.SeparatedList(Arguments);
         var ThisOpenParenToken = SyntaxFactory.Token(SyntaxKind.OpenParenToken);
         var ThisCloseParenToken = SyntaxFactory.Token(SyntaxKind.CloseParenToken);
@@ -118,12 +120,12 @@ public static class ConstructorCodeFixes
     /// <param name="propertyDeclaration">The property to check.</param>
     /// <param name="assignments">The list of assignments.</param>
     /// <returns>An initializer for the property if found; otherwise, <see langword="null"/>.</returns>
-    public static EqualsValueClauseSyntax? FindPropertyInitializer(PropertyDeclarationSyntax propertyDeclaration, List<AssignmentExpressionSyntax> assignments)
+    public static EqualsValueClauseSyntax? FindPropertyInitializer(PropertyDeclarationSyntax propertyDeclaration, Collection<AssignmentExpressionSyntax> assignments)
     {
         EqualsValueClauseSyntax? Initializer = null;
         string PropertyName = propertyDeclaration.Identifier.Text;
 
-        if (assignments.Find(assignment => IsPropertyDestinationOfAssignment(PropertyName, assignment)) is AssignmentExpressionSyntax Assignment)
+        if (assignments.ToList().Find(assignment => IsPropertyDestinationOfAssignment(PropertyName, assignment)) is AssignmentExpressionSyntax Assignment)
         {
             ExpressionSyntax Expression = Assignment.Right;
             Initializer = SyntaxFactory.EqualsValueClause(Expression);

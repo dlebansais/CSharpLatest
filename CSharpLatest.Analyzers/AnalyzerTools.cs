@@ -4,15 +4,24 @@ using System;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.Diagnostics;
 
+/// <summary>
+/// Helper providing methods for analyzers.
+/// </summary>
 internal static class AnalyzerTools
 {
-    // The minimum version of the language we care about.
+    /// <summary>
+    /// The minimum version of the language we care about.
+    /// </summary>
     public const LanguageVersion MinimumVersionAnalyzed = LanguageVersion.CSharp4;
 
     // Define this symbol in unit tests to simulate an assertion failure.
     // This will test branches that can only execute in future versions of C#.
     private const string CoverageDirectivePrefix = "#define COVERAGE_A25BDFABDDF8402785EB75AD812DA952";
 
+    /// <summary>
+    /// Gets the help link for a diagnostic id.
+    /// </summary>
+    /// <param name="diagnosticId">The diagnostic id.</param>
     public static string GetHelpLink(string diagnosticId)
     {
         return $"https://github.com/dlebansais/CSharpLatest/blob/master/doc/{diagnosticId}.md";
@@ -50,7 +59,7 @@ internal static class AnalyzerTools
     private static bool IsCalledForCoverage(SyntaxNodeAnalysisContext context)
     {
         string? FirstDirectiveText = context.SemanticModel.SyntaxTree.GetRoot().GetFirstDirective()?.GetText().ToString();
-        return FirstDirectiveText is not null && FirstDirectiveText.StartsWith(CoverageDirectivePrefix);
+        return FirstDirectiveText is not null && FirstDirectiveText.StartsWith(CoverageDirectivePrefix, StringComparison.Ordinal);
     }
 
     private static bool TrueForAll(this IAnalysisAssertion[] analysisAssertions, SyntaxNodeAnalysisContext context)

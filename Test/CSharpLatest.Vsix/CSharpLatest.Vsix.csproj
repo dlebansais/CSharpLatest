@@ -6,6 +6,7 @@
     <TargetFramework>net8.0</TargetFramework>
     <RootNamespace>CSharpLatest.Vsix</RootNamespace>
     <AssemblyName>CSharpLatest.Vsix</AssemblyName>
+    <Platforms>x64</Platforms>
   </PropertyGroup>
 
   <PropertyGroup>

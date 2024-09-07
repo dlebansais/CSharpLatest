@@ -6,6 +6,7 @@
 		<Nullable>enable</Nullable>
 		<IsPackable>false</IsPackable>
 		<RootNamespace>CSharpLatest</RootNamespace>
+		<Platforms>x64</Platforms>
 	</PropertyGroup>
 
 	<ItemGroup>

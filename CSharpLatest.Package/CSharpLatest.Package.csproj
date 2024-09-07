@@ -6,6 +6,7 @@
 		<SuppressDependenciesWhenPacking>true</SuppressDependenciesWhenPacking>
 		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
 		<SuppressTfmSupportBuildWarnings>true</SuppressTfmSupportBuildWarnings>
+		<Platforms>x64</Platforms>
 	</PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)'=='Release'">

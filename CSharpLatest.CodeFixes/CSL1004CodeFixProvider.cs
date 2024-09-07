@@ -2,8 +2,10 @@
 
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.Collections.ObjectModel;
 using System.Composition;
 using System.Diagnostics;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.CodeAnalysis;
@@ -18,7 +20,7 @@ public class CSL1004CodeFixProvider : CodeFixProvider
 {
     public sealed override ImmutableArray<string> FixableDiagnosticIds
     {
-        get { return [CSL1004ConsiderUsingPrimaryConstructor.DiagnosticId]; }
+        get { return [CSL1004ConsiderUsingRecord.DiagnosticId]; }
     }
 
     public sealed override FixAllProvider GetFixAllProvider()
@@ -63,12 +65,12 @@ public class CSL1004CodeFixProvider : CodeFixProvider
         Debug.Assert(classDeclaration.ParameterList is null);
 
         // Gets the list of parameters for the record.
-        List<ParameterSyntax> ParameterCandidates = ConstructorAnalysis.GetParameterCandidates(classDeclaration);
+        Collection<ParameterSyntax> ParameterCandidates = ConstructorAnalysis.GetParameterCandidates(classDeclaration);
         ConstructorDeclarationSyntax? ConstructorCandidate = ConstructorAnalysis.GetConstructorCandidate(classDeclaration, ParameterCandidates);
         Debug.Assert(ConstructorCandidate != null);
 
         // Get the list of assignments that are simplified as record arguments.
-        (bool HasPropertyAssignmentsOnly, List<AssignmentExpressionSyntax> Assignments) = ConstructorAnalysis.GetPropertyAssignments(classDeclaration, ConstructorCandidate!);
+        (bool HasPropertyAssignmentsOnly, Collection<AssignmentExpressionSyntax> Assignments) = ConstructorAnalysis.GetPropertyAssignments(classDeclaration, ConstructorCandidate!);
         Debug.Assert(HasPropertyAssignmentsOnly);
         Debug.Assert(Assignments.Count > 0);
 
@@ -114,7 +116,7 @@ public class CSL1004CodeFixProvider : CodeFixProvider
         // Update the class with the modified members.
         var NewMemberList = SyntaxFactory.List(NewMembers);
 
-        List<ParameterSyntax> PropertyParameters = Assignments.ConvertAll(assignment => ConstructorCodeFixes.ToParameter(assignment, classDeclaration));
+        List<ParameterSyntax> PropertyParameters = Assignments.ToList().ConvertAll(assignment => ConstructorCodeFixes.ToParameter(assignment, classDeclaration));
         var SeparatedParameterList = SyntaxFactory.SeparatedList(PropertyParameters);
         var NewParameterList = SyntaxFactory.ParameterList(SeparatedParameterList);
 
