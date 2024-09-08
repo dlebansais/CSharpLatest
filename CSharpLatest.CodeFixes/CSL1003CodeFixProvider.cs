@@ -7,6 +7,7 @@ using System.Composition;
 using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
+using Contracts;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeActions;
 using Microsoft.CodeAnalysis.CodeFixes;
@@ -56,17 +57,16 @@ public class CSL1003CodeFixProvider : CodeFixProvider
         ClassDeclarationSyntax NewDeclaration = classDeclaration.WithIdentifier(NewIdentifier.WithoutTrivia());
 
         // There was no diagnostic if there is a parameter list already.
-        Debug.Assert(classDeclaration.ParameterList is null);
+        Contract.Assert(classDeclaration.ParameterList is null);
 
         // Gets the list of parameters for the primary constructor, and the constructor we got them from (we know it exists or there would be no diagnostic).
         Collection<ParameterSyntax> ParameterCandidates = ConstructorAnalysis.GetParameterCandidates(classDeclaration);
-        ConstructorDeclarationSyntax? ConstructorCandidate = ConstructorAnalysis.GetConstructorCandidate(classDeclaration, ParameterCandidates);
-        Debug.Assert(ConstructorCandidate != null);
+        ConstructorDeclarationSyntax ConstructorCandidate = Contract.AssertNotNull(ConstructorAnalysis.GetConstructorCandidate(classDeclaration, ParameterCandidates));
 
         // Get the list of assignments that are simplified as primary constructor arguments.
-        (bool HasPropertyAssignmentsOnly, Collection<AssignmentExpressionSyntax> Assignments) = ConstructorAnalysis.GetPropertyAssignments(classDeclaration, ConstructorCandidate!);
-        Debug.Assert(HasPropertyAssignmentsOnly);
-        Debug.Assert(Assignments.Count > 0);
+        (bool HasPropertyAssignmentsOnly, Collection<AssignmentExpressionSyntax> Assignments) = ConstructorAnalysis.GetPropertyAssignments(classDeclaration, ConstructorCandidate);
+        Contract.Assert(HasPropertyAssignmentsOnly);
+        Contract.Assert(Assignments.Count > 0);
 
         List<MemberDeclarationSyntax> NewMembers = new();
         SyntaxTriviaList? PassedOverLeadingTrivia = null;

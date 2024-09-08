@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
+using Contracts;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -19,7 +20,7 @@ public static class ConstructorCodeFixes
     /// <returns></returns>
     public static ConstructorDeclarationSyntax SimplifiedConstructor(ConstructorDeclarationSyntax constructorDeclaration, Collection<ParameterSyntax> primaryConstructorParameters, Collection<AssignmentExpressionSyntax> initialAssignments)
     {
-        Debug.Assert(constructorDeclaration.Initializer is null);
+        Contract.Assert(constructorDeclaration.Initializer is null);
 
         // Save the leading and trailling trivias of the closing parenthesis, we will restore them at different places.
         // The trailing trivia is set to null later if it must not be restored.
@@ -37,19 +38,20 @@ public static class ConstructorCodeFixes
             List<StatementSyntax> Statements = new(Body.Statements);
 
             // Perfom some consistency checks.
-            Debug.Assert(initialAssignments.Count <= Statements.Count);
+            Contract.Assert(initialAssignments.Count <= Statements.Count);
+
             for (int i = 0; i < initialAssignments.Count; i++)
             {
                 StatementSyntax Statement = Statements[i];
 
-                Debug.Assert(Statement is ExpressionStatementSyntax);
+                Contract.Assert(Statement is ExpressionStatementSyntax);
                 ExpressionStatementSyntax ExpressionStatement = (ExpressionStatementSyntax)Statement;
 
-                Debug.Assert(ExpressionStatement.Expression is AssignmentExpressionSyntax);
+                Contract.Assert(ExpressionStatement.Expression is AssignmentExpressionSyntax);
                 AssignmentExpressionSyntax Assignment = (AssignmentExpressionSyntax)ExpressionStatement.Expression;
 
                 AssignmentExpressionSyntax InitialAssignment = initialAssignments[i];
-                Debug.Assert(ConstructorAnalysis.IsSyntaxNodeEquivalent(Assignment, InitialAssignment));
+                Contract.Assert(ConstructorAnalysis.IsSyntaxNodeEquivalent(Assignment, InitialAssignment));
             }
 
             // Get statements beyond those that are removed and create the new block body..
@@ -64,12 +66,12 @@ public static class ConstructorCodeFixes
         if (constructorDeclaration.ExpressionBody is ArrowExpressionClauseSyntax ExpressionBody)
         {
             // Perfom some consistency checks.
-            Debug.Assert(ExpressionBody.Expression is AssignmentExpressionSyntax);
+            Contract.Assert(ExpressionBody.Expression is AssignmentExpressionSyntax);
             AssignmentExpressionSyntax Assignment = (AssignmentExpressionSyntax)ExpressionBody.Expression;
 
-            Debug.Assert(initialAssignments.Count == 1);
+            Contract.Assert(initialAssignments.Count == 1);
             AssignmentExpressionSyntax InitialAssignment = initialAssignments[0];
-            Debug.Assert(ConstructorAnalysis.IsSyntaxNodeEquivalent(Assignment, InitialAssignment));
+            Contract.Assert(ConstructorAnalysis.IsSyntaxNodeEquivalent(Assignment, InitialAssignment));
 
             // Forget the previously saved trivia and pick the one following the semicolon.
             PreservedTrailingTrivia = constructorDeclaration.SemicolonToken.TrailingTrivia;
@@ -137,7 +139,7 @@ public static class ConstructorCodeFixes
     private static bool IsPropertyDestinationOfAssignment(string propertyName, AssignmentExpressionSyntax assignment)
     {
         // Consistency check: only assinments of this type can considered in the diagnostic.
-        Debug.Assert(assignment.Left is IdentifierNameSyntax);
+        Contract.Assert(assignment.Left is IdentifierNameSyntax);
         IdentifierNameSyntax IdentifierName = (IdentifierNameSyntax)assignment.Left;
 
         return IdentifierName.Identifier.Text == propertyName;
@@ -158,7 +160,7 @@ public static class ConstructorCodeFixes
     /// <param name="classDeclaration">The class containing the property.</param>
     public static ParameterSyntax ToParameter(AssignmentExpressionSyntax assignmentExpression, ClassDeclarationSyntax classDeclaration)
     {
-        Debug.Assert(assignmentExpression.Left is IdentifierNameSyntax);
+        Contract.Assert(assignmentExpression.Left is IdentifierNameSyntax);
         IdentifierNameSyntax Left = (IdentifierNameSyntax)assignmentExpression.Left;
         SyntaxToken PropertyIdentifier = Left.Identifier.WithoutTrivia();
 
@@ -170,8 +172,8 @@ public static class ConstructorCodeFixes
                 break;
             }
 
-        Debug.Assert(MatchingPropertyDeclaration != null);
-        TypeSyntax PropertyType = MatchingPropertyDeclaration!.Type.WithoutTrivia();
+        MatchingPropertyDeclaration = Contract.AssertNotNull(MatchingPropertyDeclaration);
+        TypeSyntax PropertyType = MatchingPropertyDeclaration.Type.WithoutTrivia();
 
         return SyntaxFactory.Parameter(SyntaxFactory.List<AttributeListSyntax>(), SyntaxFactory.TokenList(), PropertyType, PropertyIdentifier.WithLeadingTrivia(Whitespace()), null);
     }

@@ -164,7 +164,7 @@ public static class ConstructorAnalysis
 
         foreach (AssignmentExpressionSyntax Assignment in Assignments)
         {
-            Debug.Assert(Assignment.Left is IdentifierNameSyntax);
+            Contract.Assert(Assignment.Left is IdentifierNameSyntax);
             IdentifierNameSyntax IdentifierName = (IdentifierNameSyntax)Assignment.Left;
 
             if (!ClassDeclaration.Members.OfType<PropertyDeclarationSyntax>().Any(propertyDeclaration => propertyDeclaration.Identifier.Text == IdentifierName.Identifier.Text && propertyDeclaration.Initializer is null))

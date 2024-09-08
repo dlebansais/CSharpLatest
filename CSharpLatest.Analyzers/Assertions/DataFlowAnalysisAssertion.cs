@@ -22,15 +22,13 @@ internal class DataFlowAnalysisAssertion<T> : IAnalysisAssertion
     public bool IsTrue(SyntaxNodeAnalysisContext context)
     {
         StatementSyntax Statement = (StatementSyntax)context.Node;
-        DataFlowAnalysis? AnalysisResult = context.SemanticModel.AnalyzeDataFlow(Statement);
-        bool AssertionResult = AnalysisResult is not null;
-        DataFlowAnalysis = AnalysisResult!;
+        DataFlowAnalysis = context.SemanticModel.AnalyzeDataFlow(Statement);
 
-        return AssertionResult;
+        return DataFlowAnalysis is not null;
     }
 
     /// <summary>
     /// Gets the data flow analysis if <see cref="IsTrue"/> returned <see langword="true"/>.
     /// </summary>
-    public DataFlowAnalysis DataFlowAnalysis { get; private set; } = null!;
+    public DataFlowAnalysis? DataFlowAnalysis { get; private set; }
 }

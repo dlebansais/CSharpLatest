@@ -76,7 +76,7 @@ public class CSL1000VariableshouldBeMadeConstant : DiagnosticAnalyzer
                 return;
 
         // Gets the data flow analysis performed on the local declaration during the analysis assertion phase.
-        DataFlowAnalysis DataFlowAnalysis = ((DataFlowAnalysisAssertion<LocalDeclarationStatementSyntax>)analysisAssertions.First()).DataFlowAnalysis;
+        DataFlowAnalysis DataFlowAnalysis = Contract.AssertNotNull(((DataFlowAnalysisAssertion<LocalDeclarationStatementSyntax>)analysisAssertions.First()).DataFlowAnalysis);
 
         foreach (VariableDeclaratorSyntax Variable in localDeclaration.Declaration.Variables)
         {
@@ -120,9 +120,8 @@ public class CSL1000VariableshouldBeMadeConstant : DiagnosticAnalyzer
 
     private static ISymbol GetDeclaredSymbol(SyntaxNodeAnalysisContext context, VariableDeclaratorSyntax variable)
     {
-        ISymbol? VariableSymbol = context.SemanticModel.GetDeclaredSymbol(variable, context.CancellationToken);
-        Debug.Assert(VariableSymbol is not null);
+        ISymbol VariableSymbol = Contract.AssertNotNull(context.SemanticModel.GetDeclaredSymbol(variable, context.CancellationToken));
 
-        return VariableSymbol!;
+        return VariableSymbol;
     }
 }

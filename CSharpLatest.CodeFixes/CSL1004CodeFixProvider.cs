@@ -8,6 +8,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Contracts;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeActions;
 using Microsoft.CodeAnalysis.CodeFixes;
@@ -62,17 +63,16 @@ public class CSL1004CodeFixProvider : CodeFixProvider
         SyntaxToken NewKeyword = SyntaxFactory.Token(SyntaxKind.RecordKeyword).WithoutTrivia().WithTrailingTrivia(PreservedClassKeywordTrailingTrivia);
 
         // There was no diagnostic if there is a parameter list already.
-        Debug.Assert(classDeclaration.ParameterList is null);
+        Contract.Assert(classDeclaration.ParameterList is null);
 
         // Gets the list of parameters for the record.
         Collection<ParameterSyntax> ParameterCandidates = ConstructorAnalysis.GetParameterCandidates(classDeclaration);
-        ConstructorDeclarationSyntax? ConstructorCandidate = ConstructorAnalysis.GetConstructorCandidate(classDeclaration, ParameterCandidates);
-        Debug.Assert(ConstructorCandidate != null);
+        ConstructorDeclarationSyntax ConstructorCandidate = Contract.AssertNotNull(ConstructorAnalysis.GetConstructorCandidate(classDeclaration, ParameterCandidates));
 
         // Get the list of assignments that are simplified as record arguments.
-        (bool HasPropertyAssignmentsOnly, Collection<AssignmentExpressionSyntax> Assignments) = ConstructorAnalysis.GetPropertyAssignments(classDeclaration, ConstructorCandidate!);
-        Debug.Assert(HasPropertyAssignmentsOnly);
-        Debug.Assert(Assignments.Count > 0);
+        (bool HasPropertyAssignmentsOnly, Collection<AssignmentExpressionSyntax> Assignments) = ConstructorAnalysis.GetPropertyAssignments(classDeclaration, ConstructorCandidate);
+        Contract.Assert(HasPropertyAssignmentsOnly);
+        Contract.Assert(Assignments.Count > 0);
 
         List<MemberDeclarationSyntax> NewMembers = new();
         SyntaxTriviaList? PassedOverLeadingTrivia = null;
@@ -84,7 +84,7 @@ public class CSL1004CodeFixProvider : CodeFixProvider
             if (Member is ConstructorDeclarationSyntax ConstructorDeclaration)
             {
                 // There can be only one constructor if the diagnostic is to suggest to use a record.
-                Debug.Assert(ConstructorDeclaration == ConstructorCandidate);
+                Contract.Assert(ConstructorDeclaration == ConstructorCandidate);
 
                 // Get the trivia to pass over to the next member, and ignore the constructor.
                 PassedOverLeadingTrivia = Member.GetLeadingTrivia();
