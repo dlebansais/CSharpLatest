@@ -31,6 +31,7 @@ public static partial class CSharpAnalyzerVerifier<TAnalyzer>
         };
 
         test.ExpectedDiagnostics.AddRange(expected);
+
         await test.RunAsync(CancellationToken.None);
     }
 }
