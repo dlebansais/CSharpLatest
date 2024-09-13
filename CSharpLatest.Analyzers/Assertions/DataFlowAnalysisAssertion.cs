@@ -18,7 +18,7 @@ internal class DataFlowAnalysisAssertion<T> : IAnalysisAssertion
     {
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc cref="IAnalysisAssertion.IsTrue(SyntaxNodeAnalysisContext)" />
     public bool IsTrue(SyntaxNodeAnalysisContext context)
     {
         StatementSyntax Statement = (StatementSyntax)context.Node;
