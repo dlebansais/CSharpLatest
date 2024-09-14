@@ -12,7 +12,7 @@ using RoslynHelpers;
 /// Analyzer for rule CLS1002: Use 'is not null' syntax instead of '!= null'.
 /// </summary>
 [DiagnosticAnalyzer(LanguageNames.CSharp)]
-public class CSL1002UseIsNotNull : DiagnosticAnalyzer
+public partial class CSL1002UseIsNotNull : DiagnosticAnalyzer
 {
     /// <summary>
     /// Diagnostic ID for this rule.
@@ -42,10 +42,10 @@ public class CSL1002UseIsNotNull : DiagnosticAnalyzer
     /// Initializes the rule analyzer.
     /// </summary>
     /// <param name="context">The analysis context.</param>
-    public override void Initialize(AnalysisContext context)
+    [Access("public", "override")]
+    [RequireNotNull(nameof(context))]
+    private void InitializeVerified(AnalysisContext context)
     {
-        context = Contract.AssertNotNull(context);
-
         context.ConfigureGeneratedCodeAnalysis(GeneratedCodeAnalysisFlags.None);
         context.EnableConcurrentExecution();
 

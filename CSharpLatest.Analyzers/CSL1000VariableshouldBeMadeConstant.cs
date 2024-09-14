@@ -14,7 +14,7 @@ using RoslynHelpers;
 /// Analyzer for rule CLS1000: Variables that are not modified should be made constants.
 /// </summary>
 [DiagnosticAnalyzer(LanguageNames.CSharp)]
-public class CSL1000VariableshouldBeMadeConstant : DiagnosticAnalyzer
+public partial class CSL1000VariableshouldBeMadeConstant : DiagnosticAnalyzer
 {
     /// <summary>
     /// Diagnostic ID for this rule.
@@ -44,10 +44,10 @@ public class CSL1000VariableshouldBeMadeConstant : DiagnosticAnalyzer
     /// Initializes the rule analyzer.
     /// </summary>
     /// <param name="context">The analysis context.</param>
-    public override void Initialize(AnalysisContext context)
+    [Access("public", "override")]
+    [RequireNotNull(nameof(context))]
+    private void InitializeVerified(AnalysisContext context)
     {
-        context = Contract.AssertNotNull(context);
-
         context.ConfigureGeneratedCodeAnalysis(GeneratedCodeAnalysisFlags.None);
         context.EnableConcurrentExecution();
 

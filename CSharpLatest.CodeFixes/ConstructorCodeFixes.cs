@@ -17,7 +17,6 @@ public static class ConstructorCodeFixes
     /// <param name="constructorDeclaration">The constructor to simplify.</param>
     /// <param name="primaryConstructorParameters">Parameters in the primary constructor.</param>
     /// <param name="initialAssignments">The list of removed assignments.</param>
-    /// <returns></returns>
     public static ConstructorDeclarationSyntax SimplifiedConstructor(ConstructorDeclarationSyntax constructorDeclaration, Collection<ParameterSyntax> primaryConstructorParameters, Collection<AssignmentExpressionSyntax> initialAssignments)
     {
         Contract.Assert(constructorDeclaration.Initializer is null);
@@ -43,12 +42,8 @@ public static class ConstructorCodeFixes
             for (int i = 0; i < initialAssignments.Count; i++)
             {
                 StatementSyntax Statement = Statements[i];
-
-                Contract.Assert(Statement is ExpressionStatementSyntax);
-                ExpressionStatementSyntax ExpressionStatement = (ExpressionStatementSyntax)Statement;
-
-                Contract.Assert(ExpressionStatement.Expression is AssignmentExpressionSyntax);
-                AssignmentExpressionSyntax Assignment = (AssignmentExpressionSyntax)ExpressionStatement.Expression;
+                ExpressionStatementSyntax ExpressionStatement = Contract.AssertOfType<ExpressionStatementSyntax>(Statement);
+                AssignmentExpressionSyntax Assignment = Contract.AssertOfType<AssignmentExpressionSyntax>(ExpressionStatement.Expression);
 
                 AssignmentExpressionSyntax InitialAssignment = initialAssignments[i];
                 Contract.Assert(ConstructorAnalysis.IsSyntaxNodeEquivalent(Assignment, InitialAssignment));
@@ -66,8 +61,7 @@ public static class ConstructorCodeFixes
         if (constructorDeclaration.ExpressionBody is ArrowExpressionClauseSyntax ExpressionBody)
         {
             // Perfom some consistency checks.
-            Contract.Assert(ExpressionBody.Expression is AssignmentExpressionSyntax);
-            AssignmentExpressionSyntax Assignment = (AssignmentExpressionSyntax)ExpressionBody.Expression;
+            AssignmentExpressionSyntax Assignment = Contract.AssertOfType<AssignmentExpressionSyntax>(ExpressionBody.Expression);
 
             Contract.Assert(initialAssignments.Count == 1);
             AssignmentExpressionSyntax InitialAssignment = initialAssignments[0];
@@ -139,8 +133,7 @@ public static class ConstructorCodeFixes
     private static bool IsPropertyDestinationOfAssignment(string propertyName, AssignmentExpressionSyntax assignment)
     {
         // Consistency check: only assinments of this type can considered in the diagnostic.
-        Contract.Assert(assignment.Left is IdentifierNameSyntax);
-        IdentifierNameSyntax IdentifierName = (IdentifierNameSyntax)assignment.Left;
+        IdentifierNameSyntax IdentifierName = Contract.AssertOfType<IdentifierNameSyntax>(assignment.Left);
 
         return IdentifierName.Identifier.Text == propertyName;
     }
@@ -160,8 +153,7 @@ public static class ConstructorCodeFixes
     /// <param name="classDeclaration">The class containing the property.</param>
     public static ParameterSyntax ToParameter(AssignmentExpressionSyntax assignmentExpression, ClassDeclarationSyntax classDeclaration)
     {
-        Contract.Assert(assignmentExpression.Left is IdentifierNameSyntax);
-        IdentifierNameSyntax Left = (IdentifierNameSyntax)assignmentExpression.Left;
+        IdentifierNameSyntax Left = Contract.AssertOfType<IdentifierNameSyntax>(assignmentExpression.Left);
         SyntaxToken PropertyIdentifier = Left.Identifier.WithoutTrivia();
 
         PropertyDeclarationSyntax? MatchingPropertyDeclaration = null;

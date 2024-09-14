@@ -11,7 +11,7 @@ using Microsoft.CodeAnalysis.Diagnostics;
 /// Analyzer for rule CSL1004: Consider using primary constructor.
 /// </summary>
 [DiagnosticAnalyzer(LanguageNames.CSharp)]
-public class CSL1004ConsiderUsingRecord : DiagnosticAnalyzer
+public partial class CSL1004ConsiderUsingRecord : DiagnosticAnalyzer
 {
     /// <summary>
     /// Diagnostic ID for this rule.
@@ -41,10 +41,10 @@ public class CSL1004ConsiderUsingRecord : DiagnosticAnalyzer
     /// Initializes the rule analyzer.
     /// </summary>
     /// <param name="context">The analysis context.</param>
-    public override void Initialize(AnalysisContext context)
+    [Access("public", "override")]
+    [RequireNotNull(nameof(context))]
+    private void InitializeVerified(AnalysisContext context)
     {
-        context = Contract.AssertNotNull(context);
-
         context.ConfigureGeneratedCodeAnalysis(GeneratedCodeAnalysisFlags.None);
         context.EnableConcurrentExecution();
 

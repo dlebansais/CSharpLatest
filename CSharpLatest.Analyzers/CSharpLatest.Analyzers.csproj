@@ -70,7 +70,15 @@
 		  <PrivateAssets>all</PrivateAssets>
 		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
-		<PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.11.0" />
+        <PackageReference Include="Method.Contracts.Analyzers-Debug" Version="1.5.0" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="Method.Contracts.Analyzers" Version="1.5.0" Condition="'$(Configuration)|$(Platform)'!='Debug|x64'">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.11.0" />
 		<PackageReference Include="dlebansais.RoslynHelpers" Version="0.0.4" GeneratePathProperty="true" />
 		<PackageReference Include="PolySharp" Version="1.14.1">
 		  <PrivateAssets>all</PrivateAssets>
@@ -79,8 +87,8 @@
 	</ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Method.Contracts-Debug" Version="1.4.2" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" />
-        <PackageReference Include="Method.Contracts" Version="1.4.2" Condition="'$(Configuration)|$(Platform)'!='Debug|x64'" />
+        <PackageReference Include="Method.Contracts-Debug" Version="1.5.0" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" />
+        <PackageReference Include="Method.Contracts" Version="1.5.0" Condition="'$(Configuration)|$(Platform)'!='Debug|x64'" />
     </ItemGroup>
 
     <ItemGroup>

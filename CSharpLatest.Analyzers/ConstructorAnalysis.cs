@@ -11,7 +11,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 /// <summary>
 /// Provides helpers for analyzing constructors.
 /// </summary>
-public static class ConstructorAnalysis
+public static partial class ConstructorAnalysis
 {
     /// <summary>
     /// Values of a best suggestion.
@@ -38,20 +38,19 @@ public static class ConstructorAnalysis
     /// Gets the best suggestion for a class declaration.
     /// </summary>
     /// <param name="classDeclaration">The class declaration.</param>
-    public static BestSuggestion GetBestSuggestion(ClassDeclarationSyntax classDeclaration)
+    [RequireNotNull(nameof(classDeclaration))]
+    private static BestSuggestion GetBestSuggestionVerified(ClassDeclarationSyntax classDeclaration)
     {
-        Contract.RequireNotNull(classDeclaration, out ClassDeclarationSyntax ClassDeclaration);
-
         // Make sure the class has a name to display.
-        if (ClassDeclaration.Identifier.Text == string.Empty)
+        if (classDeclaration.Identifier.Text == string.Empty)
             return BestSuggestion.None;
 
         // Make sure the declaration doesn't already use a primary contructor.
-        if (ClassDeclaration.ParameterList is not null)
+        if (classDeclaration.ParameterList is not null)
             return BestSuggestion.None;
 
         // No diagnostic if any of the constructors calls this() or base().
-        if (ClassDeclaration.Members.OfType<ConstructorDeclarationSyntax>().Any(constructor => constructor.Initializer is not null))
+        if (classDeclaration.Members.OfType<ConstructorDeclarationSyntax>().Any(constructor => constructor.Initializer is not null))
             return BestSuggestion.None;
 
         // If the list of candidates is empty, no primary constructor can be used.
@@ -71,7 +70,7 @@ public static class ConstructorAnalysis
         int ConstructorCount = 0;
 
         // If other constructors don't do the same, let's not try to second-guess the code.
-        foreach (var Member in ClassDeclaration.Members)
+        foreach (var Member in classDeclaration.Members)
             if (Member is ConstructorDeclarationSyntax ConstructorDeclaration)
             {
                 ConstructorCount++;
@@ -91,14 +90,13 @@ public static class ConstructorAnalysis
     /// Gets the list of parameters that are candidates to be in a primary constructor.
     /// </summary>
     /// <param name="classDeclaration">The class declaration.</param>
-    public static Collection<ParameterSyntax> GetParameterCandidates(ClassDeclarationSyntax classDeclaration)
+    [RequireNotNull(nameof(classDeclaration))]
+    private static Collection<ParameterSyntax> GetParameterCandidatesVerified(ClassDeclarationSyntax classDeclaration)
     {
-        Contract.RequireNotNull(classDeclaration, out ClassDeclarationSyntax ClassDeclaration);
-
         List<ParameterSyntax> Result = new();
         bool IsFirstConstructor = true;
 
-        foreach (var Member in ClassDeclaration.Members)
+        foreach (var Member in classDeclaration.Members)
             if (Member is ConstructorDeclarationSyntax ConstructorDeclaration)
             {
                 List<ParameterSyntax> Parameters = [.. ConstructorDeclaration.ParameterList.Parameters];
@@ -133,14 +131,13 @@ public static class ConstructorAnalysis
     /// </summary>
     /// <param name="classDeclaration">The class declaration.</param>
     /// <param name="parameterCandidates">The list of parameters.</param>
-    public static ConstructorDeclarationSyntax? GetConstructorCandidate(ClassDeclarationSyntax classDeclaration, Collection<ParameterSyntax> parameterCandidates)
+    [RequireNotNull(nameof(classDeclaration))]
+    [RequireNotNull(nameof(parameterCandidates))]
+    private static ConstructorDeclarationSyntax? GetConstructorCandidateVerified(ClassDeclarationSyntax classDeclaration, Collection<ParameterSyntax> parameterCandidates)
     {
-        Contract.RequireNotNull(classDeclaration, out ClassDeclarationSyntax ClassDeclaration);
-        Contract.RequireNotNull(parameterCandidates, out Collection<ParameterSyntax> ParameterCandidates);
-
-        foreach (var Member in ClassDeclaration.Members)
+        foreach (var Member in classDeclaration.Members)
             if (Member is ConstructorDeclarationSyntax ConstructorDeclaration)
-                if (ConstructorDeclaration.ParameterList.Parameters.Count == ParameterCandidates.Count)
+                if (ConstructorDeclaration.ParameterList.Parameters.Count == parameterCandidates.Count)
                     return ConstructorDeclaration;
 
         return null;
@@ -152,22 +149,20 @@ public static class ConstructorAnalysis
     /// <param name="classDeclaration">The class declaration.</param>
     /// <param name="constructorDeclaration">The constructor declaration.</param>
     /// <returns><see langword="true"/> and the assignments if the constructor has no other statements; otherwise, <see langword="false"/>.</returns>
-    public static (bool HasOtherStatements, Collection<AssignmentExpressionSyntax> Assignments) GetPropertyAssignments(ClassDeclarationSyntax classDeclaration, ConstructorDeclarationSyntax constructorDeclaration)
+    [RequireNotNull(nameof(classDeclaration))]
+    [RequireNotNull(nameof(constructorDeclaration))]
+    private static (bool HasOtherStatements, Collection<AssignmentExpressionSyntax> Assignments) GetPropertyAssignmentsVerified(ClassDeclarationSyntax classDeclaration, ConstructorDeclarationSyntax constructorDeclaration)
     {
-        Contract.RequireNotNull(classDeclaration, out ClassDeclarationSyntax ClassDeclaration);
-        Contract.RequireNotNull(constructorDeclaration, out ConstructorDeclarationSyntax ConstructorDeclaration);
-
-        (bool HasOtherStatements, Collection<AssignmentExpressionSyntax> Assignments) = GetConstructorStartingAssignments(ConstructorDeclaration);
+        (bool HasOtherStatements, Collection<AssignmentExpressionSyntax> Assignments) = GetConstructorStartingAssignments(constructorDeclaration);
 
         if (HasOtherStatements)
             return (false, Assignments);
 
         foreach (AssignmentExpressionSyntax Assignment in Assignments)
         {
-            Contract.Assert(Assignment.Left is IdentifierNameSyntax);
-            IdentifierNameSyntax IdentifierName = (IdentifierNameSyntax)Assignment.Left;
+            IdentifierNameSyntax IdentifierName = Contract.AssertOfType<IdentifierNameSyntax>(Assignment.Left);
 
-            if (!ClassDeclaration.Members.OfType<PropertyDeclarationSyntax>().Any(propertyDeclaration => propertyDeclaration.Identifier.Text == IdentifierName.Identifier.Text && propertyDeclaration.Initializer is null))
+            if (!classDeclaration.Members.OfType<PropertyDeclarationSyntax>().Any(propertyDeclaration => propertyDeclaration.Identifier.Text == IdentifierName.Identifier.Text && propertyDeclaration.Initializer is null))
                 return (false, Assignments);
         }
 
