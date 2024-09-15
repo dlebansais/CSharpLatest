@@ -76,8 +76,6 @@ artifacts:
     name: $(APPVEYOR_PROJECT_NAME)-Package-Debug
   - path: $(APPVEYOR_PROJECT_NAME).Package\bin\x64\Release\$(PACKAGE_PREFIX).$(APPVEYOR_PROJECT_NAME).*.nupkg
     name: $(APPVEYOR_PROJECT_NAME)-Package-Release
-  - path: $(APPVEYOR_PROJECT_NAME).Analyzers\obj\*.nuget.g.props
-    name: $(APPVEYOR_PROJECT_NAME)-Info
 
 deploy:
   - provider: GitHub
