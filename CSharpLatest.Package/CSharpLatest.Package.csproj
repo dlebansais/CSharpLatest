@@ -1,13 +1,13 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-	<PropertyGroup>
+    <PropertyGroup>
         <TargetFrameworks>netstandard2.0</TargetFrameworks>
         <IncludeBuildOutput>false</IncludeBuildOutput>
-		<SuppressDependenciesWhenPacking>true</SuppressDependenciesWhenPacking>
-		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-		<SuppressTfmSupportBuildWarnings>true</SuppressTfmSupportBuildWarnings>
-		<Platforms>x64</Platforms>
-	</PropertyGroup>
+        <SuppressDependenciesWhenPacking>true</SuppressDependenciesWhenPacking>
+        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+        <SuppressTfmSupportBuildWarnings>true</SuppressTfmSupportBuildWarnings>
+        <Platforms>x64</Platforms>
+    </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)'=='Release'">
         <PackageId>dlebansais.CSharpLatest</PackageId>
@@ -18,41 +18,42 @@
     </PropertyGroup>
 
     <PropertyGroup>
-		<PackageVersion>1.0.5</PackageVersion>
-		<Authors>David Le Bansais</Authors>
-		<Company />
-		<Product />
-		<PackageProjectUrl>https://github.com/dlebansais/CSharpLatest</PackageProjectUrl>
-		<RepositoryUrl>https://github.com/dlebansais/CSharpLatest</RepositoryUrl>
-		<PackageIcon>main.png</PackageIcon>
-		<PackageLicenseExpression>0BSD</PackageLicenseExpression>
-		<PackageReadmeFile>README-short.md</PackageReadmeFile>
-		<PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
-		<Description>Roslyn-based analysis of C# code to suggest the use of features in the latest version of the language</Description>
-		<Copyright>Copyright © 2024 David Le Bansais</Copyright>
-		<PackageTags>roslyn, analyzers</PackageTags>
-		<DevelopmentDependency>true</DevelopmentDependency>
-		<NoPackageAnalysis>true</NoPackageAnalysis>
-		<TargetsForTfmSpecificContentInPackage>$(TargetsForTfmSpecificContentInPackage);_AddAnalyzersToOutput</TargetsForTfmSpecificContentInPackage>
-	</PropertyGroup>
+        <PackageVersion>1.0.5</PackageVersion>
+        <Authors>David Le Bansais</Authors>
+        <Company />
+        <Product />
+        <PackageProjectUrl>https://github.com/dlebansais/CSharpLatest</PackageProjectUrl>
+        <RepositoryUrl>https://github.com/dlebansais/CSharpLatest</RepositoryUrl>
+        <PackageIcon>main.png</PackageIcon>
+        <PackageLicenseExpression>0BSD</PackageLicenseExpression>
+        <PackageReadmeFile>README-short.md</PackageReadmeFile>
+        <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+        <Description>Roslyn-based analysis of C# code to suggest the use of features in the latest version of the language</Description>
+        <Copyright>Copyright © 2024 David Le Bansais</Copyright>
+        <PackageTags>roslyn, analyzers</PackageTags>
+        <DevelopmentDependency>true</DevelopmentDependency>
+        <NoPackageAnalysis>true</NoPackageAnalysis>
+        <TargetsForTfmSpecificContentInPackage>$(TargetsForTfmSpecificContentInPackage);_AddAnalyzersToOutput</TargetsForTfmSpecificContentInPackage>
+    </PropertyGroup>
 
-	<ItemGroup>
-		<ProjectReference Include="..\CSharpLatest.CodeFixes\CSharpLatest.CodeFixes.csproj" />
-		<ProjectReference Include="..\CSharpLatest.Analyzers\CSharpLatest.Analyzers.csproj" />
-	</ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\CSharpLatest.CodeFixes\CSharpLatest.CodeFixes.csproj" />
+        <ProjectReference Include="..\CSharpLatest.Analyzers\CSharpLatest.Analyzers.csproj" />
+    </ItemGroup>
 
-	<ItemGroup>
-		<None Update="tools\*.ps1" CopyToOutputDirectory="PreserveNewest" Pack="true" PackagePath="" />
-	</ItemGroup>
+    <ItemGroup>
+        <None Update="tools\*.ps1" CopyToOutputDirectory="PreserveNewest" Pack="true" PackagePath="" />
+    </ItemGroup>
 
-	<Target Name="_AddAnalyzersToOutput">
-		<ItemGroup>
-			<TfmSpecificPackageFile Include="main.png" PackagePath="" />
-			<TfmSpecificPackageFile Include="README-short.md" PackagePath="" />
-			<TfmSpecificPackageFile Include="$(OutputPath)\CSharpLatest.Analyzers.dll" PackagePath="analyzers/dotnet/cs" />
-			<TfmSpecificPackageFile Include="$(OutputPath)\CSharpLatest.CodeFixes.dll" PackagePath="analyzers/dotnet/cs" />
+    <Target Name="_AddAnalyzersToOutput">
+        <ItemGroup>
+            <TfmSpecificPackageFile Include="main.png" PackagePath="" />
+            <TfmSpecificPackageFile Include="README-short.md" PackagePath="" />
+            <TfmSpecificPackageFile Include="$(OutputPath)\CSharpLatest.Analyzers.dll" PackagePath="analyzers/dotnet/cs" />
+            <TfmSpecificPackageFile Include="$(OutputPath)\CSharpLatest.CodeFixes.dll" PackagePath="analyzers/dotnet/cs" />
             <TfmSpecificPackageFile Include="$(OutputPath)\RoslynHelpers.dll" PackagePath="analyzers/dotnet/cs" />
+            <TfmSpecificPackageFile Include="$(OutputPath)\Method.Contracts.dll" PackagePath="analyzers/dotnet/cs" />
         </ItemGroup>
-	</Target>
+    </Target>
 
 </Project>
