@@ -166,11 +166,11 @@
     <comment>The title of the diagnostic.</comment>
   </data>
   <data name="CSL1004AnalyzerDescription" xml:space="preserve">
-    <value>Consider using records to simplify your code.</value>
+    <value>Consider using records to simplify your code. If a record is not appropriate, consider using a primary constructor.</value>
     <comment>An optional longer localizable description of the diagnostic.</comment>
   </data>
   <data name="CSL1004AnalyzerMessageFormat" xml:space="preserve">
-    <value>Consider using a record for '{0}'</value>
+    <value>Consider using a record for '{0}' (if a record is not appropriate, consider using a primary constructor)</value>
     <comment>The format-able message the diagnostic displays.</comment>
   </data>
   <data name="CSL1004AnalyzerTitle" xml:space="preserve">
