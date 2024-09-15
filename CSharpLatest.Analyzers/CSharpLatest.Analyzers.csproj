@@ -89,8 +89,6 @@
 	</ItemGroup>
 
     <ItemGroup>
-        <None Include="$(PkgMethod_Contracts-Debug)\lib\netstandard2.0\Method.Contracts.dll" CopyToOutputDirectory="PreserveNewest" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" />
-        <None Include="$(PkgMethod_Contracts)\lib\netstandard2.0\Method.Contracts.dll" CopyToOutputDirectory="PreserveNewest" Condition="'$(Configuration)|$(Platform)'!='Debug|x64'" />
         <None Include="$(Pkgdlebansais_RoslynHelpers)\lib\netstandard2.0\RoslynHelpers.dll" CopyToOutputDirectory="PreserveNewest" />
     </ItemGroup>
 	
