@@ -29,3 +29,4 @@ To uninstall this analyzer, in Visual Studio:
 | CSL1001 | Use `is null` instead of `== null`                        |
 | CSL1002 | Use `is not null` instead of `!= null`                    |
 | CSL1003 | Consider using primary contructors to simplify your code. |
+| CSL1004 | Consider using records to simplify your code.             |

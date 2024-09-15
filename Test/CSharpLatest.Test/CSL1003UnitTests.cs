@@ -43,7 +43,7 @@ class Program
     public async Task MultipleConstructors_Diagnostic()
     {
         await VerifyCS.VerifyCodeFixAsync(@"
-    [|class Program
+    class [|Program|]
     {
         public Program(string prop)
         {
@@ -56,7 +56,7 @@ class Program
         }
 
         public string Prop { get; }
-    }|]
+    }
 ", @"
 class Program(string prop)
 {
@@ -73,7 +73,7 @@ class Program(string prop)
     public async Task MultipleConstructorsWithExtraMethod_Diagnostic()
     {
         await VerifyCS.VerifyCodeFixAsync(@"
-    [|class Program
+    class [|Program|]
     {
         public Program(string prop)
         {
@@ -90,7 +90,7 @@ class Program(string prop)
         private void Method()
         {
         }
-    }|]
+    }
 ", @"
 class Program(string prop)
 {
@@ -111,7 +111,7 @@ class Program(string prop)
     public async Task MultipleConstructorsWithExtraProperty_Diagnostic()
     {
         await VerifyCS.VerifyCodeFixAsync(@"
-    [|class Program
+    class [|Program|]
     {
         public Program(string prop)
         {
@@ -126,7 +126,7 @@ class Program(string prop)
         public string Prop { get; }
 
         public int Test { get; }
-    }|]
+    }
 ", @"
 class Program(string prop)
 {
@@ -145,7 +145,7 @@ class Program(string prop)
     public async Task Decoration1_Diagnostic()
     {
         await VerifyCS.VerifyCodeFixAsync(@"
-[|class Program
+class [|Program|]
 {
     public Program(string prop)
     {
@@ -158,7 +158,7 @@ class Program(string prop)
     }
 
     public string Prop { get; }
-}|]
+}
 ", @"
 class Program(string prop)
 {
@@ -175,7 +175,7 @@ class Program(string prop)
     public async Task Decoration2_Diagnostic()
     {
         await VerifyCS.VerifyCodeFixAsync(@"
-[|class Program
+class [|Program|]
 {
     public Program(string prop)
     {
@@ -185,7 +185,7 @@ class Program(string prop)
     public Program(string prop, int other) => Prop = prop;/**/
 
     public string Prop { get; }
-}|]
+}
 ", @"
 class Program(string prop)
 {
@@ -223,7 +223,7 @@ class Program
     public async Task MultipleConstructorsExpressionBody_Diagnostic()
     {
         await VerifyCS.VerifyCodeFixAsync(@"
-[|class Program
+class [|Program|]
 {
     public Program(string prop) => Prop = prop;
 
@@ -233,7 +233,7 @@ class Program
     }
 
     public string Prop { get; }
-}|]
+}
 ", @"
 class Program(string prop)
 {
@@ -359,7 +359,7 @@ class Program
     public async Task SimpleClassWithExpressionBodyConstructor_Diagnostic()
     {
         await VerifyCS.VerifyCodeFixAsync(@"
-[|class Program
+class [|Program|]
 {
     public Program(string prop)
     {
@@ -369,7 +369,7 @@ class Program
     public Program(string prop, int other) => Prop = prop;
 
     public string Prop { get; }
-}|]
+}
 ", @"
 class Program(string prop)
 {

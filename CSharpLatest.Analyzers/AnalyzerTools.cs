@@ -1,6 +1,7 @@
 ﻿namespace CSharpLatest;
 
 using System;
+using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.Diagnostics;
 
@@ -70,5 +71,21 @@ internal static class AnalyzerTools
     private static bool IsTrue(this IAnalysisAssertion analysisAssertion, SyntaxNodeAnalysisContext context)
     {
         return analysisAssertion.IsTrue(context);
+    }
+
+    /// <summary>
+    /// Gets the base information of a symbol.
+    /// </summary>
+    /// <param name="typeSymbol">The symbol.</param>
+    public static BaseInfo GetBaseInfo(INamedTypeSymbol? typeSymbol)
+    {
+        if (typeSymbol is null)
+            return new BaseInfo(IsObject: false, Depth: 0);
+
+        if (typeSymbol.SpecialType == SpecialType.System_Object)
+            return new BaseInfo(IsObject: true, Depth: 0);
+
+        BaseInfo BaseTypeInfo = GetBaseInfo(typeSymbol.BaseType);
+        return BaseTypeInfo with { Depth = BaseTypeInfo.Depth + 1 };
     }
 }

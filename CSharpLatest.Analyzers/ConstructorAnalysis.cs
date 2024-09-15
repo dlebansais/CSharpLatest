@@ -83,6 +83,15 @@ public static partial class ConstructorAnalysis
         if (ConstructorCount > 1)
             return BestSuggestion.PrimaryConstructor;
 
+        /*
+        if (classDeclaration.BaseList is BaseListSyntax BaseList)
+        {
+            foreach (BaseTypeSyntax BaseType in BaseList.Types)
+                if (BaseType.Type is NameSyntax Name)
+            {
+            }
+        }*/
+
         return BestSuggestion.Record;
     }
 

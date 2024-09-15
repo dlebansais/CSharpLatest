@@ -1,6 +1,9 @@
 ﻿namespace CSharpLatest.Test;
 
 using System.Threading.Tasks;
+using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.Testing;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using VerifyCS = CSharpCodeFixVerifier<CSL1004ConsiderUsingRecord, CSL1004CodeFixProvider>;
 
@@ -11,7 +14,7 @@ public partial class CSL1004UnitTests
     public async Task SimpleClassWithPropertyLast_Diagnostic()
     {
         await VerifyCS.VerifyCodeFixAsync(Prologs.IsExternalInit, @"
-    [|class Program
+    class [|Program|]
     {
         public Program(string prop)
         {
@@ -19,16 +22,17 @@ public partial class CSL1004UnitTests
         }
 
         public string Prop { get; }
-    }|]
+    }
 ", @"
     record Program(string Prop);
 ");
     }
+
     [TestMethod]
     public async Task SimpleClassWithPropertyFirst_Diagnostic()
     {
         await VerifyCS.VerifyCodeFixAsync(Prologs.IsExternalInit, @"
-    [|class Program
+    class [|Program|]
     {
         public string Prop { get; }
 
@@ -36,7 +40,7 @@ public partial class CSL1004UnitTests
         {
             Prop = prop;
         }
-    }|]
+    }
 ", @"
     record Program(string Prop);
 ");
@@ -99,7 +103,7 @@ class Program
     public async Task Decoration1_Diagnostic()
     {
         await VerifyCS.VerifyCodeFixAsync(Prologs.IsExternalInit, @"
-/*XYZ*/[|class Program
+/*XYZ*/class [|Program|]
 {
     public Program(string prop)
     {
@@ -107,7 +111,7 @@ class Program
     }
 
     public string Prop { get; }
-}|]
+}
 ", @"
 /*XYZ*/record Program(string Prop);
 ");
@@ -117,7 +121,7 @@ class Program
     public async Task Decoration2_Diagnostic()
     {
         await VerifyCS.VerifyCodeFixAsync(Prologs.IsExternalInit, @"
-    [|class Program
+    class [|Program|]
     {
         public Program(string prop)
         {
@@ -125,7 +129,7 @@ class Program
         }
 
         public string Prop { get; }
-    }|]/*XYZ*/
+    }/*XYZ*/
 ", @"
     record Program(string Prop);/*XYZ*/
 ");
@@ -135,7 +139,7 @@ class Program
     public async Task Decoration3_Diagnostic()
     {
         await VerifyCS.VerifyCodeFixAsync(Prologs.IsExternalInit, @"
-    [|class Program/*XYZ*/
+    class [|Program|]/*XYZ*/
     {
         public Program(string prop)
         {
@@ -143,7 +147,7 @@ class Program
         }
 
         public string Prop { get; }
-    }|]
+    }
 ", @"
     record Program(string Prop);
 ");
@@ -303,7 +307,7 @@ class Program
     public async Task SimpleClassWithOtherProperties1_Diagnostic()
     {
         await VerifyCS.VerifyCodeFixAsync(Prologs.IsExternalInit, @"
-    [|class Program
+    class [|Program|]
     {
         public Program(string prop)
         {
@@ -312,7 +316,7 @@ class Program
 
         public string Prop { get; }
         public string Other { get; } = string.Empty;
-    }|]
+    }
 ", @"
     record Program(string Prop)
 {
@@ -325,7 +329,7 @@ class Program
     public async Task SimpleClassWithOtherProperties2_Diagnostic()
     {
         await VerifyCS.VerifyCodeFixAsync(Prologs.IsExternalInit, @"
-    [|class Program
+    class [|Program|]
     {
         public string Other { get; } = string.Empty;
 
@@ -335,7 +339,7 @@ class Program
         }
 
         public string Prop { get; }
-    }|]
+    }
 ", @"
     record Program(string Prop)
 {
@@ -394,7 +398,7 @@ class Program
     public async Task SimpleClassWithExtraMember_Diagnostic()
     {
         await VerifyCS.VerifyCodeFixAsync(Prologs.IsExternalInit, @"
-    [|class Program
+    class [|Program|]
     {
         public Program(string prop)
         {
@@ -403,12 +407,88 @@ class Program
 
         public string Prop { get; }
         protected int Other;
-    }|]
+    }
 ", @"
     record Program(string Prop)
 {
     protected int Other;
 }
 ");
+    }
+
+    [TestMethod]
+    public async Task BaseNotRecord_NoDiagnostic()
+    {
+        await VerifyCS.VerifyAnalyzerAsync(Prologs.IsExternalInit, @"
+    class ProgramBase
+    {
+    }
+
+    class Program : ProgramBase
+    {
+        public Program(string prop)
+        {
+            Prop = prop;
+        }
+
+        public string Prop { get; }
+    }
+");
+    }
+
+    [TestMethod]
+    public async Task UnknownBase_NoDiagnostic()
+    {
+        var DescriptorCS0246 = new DiagnosticDescriptor(
+            "CS0246",
+            "title",
+            "The type or namespace name 'ProgramBase' could not be found (are you missing a using directive or an assembly reference?)",
+            "description",
+            DiagnosticSeverity.Error,
+            true
+            );
+
+        var Expected = new DiagnosticResult(DescriptorCS0246);
+        Expected = Expected.WithLocation("/0/Test0.cs", 13, 21);
+
+        await VerifyCS.VerifyAnalyzerAsync(Prologs.IsExternalInit, @"
+    class Program : ProgramBase
+    {
+        public Program(string prop)
+        {
+            Prop = prop;
+        }
+
+        public string Prop { get; }
+    }
+", LanguageVersion.Default, Expected);
+    }
+
+    [TestMethod]
+    public async Task UnknownGenericBase_NoDiagnostic()
+    {
+        var DescriptorCS0246 = new DiagnosticDescriptor(
+            "CS0246",
+            "title",
+            "The type or namespace name 'List<>' could not be found (are you missing a using directive or an assembly reference?)",
+            "description",
+            DiagnosticSeverity.Error,
+            true
+            );
+
+        var Expected = new DiagnosticResult(DescriptorCS0246);
+        Expected = Expected.WithLocation("/0/Test0.cs", 13, 21);
+
+        await VerifyCS.VerifyAnalyzerAsync(Prologs.IsExternalInit, @"
+    class Program : List<string>
+    {
+        public Program(string prop)
+        {
+            Prop = prop;
+        }
+
+        public string Prop { get; }
+    }
+", LanguageVersion.Default, Expected);
     }
 }
