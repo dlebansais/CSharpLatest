@@ -18,7 +18,7 @@
     </PropertyGroup>
 
     <PropertyGroup>
-		<PackageVersion>1.0.4</PackageVersion>
+		<PackageVersion>1.0.5</PackageVersion>
 		<Authors>David Le Bansais</Authors>
 		<Company />
 		<Product />
@@ -51,8 +51,9 @@
 			<TfmSpecificPackageFile Include="README-short.md" PackagePath="" />
 			<TfmSpecificPackageFile Include="$(OutputPath)\CSharpLatest.Analyzers.dll" PackagePath="analyzers/dotnet/cs" />
 			<TfmSpecificPackageFile Include="$(OutputPath)\CSharpLatest.CodeFixes.dll" PackagePath="analyzers/dotnet/cs" />
-			<TfmSpecificPackageFile Include="$(OutputPath)\RoslynHelpers.dll" PackagePath="analyzers/dotnet/cs" />
-		</ItemGroup>
+            <TfmSpecificPackageFile Include="$(OutputPath)\RoslynHelpers.dll" PackagePath="analyzers/dotnet/cs" />
+            <TfmSpecificPackageFile Include="$(OutputPath)\Method.Contracts.dll" PackagePath="analyzers/dotnet/cs" />
+        </ItemGroup>
 	</Target>
 
 </Project>

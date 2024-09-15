@@ -6,14 +6,14 @@
         <Nullable>enable</Nullable>
 
         <RootNamespace>CSharpLatest</RootNamespace>
-        <Version>1.0.4</Version>
+        <Version>1.0.5</Version>
         <Authors>David Le Bansais</Authors>
         <Company />
         <Product />
         <Description>Roslyn-based analysis of C# code to suggest the use of features in the latest version of the language</Description>
         <Copyright>Copyright © 2024 David Le Bansais</Copyright>
-        <AssemblyVersion>1.0.4.11</AssemblyVersion>
-        <FileVersion>1.0.4.11</FileVersion>
+        <AssemblyVersion>1.0.5.12</AssemblyVersion>
+        <FileVersion>1.0.5.12</FileVersion>
         <RepositoryUrl>https://github.com/dlebansais/CSharpLatest</RepositoryUrl>
         <SuppressTfmSupportBuildWarnings>true</SuppressTfmSupportBuildWarnings>
 
@@ -70,6 +70,8 @@
 		  <PrivateAssets>all</PrivateAssets>
 		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
+        <PackageReference Include="Method.Contracts-Debug" Version="1.5.0" GeneratePathProperty="true" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" />
+        <PackageReference Include="Method.Contracts" Version="1.5.0" GeneratePathProperty="true" Condition="'$(Configuration)|$(Platform)'!='Debug|x64'" />
         <PackageReference Include="Method.Contracts.Analyzers-Debug" Version="1.5.1" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -87,13 +89,10 @@
 	</ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Method.Contracts-Debug" Version="1.5.0" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" />
-        <PackageReference Include="Method.Contracts" Version="1.5.0" Condition="'$(Configuration)|$(Platform)'!='Debug|x64'" />
+        <None Include="$(PkgMethod_Contracts-Debug)\lib\netstandard2.0\Method.Contracts.dll" CopyToOutputDirectory="PreserveNewest" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" />
+        <None Include="$(PkgMethod_Contracts)\lib\netstandard2.0\Method.Contracts.dll" CopyToOutputDirectory="PreserveNewest" Condition="'$(Configuration)|$(Platform)'!='Debug|x64'" />
+        <None Include="$(Pkgdlebansais_RoslynHelpers)\lib\netstandard2.0\RoslynHelpers.dll" CopyToOutputDirectory="PreserveNewest" />
     </ItemGroup>
-
-    <ItemGroup>
-		<None Include="$(Pkgdlebansais_RoslynHelpers)\lib\netstandard2.0\RoslynHelpers.dll" CopyToOutputDirectory="PreserveNewest" />
-	</ItemGroup>
 	
 	<ItemGroup>
 		<Compile Update="AnalyzerResources.Designer.cs" DesignTime="True" AutoGen="True" DependentUpon="AnalyzerResources.resx" />
