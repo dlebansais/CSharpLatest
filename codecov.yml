@@ -8,7 +8,7 @@ comment:
 coverage:
   precision: 2
   range:
-  - 70.0
+  - 90.0
   - 100.0
   round: down
   status:
@@ -16,7 +16,6 @@ coverage:
     patch: true
     project: true
 ignore:
-  - "./Test/**"
   - "./CSharpLatest.Analyzers/AnalyzerResources.Designer.cs"
   - "./CSharpLatest.CodeFixes/CodeFixResources.Designer.cs"
 parsers:
