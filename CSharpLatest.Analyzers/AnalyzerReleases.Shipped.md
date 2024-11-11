@@ -9,3 +9,4 @@ CSL1001 |  Usage   |  Warning | CSL1001UseIsNull, [Documentation](doc/CSL1001.md
 CSL1002 |  Usage   |  Warning | CSL1002UseIsNotNull, [Documentation](doc/CSL1002.md)
 CSL1003 |  Usage   |  Warning | CSL1003ConsiderUsingPrimaryConstructor, [Documentation](doc/CSL1003.md)
 CSL1004 |  Usage   |  Warning | CSL1004ConsiderUsingRecord, [Documentation](doc/CSL1004.md)
+CSL1005 |  Usage   |  Warning | CSL1005SimplifyOneLineGetter, [Documentation](doc/CSL1005.md)

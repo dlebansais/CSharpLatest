@@ -137,4 +137,8 @@
     <value>Use a record</value>
     <comment>The title of the code fix.</comment>
   </data>
+  <data name="CSL1005CodeFixTitle" xml:space="preserve">
+    <value>Simplify getter</value>
+    <comment>The title of the code fix.</comment>
+  </data>
 </root>

@@ -7,11 +7,11 @@ call ..\Certification\set_tokens.bat
 set PROJECTNAME=CSharpLatest
 set TOKEN=%CSHARP_LATEST_CODECOV_TOKEN%
 set TESTPROJECTNAME=%PROJECTNAME%.Test
-set PLATFORM=Any CPU
+set PLATFORM=x64
 set CONFIGURATION=Release
 set FRAMEWORK=netcoreapp3.1
 set RESULTFILENAME=Coverage-%PROJECTNAME%.xml
-set RESULTFILEPATH=".\Test\%TESTPROJECTNAME%\bin\%CONFIGURATION%\%FRAMEWORK%\%RESULTFILENAME%"
+set RESULTFILEPATH=".\Test\%TESTPROJECTNAME%\bin\x64\%CONFIGURATION%\%FRAMEWORK%\%RESULTFILENAME%"
 
 set OPENCOVER_VERSION=4.7.1221
 set OPENCOVER=OpenCover.%OPENCOVER_VERSION%
@@ -42,9 +42,10 @@ if exist .\Test\%TESTPROJECTNAME%\*.log del .\Test\%TESTPROJECTNAME%\*.log
 if exist %RESULTFILEPATH% del %RESULTFILEPATH%
 
 rem Execute tests within OpenCover.
-%OPENCOVER_EXE% -register:user -target:"C:\Program Files\dotnet\dotnet.exe" -targetargs:"test .\Test\%TESTPROJECTNAME%\bin\%CONFIGURATION%\%FRAMEWORK%\%TESTPROJECTNAME%.dll -l console;verbosity=detailed" "-filter:+[*]* -[%TESTPROJECTNAME%*]*" -output:%RESULTFILEPATH% -mergeoutput
+echo %RESULTFILEPATH%
+%OPENCOVER_EXE% -register:user -target:"C:\Program Files\dotnet\dotnet.exe" -targetargs:"test .\Test\%TESTPROJECTNAME%\bin\x64\%CONFIGURATION%\%FRAMEWORK%\%TESTPROJECTNAME%.dll -l console;verbosity=detailed" "-filter:+[*]* -[%TESTPROJECTNAME%*]*" -output:%RESULTFILEPATH% -mergeoutput
 
-rem -targetargs:"test .\Test\%TESTPROJECTNAME%\bin\Debug\%FRAMEWORK%\%TESTPROJECTNAME%.dll -l console;verbosity=detailed" "-filter:+[*]* -[%TESTPROJECTNAME%*]*" -output:".\Test\%TESTPROJECTNAME%\obj\Debug\%RESULTFILENAME%"
+rem -targetargs:"test .\Test\%TESTPROJECTNAME%\bin\x64\Debug\%FRAMEWORK%\%TESTPROJECTNAME%.dll -l console;verbosity=detailed" "-filter:+[*]* -[%TESTPROJECTNAME%*]*" -output:".\Test\%TESTPROJECTNAME%\obj\Debug\%RESULTFILENAME%"
 if not exist %RESULTFILEPATH% goto end
 %CODECOV_UPLOADER_EXE% -f %RESULTFILEPATH% -t %TOKEN%
 %REPORTGENERATOR_EXE% -reports:%RESULTFILEPATH% -targetdir:.\CoverageReports "-assemblyfilters:+%PROJECTNAME%.*" "-filefilters:-*.g.cs;-*.Designer.cs;-*Microsoft.NET.Test.Sdk.Program.cs"

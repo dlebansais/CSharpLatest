@@ -42,8 +42,6 @@ public class CSL1002CodeFixProvider : CodeFixProvider
         BinaryExpressionSyntax binaryExpression,
         CancellationToken cancellationToken)
     {
-        Document Result = document;
-
         // Remove the leading trivia from the expression operator.
         SyntaxToken OperatorToken = binaryExpression.OperatorToken;
         SyntaxTriviaList LeadingTrivia = OperatorToken.LeadingTrivia;

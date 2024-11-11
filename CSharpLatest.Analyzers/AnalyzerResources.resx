@@ -177,4 +177,16 @@
     <value>Consider using records</value>
     <comment>The title of the diagnostic.</comment>
   </data>
+  <data name="CSL1005AnalyzerDescription" xml:space="preserve">
+    <value>Simplify this one-line getter to remove unnecessary clutter.</value>
+    <comment>An optional longer localizable description of the diagnostic.</comment>
+  </data>
+  <data name="CSL1005AnalyzerMessageFormat" xml:space="preserve">
+    <value>Simplify property {0} one-line getter</value>
+    <comment>The format-able message the diagnostic displays.</comment>
+  </data>
+  <data name="CSL1005AnalyzerTitle" xml:space="preserve">
+    <value>Simplify this one-line getter</value>
+    <comment>The title of the diagnostic.</comment>
+  </data>
 </root>

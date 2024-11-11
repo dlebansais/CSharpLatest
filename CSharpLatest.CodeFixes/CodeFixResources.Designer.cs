@@ -104,5 +104,14 @@ namespace CSharpLatest {
                 return ResourceManager.GetString("CSL1004CodeFixTitle", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Simplify getter.
+        /// </summary>
+        internal static string CSL1005CodeFixTitle {
+            get {
+                return ResourceManager.GetString("CSL1005CodeFixTitle", resourceCulture);
+            }
+        }
     }
 }

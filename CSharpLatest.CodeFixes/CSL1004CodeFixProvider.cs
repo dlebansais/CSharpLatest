@@ -47,8 +47,6 @@ public class CSL1004CodeFixProvider : CodeFixProvider
         ClassDeclarationSyntax classDeclaration,
         CancellationToken cancellationToken)
     {
-        Document Result = document;
-
         // Save the leading and trailing trivias to restore it later.
         SyntaxTriviaList PreservedClassDeclarationLeadingTrivia = classDeclaration.GetLeadingTrivia();
         SyntaxTriviaList PreservedClassDeclarationTrailingTrivia = classDeclaration.GetTrailingTrivia();

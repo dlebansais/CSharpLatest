@@ -169,7 +169,7 @@ namespace CSharpLatest {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Consider using records to simplify your code..
+        ///   Looks up a localized string similar to Consider using records to simplify your code. If a record is not appropriate, consider using a primary constructor..
         /// </summary>
         internal static string CSL1004AnalyzerDescription {
             get {
@@ -178,7 +178,7 @@ namespace CSharpLatest {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Consider using a record for &apos;{0}&apos;.
+        ///   Looks up a localized string similar to Consider using a record for &apos;{0}&apos; (if a record is not appropriate, consider using a primary constructor).
         /// </summary>
         internal static string CSL1004AnalyzerMessageFormat {
             get {
@@ -192,6 +192,33 @@ namespace CSharpLatest {
         internal static string CSL1004AnalyzerTitle {
             get {
                 return ResourceManager.GetString("CSL1004AnalyzerTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Simplify this one-line getter to remove unnecessary clutter..
+        /// </summary>
+        internal static string CSL1005AnalyzerDescription {
+            get {
+                return ResourceManager.GetString("CSL1005AnalyzerDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Simplify property {0} one-line getter.
+        /// </summary>
+        internal static string CSL1005AnalyzerMessageFormat {
+            get {
+                return ResourceManager.GetString("CSL1005AnalyzerMessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Simplify this one-line getter.
+        /// </summary>
+        internal static string CSL1005AnalyzerTitle {
+            get {
+                return ResourceManager.GetString("CSL1005AnalyzerTitle", resourceCulture);
             }
         }
     }
