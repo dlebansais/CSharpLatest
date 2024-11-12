@@ -196,7 +196,7 @@ namespace CSharpLatest {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Simplify this one-line getter to remove unnecessary clutter..
+        ///   Looks up a localized string similar to Simplify this one line getter to remove unnecessary clutter..
         /// </summary>
         internal static string CSL1005AnalyzerDescription {
             get {
@@ -205,7 +205,7 @@ namespace CSharpLatest {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Simplify property {0} one-line getter.
+        ///   Looks up a localized string similar to Simplify property {0} one line getter.
         /// </summary>
         internal static string CSL1005AnalyzerMessageFormat {
             get {
@@ -214,11 +214,38 @@ namespace CSharpLatest {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Simplify this one-line getter.
+        ///   Looks up a localized string similar to Simplify this one line getter.
         /// </summary>
         internal static string CSL1005AnalyzerTitle {
             get {
                 return ResourceManager.GetString("CSL1005AnalyzerTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Simplify this one line setter to remove unnecessary clutter..
+        /// </summary>
+        internal static string CSL1006AnalyzerDescription {
+            get {
+                return ResourceManager.GetString("CSL1006AnalyzerDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Simplify property {0} one line setter.
+        /// </summary>
+        internal static string CSL1006AnalyzerMessageFormat {
+            get {
+                return ResourceManager.GetString("CSL1006AnalyzerMessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Simplify this one line setter.
+        /// </summary>
+        internal static string CSL1006AnalyzerTitle {
+            get {
+                return ResourceManager.GetString("CSL1006AnalyzerTitle", resourceCulture);
             }
         }
     }

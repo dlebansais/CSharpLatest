@@ -141,4 +141,8 @@
     <value>Simplify getter</value>
     <comment>The title of the code fix.</comment>
   </data>
+  <data name="CSL1006CodeFixTitle" xml:space="preserve">
+    <value>Simplify setter</value>
+    <comment>The title of the code fix.</comment>
+  </data>
 </root>

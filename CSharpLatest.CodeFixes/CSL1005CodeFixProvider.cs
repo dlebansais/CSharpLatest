@@ -1,11 +1,7 @@
 ﻿namespace CSharpLatest;
 
-using System.Collections.Generic;
 using System.Collections.Immutable;
-using System.Collections.ObjectModel;
 using System.Composition;
-using System.Diagnostics;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Contracts;
@@ -14,7 +10,6 @@ using Microsoft.CodeAnalysis.CodeActions;
 using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Microsoft.CodeAnalysis.Formatting;
 
 [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(CSL1005CodeFixProvider)), Shared]
 public class CSL1005CodeFixProvider : CodeFixProvider
