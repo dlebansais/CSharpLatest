@@ -8,6 +8,9 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
+/// <summary>
+/// Represents a code fix constructor.
+/// </summary>
 public static class ConstructorCodeFixes
 {
     /// <summary>

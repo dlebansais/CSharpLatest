@@ -11,19 +11,33 @@ using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Formatting;
 
-[ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(CSL1002CodeFixProvider)), Shared]
+/// <summary>
+/// Represents a code fix provider for CSL1002.
+/// </summary>
+[ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(CSL1002CodeFixProvider))]
+[Shared]
 public class CSL1002CodeFixProvider : CodeFixProvider
 {
+    /// <summary>
+    /// Gets the list of fixable diagnostics.
+    /// </summary>
     public sealed override ImmutableArray<string> FixableDiagnosticIds
     {
         get { return [CSL1002UseIsNotNull.DiagnosticId]; }
     }
 
+    /// <summary>
+    /// Gets the fix provider.
+    /// </summary>
     public sealed override FixAllProvider GetFixAllProvider()
     {
         return WellKnownFixAllProviders.BatchFixer;
     }
 
+    /// <summary>
+    /// Registers a code action to invoke a fix.
+    /// </summary>
+    /// <param name="context">The code fix context.</param>
     public sealed override async Task RegisterCodeFixesAsync(CodeFixContext context)
     {
         // Find the expression identified by the diagnostic.
@@ -63,6 +77,6 @@ public class CSL1002CodeFixProvider : CodeFixProvider
         var FormattedExpression = NewExpression.WithAdditionalAnnotations(Formatter.Annotation);
 
         // Replace the old expression with the new expression.
-        return await document.WithReplacedNode(cancellationToken, binaryExpression, FormattedExpression);
+        return await document.WithReplacedNode(binaryExpression, FormattedExpression, cancellationToken);
     }
 }

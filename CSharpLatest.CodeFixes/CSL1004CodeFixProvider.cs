@@ -15,19 +15,33 @@ using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Formatting;
 
-[ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(CSL1004CodeFixProvider)), Shared]
+/// <summary>
+/// Represents a code fix provider for CSL1004.
+/// </summary>
+[ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(CSL1004CodeFixProvider))]
+[Shared]
 public class CSL1004CodeFixProvider : CodeFixProvider
 {
+    /// <summary>
+    /// Gets the list of fixable diagnostics.
+    /// </summary>
     public sealed override ImmutableArray<string> FixableDiagnosticIds
     {
         get { return [CSL1004ConsiderUsingRecord.DiagnosticId]; }
     }
 
+    /// <summary>
+    /// Gets the fix provider.
+    /// </summary>
     public sealed override FixAllProvider GetFixAllProvider()
     {
         return WellKnownFixAllProviders.BatchFixer;
     }
 
+    /// <summary>
+    /// Registers a code action to invoke a fix.
+    /// </summary>
+    /// <param name="context">The code fix context.</param>
     public sealed override async Task RegisterCodeFixesAsync(CodeFixContext context)
     {
         // Find the declaration identified by the diagnostic.
@@ -144,6 +158,6 @@ public class CSL1004CodeFixProvider : CodeFixProvider
         var FormattedDeclaration = NewDeclaration.WithAdditionalAnnotations(Formatter.Annotation);
 
         // Replace the old declaration with the new declaration.
-        return await document.WithReplacedNode(cancellationToken, classDeclaration, NewDeclaration);
+        return await document.WithReplacedNode(classDeclaration, NewDeclaration, cancellationToken);
     }
 }

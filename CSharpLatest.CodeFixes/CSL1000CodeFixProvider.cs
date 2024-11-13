@@ -12,19 +12,33 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Formatting;
 using Microsoft.CodeAnalysis.Simplification;
 
-[ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(CSL1000CodeFixProvider)), Shared]
+/// <summary>
+/// Represents a code fix provider for CSL1000.
+/// </summary>
+[ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(CSL1000CodeFixProvider))]
+[Shared]
 public class CSL1000CodeFixProvider : CodeFixProvider
 {
+    /// <summary>
+    /// Gets the list of fixable diagnostics.
+    /// </summary>
     public sealed override ImmutableArray<string> FixableDiagnosticIds
     {
         get { return [CSL1000VariableshouldBeMadeConstant.DiagnosticId]; }
     }
 
+    /// <summary>
+    /// Gets the fix provider.
+    /// </summary>
     public sealed override FixAllProvider GetFixAllProvider()
     {
         return WellKnownFixAllProviders.BatchFixer;
     }
 
+    /// <summary>
+    /// Registers a code action to invoke a fix.
+    /// </summary>
+    /// <param name="context">The code fix context.</param>
     public sealed override async Task RegisterCodeFixesAsync(CodeFixContext context)
     {
         // Find the declaration identified by the diagnostic.
@@ -85,7 +99,7 @@ public class CSL1000CodeFixProvider : CodeFixProvider
                 }
             }
         }
-        
+
         // Produce the new local declaration.
         LocalDeclarationStatementSyntax NewLocal = TrimmedLocal.WithModifiers(NewModifiers)
                                                                .WithDeclaration(VariableDeclaration);
@@ -94,6 +108,6 @@ public class CSL1000CodeFixProvider : CodeFixProvider
         var FormattedLocal = NewLocal.WithAdditionalAnnotations(Formatter.Annotation);
 
         // Replace the old local declaration with the new local declaration.
-        return await document.WithReplacedNode(cancellationToken, localDeclaration, FormattedLocal);
+        return await document.WithReplacedNode(localDeclaration, FormattedLocal, cancellationToken);
     }
 }
