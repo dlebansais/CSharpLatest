@@ -116,7 +116,7 @@ public partial class CSL1006UnitTests
     }
 
     [TestMethod]
-    public async Task OneLineGetterWithLeadingTrivia_Diagnostic()
+    public async Task OneLineSetterWithLeadingTrivia_Diagnostic()
     {
         await VerifyCS.VerifyCodeFixAsync(Prologs.IsExternalInit, @"
     class Program
@@ -134,7 +134,7 @@ public partial class CSL1006UnitTests
     }
 
     [TestMethod]
-    public async Task OneLineGetterWithTrailingTrivia_Diagnostic()
+    public async Task OneLineSetterWithTrailingTrivia_Diagnostic()
     {
         await VerifyCS.VerifyCodeFixAsync(Prologs.IsExternalInit, @"
     class Program
@@ -146,6 +146,153 @@ public partial class CSL1006UnitTests
     class Program
     {
         public string Prop { set => _prop = value;/**/}
+        private string _prop = string.Empty;
+    }
+");
+    }
+
+
+
+
+    [TestMethod]
+    public async Task OneLineInitSetter_Diagnostic()
+    {
+        await VerifyCS.VerifyCodeFixAsync(Prologs.IsExternalInit, @"
+    class Program
+    {
+        public string Prop { init [|{ _prop = value; }|] }
+        private string _prop = string.Empty;
+    }
+", @"
+    class Program
+    {
+        public string Prop { init => _prop = value; }
+        private string _prop = string.Empty;
+    }
+");
+    }
+
+    [TestMethod]
+    public async Task OneLineInitSetterWithGetter_Diagnostic()
+    {
+        await VerifyCS.VerifyCodeFixAsync(Prologs.IsExternalInit, @"
+    class Program
+    {
+        public string Prop { get => _prop; init [|{ _prop = value; }|] }
+        private string _prop = string.Empty;
+    }
+", @"
+    class Program
+    {
+        public string Prop { get => _prop; init => _prop = value; }
+        private string _prop = string.Empty;
+    }
+");
+    }
+
+    [TestMethod]
+    public async Task ReplacedInit_NoDiagnostic()
+    {
+        await VerifyCS.VerifyAnalyzerAsync(Prologs.IsExternalInit, @"
+    class Program
+    {
+        public string Prop { init => _prop = value; }
+        private string _prop = string.Empty;
+    }
+");
+    }
+
+    [TestMethod]
+    public async Task InitMultipleStatements_NoDiagnostic()
+    {
+        await VerifyCS.VerifyAnalyzerAsync(Prologs.IsExternalInit, @"
+    class Program
+    {
+        public string Prop
+        {
+            init
+            {
+                _prop = value;
+                _prop = _prop + _prop;
+            }
+        }
+
+        private string _prop = string.Empty;
+    }
+");
+    }
+
+    [TestMethod]
+    public async Task InitNotExpression_NoDiagnostic()
+    {
+        await VerifyCS.VerifyAnalyzerAsync(Prologs.IsExternalInit, @"
+    class Program
+    {
+        public string Prop
+        {
+            init
+            {
+                if (value != string.Empty)
+                    _prop = value;
+            }
+        }
+
+        private string _prop = string.Empty;
+    }
+");
+    }
+
+    [TestMethod]
+    public async Task InitMultiLine_NoDiagnostic()
+    {
+        await VerifyCS.VerifyAnalyzerAsync(Prologs.IsExternalInit, @"
+    class Program
+    {
+        public string Prop
+        {
+            init
+            {
+                _prop =
+                        value;
+            }
+        }
+
+        private string _prop = string.Empty;
+    }
+");
+    }
+
+    [TestMethod]
+    public async Task OneLineInitSetterWithLeadingTrivia_Diagnostic()
+    {
+        await VerifyCS.VerifyCodeFixAsync(Prologs.IsExternalInit, @"
+    class Program
+    {
+        public string Prop { init/**/[|{ _prop = value; }|] }
+        private string _prop = string.Empty;
+    }
+", @"
+    class Program
+    {
+        public string Prop { init/**/=> _prop = value; }
+        private string _prop = string.Empty;
+    }
+");
+    }
+
+    [TestMethod]
+    public async Task OneLineInitSetterWithTrailingTrivia_Diagnostic()
+    {
+        await VerifyCS.VerifyCodeFixAsync(Prologs.IsExternalInit, @"
+    class Program
+    {
+        public string Prop { init [|{ _prop = value; }|]/**/}
+        private string _prop = string.Empty;
+    }
+", @"
+    class Program
+    {
+        public string Prop { init => _prop = value;/**/}
         private string _prop = string.Empty;
     }
 ");

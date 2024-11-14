@@ -6,14 +6,14 @@
         <Nullable>enable</Nullable>
 
         <RootNamespace>CSharpLatest</RootNamespace>
-        <Version>1.0.8</Version>
+        <Version>1.0.9</Version>
         <Authors>David Le Bansais</Authors>
         <Company />
         <Product />
         <Description>Roslyn-based analysis of C# code to suggest the use of features in the latest version of the language</Description>
         <Copyright>Copyright © 2024 David Le Bansais</Copyright>
-        <AssemblyVersion>1.0.8.14</AssemblyVersion>
-        <FileVersion>1.0.8.14</FileVersion>
+        <AssemblyVersion>1.0.9.15</AssemblyVersion>
+        <FileVersion>1.0.9.15</FileVersion>
         <RepositoryUrl>https://github.com/dlebansais/CSharpLatest</RepositoryUrl>
         <SuppressTfmSupportBuildWarnings>true</SuppressTfmSupportBuildWarnings>
 

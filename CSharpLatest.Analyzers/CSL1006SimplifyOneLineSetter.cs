@@ -48,7 +48,7 @@ public partial class CSL1006SimplifyOneLineSetter : DiagnosticAnalyzer
         context.ConfigureGeneratedCodeAnalysis(GeneratedCodeAnalysisFlags.None);
         context.EnableConcurrentExecution();
 
-        context.RegisterSyntaxNodeAction(AnalyzeNode, SyntaxKind.SetAccessorDeclaration);
+        context.RegisterSyntaxNodeAction(AnalyzeNode, SyntaxKind.SetAccessorDeclaration, SyntaxKind.InitAccessorDeclaration);
     }
 
     private void AnalyzeNode(SyntaxNodeAnalysisContext context)
