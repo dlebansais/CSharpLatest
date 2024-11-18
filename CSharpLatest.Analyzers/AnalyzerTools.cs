@@ -53,7 +53,7 @@ internal static class AnalyzerTools
 
     private static bool IsFeatureSupportedInThisVersion(SyntaxNodeAnalysisContext context, LanguageVersion minimumLanguageVersion)
     {
-        var ParseOptions = (CSharpParseOptions)context.SemanticModel.SyntaxTree.Options;
+        CSharpParseOptions ParseOptions = (CSharpParseOptions)context.SemanticModel.SyntaxTree.Options;
         return ParseOptions.LanguageVersion >= minimumLanguageVersion;
     }
 

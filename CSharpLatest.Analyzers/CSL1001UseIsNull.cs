@@ -36,7 +36,7 @@ public partial class CSL1001UseIsNull : DiagnosticAnalyzer
     /// <summary>
     /// Gets the list of supported diagnostic.
     /// </summary>
-    public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics { get { return [Rule]; } }
+    public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => [Rule];
 
     /// <summary>
     /// Initializes the rule analyzer.
@@ -63,9 +63,9 @@ public partial class CSL1001UseIsNull : DiagnosticAnalyzer
 
     private void AnalyzeVerifiedNode(SyntaxNodeAnalysisContext context, BinaryExpressionSyntax binaryExpression, IAnalysisAssertion[] analysisAssertions)
     {
-        var RightExpression = binaryExpression.Right;
-        var OperatorToken = binaryExpression.OperatorToken;
-        var LeftExpression = binaryExpression.Left;
+        ExpressionSyntax RightExpression = binaryExpression.Right;
+        SyntaxToken OperatorToken = binaryExpression.OperatorToken;
+        ExpressionSyntax LeftExpression = binaryExpression.Left;
 
         // Check whether the comparison is '== null'.
         if (RightExpression is not LiteralExpressionSyntax literalExpressionRight)

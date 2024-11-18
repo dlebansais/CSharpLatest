@@ -6,14 +6,14 @@
         <Nullable>enable</Nullable>
 
         <RootNamespace>CSharpLatest</RootNamespace>
-        <Version>1.0.9</Version>
+        <Version>1.0.10</Version>
         <Authors>David Le Bansais</Authors>
         <Company />
         <Product />
         <Description>Roslyn-based analysis of C# code to suggest the use of features in the latest version of the language</Description>
         <Copyright>Copyright © 2024 David Le Bansais</Copyright>
-        <AssemblyVersion>1.0.9.15</AssemblyVersion>
-        <FileVersion>1.0.9.15</FileVersion>
+        <AssemblyVersion>1.0.10.16</AssemblyVersion>
+        <FileVersion>1.0.10.16</FileVersion>
         <RepositoryUrl>https://github.com/dlebansais/CSharpLatest</RepositoryUrl>
         <SuppressTfmSupportBuildWarnings>true</SuppressTfmSupportBuildWarnings>
 
@@ -83,12 +83,29 @@
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
 
-        <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.9.2" />
         <PackageReference Include="dlebansais.RoslynHelpers" Version="1.0.0" GeneratePathProperty="true" />
         <PackageReference Include="Method.Contracts-Debug" Version="1.7.1" GeneratePathProperty="true" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" />
         <PackageReference Include="Method.Contracts" Version="1.7.1" GeneratePathProperty="true" Condition="'$(Configuration)|$(Platform)'!='Debug|x64'" />
     </ItemGroup>
 
+    <Choose>
+        <When Condition="$(RoslynVersion) == 'roslyn4.11.0'">
+            <ItemGroup>
+                <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.11.0" />
+            </ItemGroup>
+        </When>
+        <When Condition="$(RoslynVersion) == 'roslyn4.10.0'">
+            <ItemGroup>
+                <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.10.0" />
+            </ItemGroup>
+        </When>
+        <Otherwise>
+            <ItemGroup>
+                <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.9.2" />
+            </ItemGroup>
+        </Otherwise>
+    </Choose>
+    
     <ItemGroup>
         <None Include="$(PkgMethod_Contracts-Debug)\lib\netstandard2.0\Method.Contracts.dll" CopyToOutputDirectory="PreserveNewest" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" />
         <None Include="$(PkgMethod_Contracts)\lib\netstandard2.0\Method.Contracts.dll" CopyToOutputDirectory="PreserveNewest" Condition="'$(Configuration)|$(Platform)'!='Debug|x64'" />

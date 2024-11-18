@@ -69,7 +69,8 @@ public static partial class ConstructorAnalysis
         int ConstructorCount = 0;
 
         // If other constructors don't do the same, let's not try to second-guess the code.
-        foreach (var Member in classDeclaration.Members)
+        foreach (MemberDeclarationSyntax Member in classDeclaration.Members)
+        {
             if (Member is ConstructorDeclarationSyntax ConstructorDeclaration)
             {
                 ConstructorCount++;
@@ -77,6 +78,7 @@ public static partial class ConstructorAnalysis
                 if (ConstructorDeclaration != ConstructorCandidate && !IsConstructorStartingWithAssignments(ConstructorDeclaration, Assignments))
                     return BestSuggestion.None;
             }
+        }
 
         // If there is only one constructor, considering our constraints a record is a better option.
         if (ConstructorCount > 1)
@@ -101,10 +103,11 @@ public static partial class ConstructorAnalysis
     [RequireNotNull(nameof(classDeclaration))]
     private static Collection<ParameterSyntax> GetParameterCandidatesVerified(ClassDeclarationSyntax classDeclaration)
     {
-        List<ParameterSyntax> Result = new();
+        List<ParameterSyntax> Result = [];
         bool IsFirstConstructor = true;
 
-        foreach (var Member in classDeclaration.Members)
+        foreach (MemberDeclarationSyntax Member in classDeclaration.Members)
+        {
             if (Member is ConstructorDeclarationSyntax ConstructorDeclaration)
             {
                 List<ParameterSyntax> Parameters = [.. ConstructorDeclaration.ParameterList.Parameters];
@@ -119,12 +122,15 @@ public static partial class ConstructorAnalysis
                     int LastCandidateIndex;
 
                     for (LastCandidateIndex = 0; LastCandidateIndex < Result.Count && LastCandidateIndex < Parameters.Count; LastCandidateIndex++)
+                    {
                         if (!IsSameParameter(Result[LastCandidateIndex], Parameters[LastCandidateIndex]))
                             break;
+                    }
 
                     Result = Result.GetRange(0, LastCandidateIndex);
                 }
             }
+        }
 
         return new Collection<ParameterSyntax>(Result);
     }
@@ -143,10 +149,14 @@ public static partial class ConstructorAnalysis
     [RequireNotNull(nameof(parameterCandidates))]
     private static ConstructorDeclarationSyntax? GetConstructorCandidateVerified(ClassDeclarationSyntax classDeclaration, Collection<ParameterSyntax> parameterCandidates)
     {
-        foreach (var Member in classDeclaration.Members)
+        foreach (MemberDeclarationSyntax Member in classDeclaration.Members)
+        {
             if (Member is ConstructorDeclarationSyntax ConstructorDeclaration)
+            {
                 if (ConstructorDeclaration.ParameterList.Parameters.Count == parameterCandidates.Count)
                     return ConstructorDeclaration;
+            }
+        }
 
         return null;
     }
@@ -185,8 +195,10 @@ public static partial class ConstructorAnalysis
             return false;
 
         for (int i = 0; i < expectedAssignments.Count; i++)
+        {
             if (!IsSyntaxNodeEquivalent(Assignments[i], expectedAssignments[i]))
                 return false;
+        }
 
         return true;
     }
@@ -210,11 +222,11 @@ public static partial class ConstructorAnalysis
     private static (bool HasOtherStatements, Collection<AssignmentExpressionSyntax> Assignments) GetConstructorStartingAssignments(ConstructorDeclarationSyntax constructorDeclaration)
     {
         bool HasOtherStatements = false;
-        Collection<AssignmentExpressionSyntax> Assignments = new();
+        Collection<AssignmentExpressionSyntax> Assignments = [];
 
         if (constructorDeclaration.Body is BlockSyntax Body)
         {
-            foreach (var Statement in Body.Statements)
+            foreach (StatementSyntax Statement in Body.Statements)
             {
                 if (Statement is not ExpressionStatementSyntax ExpressionStatement || ExpressionStatement.Expression is not AssignmentExpressionSyntax Assignment)
                 {
@@ -235,7 +247,7 @@ public static partial class ConstructorAnalysis
         if (constructorDeclaration.ExpressionBody is ArrowExpressionClauseSyntax ExpressionBody)
         {
             if (ExpressionBody.Expression is AssignmentExpressionSyntax Assignment)
-                Assignments = new() { Assignment };
+                Assignments = [Assignment];
             else
                 HasOtherStatements = true;
         }

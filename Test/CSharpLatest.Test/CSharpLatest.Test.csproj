@@ -24,7 +24,11 @@
 		<PackageReference Include="Microsoft.CodeAnalysis.CSharp.Analyzer.Testing.MSTest" Version="1.1.2" />
 		<PackageReference Include="Microsoft.CodeAnalysis.CSharp.CodeFix.Testing.MSTest" Version="1.1.2" />
 		<PackageReference Include="Microsoft.CodeAnalysis.CSharp.CodeRefactoring.Testing.MSTest" Version="1.1.2" />
-	</ItemGroup>
+
+        <!-- System.Formats.Asn1 is added to mitigate vulnerability. -->
+        <!-- Remove as soon as one of the packages above no longer depends on the vulnerable version -->
+        <PackageReference Include="System.Formats.Asn1" Version="8.0.1" />
+    </ItemGroup>
 
 	<ItemGroup>
 		<ProjectReference Include="..\..\CSharpLatest.CodeFixes\CSharpLatest.CodeFixes.csproj" />

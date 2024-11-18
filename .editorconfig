@@ -101,6 +101,10 @@ dotnet_diagnostic.IDE0002.severity = warning
 # IDE0004: Remove unnecessary cast
 dotnet_diagnostic.IDE0004.severity = warning
 
+# IDE0011: Add braces
+dotnet_diagnostic.IDE0011.severity = warning
+csharp_prefer_braces = when_multiline
+
 # IDE0016: Use throw expression
 dotnet_diagnostic.IDE0016.severity = warning
 
@@ -191,6 +195,9 @@ dotnet_diagnostic.IDE0110.severity = warning
 
 # IDE0120: Simplify LINQ expression
 dotnet_diagnostic.IDE0120.severity = warning
+
+# IDE0130: Namespace does not match folder structure
+dotnet_diagnostic.IDE0130.severity = silent
 
 # IDE0161: Use file-scoped namespace
 dotnet_diagnostic.IDE0161.severity = warning

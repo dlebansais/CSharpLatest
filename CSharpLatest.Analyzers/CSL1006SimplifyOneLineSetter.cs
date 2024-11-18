@@ -35,7 +35,7 @@ public partial class CSL1006SimplifyOneLineSetter : DiagnosticAnalyzer
     /// <summary>
     /// Gets the list of supported diagnostic.
     /// </summary>
-    public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics { get { return [Rule]; } }
+    public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => [Rule];
 
     /// <summary>
     /// Initializes the rule analyzer.
@@ -81,7 +81,7 @@ public partial class CSL1006SimplifyOneLineSetter : DiagnosticAnalyzer
         }
 
         // Ignore the property if already simplified.
-        if (accessorDeclaration.ExpressionBody is ArrowExpressionClauseSyntax)
+        if (accessorDeclaration.ExpressionBody is not null)
             return;
 
         // Ignore multi-line statements.

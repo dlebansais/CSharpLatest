@@ -1,4 +1,4 @@
-﻿## Release 1.0.9
+﻿## Release 1.0.10
 
 ### New Rules
 

@@ -37,7 +37,7 @@ public partial class CSL1000VariableshouldBeMadeConstant : DiagnosticAnalyzer
     /// <summary>
     /// Gets the list of supported diagnostic.
     /// </summary>
-    public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics { get { return [Rule]; } }
+    public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => [Rule];
 
     /// <summary>
     /// Initializes the rule analyzer.
@@ -71,8 +71,10 @@ public partial class CSL1000VariableshouldBeMadeConstant : DiagnosticAnalyzer
 
         // Ensure that all variables in the local declaration have initializers that are assigned with constant values.
         foreach (VariableDeclaratorSyntax Variable in localDeclaration.Declaration.Variables)
+        {
             if (!IsVariableAssignedToConstantValue(context, VariableType, Variable))
                 return;
+        }
 
         // Gets the data flow analysis performed on the local declaration during the analysis assertion phase.
         DataFlowAnalysis DataFlowAnalysis = Contract.AssertNotNull(((DataFlowAnalysisAssertion<LocalDeclarationStatementSyntax>)analysisAssertions.First()).DataFlowAnalysis);
@@ -112,7 +114,9 @@ public partial class CSL1000VariableshouldBeMadeConstant : DiagnosticAnalyzer
                 return false;
         }
         else if (variableType.IsReferenceType && ConstantValue.Value is not null)
+        {
             return false;
+        }
 
         return true;
     }

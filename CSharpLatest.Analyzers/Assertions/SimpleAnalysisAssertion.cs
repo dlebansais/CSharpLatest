@@ -6,19 +6,14 @@ using Microsoft.CodeAnalysis.Diagnostics;
 /// <summary>
 /// Represents a simple analysis assertion.
 /// </summary>
-internal class SimpleAnalysisAssertion : IAnalysisAssertion
+/// <param name="method">The assertion method.</param>
+internal class SimpleAnalysisAssertion(Func<SyntaxNodeAnalysisContext, bool> method) : IAnalysisAssertion
 {
-    /// <summary>
-    /// Initializes a new instance of the <see cref="SimpleAnalysisAssertion"/> class.
-    /// </summary>
-    /// <param name="method">The assertion method.</param>
-    public SimpleAnalysisAssertion(Func<SyntaxNodeAnalysisContext, bool> method)
+    /// <inheritdoc />
+    public bool IsTrue(SyntaxNodeAnalysisContext context)
     {
-        Method = method;
+        return Method(context);
     }
 
-    /// <inheritdoc />
-    public bool IsTrue(SyntaxNodeAnalysisContext context) => Method(context) == true;
-
-    private readonly Func<SyntaxNodeAnalysisContext, bool> Method;
+    private readonly Func<SyntaxNodeAnalysisContext, bool> Method = method;
 }
