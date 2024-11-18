@@ -83,28 +83,11 @@
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
 
+        <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.9.2" />
         <PackageReference Include="dlebansais.RoslynHelpers" Version="1.0.0" GeneratePathProperty="true" />
         <PackageReference Include="Method.Contracts-Debug" Version="1.7.1" GeneratePathProperty="true" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" />
         <PackageReference Include="Method.Contracts" Version="1.7.1" GeneratePathProperty="true" Condition="'$(Configuration)|$(Platform)'!='Debug|x64'" />
     </ItemGroup>
-
-    <Choose>
-        <When Condition="$(RoslynVersion) == 'roslyn4.11.0'">
-            <ItemGroup>
-                <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.11.0" />
-            </ItemGroup>
-        </When>
-        <When Condition="$(RoslynVersion) == 'roslyn4.10.0'">
-            <ItemGroup>
-                <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.10.0" />
-            </ItemGroup>
-        </When>
-        <Otherwise>
-            <ItemGroup>
-                <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.9.2" />
-            </ItemGroup>
-        </Otherwise>
-    </Choose>
     
     <ItemGroup>
         <None Include="$(PkgMethod_Contracts-Debug)\lib\netstandard2.0\Method.Contracts.dll" CopyToOutputDirectory="PreserveNewest" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" />
