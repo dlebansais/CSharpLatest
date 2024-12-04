@@ -37,3 +37,5 @@ To uninstall this analyzer, in Visual Studio:
 | [CSL1004](doc/CSL1004.md) | Consider using records to simplify your code.             |
 | [CSL1005](doc/CSL1005.md) | Simplify one line getter.                                 |
 | [CSL1006](doc/CSL1006.md) | Simplify one line setter.                                 |
+| [CSL1007](doc/CSL1007.md) | Add missing braces.                                       |
+| [CSL1008](doc/CSL1008.md) | Remove unnecessary braces.                                |

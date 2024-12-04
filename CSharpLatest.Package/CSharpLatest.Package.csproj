@@ -18,7 +18,7 @@
     </PropertyGroup>
 
     <PropertyGroup>
-        <PackageVersion>1.0.10</PackageVersion>
+        <PackageVersion>1.1.0</PackageVersion>
         <Authors>David Le Bansais</Authors>
         <Company />
         <Product />

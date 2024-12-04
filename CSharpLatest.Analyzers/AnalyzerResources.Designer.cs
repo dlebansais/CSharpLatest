@@ -248,5 +248,59 @@ namespace CSharpLatest {
                 return ResourceManager.GetString("CSL1006AnalyzerTitle", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add missing braces to a statement..
+        /// </summary>
+        internal static string CSL1007AnalyzerDescription {
+            get {
+                return ResourceManager.GetString("CSL1007AnalyzerDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add missing braces to &apos;{0}&apos; statement.
+        /// </summary>
+        internal static string CSL1007AnalyzerMessageFormat {
+            get {
+                return ResourceManager.GetString("CSL1007AnalyzerMessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add missing braces.
+        /// </summary>
+        internal static string CSL1007AnalyzerTitle {
+            get {
+                return ResourceManager.GetString("CSL1007AnalyzerTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove unnecessary braces..
+        /// </summary>
+        internal static string CSL1008AnalyzerDescription {
+            get {
+                return ResourceManager.GetString("CSL1008AnalyzerDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove unnecessary braces from &apos;{0}&apos; statement.
+        /// </summary>
+        internal static string CSL1008AnalyzerMessageFormat {
+            get {
+                return ResourceManager.GetString("CSL1008AnalyzerMessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove unnecessary braces.
+        /// </summary>
+        internal static string CSL1008AnalyzerTitle {
+            get {
+                return ResourceManager.GetString("CSL1008AnalyzerTitle", resourceCulture);
+            }
+        }
     }
 }

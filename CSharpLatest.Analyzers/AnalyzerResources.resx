@@ -201,4 +201,28 @@
     <value>Simplify this one line setter</value>
     <comment>The title of the diagnostic.</comment>
   </data>
+  <data name="CSL1007AnalyzerDescription" xml:space="preserve">
+    <value>Add missing braces to a statement.</value>
+    <comment>An optional longer localizable description of the diagnostic.</comment>
+  </data>
+  <data name="CSL1007AnalyzerMessageFormat" xml:space="preserve">
+    <value>Add missing braces to '{0}' statement</value>
+    <comment>The format-able message the diagnostic displays.</comment>
+  </data>
+  <data name="CSL1007AnalyzerTitle" xml:space="preserve">
+    <value>Add missing braces</value>
+    <comment>The title of the diagnostic.</comment>
+  </data>
+  <data name="CSL1008AnalyzerDescription" xml:space="preserve">
+    <value>Remove unnecessary braces.</value>
+    <comment>An optional longer localizable description of the diagnostic.</comment>
+  </data>
+  <data name="CSL1008AnalyzerMessageFormat" xml:space="preserve">
+    <value>Remove unnecessary braces from '{0}' statement</value>
+    <comment>The format-able message the diagnostic displays.</comment>
+  </data>
+  <data name="CSL1008AnalyzerTitle" xml:space="preserve">
+    <value>Remove unnecessary braces</value>
+    <comment>The title of the diagnostic.</comment>
+  </data>
 </root>

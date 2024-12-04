@@ -122,5 +122,23 @@ namespace CSharpLatest {
                 return ResourceManager.GetString("CSL1006CodeFixTitle", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add missing braces.
+        /// </summary>
+        internal static string CSL1007CodeFixTitle {
+            get {
+                return ResourceManager.GetString("CSL1007CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove unnecessary braces.
+        /// </summary>
+        internal static string CSL1008CodeFixTitle {
+            get {
+                return ResourceManager.GetString("CSL1008CodeFixTitle", resourceCulture);
+            }
+        }
     }
 }

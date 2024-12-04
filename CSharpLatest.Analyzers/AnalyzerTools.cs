@@ -88,4 +88,40 @@ internal static class AnalyzerTools
         BaseInfo BaseTypeInfo = GetBaseInfo(typeSymbol.BaseType);
         return BaseTypeInfo with { Depth = BaseTypeInfo.Depth + 1 };
     }
+
+    private static string GetUserPreferenceFromContextOptions(SyntaxNodeAnalysisContext context, string setting, string defaultValue)
+    {
+        return context.Options.AnalyzerConfigOptionsProvider.GetOptions(context.Node.SyntaxTree).TryGetValue(setting, out string? UserPreference)
+            ? UserPreference
+            : defaultValue;
+    }
+
+    private static string GetUserPreferenceFromCompilationOptions(SyntaxNodeAnalysisContext context, string setting, string defaultValue)
+    {
+        foreach (string Key in context.Compilation.Options.SpecificDiagnosticOptions.Keys)
+        {
+            string[] KeyAndValue = Key.Split('=');
+            if (KeyAndValue.Length == 2 && KeyAndValue[0].Trim() == setting)
+                return KeyAndValue[1].Trim();
+        }
+
+        return defaultValue;
+    }
+
+    /// <summary>
+    /// Gets user preferences from .editorconfig or a custom test setting.
+    /// </summary>
+    /// <param name="context">The analysis context.</param>
+    /// <param name="setting">The setting to check.</param>
+    /// <param name="defaultValue">The default value to use if no setting value is found.</param>
+    /// <returns>The setting value, or <paramref name="defaultValue"/>.</returns>
+    public static string GetUserPreference(SyntaxNodeAnalysisContext context, string setting, string defaultValue)
+    {
+        string value = defaultValue;
+
+        value = GetUserPreferenceFromContextOptions(context, setting, value);
+        value = GetUserPreferenceFromCompilationOptions(context, setting, value);
+
+        return value;
+    }
 }
