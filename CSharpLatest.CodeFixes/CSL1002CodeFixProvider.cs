@@ -21,10 +21,7 @@ public class CSL1002CodeFixProvider : CodeFixProvider
     /// <summary>
     /// Gets the list of fixable diagnostics.
     /// </summary>
-    public sealed override ImmutableArray<string> FixableDiagnosticIds
-    {
-        get { return [CSL1002UseIsNotNull.DiagnosticId]; }
-    }
+    public sealed override ImmutableArray<string> FixableDiagnosticIds => [CSL1002UseIsNotNull.DiagnosticId];
 
     /// <summary>
     /// Gets the fix provider.

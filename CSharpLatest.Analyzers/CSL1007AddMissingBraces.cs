@@ -21,7 +21,7 @@ public partial class CSL1007AddMissingBraces : DiagnosticAnalyzer
     private static readonly LocalizableString Title = new LocalizableResourceString(nameof(AnalyzerResources.CSL1007AnalyzerTitle), AnalyzerResources.ResourceManager, typeof(AnalyzerResources));
     private static readonly LocalizableString MessageFormat = new LocalizableResourceString(nameof(AnalyzerResources.CSL1007AnalyzerMessageFormat), AnalyzerResources.ResourceManager, typeof(AnalyzerResources));
     private static readonly LocalizableString Description = new LocalizableResourceString(nameof(AnalyzerResources.CSL1007AnalyzerDescription), AnalyzerResources.ResourceManager, typeof(AnalyzerResources));
-    private const string Category = "Usage";
+    private const string Category = "Style";
 
     private static readonly DiagnosticDescriptor Rule = new(DiagnosticId,
                                                             Title,

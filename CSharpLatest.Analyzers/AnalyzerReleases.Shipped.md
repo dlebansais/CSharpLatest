@@ -11,5 +11,5 @@ CSL1003 |  Usage   |  Warning | CSL1003ConsiderUsingPrimaryConstructor, [Documen
 CSL1004 |  Usage   |  Warning | CSL1004ConsiderUsingRecord, [Documentation](doc/CSL1004.md)
 CSL1005 |  Usage   |  Warning | CSL1005SimplifyOneLineGetter, [Documentation](doc/CSL1005.md)
 CSL1006 |  Usage   |  Warning | CSL1006SimplifyOneLineSetter, [Documentation](doc/CSL1006.md)
-CSL1007 |  Usage   |  Warning | CSL1007AddMissingBraces, [Documentation](doc/CSL1007.md)
-CSL1008 |  Usage   |  Warning | CSL1008RemoveUnnecessaryBraces, [Documentation](doc/CSL1008.md)
+CSL1007 |  Style   |  Warning | CSL1007AddMissingBraces, [Documentation](doc/CSL1007.md)
+CSL1008 |  Style   |  Warning | CSL1008RemoveUnnecessaryBraces, [Documentation](doc/CSL1008.md)

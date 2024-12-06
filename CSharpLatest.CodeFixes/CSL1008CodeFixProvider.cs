@@ -23,10 +23,7 @@ public class CSL1008CodeFixProvider : CodeFixProvider
     /// <summary>
     /// Gets the list of fixable diagnostics.
     /// </summary>
-    public sealed override ImmutableArray<string> FixableDiagnosticIds
-    {
-        get { return [CSL1008RemoveUnnecessaryBraces.DiagnosticId]; }
-    }
+    public sealed override ImmutableArray<string> FixableDiagnosticIds => [CSL1008RemoveUnnecessaryBraces.DiagnosticId];
 
     /// <summary>
     /// Gets the fix provider.

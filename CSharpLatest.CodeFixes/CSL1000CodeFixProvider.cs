@@ -22,10 +22,7 @@ public class CSL1000CodeFixProvider : CodeFixProvider
     /// <summary>
     /// Gets the list of fixable diagnostics.
     /// </summary>
-    public sealed override ImmutableArray<string> FixableDiagnosticIds
-    {
-        get { return [CSL1000VariableshouldBeMadeConstant.DiagnosticId]; }
-    }
+    public sealed override ImmutableArray<string> FixableDiagnosticIds => [CSL1000VariableshouldBeMadeConstant.DiagnosticId];
 
     /// <summary>
     /// Gets the fix provider.
