@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Contracts;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -197,14 +198,26 @@ public static partial class BraceAnalysis
         if (!AreTwoTokensOnSameLine(syntaxNode.GetFirstToken(), block.OpenBraceToken.GetPreviousToken()))
             return true;
 
+        SyntaxToken LastToken = singleStatement.GetLastToken();
+
         // The embedded statement does not fit on one line. Examples:
         //
         //   if (something)
         //     obj.Method(   // <-- This embedded statement spans two lines.
         //       arg);
-        if (!AreTwoTokensOnSameLine(singleStatement.GetFirstToken(), singleStatement.GetLastToken()))
+        if (!AreTwoTokensOnSameLine(singleStatement.GetFirstToken(), LastToken))
             if (RequiresBracesToMatchContext(singleStatement))
                 return false;
+
+        // The embedded statement does not fit on one line. Examples:
+        //
+        //   if (something)
+        //     // <-- This statement spans two lines when comments are included.
+        //     obj.Method();
+        SyntaxTrivia FirstTrivia = singleStatement.GetLeadingTrivia().FirstOrDefault(trivia => !IsInnocuousTrivia(trivia));
+        if (!FirstTrivia.IsKind(SyntaxKind.None))
+            if (!AreTriviaAndTokenOnSameLine(FirstTrivia, LastToken))
+                return true;
 
         // Check the part of the statement following the embedded statement, but only if it exists and is not an 'else' clause (bullet 3).
         if (syntaxNode.GetLastToken() != block.GetLastToken())
@@ -236,6 +249,11 @@ public static partial class BraceAnalysis
         return false;
     }
 
+    private static bool IsInnocuousTrivia(SyntaxTrivia trivia)
+    {
+        return trivia.IsKind(SyntaxKind.WhitespaceTrivia) || trivia.IsKind(SyntaxKind.EndOfLineTrivia);
+    }
+
     /// <summary>
     /// Checks whether a syntax node requires braces.
     /// </summary>
@@ -261,14 +279,28 @@ public static partial class BraceAnalysis
         return AreOnSameLine(Text, token1, token2);
     }
 
+    private static bool AreTriviaAndTokenOnSameLine(SyntaxTrivia trivia, SyntaxToken token)
+    {
+        SyntaxTree SyntaxTree = Contract.AssertNotNull(token.SyntaxTree);
+        SourceText Text = SyntaxTree.GetText();
+        return AreOnSameLine(Text, trivia, token);
+    }
+
     private static bool AreOnSameLine(SourceText text, SyntaxToken token1, SyntaxToken token2)
     {
         return AreOnSameLine(text, token1.Span.End, token2.SpanStart);
     }
 
+    private static bool AreOnSameLine(SourceText text, SyntaxTrivia trivia, SyntaxToken token)
+    {
+        return AreOnSameLine(text, trivia.Span.Start, token.SpanStart);
+    }
+
     private static bool AreOnSameLine(SourceText text, int pos1, int pos2)
     {
-        return text.Lines.IndexOf(pos1) == text.Lines.IndexOf(pos2);
+        int Line1 = text.Lines.IndexOf(pos1);
+        int Line2 = text.Lines.IndexOf(pos2);
+        return Line1 == Line2;
     }
 
     private static IfStatementSyntax GetOutermostIfStatementOfSequence(SyntaxNode ifStatementOrElseClause)

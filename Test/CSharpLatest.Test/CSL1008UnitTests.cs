@@ -470,4 +470,32 @@ class Program
 }
 ");
     }
+
+    [TestMethod]
+    [DataRow(";;")]
+    [DataRow("true;;")]
+    [DataRow("false;;")]
+    [DataRow("when_multiline;;")]
+    [DataRow("recursive;;")]
+    [DataRow("never;;")]
+    public async Task IfWithTrivia_NoDiagnostic(string args)
+    {
+        Dictionary<string, string> Options = TestTools.ToOptions(args);
+
+        await VerifyCS.VerifyAnalyzerAsync(Options, Prologs.IsExternalInit, @"
+class Program
+{
+    public int Foo(int n)
+    {
+        if (n > 0)
+        {
+            // Trivia
+            return 1;
+        }
+
+        return 0;
+    }
+}
+");
+    }
 }
