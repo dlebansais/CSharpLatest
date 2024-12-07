@@ -74,42 +74,33 @@ public partial class CSL1007AddMissingBraces : DiagnosticAnalyzer
 
         // PreferBraceNever is handled in CSL1008.
         if (BraceSettingValue is BraceAnalysis.PreferBraceNone or BraceAnalysis.PreferBraceNever)
-        {
             return;
-        }
 
+        // The embedded statement already has braces, which is always allowed.
         if (EmbeddedStatementKind is SyntaxKind.Block)
-        {
-            // The embedded statement already has braces, which is always allowed.
             return;
-        }
 
+        // Constructs like the following are always allowed:
+        //
+        //   if (something)
+        //   {
+        //   }
+        //   else if (somethingElse) // <-- 'if' nested in an 'else' clause
+        //   {
+        //   }
         if (EmbeddedStatementKind is SyntaxKind.IfStatement && syntaxNode is ElseClauseSyntax)
-        {
-            // Constructs like the following are always allowed:
-            //
-            //   if (something)
-            //   {
-            //   }
-            //   else if (somethingElse) // <-- 'if' nested in an 'else' clause
-            //   {
-            //   }
             return;
-        }
 
-        if (EmbeddedStatementKind is SyntaxKind.LockStatement or SyntaxKind.UsingStatement or SyntaxKind.FixedStatement &&
-            EmbeddedStatementKind == syntaxNode.Kind())
-        {
-            // If we have something like this:
-            //
-            //    using (...)
-            //    using (...)
-            //    {
-            //    }
-            //
-            // The first statement needs no block as it formatted with the same indentation.
+        // If we have something like this:
+        //
+        //    using (...)
+        //    using (...)
+        //    {
+        //    }
+        //
+        // The first statement needs no block as it formatted with the same indentation.
+        if (EmbeddedStatementKind is SyntaxKind.LockStatement or SyntaxKind.UsingStatement or SyntaxKind.FixedStatement && EmbeddedStatementKind == syntaxNode.Kind())
             return;
-        }
 
         SyntaxToken LastSignificantToken = BraceSettingValue is BraceAnalysis.PreferBraceRecursive
             ? BraceAnalysis.GetStatementLastSignificantToken(EmbeddedStatement)

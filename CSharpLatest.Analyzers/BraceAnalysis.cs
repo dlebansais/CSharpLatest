@@ -66,13 +66,11 @@ public static partial class BraceAnalysis
         StatementSyntax? Result = null;
 
         foreach (KeyValuePair<Type, Func<CSharpSyntaxNode, StatementSyntax>> Entry in Table)
-        {
             if (Entry.Key.IsAssignableFrom(syntaxNode.GetType()))
             {
                 Result = Entry.Value(syntaxNode);
                 break;
             }
-        }
 
         return Contract.AssertNotNull(Result);
     }
@@ -99,13 +97,11 @@ public static partial class BraceAnalysis
         SyntaxToken Result = statement.GetLastToken();
 
         foreach (KeyValuePair<Type, Func<CSharpSyntaxNode, SyntaxToken>> Entry in Table)
-        {
             if (Entry.Key.IsAssignableFrom(statement.GetType()))
             {
                 Result = Entry.Value(statement);
                 break;
             }
-        }
 
         return Result;
     }
@@ -120,51 +116,38 @@ public static partial class BraceAnalysis
     [RequireNotNull(nameof(embeddedStatement))]
     private static bool IsConsideredMultiLineVerified(SyntaxNode syntaxNode, StatementSyntax embeddedStatement, SyntaxToken lastSignificantToken)
     {
-        // Early return if syntax errors prevent analysis.
+        // The embedded statement was added by the compiler during recovery from a syntax error.
         if (embeddedStatement.IsMissing)
-        {
-            // The embedded statement was added by the compiler during recovery from a syntax error.
             return false;
-        }
 
-        // Early return if the entire statement fits on one line.
+        // The entire statement fits on one line. Examples:
+        //
+        //   if (something) return;
+        //
+        //   while (true) something();
         if (AreTwoTokensOnSameLine(syntaxNode.GetFirstToken(), syntaxNode.GetLastToken()))
-        {
-            // The entire statement fits on one line. Examples:
-            //
-            //   if (something) return;
-            //
-            //   while (true) something();
             return false;
-        }
 
-        // Check the part of the statement preceding the embedded statement (bullet 1).
+        // The part of the statement preceding the embedded statement does not fit on one line. Examples:
+        //
+        //   for (int i = 0; // <-- The initializer/condition/increment are on separate lines
+        //        i < 10;
+        //        i++)
+        //     SomeMethod();
         SyntaxToken lastTokenBeforeEmbeddedStatement = embeddedStatement.GetFirstToken().GetPreviousToken();
         if (!AreTwoTokensOnSameLine(syntaxNode.GetFirstToken(), lastTokenBeforeEmbeddedStatement))
-        {
-            // The part of the statement preceding the embedded statement does not fit on one line. Examples:
-            //
-            //   for (int i = 0; // <-- The initializer/condition/increment are on separate lines
-            //        i < 10;
-            //        i++)
-            //     SomeMethod();
             return true;
-        }
 
-        // Check the embedded statement itself (bullet 2).
+        // The embedded statement does not fit on one line. Examples:
+        //
+        //   if (something)
+        //     obj.Method(   // <-- This embedded statement spans two lines.
+        //       arg);
         if (!AreTwoTokensOnSameLine(embeddedStatement.GetFirstToken(), lastSignificantToken))
-        {
-            // The embedded statement does not fit on one line. Examples:
-            //
-            //   if (something)
-            //     obj.Method(   // <-- This embedded statement spans two lines.
-            //       arg);
             return true;
-        }
 
         // Check the part of the statement following the embedded statement, but only if it exists and is not an 'else' clause (bullet 3).
         if (syntaxNode.GetLastToken() != embeddedStatement.GetLastToken())
-        {
             if (syntaxNode is IfStatementSyntax ifStatement && ifStatement.Statement == embeddedStatement)
             {
                 // The embedded statement is followed by an 'else' clause, which may span multiple lines without
@@ -180,19 +163,77 @@ public static partial class BraceAnalysis
             }
             else
             {
+                // The part of the statement following the embedded statement does not fit on one line. Examples:
+                //
+                //   do
+                //     SomeMethod();
+                //   while (x < 0 ||    // <-- This condition is split across multiple lines.
+                //          x > 10);
                 SyntaxToken firstTokenAfterEmbeddedStatement = embeddedStatement.GetLastToken().GetNextToken();
                 if (!AreTwoTokensOnSameLine(firstTokenAfterEmbeddedStatement, syntaxNode.GetLastToken()))
-                {
-                    // The part of the statement following the embedded statement does not fit on one line. Examples:
-                    //
-                    //   do
-                    //     SomeMethod();
-                    //   while (x < 0 ||    // <-- This condition is split across multiple lines.
-                    //          x > 10);
                     return true;
-                }
             }
+
+        return false;
+    }
+
+    /// <summary>
+    /// Same as <see cref="IsConsideredMultiLine(SyntaxNode, StatementSyntax, SyntaxToken)"/> but for a single statement and ignores braces.
+    /// </summary>
+    /// <param name="syntaxNode">The syntax node.</param>
+    /// <param name="block">The block containing <paramref name="singleStatement"/>.</param>
+    /// <param name="singleStatement">The embedded statement.</param>
+    [RequireNotNull(nameof(syntaxNode))]
+    [RequireNotNull(nameof(block))]
+    [RequireNotNull(nameof(singleStatement))]
+    private static bool IsConsideredMultiLineNoBraceVerified(SyntaxNode syntaxNode, BlockSyntax block, StatementSyntax singleStatement)
+    {
+        // The part of the statement preceding the embedded statement does not fit on one line. Examples:
+        //
+        //   for (int i = 0; // <-- The initializer/condition/increment are on separate lines
+        //        i < 10;
+        //        i++)
+        //     SomeMethod();
+        if (!AreTwoTokensOnSameLine(syntaxNode.GetFirstToken(), block.OpenBraceToken.GetPreviousToken()))
+            return true;
+
+        // The embedded statement does not fit on one line. Examples:
+        //
+        //   if (something)
+        //     obj.Method(   // <-- This embedded statement spans two lines.
+        //       arg);
+        if (!AreTwoTokensOnSameLine(singleStatement.GetFirstToken(), singleStatement.GetLastToken()))
+        {
+            if (RequiresBracesToMatchContext(singleStatement))
+                return false;
         }
+
+        // Check the part of the statement following the embedded statement, but only if it exists and is not an 'else' clause (bullet 3).
+        if (syntaxNode.GetLastToken() != block.GetLastToken())
+            if (syntaxNode is IfStatementSyntax ifStatement && ifStatement.Statement == block)
+            {
+                // The embedded statement is followed by an 'else' clause, which may span multiple lines without
+                // triggering a braces requirement, such as this:
+                //
+                //   if (true)
+                //     return;
+                //   else          // <-- this else clause is two lines, but is not considered a multiline context
+                //     return;
+                //
+                // ---
+                // INTENTIONAL FALLTHROUGH
+            }
+            else
+            {
+                // The part of the statement following the embedded statement does not fit on one line. Examples:
+                //
+                //   do
+                //     SomeMethod();
+                //   while (x < 0 ||    // <-- This condition is split across multiple lines.
+                //          x > 10);
+                if (!AreTwoTokensOnSameLine(block.CloseBraceToken.GetNextToken(), syntaxNode.GetLastToken()))
+                    return true;
+            }
 
         return false;
     }
@@ -204,12 +245,9 @@ public static partial class BraceAnalysis
     [RequireNotNull(nameof(syntaxNode))]
     private static bool RequiresBracesToMatchContextVerified(SyntaxNode syntaxNode)
     {
+        // 'if' statements are the only statements that can have multiple embedded statements which are considered relative to each other.
         if (syntaxNode.Kind() is not (SyntaxKind.IfStatement or SyntaxKind.ElseClause))
-        {
-            // 'if' statements are the only statements that can have multiple embedded statements which are
-            // considered relative to each other.
             return false;
-        }
 
         IfStatementSyntax outermostIfStatement = GetOutermostIfStatementOfSequence(syntaxNode);
         return AnyPartOfIfSequenceUsesBraces(outermostIfStatement);
@@ -218,9 +256,7 @@ public static partial class BraceAnalysis
     private static bool AreTwoTokensOnSameLine(SyntaxToken token1, SyntaxToken token2)
     {
         if (token1 == token2)
-        {
             return true;
-        }
 
         SyntaxTree SyntaxTree = Contract.AssertNotNull(token1.SyntaxTree);
         SourceText Text = SyntaxTree.GetText();
@@ -239,16 +275,9 @@ public static partial class BraceAnalysis
 
     private static IfStatementSyntax GetOutermostIfStatementOfSequence(SyntaxNode ifStatementOrElseClause)
     {
-        IfStatementSyntax result;
-        if (ifStatementOrElseClause.IsKind(SyntaxKind.ElseClause))
-        {
-            result = (IfStatementSyntax)GetRequiredParent(ifStatementOrElseClause);
-        }
-        else
-        {
-            // Debug.Assert(ifStatementOrElseClause.IsKind(SyntaxKind.IfStatement));
-            result = (IfStatementSyntax)ifStatementOrElseClause;
-        }
+        IfStatementSyntax result = ifStatementOrElseClause.IsKind(SyntaxKind.ElseClause)
+            ? (IfStatementSyntax)GetRequiredParent(ifStatementOrElseClause)
+            : (IfStatementSyntax)ifStatementOrElseClause;
 
         while (result.Parent.IsKind(SyntaxKind.ElseClause))
             result = (IfStatementSyntax)GetRequiredParent(GetRequiredParent(result));

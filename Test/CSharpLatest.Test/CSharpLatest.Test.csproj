@@ -2,8 +2,9 @@
 
 	<PropertyGroup>
 		<TargetFramework>netcoreapp3.1</TargetFramework>
-		<LangVersion>12</LangVersion>
+		<LangVersion>13</LangVersion>
 		<Nullable>enable</Nullable>
+        <Platforms>x64</Platforms>
         <IsTestProject>true</IsTestProject>
 
         <RootNamespace>CSharpLatest.Test</RootNamespace>
@@ -13,7 +14,6 @@
         <SuppressTfmSupportBuildWarnings>true</SuppressTfmSupportBuildWarnings>
 		<AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
 		<GenerateBindingRedirectsOutputType>true</GenerateBindingRedirectsOutputType>
-		<Platforms>x64</Platforms>
 	</PropertyGroup>
 
 	<ItemGroup>

@@ -71,10 +71,8 @@ public partial class CSL1000VariableshouldBeMadeConstant : DiagnosticAnalyzer
 
         // Ensure that all variables in the local declaration have initializers that are assigned with constant values.
         foreach (VariableDeclaratorSyntax Variable in localDeclaration.Declaration.Variables)
-        {
             if (!IsVariableAssignedToConstantValue(context, VariableType, Variable))
                 return;
-        }
 
         // Gets the data flow analysis performed on the local declaration during the analysis assertion phase.
         DataFlowAnalysis DataFlowAnalysis = Contract.AssertNotNull(((DataFlowAnalysisAssertion<LocalDeclarationStatementSyntax>)analysisAssertions.First()).DataFlowAnalysis);

@@ -1,10 +1,5 @@
 ﻿[*.cs]
 
-#### Special
-contract_generator.called_method.suffix = DemoVerified
-contract_generator.tab_length = 2
-contract_generator.called_method.result_identifier = DemoResult
-
 #### CA
 
 # CA1031: Do not catch general exception types
@@ -102,8 +97,10 @@ dotnet_diagnostic.IDE0002.severity = warning
 dotnet_diagnostic.IDE0004.severity = warning
 
 # IDE0011: Add braces
-dotnet_diagnostic.IDE0011.severity = warning
-csharp_prefer_braces = when_multiline
+dotnet_diagnostic.IDE0011.severity = none
+dotnet_diagnostic.CSL1007.severity = warning
+dotnet_diagnostic.CSL1008.severity = warning
+csharp_prefer_braces = recursive
 
 # IDE0016: Use throw expression
 dotnet_diagnostic.IDE0016.severity = warning

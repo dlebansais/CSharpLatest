@@ -2,18 +2,18 @@
 
     <PropertyGroup>
         <TargetFrameworks>netstandard2.0</TargetFrameworks>
-        <LangVersion>12</LangVersion>
+        <LangVersion>13</LangVersion>
         <Nullable>enable</Nullable>
 
         <RootNamespace>CSharpLatest</RootNamespace>
-        <Version>1.1.0</Version>
+        <Version>1.1.1</Version>
         <Authors>David Le Bansais</Authors>
         <Company />
         <Product />
         <Description>Roslyn-based analysis of C# code to suggest the use of features in the latest version of the language</Description>
         <Copyright>Copyright © 2024 David Le Bansais</Copyright>
-        <AssemblyVersion>1.1.0.17</AssemblyVersion>
-        <FileVersion>1.1.0.17</FileVersion>
+        <AssemblyVersion>1.1.1.18</AssemblyVersion>
+        <FileVersion>1.1.1.18</FileVersion>
         <RepositoryUrl>https://github.com/dlebansais/CSharpLatest</RepositoryUrl>
         <SuppressTfmSupportBuildWarnings>true</SuppressTfmSupportBuildWarnings>
 
@@ -80,17 +80,18 @@
         </PackageReference>
 
         <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.12.0" />
-        <PackageReference Include="dlebansais.RoslynHelpers" Version="1.0.0" GeneratePathProperty="true" />
+        <PackageReference Include="dlebansais.RoslynHelpers-Debug" Version="1.0.1" GeneratePathProperty="true" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" />
+        <PackageReference Include="dlebansais.RoslynHelpers" Version="1.0.1" GeneratePathProperty="true" Condition="'$(Configuration)|$(Platform)'!='Debug|x64'" />
         <PackageReference Include="Method.Contracts-Debug" Version="1.8.0" GeneratePathProperty="true" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" />
         <PackageReference Include="Method.Contracts" Version="1.8.0" GeneratePathProperty="true" Condition="'$(Configuration)|$(Platform)'!='Debug|x64'" />
     </ItemGroup>
 
     <ItemGroup Condition="'$(APPVEYOR)' != 'True'">
-        <PackageReference Include="dlebansais.CSharpLatest" Version="1.0.10" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+        <PackageReference Include="dlebansais.CSharpLatest" Version="1.1.0" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="dlebansais.CSharpLatest-Debug" Version="1.0.10" Condition="'$(Configuration)|$(Platform)'!='Debug|x64'">
+        <PackageReference Include="dlebansais.CSharpLatest-Debug" Version="1.1.0" Condition="'$(Configuration)|$(Platform)'!='Debug|x64'">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
@@ -99,7 +100,8 @@
     <ItemGroup>
         <None Include="$(PkgMethod_Contracts-Debug)\lib\netstandard2.0\Method.Contracts.dll" CopyToOutputDirectory="PreserveNewest" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" />
         <None Include="$(PkgMethod_Contracts)\lib\netstandard2.0\Method.Contracts.dll" CopyToOutputDirectory="PreserveNewest" Condition="'$(Configuration)|$(Platform)'!='Debug|x64'" />
-        <None Include="$(Pkgdlebansais_RoslynHelpers)\lib\netstandard2.0\RoslynHelpers.dll" CopyToOutputDirectory="PreserveNewest" />
+        <None Include="$(Pkgdlebansais_RoslynHelpers-Debug)\lib\netstandard2.0\RoslynHelpers.dll" CopyToOutputDirectory="PreserveNewest" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" />
+        <None Include="$(Pkgdlebansais_RoslynHelpers)\lib\netstandard2.0\RoslynHelpers.dll" CopyToOutputDirectory="PreserveNewest" Condition="'$(Configuration)|$(Platform)'!='Debug|x64'" />
     </ItemGroup>
 
     <ItemGroup>

@@ -73,13 +73,24 @@ public partial class CSL1008RemoveUnnecessaryBraces : DiagnosticAnalyzer
 
         // Other cases are handled in CSL1007.
         if (BraceSettingValue != BraceAnalysis.PreferBraceNever)
-        {
             return;
-        }
 
+        // The embedded statement has braces, but has several statements or is the empty block.
         if (EmbeddedStatement is not BlockSyntax Block || Block.Statements.Count != 1)
+            return;
+
+        StatementSyntax SingleStatement = Block.Statements[0];
+
+        // If the statement is multine, the rule should not apply.
+        if (BraceAnalysis.IsConsideredMultiLineNoBrace(syntaxNode, Block, SingleStatement))
+            return;
+
+        // A 'if' with no 'else' must not conflict with the current 'if' with a 'else'.
+        if (syntaxNode is IfStatementSyntax IfStatement &&
+            IfStatement.Else is not null &&
+            SingleStatement is IfStatementSyntax EmbeddedIfStatement &&
+            EmbeddedIfStatement.Else is null)
         {
-            // The embedded statement has braces, but has several statements or is the empty block.
             return;
         }
 
