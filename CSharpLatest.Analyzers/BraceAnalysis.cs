@@ -2,7 +2,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Text;
 using Contracts;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -40,6 +39,11 @@ public static partial class BraceAnalysis
     public const string PreferBraceNever = "never";
 
     /// <summary>
+    /// The 'recursive' value for <see cref="PreferBraceSetting"/>.
+    /// </summary>
+    public const string PreferBraceRecursive = "recursive";
+
+    /// <summary>
     /// Gets the embedded statement of a if, else, do ... statement.
     /// </summary>
     /// <param name="syntaxNode">The syntax node with the embedded statement.</param>
@@ -74,13 +78,47 @@ public static partial class BraceAnalysis
     }
 
     /// <summary>
-    /// Checks whether a node embeds a multiline statement.
+    /// Gets the last token of a statement for if, do ... statements.
+    /// </summary>
+    /// <param name="statement">The statement.</param>
+    [RequireNotNull(nameof(statement))]
+    private static SyntaxToken GetStatementLastSignificantTokenVerified(StatementSyntax statement)
+    {
+        Dictionary<Type, Func<CSharpSyntaxNode, SyntaxToken>> Table = new()
+        {
+            { typeof(DoStatementSyntax), (n) => ((DoStatementSyntax)n).DoKeyword },
+            { typeof(FixedStatementSyntax), (n) => ((FixedStatementSyntax)n).CloseParenToken },
+            { typeof(CommonForEachStatementSyntax), (n) => ((CommonForEachStatementSyntax)n).CloseParenToken },
+            { typeof(ForStatementSyntax), (n) => ((ForStatementSyntax)n).CloseParenToken },
+            { typeof(IfStatementSyntax), (n) => ((IfStatementSyntax)n).CloseParenToken },
+            { typeof(LockStatementSyntax), (n) => ((LockStatementSyntax)n).CloseParenToken },
+            { typeof(UsingStatementSyntax), (n) => ((UsingStatementSyntax)n).CloseParenToken },
+            { typeof(WhileStatementSyntax), (n) => ((WhileStatementSyntax)n).CloseParenToken },
+        };
+
+        SyntaxToken Result = statement.GetLastToken();
+
+        foreach (KeyValuePair<Type, Func<CSharpSyntaxNode, SyntaxToken>> Entry in Table)
+        {
+            if (Entry.Key.IsAssignableFrom(statement.GetType()))
+            {
+                Result = Entry.Value(statement);
+                break;
+            }
+        }
+
+        return Result;
+    }
+
+    /// <summary>
+    /// Checks whether a node embeds a multiline node.
     /// </summary>
     /// <param name="syntaxNode">The syntax node.</param>
     /// <param name="embeddedStatement">The embedded statement.</param>
+    /// <param name="lastSignificantToken">The last significant token in <paramref name="embeddedStatement"/>.</param>
     [RequireNotNull(nameof(syntaxNode))]
     [RequireNotNull(nameof(embeddedStatement))]
-    private static bool IsConsideredMultiLineVerified(SyntaxNode syntaxNode, StatementSyntax embeddedStatement)
+    private static bool IsConsideredMultiLineVerified(SyntaxNode syntaxNode, StatementSyntax embeddedStatement, SyntaxToken lastSignificantToken)
     {
         // Early return if syntax errors prevent analysis.
         if (embeddedStatement.IsMissing)
@@ -114,7 +152,7 @@ public static partial class BraceAnalysis
         }
 
         // Check the embedded statement itself (bullet 2).
-        if (!AreTwoTokensOnSameLine(embeddedStatement.GetFirstToken(), embeddedStatement.GetLastToken()))
+        if (!AreTwoTokensOnSameLine(embeddedStatement.GetFirstToken(), lastSignificantToken))
         {
             // The embedded statement does not fit on one line. Examples:
             //
@@ -184,129 +222,19 @@ public static partial class BraceAnalysis
             return true;
         }
 
-        SyntaxTree? tree = token1.SyntaxTree;
-        return tree is not null && tree.TryGetText(out SourceText? text)
-            ? AreOnSameLine(text, token1, token2)
-            : !ContainsLineBreak(GetTextBetween(token1, token2));
+        SyntaxTree SyntaxTree = Contract.AssertNotNull(token1.SyntaxTree);
+        SourceText Text = SyntaxTree.GetText();
+        return AreOnSameLine(Text, token1, token2);
     }
 
     private static bool AreOnSameLine(SourceText text, SyntaxToken token1, SyntaxToken token2)
     {
-        return token1.RawKind != 0 &&
-           token2.RawKind != 0 &&
-           AreOnSameLine(text, token1.Span.End, token2.SpanStart);
+        return AreOnSameLine(text, token1.Span.End, token2.SpanStart);
     }
 
     private static bool AreOnSameLine(SourceText text, int pos1, int pos2)
     {
         return text.Lines.IndexOf(pos1) == text.Lines.IndexOf(pos2);
-    }
-
-    private static bool ContainsLineBreak(string text)
-    {
-        foreach (char ch in text)
-        {
-            if (ch is '\n' or '\r')
-            {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    private static string GetTextBetween(SyntaxToken token1, SyntaxToken token2)
-    {
-        StringBuilder builder = new();
-        AppendTextBetween(token1, token2, builder);
-
-        return builder.ToString();
-    }
-
-    private static void AppendTextBetween(SyntaxToken token1, SyntaxToken token2, StringBuilder builder)
-    {
-        // Contract.ThrowIfTrue(token1.RawKind == 0 && token2.RawKind == 0);
-        // Contract.ThrowIfTrue(token1.Equals(token2));
-        if (token1.RawKind == 0)
-        {
-            AppendLeadingTriviaText(token2, builder);
-            return;
-        }
-
-        if (token2.RawKind == 0)
-        {
-            AppendTrailingTriviaText(token1, builder);
-            return;
-        }
-
-        if (token1.FullSpan.End == token2.FullSpan.Start)
-        {
-            AppendTextBetweenTwoAdjacentTokens(token1, token2, builder);
-            return;
-        }
-
-        AppendTrailingTriviaText(token1, builder);
-
-        for (SyntaxToken token = token1.GetNextToken(includeZeroWidth: true); token.FullSpan.End <= token2.FullSpan.Start; token = token.GetNextToken(includeZeroWidth: true))
-        {
-            _ = builder.Append(token.ToFullString());
-        }
-
-        AppendPartialLeadingTriviaText(token2, builder, token1.TrailingTrivia.FullSpan.End);
-    }
-
-    private static void AppendTextBetweenTwoAdjacentTokens(SyntaxToken token1, SyntaxToken token2, StringBuilder builder)
-    {
-        AppendTrailingTriviaText(token1, builder);
-        AppendLeadingTriviaText(token2, builder);
-    }
-
-    /// <summary>
-    /// If the token1 is expected to be part of the leading trivia of the token2 then the trivia
-    /// before the token1FullSpanEnd, which the fullspan end of the token1 should be ignored.
-    /// </summary>
-    private static void AppendPartialLeadingTriviaText(SyntaxToken token, StringBuilder builder, int token1FullSpanEnd)
-    {
-        if (!token.HasLeadingTrivia)
-        {
-            return;
-        }
-
-        foreach (SyntaxTrivia trivia in token.LeadingTrivia)
-        {
-            if (trivia.FullSpan.End <= token1FullSpanEnd)
-            {
-                continue;
-            }
-
-            _ = builder.Append(trivia.ToFullString());
-        }
-    }
-
-    private static void AppendLeadingTriviaText(SyntaxToken token, StringBuilder builder)
-    {
-        if (!token.HasLeadingTrivia)
-        {
-            return;
-        }
-
-        foreach (SyntaxTrivia trivia in token.LeadingTrivia)
-        {
-            _ = builder.Append(trivia.ToFullString());
-        }
-    }
-
-    private static void AppendTrailingTriviaText(SyntaxToken token, StringBuilder builder)
-    {
-        if (!token.HasTrailingTrivia)
-        {
-            return;
-        }
-
-        foreach (SyntaxTrivia trivia in token.TrailingTrivia)
-        {
-            _ = builder.Append(trivia.ToFullString());
-        }
     }
 
     private static IfStatementSyntax GetOutermostIfStatementOfSequence(SyntaxNode ifStatementOrElseClause)
@@ -330,7 +258,7 @@ public static partial class BraceAnalysis
 
     private static SyntaxNode GetRequiredParent(SyntaxNode node)
     {
-        return node.Parent ?? throw new InvalidOperationException("Token's parent was null");
+        return Contract.AssertNotNull(node.Parent);
     }
 
     private static bool AnyPartOfIfSequenceUsesBraces(IfStatementSyntax? statement)

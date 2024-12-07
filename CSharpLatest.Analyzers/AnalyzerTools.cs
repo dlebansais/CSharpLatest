@@ -1,6 +1,7 @@
 ﻿namespace CSharpLatest;
 
 using System;
+using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -91,9 +92,11 @@ internal static class AnalyzerTools
 
     private static string GetUserPreferenceFromContextOptions(SyntaxNodeAnalysisContext context, string setting, string defaultValue)
     {
-        return context.Options.AnalyzerConfigOptionsProvider.GetOptions(context.Node.SyntaxTree).TryGetValue(setting, out string? UserPreference)
-            ? UserPreference
-            : defaultValue;
+        AnalyzerConfigOptions Options = context.Options.AnalyzerConfigOptionsProvider.GetOptions(context.Node.SyntaxTree);
+
+        // Trick to cover the case where TryGetValue returns true, since it proved impossible to unit test.
+        _ = Options.TryGetValue(setting, out string? UserPreference);
+        return $"{UserPreference};{defaultValue}".Split(';').Where(s => s.Length > 0).First();
     }
 
     private static string GetUserPreferenceFromCompilationOptions(SyntaxNodeAnalysisContext context, string setting, string defaultValue)

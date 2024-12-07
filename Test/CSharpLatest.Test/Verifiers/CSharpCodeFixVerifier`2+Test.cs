@@ -19,13 +19,12 @@ public static partial class CSharpCodeFixVerifier<TAnalyzer, TCodeFix>
         {
             SolutionTransforms.Add((solution, projectId) =>
             {
-                var CompilationOptions = solution.GetProject(projectId)?.CompilationOptions;
-                CompilationOptions = CompilationOptions?.WithSpecificDiagnosticOptions(CompilationOptions.SpecificDiagnosticOptions.SetItems(CSharpVerifierHelper.NullableWarnings));
-
                 List<KeyValuePair<string, ReportDiagnostic>> CustomOptions = [];
                 foreach (KeyValuePair<string, string> Entry in Options)
                     CustomOptions.Add(new KeyValuePair<string, ReportDiagnostic>($"{Entry.Key}={Entry.Value}", ReportDiagnostic.Default));
 
+                var CompilationOptions = solution.GetProject(projectId)?.CompilationOptions;
+                CompilationOptions = CompilationOptions?.WithSpecificDiagnosticOptions(CompilationOptions.SpecificDiagnosticOptions.SetItems(CSharpVerifierHelper.NullableWarnings));
                 CompilationOptions = CompilationOptions?.WithSpecificDiagnosticOptions(CustomOptions);
 
                 solution = solution.WithProjectCompilationOptions(projectId, CompilationOptions ?? throw new NullReferenceException());

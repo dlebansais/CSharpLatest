@@ -111,8 +111,12 @@ public partial class CSL1007AddMissingBraces : DiagnosticAnalyzer
             return;
         }
 
-        if (BraceSettingValue == BraceAnalysis.PreferBraceWhenMultiline
-            && !BraceAnalysis.IsConsideredMultiLine(syntaxNode, EmbeddedStatement)
+        SyntaxToken LastSignificantToken = BraceSettingValue is BraceAnalysis.PreferBraceRecursive
+            ? BraceAnalysis.GetStatementLastSignificantToken(EmbeddedStatement)
+            : EmbeddedStatement.GetLastToken();
+
+        if ((BraceSettingValue is BraceAnalysis.PreferBraceWhenMultiline or BraceAnalysis.PreferBraceRecursive)
+            && !BraceAnalysis.IsConsideredMultiLine(syntaxNode, EmbeddedStatement, LastSignificantToken)
             && !BraceAnalysis.RequiresBracesToMatchContext(syntaxNode))
         {
             return;

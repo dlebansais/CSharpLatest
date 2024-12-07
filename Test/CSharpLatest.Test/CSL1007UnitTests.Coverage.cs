@@ -2,7 +2,7 @@
 
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using VerifyCS = CSharpCodeFixVerifier<CSL1007AddMissingBraces, CSL1007CodeFixProvider>;
+using VerifyCS = CSharpAnalyzerVerifier<CSL1007AddMissingBraces>;
 
 public partial class CSL1007UnitTests
 {
