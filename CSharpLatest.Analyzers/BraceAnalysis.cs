@@ -203,10 +203,8 @@ public static partial class BraceAnalysis
         //     obj.Method(   // <-- This embedded statement spans two lines.
         //       arg);
         if (!AreTwoTokensOnSameLine(singleStatement.GetFirstToken(), singleStatement.GetLastToken()))
-        {
             if (RequiresBracesToMatchContext(singleStatement))
                 return false;
-        }
 
         // Check the part of the statement following the embedded statement, but only if it exists and is not an 'else' clause (bullet 3).
         if (syntaxNode.GetLastToken() != block.GetLastToken())
