@@ -51,10 +51,7 @@ public partial class CSL1003ConsiderUsingPrimaryConstructor : DiagnosticAnalyzer
         context.RegisterSyntaxNodeAction(AnalyzeNode, SyntaxKind.ClassDeclaration);
     }
 
-    private void AnalyzeNode(SyntaxNodeAnalysisContext context)
-    {
-        AnalyzerTools.AssertSyntaxRequirements<ClassDeclarationSyntax>(context, LanguageVersion.CSharp12, AnalyzeVerifiedNode);
-    }
+    private void AnalyzeNode(SyntaxNodeAnalysisContext context) => AnalyzerTools.AssertSyntaxRequirements<ClassDeclarationSyntax>(context, LanguageVersion.CSharp12, AnalyzeVerifiedNode);
 
     private void AnalyzeVerifiedNode(SyntaxNodeAnalysisContext context, ClassDeclarationSyntax classDeclaration, IAnalysisAssertion[] analysisAssertions)
     {

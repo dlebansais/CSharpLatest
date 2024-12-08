@@ -24,10 +24,7 @@ internal static class AnalyzerTools
     /// Gets the help link for a diagnostic id.
     /// </summary>
     /// <param name="diagnosticId">The diagnostic id.</param>
-    public static string GetHelpLink(string diagnosticId)
-    {
-        return $"https://github.com/dlebansais/CSharpLatest/blob/master/doc/{diagnosticId}.md";
-    }
+    public static string GetHelpLink(string diagnosticId) => $"https://github.com/dlebansais/CSharpLatest/blob/master/doc/{diagnosticId}.md";
 
     /// <summary>
     /// Asserts that the analyzed node is of the expected type and satisfies requirements, then executes <paramref name="continueAction"/>.
@@ -64,15 +61,9 @@ internal static class AnalyzerTools
         return FirstDirectiveText is not null && FirstDirectiveText.StartsWith(CoverageDirectivePrefix, StringComparison.Ordinal);
     }
 
-    private static bool TrueForAll(this IAnalysisAssertion[] analysisAssertions, SyntaxNodeAnalysisContext context)
-    {
-        return Array.TrueForAll(analysisAssertions, analysisAssertion => IsTrue(analysisAssertion, context));
-    }
+    private static bool TrueForAll(this IAnalysisAssertion[] analysisAssertions, SyntaxNodeAnalysisContext context) => Array.TrueForAll(analysisAssertions, analysisAssertion => IsTrue(analysisAssertion, context));
 
-    private static bool IsTrue(this IAnalysisAssertion analysisAssertion, SyntaxNodeAnalysisContext context)
-    {
-        return analysisAssertion.IsTrue(context);
-    }
+    private static bool IsTrue(this IAnalysisAssertion analysisAssertion, SyntaxNodeAnalysisContext context) => analysisAssertion.IsTrue(context);
 
     /// <summary>
     /// Gets the base information of a symbol.

@@ -51,10 +51,7 @@ public partial class CSL1006SimplifyOneLineSetter : DiagnosticAnalyzer
         context.RegisterSyntaxNodeAction(AnalyzeNode, SyntaxKind.SetAccessorDeclaration, SyntaxKind.InitAccessorDeclaration);
     }
 
-    private void AnalyzeNode(SyntaxNodeAnalysisContext context)
-    {
-        AnalyzerTools.AssertSyntaxRequirements<AccessorDeclarationSyntax>(context, LanguageVersion.CSharp7, AnalyzeVerifiedNode);
-    }
+    private void AnalyzeNode(SyntaxNodeAnalysisContext context) => AnalyzerTools.AssertSyntaxRequirements<AccessorDeclarationSyntax>(context, LanguageVersion.CSharp7, AnalyzeVerifiedNode);
 
     private void AnalyzeVerifiedNode(SyntaxNodeAnalysisContext context, AccessorDeclarationSyntax accessorDeclaration, IAnalysisAssertion[] analysisAssertions)
     {

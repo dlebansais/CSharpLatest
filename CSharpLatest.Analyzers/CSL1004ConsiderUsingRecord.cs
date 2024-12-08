@@ -51,10 +51,7 @@ public partial class CSL1004ConsiderUsingRecord : DiagnosticAnalyzer
         context.RegisterSyntaxNodeAction(AnalyzeNode, SyntaxKind.ClassDeclaration);
     }
 
-    private void AnalyzeNode(SyntaxNodeAnalysisContext context)
-    {
-        AnalyzerTools.AssertSyntaxRequirements<ClassDeclarationSyntax>(context, LanguageVersion.CSharp9, AnalyzeVerifiedNode);
-    }
+    private void AnalyzeNode(SyntaxNodeAnalysisContext context) => AnalyzerTools.AssertSyntaxRequirements<ClassDeclarationSyntax>(context, LanguageVersion.CSharp9, AnalyzeVerifiedNode);
 
     private void AnalyzeVerifiedNode(SyntaxNodeAnalysisContext context, ClassDeclarationSyntax classDeclaration, IAnalysisAssertion[] analysisAssertions)
     {

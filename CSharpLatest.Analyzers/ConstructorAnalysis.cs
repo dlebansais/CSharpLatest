@@ -129,10 +129,7 @@ public static partial class ConstructorAnalysis
         return new Collection<ParameterSyntax>(Result);
     }
 
-    private static bool IsSameParameter(ParameterSyntax p1, ParameterSyntax p2)
-    {
-        return IsSyntaxNodeEquivalent(p1, p2);
-    }
+    private static bool IsSameParameter(ParameterSyntax p1, ParameterSyntax p2) => IsSyntaxNodeEquivalent(p1, p2);
 
     /// <summary>
     /// Gets the constructor that takes the provided list of parameters.

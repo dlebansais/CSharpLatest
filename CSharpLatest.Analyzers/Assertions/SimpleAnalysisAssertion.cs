@@ -10,10 +10,7 @@ using Microsoft.CodeAnalysis.Diagnostics;
 internal class SimpleAnalysisAssertion(Func<SyntaxNodeAnalysisContext, bool> method) : IAnalysisAssertion
 {
     /// <inheritdoc />
-    public bool IsTrue(SyntaxNodeAnalysisContext context)
-    {
-        return Method(context);
-    }
+    public bool IsTrue(SyntaxNodeAnalysisContext context) => Method(context);
 
     private readonly Func<SyntaxNodeAnalysisContext, bool> Method = method;
 }

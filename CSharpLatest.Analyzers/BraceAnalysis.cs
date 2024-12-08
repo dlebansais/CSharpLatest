@@ -249,10 +249,7 @@ public static partial class BraceAnalysis
         return false;
     }
 
-    private static bool IsInnocuousTrivia(SyntaxTrivia trivia)
-    {
-        return trivia.IsKind(SyntaxKind.WhitespaceTrivia) || trivia.IsKind(SyntaxKind.EndOfLineTrivia);
-    }
+    private static bool IsInnocuousTrivia(SyntaxTrivia trivia) => trivia.IsKind(SyntaxKind.WhitespaceTrivia) || trivia.IsKind(SyntaxKind.EndOfLineTrivia);
 
     /// <summary>
     /// Checks whether a syntax node requires braces.
@@ -286,15 +283,9 @@ public static partial class BraceAnalysis
         return AreOnSameLine(Text, trivia, token);
     }
 
-    private static bool AreOnSameLine(SourceText text, SyntaxToken token1, SyntaxToken token2)
-    {
-        return AreOnSameLine(text, token1.Span.End, token2.SpanStart);
-    }
+    private static bool AreOnSameLine(SourceText text, SyntaxToken token1, SyntaxToken token2) => AreOnSameLine(text, token1.Span.End, token2.SpanStart);
 
-    private static bool AreOnSameLine(SourceText text, SyntaxTrivia trivia, SyntaxToken token)
-    {
-        return AreOnSameLine(text, trivia.Span.Start, token.SpanStart);
-    }
+    private static bool AreOnSameLine(SourceText text, SyntaxTrivia trivia, SyntaxToken token) => AreOnSameLine(text, trivia.Span.Start, token.SpanStart);
 
     private static bool AreOnSameLine(SourceText text, int pos1, int pos2)
     {
@@ -315,10 +306,7 @@ public static partial class BraceAnalysis
         return result;
     }
 
-    private static SyntaxNode GetRequiredParent(SyntaxNode node)
-    {
-        return Contract.AssertNotNull(node.Parent);
-    }
+    private static SyntaxNode GetRequiredParent(SyntaxNode node) => Contract.AssertNotNull(node.Parent);
 
     private static bool AnyPartOfIfSequenceUsesBraces(IfStatementSyntax? statement)
     {
