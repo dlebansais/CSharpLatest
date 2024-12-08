@@ -6,7 +6,7 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.Testing;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using VerifyCS = CSharpAnalyzerVerifier<CSL1007AddMissingBraces>;
+using VerifyCS = CSharpCodeFixVerifier<CSL1007AddMissingBraces, CSL1007CodeFixProvider>;
 
 [TestClass]
 public partial class CSL1007UnitTests
@@ -18,13 +18,26 @@ public partial class CSL1007UnitTests
     {
         Dictionary<string, string> Options = TestTools.ToOptions(args);
 
-        await VerifyCS.VerifyAnalyzerAsync(Options, Prologs.IsExternalInit, @"
+        await VerifyCS.VerifyCodeFixAsync(Options, Prologs.IsExternalInit, @"
 class Program
 {
     public int Foo(int n)
     {
         [|if|] (n > 0)
             return 1;
+
+        return 0;
+    }
+}
+", @"
+class Program
+{
+    public int Foo(int n)
+    {
+        if (n > 0)
+        {
+            return 1;
+        }
 
         return 0;
     }
@@ -91,7 +104,7 @@ class Program
     {
         Dictionary<string, string> Options = TestTools.ToOptions(args);
 
-        await VerifyCS.VerifyAnalyzerAsync(Options, Prologs.IsExternalInit, @"
+        await VerifyCS.VerifyCodeFixAsync(Options, Prologs.IsExternalInit, @"
 class Program
 {
     public int Foo(int n)
@@ -102,6 +115,21 @@ class Program
         }
         [|else|]
             return 0;
+    }
+}
+", @"
+class Program
+{
+    public int Foo(int n)
+    {
+        if (n > 0)
+        {
+            return 1;
+        }
+        else
+        {
+            return 0;
+        }
     }
 }
 ");
@@ -137,7 +165,7 @@ class Program
     {
         Dictionary<string, string> Options = TestTools.ToOptions(args);
 
-        await VerifyCS.VerifyAnalyzerAsync(Options, Prologs.IsExternalInit, @"
+        await VerifyCS.VerifyCodeFixAsync(Options, Prologs.IsExternalInit, @"
 class Program
 {
     public int Foo(int n)
@@ -146,6 +174,21 @@ class Program
             return 1;
         [|else|]
             return 0;
+    }
+}
+", @"
+class Program
+{
+    public int Foo(int n)
+    {
+        if (n > 0)
+        {
+            return 1;
+        }
+        else
+        {
+            return 0;
+        }
     }
 }
 ");
@@ -183,7 +226,7 @@ class Program
     {
         Dictionary<string, string> Options = TestTools.ToOptions(args);
 
-        await VerifyCS.VerifyAnalyzerAsync(Options, Prologs.IsExternalInit, @"
+        await VerifyCS.VerifyCodeFixAsync(Options, Prologs.IsExternalInit, @"
 class Program
 {
     public int Foo(int n)
@@ -194,6 +237,25 @@ class Program
         }
         else [|if|] (n > 1)
             return 2;
+        else
+        {
+            return 0;
+        }
+    }
+}
+", @"
+class Program
+{
+    public int Foo(int n)
+    {
+        if (n > 0)
+        {
+            return 1;
+        }
+        else if (n > 1)
+        {
+            return 2;
+        }
         else
         {
             return 0;
@@ -239,7 +301,7 @@ class Program
     {
         Dictionary<string, string> Options = TestTools.ToOptions(args);
 
-        await VerifyCS.VerifyAnalyzerAsync(Options, Prologs.IsExternalInit, @"
+        await VerifyCS.VerifyCodeFixAsync(Options, Prologs.IsExternalInit, @"
 class Program
 {
     public int Foo(int n)
@@ -252,6 +314,25 @@ class Program
         }
         [|else|]
             return 0;
+    }
+}
+", @"
+class Program
+{
+    public int Foo(int n)
+    {
+        if (n > 0)
+        {
+            return 1;
+        }
+        else if (n > 1)
+        {
+            return 2;
+        }
+        else
+        {
+            return 0;
+        }
     }
 }
 ");
@@ -291,7 +372,7 @@ class Program
     {
         Dictionary<string, string> Options = TestTools.ToOptions(args);
 
-        await VerifyCS.VerifyAnalyzerAsync(Options, Prologs.IsExternalInit, @"
+        await VerifyCS.VerifyCodeFixAsync(Options, Prologs.IsExternalInit, @"
 class Program
 {
     public int Foo(int n)
@@ -300,6 +381,25 @@ class Program
             return 1;
         else [|if|] (n > 1)
             return 2;
+        else
+        {
+            return 0;
+        }
+    }
+}
+", @"
+class Program
+{
+    public int Foo(int n)
+    {
+        if (n > 0)
+        {
+            return 1;
+        }
+        else if (n > 1)
+        {
+            return 2;
+        }
         else
         {
             return 0;
@@ -340,7 +440,7 @@ class Program
     {
         Dictionary<string, string> Options = TestTools.ToOptions(args);
 
-        await VerifyCS.VerifyAnalyzerAsync(Options, Prologs.IsExternalInit, @"
+        await VerifyCS.VerifyCodeFixAsync(Options, Prologs.IsExternalInit, @"
 class Program
 {
     public int Foo(int n)
@@ -348,6 +448,20 @@ class Program
         [|if|] (n > 0)
             if ((n % 2) == 0)
                 return 1;
+
+        return 0;
+    }
+}
+", @"
+class Program
+{
+    public int Foo(int n)
+    {
+        if (n > 0)
+        {
+            if ((n % 2) == 0)
+                return 1;
+        }
 
         return 0;
     }
@@ -384,7 +498,7 @@ class Program
     {
         Dictionary<string, string> Options = TestTools.ToOptions(args);
 
-        await VerifyCS.VerifyAnalyzerAsync(Options, Prologs.IsExternalInit, @"
+        await VerifyCS.VerifyCodeFixAsync(Options, Prologs.IsExternalInit, @"
 class Program
 {
     public int Foo(int n)
@@ -394,6 +508,22 @@ class Program
                 return 2;
             else
                 return 1;
+
+        return 0;
+    }
+}
+", @"
+class Program
+{
+    public int Foo(int n)
+    {
+        if (n > 0)
+        {
+            if ((n % 2) == 0)
+                return 2;
+            else
+                return 1;
+        }
 
         return 0;
     }
@@ -432,6 +562,7 @@ class Program
     {
         Dictionary<string, string> Options = TestTools.ToOptions(args);
 
+        // Verifiy the diagnostic, but not the code fix.
         await VerifyCS.VerifyAnalyzerAsync(Options, Prologs.IsExternalInit, @"
 class Program
 {
@@ -480,7 +611,7 @@ class Program
     {
         Dictionary<string, string> Options = TestTools.ToOptions(args);
 
-        await VerifyCS.VerifyAnalyzerAsync(Options, Prologs.IsExternalInit, @"
+        await VerifyCS.VerifyCodeFixAsync(Options, Prologs.IsExternalInit, @"
 class Program
 {
     public int Foo(int n)
@@ -489,6 +620,23 @@ class Program
             [|if|] ((n % 2) == 0)
                 if ((n % 3) == 0)
                     return 1;
+
+        return 0;
+    }
+}
+", @"
+class Program
+{
+    public int Foo(int n)
+    {
+        if (n > 0)
+        {
+            if ((n % 2) == 0)
+            {
+                if ((n % 3) == 0)
+                    return 1;
+            }
+        }
 
         return 0;
     }
@@ -714,12 +862,25 @@ Expected5);
     {
         Dictionary<string, string> Options = TestTools.ToOptions(args);
 
-        await VerifyCS.VerifyAnalyzerAsync(Options, Prologs.IsExternalInit, @"
+        await VerifyCS.VerifyCodeFixAsync(Options, Prologs.IsExternalInit, @"
 class Program
 {
     public int Foo(int n)
     {
         [|if|] (n > 0) return 1;
+
+        return 0;
+    }
+}
+", @"
+class Program
+{
+    public int Foo(int n)
+    {
+        if (n > 0)
+        {
+            return 1;
+        }
 
         return 0;
     }
@@ -758,7 +919,7 @@ class Program
     {
         Dictionary<string, string> Options = TestTools.ToOptions(args);
 
-        await VerifyCS.VerifyAnalyzerAsync(Options, Prologs.IsExternalInit, @"
+        await VerifyCS.VerifyCodeFixAsync(Options, Prologs.IsExternalInit, @"
 class Program
 {
     public int Foo(int n)
@@ -766,6 +927,21 @@ class Program
         [|if|] (n
                 >
                 0) return 1;
+
+        return 0;
+    }
+}
+", @"
+class Program
+{
+    public int Foo(int n)
+    {
+        if (n
+                >
+                0)
+        {
+            return 1;
+        }
 
         return 0;
     }
@@ -804,7 +980,7 @@ class Program
     {
         Dictionary<string, string> Options = TestTools.ToOptions(args);
 
-        await VerifyCS.VerifyAnalyzerAsync(Options, Prologs.IsExternalInit, @"
+        await VerifyCS.VerifyCodeFixAsync(Options, Prologs.IsExternalInit, @"
 class Program
 {
     public int Foo(int n)
@@ -813,6 +989,24 @@ class Program
 
         [|do|]
             i++;
+        while (i
+               <
+               n);
+
+        return i;
+    }
+}
+", @"
+class Program
+{
+    public int Foo(int n)
+    {
+        int i = 0;
+
+        do
+        {
+            i++;
+        }
         while (i
                <
                n);
@@ -856,7 +1050,7 @@ class Program
     {
         Dictionary<string, string> Options = TestTools.ToOptions(args);
 
-        await VerifyCS.VerifyAnalyzerAsync(Options, Prologs.IsExternalInit, @"
+        await VerifyCS.VerifyCodeFixAsync(Options, Prologs.IsExternalInit, @"
 class Program
 {
     public int Foo(int n)
@@ -865,6 +1059,22 @@ class Program
 
         [|do|]
             i++;
+        while (i < n);
+
+        return i;
+    }
+}
+", @"
+class Program
+{
+    public int Foo(int n)
+    {
+        int i = 0;
+
+        do
+        {
+            i++;
+        }
         while (i < n);
 
         return i;
