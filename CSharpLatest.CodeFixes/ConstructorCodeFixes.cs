@@ -11,7 +11,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 /// <summary>
 /// Represents a code fix constructor.
 /// </summary>
-public static class ConstructorCodeFixes
+public static partial class ConstructorCodeFixes
 {
     /// <summary>
     /// Creates a simplified constructor by removing assignments that are in the primary constructor.
@@ -19,7 +19,9 @@ public static class ConstructorCodeFixes
     /// <param name="constructorDeclaration">The constructor to simplify.</param>
     /// <param name="primaryConstructorParameters">Parameters in the primary constructor.</param>
     /// <param name="initialAssignments">The list of removed assignments.</param>
-    public static ConstructorDeclarationSyntax SimplifiedConstructor(ConstructorDeclarationSyntax constructorDeclaration, Collection<ParameterSyntax> primaryConstructorParameters, Collection<AssignmentExpressionSyntax> initialAssignments)
+    [RequireNotNull(nameof(constructorDeclaration))]
+    [RequireNotNull(nameof(initialAssignments))]
+    private static ConstructorDeclarationSyntax SimplifiedConstructorVerified(ConstructorDeclarationSyntax constructorDeclaration, Collection<ParameterSyntax> primaryConstructorParameters, Collection<AssignmentExpressionSyntax> initialAssignments)
     {
         Contract.Assert(constructorDeclaration.Initializer is null);
 
@@ -118,7 +120,8 @@ public static class ConstructorCodeFixes
     /// <param name="propertyDeclaration">The property to check.</param>
     /// <param name="assignments">The list of assignments.</param>
     /// <returns>An initializer for the property if found; otherwise, <see langword="null"/>.</returns>
-    public static EqualsValueClauseSyntax? FindPropertyInitializer(PropertyDeclarationSyntax propertyDeclaration, Collection<AssignmentExpressionSyntax> assignments)
+    [RequireNotNull(nameof(propertyDeclaration))]
+    private static EqualsValueClauseSyntax? FindPropertyInitializerVerified(PropertyDeclarationSyntax propertyDeclaration, Collection<AssignmentExpressionSyntax> assignments)
     {
         EqualsValueClauseSyntax? Initializer = null;
         string PropertyName = propertyDeclaration.Identifier.Text;
@@ -143,17 +146,16 @@ public static class ConstructorCodeFixes
     /// <summary>
     /// Creates a simple whitespace trivia.
     /// </summary>
-    private static SyntaxTriviaList Whitespace()
-    {
-        return SyntaxFactory.TriviaList([SyntaxFactory.Whitespace(" ")]);
-    }
+    private static SyntaxTriviaList Whitespace() => SyntaxFactory.TriviaList([SyntaxFactory.Whitespace(" ")]);
 
     /// <summary>
     /// Converts the destination of an assignment expression to a parameter.
     /// </summary>
     /// <param name="assignmentExpression">The assignment.</param>
     /// <param name="classDeclaration">The class containing the property.</param>
-    public static ParameterSyntax ToParameter(AssignmentExpressionSyntax assignmentExpression, ClassDeclarationSyntax classDeclaration)
+    [RequireNotNull(nameof(assignmentExpression))]
+    [RequireNotNull(nameof(classDeclaration))]
+    private static ParameterSyntax ToParameterVerified(AssignmentExpressionSyntax assignmentExpression, ClassDeclarationSyntax classDeclaration)
     {
         IdentifierNameSyntax Left = Contract.AssertOfType<IdentifierNameSyntax>(assignmentExpression.Left);
         SyntaxToken PropertyIdentifier = Left.Identifier.WithoutTrivia();

@@ -26,10 +26,7 @@ public class CSL1006CodeFixProvider : CodeFixProvider
     /// <summary>
     /// Gets the fix provider.
     /// </summary>
-    public sealed override FixAllProvider GetFixAllProvider()
-    {
-        return WellKnownFixAllProviders.BatchFixer;
-    }
+    public sealed override FixAllProvider GetFixAllProvider() => WellKnownFixAllProviders.BatchFixer;
 
     /// <summary>
     /// Registers a code action to invoke a fix.
@@ -38,7 +35,7 @@ public class CSL1006CodeFixProvider : CodeFixProvider
     public sealed override async Task RegisterCodeFixesAsync(CodeFixContext context)
     {
         // Find the declaration identified by the diagnostic.
-        var (Diagnostic, Declaration) = await CodeFixTools.FindNodeToFix<AccessorDeclarationSyntax>(context);
+        var (Diagnostic, Declaration) = await CodeFixTools.FindNodeToFix<AccessorDeclarationSyntax>(context).ConfigureAwait(false);
 
         // Register a code action that will invoke the fix.
         context.RegisterCodeFix(
@@ -61,11 +58,11 @@ public class CSL1006CodeFixProvider : CodeFixProvider
         SyntaxTriviaList PreservedAccessorDeclarationTrailingTrivia = accessorDeclaration.GetTrailingTrivia();
 
         AccessorDeclarationSyntax NewDeclaration = accessorDeclaration.WithBody(null)
-                                                                        .WithExpressionBody(ExpressionBody)
-                                                                        .WithSemicolonToken(ExpressionStatement.SemicolonToken)
-                                                                        .WithTrailingTrivia(PreservedAccessorDeclarationTrailingTrivia);
+                                                                      .WithExpressionBody(ExpressionBody)
+                                                                      .WithSemicolonToken(ExpressionStatement.SemicolonToken)
+                                                                      .WithTrailingTrivia(PreservedAccessorDeclarationTrailingTrivia);
 
         // Replace the old accessor with the new accessor.
-        return await document.WithReplacedNode(accessorDeclaration, NewDeclaration, cancellationToken);
+        return await document.WithReplacedNode(accessorDeclaration, NewDeclaration, cancellationToken).ConfigureAwait(false);
     }
 }

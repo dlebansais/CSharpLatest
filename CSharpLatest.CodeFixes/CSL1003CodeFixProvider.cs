@@ -29,10 +29,7 @@ public class CSL1003CodeFixProvider : CodeFixProvider
     /// <summary>
     /// Gets the fix provider.
     /// </summary>
-    public sealed override FixAllProvider GetFixAllProvider()
-    {
-        return WellKnownFixAllProviders.BatchFixer;
-    }
+    public sealed override FixAllProvider GetFixAllProvider() => WellKnownFixAllProviders.BatchFixer;
 
     /// <summary>
     /// Registers a code action to invoke a fix.
@@ -41,7 +38,7 @@ public class CSL1003CodeFixProvider : CodeFixProvider
     public sealed override async Task RegisterCodeFixesAsync(CodeFixContext context)
     {
         // Find the declaration identified by the diagnostic.
-        var (Diagnostic, Declaration) = await CodeFixTools.FindNodeToFix<ClassDeclarationSyntax>(context);
+        var (Diagnostic, Declaration) = await CodeFixTools.FindNodeToFix<ClassDeclarationSyntax>(context).ConfigureAwait(false);
 
         // Register a code action that will invoke the fix.
         context.RegisterCodeFix(
@@ -140,6 +137,6 @@ public class CSL1003CodeFixProvider : CodeFixProvider
         var FormattedDeclaration = NewDeclaration.WithAdditionalAnnotations(Formatter.Annotation);
 
         // Replace the old declaration with the new declaration.
-        return await document.WithReplacedNode(classDeclaration, FormattedDeclaration, cancellationToken);
+        return await document.WithReplacedNode(classDeclaration, FormattedDeclaration, cancellationToken).ConfigureAwait(false);
     }
 }

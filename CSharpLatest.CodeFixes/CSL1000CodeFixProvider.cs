@@ -27,10 +27,7 @@ public class CSL1000CodeFixProvider : CodeFixProvider
     /// <summary>
     /// Gets the fix provider.
     /// </summary>
-    public sealed override FixAllProvider GetFixAllProvider()
-    {
-        return WellKnownFixAllProviders.BatchFixer;
-    }
+    public sealed override FixAllProvider GetFixAllProvider() => WellKnownFixAllProviders.BatchFixer;
 
     /// <summary>
     /// Registers a code action to invoke a fix.
@@ -39,7 +36,7 @@ public class CSL1000CodeFixProvider : CodeFixProvider
     public sealed override async Task RegisterCodeFixesAsync(CodeFixContext context)
     {
         // Find the declaration identified by the diagnostic.
-        var (Diagnostic, Declaration) = await CodeFixTools.FindNodeToFix<LocalDeclarationStatementSyntax>(context);
+        var (Diagnostic, Declaration) = await CodeFixTools.FindNodeToFix<LocalDeclarationStatementSyntax>(context).ConfigureAwait(false);
 
         // Register a code action that will invoke the fix.
         context.RegisterCodeFix(
@@ -69,7 +66,7 @@ public class CSL1000CodeFixProvider : CodeFixProvider
         TypeSyntax VariableTypeName = VariableDeclaration.Type;
         if (VariableTypeName.IsVar)
         {
-            SemanticModel SemanticModel = await CodeFixTools.GetSemanticModel(document, cancellationToken);
+            SemanticModel SemanticModel = await CodeFixTools.GetSemanticModel(document, cancellationToken).ConfigureAwait(false);
 
             // Special case: Ensure that 'var' isn't actually an alias to another type
             // (e.g. using var = System.String).
@@ -105,6 +102,6 @@ public class CSL1000CodeFixProvider : CodeFixProvider
         var FormattedLocal = NewLocal.WithAdditionalAnnotations(Formatter.Annotation);
 
         // Replace the old local declaration with the new local declaration.
-        return await document.WithReplacedNode(localDeclaration, FormattedLocal, cancellationToken);
+        return await document.WithReplacedNode(localDeclaration, FormattedLocal, cancellationToken).ConfigureAwait(false);
     }
 }

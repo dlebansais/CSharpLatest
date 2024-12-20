@@ -55,7 +55,9 @@ public partial class CSL1006SimplifyOneLineSetter : DiagnosticAnalyzer
 
     private void AnalyzeVerifiedNode(SyntaxNodeAnalysisContext context, AccessorDeclarationSyntax accessorDeclaration, IAnalysisAssertion[] analysisAssertions)
     {
-        PropertyDeclarationSyntax PropertyDeclaration = Contract.AssertNotNull(accessorDeclaration.FirstAncestorOrSelf<PropertyDeclarationSyntax>());
+        // We don't handle events nor indexers.
+        if (accessorDeclaration.FirstAncestorOrSelf<PropertyDeclarationSyntax>() is not PropertyDeclarationSyntax PropertyDeclaration)
+            return;
 
         int StartLineNumber = -1;
         int EndLineNumber = 0;

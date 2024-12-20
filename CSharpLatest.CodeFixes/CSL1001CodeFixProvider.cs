@@ -26,10 +26,7 @@ public class CSL1001CodeFixProvider : CodeFixProvider
     /// <summary>
     /// Gets the fix provider.
     /// </summary>
-    public sealed override FixAllProvider GetFixAllProvider()
-    {
-        return WellKnownFixAllProviders.BatchFixer;
-    }
+    public sealed override FixAllProvider GetFixAllProvider() => WellKnownFixAllProviders.BatchFixer;
 
     /// <summary>
     /// Registers a code action to invoke a fix.
@@ -38,7 +35,7 @@ public class CSL1001CodeFixProvider : CodeFixProvider
     public sealed override async Task RegisterCodeFixesAsync(CodeFixContext context)
     {
         // Find the expression identified by the diagnostic.
-        var (Diagnostic, Expression) = await CodeFixTools.FindNodeToFix<BinaryExpressionSyntax>(context);
+        var (Diagnostic, Expression) = await CodeFixTools.FindNodeToFix<BinaryExpressionSyntax>(context).ConfigureAwait(false);
 
         // Register a code action that will invoke the fix.
         context.RegisterCodeFix(
@@ -72,6 +69,6 @@ public class CSL1001CodeFixProvider : CodeFixProvider
         var FormattedExpression = NewExpression.WithAdditionalAnnotations(Formatter.Annotation);
 
         // Replace the old expression with the new expression.
-        return await document.WithReplacedNode(binaryExpression, FormattedExpression, cancellationToken);
+        return await document.WithReplacedNode(binaryExpression, FormattedExpression, cancellationToken).ConfigureAwait(false);
     }
 }

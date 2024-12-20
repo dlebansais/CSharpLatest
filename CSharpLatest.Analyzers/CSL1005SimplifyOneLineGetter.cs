@@ -55,7 +55,10 @@ public partial class CSL1005SimplifyOneLineGetter : DiagnosticAnalyzer
 
     private void AnalyzeVerifiedNode(SyntaxNodeAnalysisContext context, AccessorDeclarationSyntax accessorDeclaration, IAnalysisAssertion[] analysisAssertions)
     {
-        PropertyDeclarationSyntax PropertyDeclaration = Contract.AssertNotNull(accessorDeclaration.FirstAncestorOrSelf<PropertyDeclarationSyntax>());
+        // We don't handle events nor indexers.
+        if (accessorDeclaration.FirstAncestorOrSelf<PropertyDeclarationSyntax>() is not PropertyDeclarationSyntax PropertyDeclaration)
+            return;
+
         AccessorListSyntax AccessorList = Contract.AssertNotNull(PropertyDeclaration.AccessorList);
         bool IsSingleAccessor = AccessorList.Accessors.Count == 1;
 

@@ -228,4 +228,36 @@ public partial class CSL1005UnitTests
     }
 ");
     }
+
+    [TestMethod]
+    public async Task EventGetter_NoDiagnostic()
+    {
+        await VerifyCS.VerifyAnalyzerAsync(Prologs.IsExternalInit, @"
+    public delegate void RoutedEventHandler(object sender);
+
+    class Program
+    {
+        public event RoutedEventHandler Foo
+        {
+            add { }
+            remove { }
+        }
+    }
+");
+    }
+
+    [TestMethod]
+    public async Task IndexerGetter_NoDiagnostic()
+    {
+        await VerifyCS.VerifyAnalyzerAsync(Prologs.IsExternalInit, @"
+    class Program
+    {
+        public int this[int index]
+        {
+            get { return index; }
+            set { }
+        }
+    }
+");
+    }
 }

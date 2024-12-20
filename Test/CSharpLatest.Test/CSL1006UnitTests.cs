@@ -297,4 +297,19 @@ public partial class CSL1006UnitTests
     }
 ");
     }
+
+    [TestMethod]
+    public async Task IndexerSetter_NoDiagnostic()
+    {
+        await VerifyCS.VerifyAnalyzerAsync(Prologs.IsExternalInit, @"
+    class Program
+    {
+        public int this[int index]
+        {
+            get { return index; }
+            set { }
+        }
+    }
+");
+    }
 }

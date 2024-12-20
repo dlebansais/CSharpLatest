@@ -37,7 +37,7 @@ public class CSL1007CodeFixProvider : CodeFixProvider
     public sealed override async Task RegisterCodeFixesAsync(CodeFixContext context)
     {
         // Find the declaration identified by the diagnostic.
-        var (Diagnostic, Declaration) = await CodeFixTools.FindNodeToFix<CSharpSyntaxNode>(context);
+        var (Diagnostic, Declaration) = await CodeFixTools.FindNodeToFix<CSharpSyntaxNode>(context).ConfigureAwait(false);
 
         // Register a code action that will invoke the fix.
         context.RegisterCodeFix(
@@ -93,6 +93,6 @@ public class CSL1007CodeFixProvider : CodeFixProvider
         NewBlock = NewBlock.WithTrailingTrivia(PreservedAccessorDeclarationTrailingTrivia);
 
         // Replace the old node with the new node.
-        return await document.WithReplacedNode(ReplacedNode, NewBlock, cancellationToken);
+        return await document.WithReplacedNode(ReplacedNode, NewBlock, cancellationToken).ConfigureAwait(false);
     }
 }

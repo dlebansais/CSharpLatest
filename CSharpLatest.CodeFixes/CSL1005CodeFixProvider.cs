@@ -26,10 +26,7 @@ public class CSL1005CodeFixProvider : CodeFixProvider
     /// <summary>
     /// Gets the fix provider.
     /// </summary>
-    public sealed override FixAllProvider GetFixAllProvider()
-    {
-        return WellKnownFixAllProviders.BatchFixer;
-    }
+    public sealed override FixAllProvider GetFixAllProvider() => WellKnownFixAllProviders.BatchFixer;
 
     /// <summary>
     /// Registers a code action to invoke a fix.
@@ -38,7 +35,7 @@ public class CSL1005CodeFixProvider : CodeFixProvider
     public sealed override async Task RegisterCodeFixesAsync(CodeFixContext context)
     {
         // Find the declaration identified by the diagnostic.
-        var (Diagnostic, Declaration) = await CodeFixTools.FindNodeToFix<AccessorDeclarationSyntax>(context);
+        var (Diagnostic, Declaration) = await CodeFixTools.FindNodeToFix<AccessorDeclarationSyntax>(context).ConfigureAwait(false);
 
         // Register a code action that will invoke the fix.
         context.RegisterCodeFix(
@@ -71,7 +68,7 @@ public class CSL1005CodeFixProvider : CodeFixProvider
                                                                                   .WithTrailingTrivia(PreservedPropertyDeclarationTrailingTrivia);
 
             // Replace the old property with the new property.
-            Result = await document.WithReplacedNode(PropertyDeclaration, NewPropertyDeclaration, cancellationToken);
+            Result = await document.WithReplacedNode(PropertyDeclaration, NewPropertyDeclaration, cancellationToken).ConfigureAwait(false);
         }
 
         if (accessorDeclaration.Body is BlockSyntax Block)
@@ -90,7 +87,7 @@ public class CSL1005CodeFixProvider : CodeFixProvider
                                                                                       .WithTrailingTrivia(PreservedPropertyDeclarationTrailingTrivia);
 
                 // Replace the old property with the new property.
-                Result = await document.WithReplacedNode(PropertyDeclaration, NewPropertyDeclaration, cancellationToken);
+                Result = await document.WithReplacedNode(PropertyDeclaration, NewPropertyDeclaration, cancellationToken).ConfigureAwait(false);
             }
             else
             {
@@ -102,7 +99,7 @@ public class CSL1005CodeFixProvider : CodeFixProvider
                                                                               .WithTrailingTrivia(PreservedAccessorDeclarationTrailingTrivia);
 
                 // Replace the old accessor with the new accessor.
-                Result = await document.WithReplacedNode(accessorDeclaration, NewDeclaration, cancellationToken);
+                Result = await document.WithReplacedNode(accessorDeclaration, NewDeclaration, cancellationToken).ConfigureAwait(false);
             }
         }
 
