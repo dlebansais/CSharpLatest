@@ -79,7 +79,7 @@ public class CSL1004CodeFixProvider : CodeFixProvider
         Contract.Assert(HasPropertyAssignmentsOnly);
         Contract.Assert(Assignments.Count > 0);
 
-        List<MemberDeclarationSyntax> NewMembers = new();
+        List<MemberDeclarationSyntax> NewMembers = [];
         SyntaxTriviaList? PassedOverLeadingTrivia = null;
 
         foreach (MemberDeclarationSyntax Member in classDeclaration.Members)
