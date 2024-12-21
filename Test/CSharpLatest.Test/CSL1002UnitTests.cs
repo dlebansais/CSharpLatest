@@ -1,4 +1,6 @@
-﻿namespace CSharpLatest.Test;
+﻿#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
+
+namespace CSharpLatest.Test;
 
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
