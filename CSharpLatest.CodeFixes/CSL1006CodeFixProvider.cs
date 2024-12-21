@@ -35,7 +35,7 @@ public class CSL1006CodeFixProvider : CodeFixProvider
     public sealed override async Task RegisterCodeFixesAsync(CodeFixContext context)
     {
         // Find the declaration identified by the diagnostic.
-        var (Diagnostic, Declaration) = await CodeFixTools.FindNodeToFix<AccessorDeclarationSyntax>(context).ConfigureAwait(false);
+        (Diagnostic Diagnostic, AccessorDeclarationSyntax Declaration) = await CodeFixTools.FindNodeToFix<AccessorDeclarationSyntax>(context).ConfigureAwait(false);
 
         // Register a code action that will invoke the fix.
         context.RegisterCodeFix(

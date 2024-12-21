@@ -36,7 +36,7 @@ public class CSL1000CodeFixProvider : CodeFixProvider
     public sealed override async Task RegisterCodeFixesAsync(CodeFixContext context)
     {
         // Find the declaration identified by the diagnostic.
-        var (Diagnostic, Declaration) = await CodeFixTools.FindNodeToFix<LocalDeclarationStatementSyntax>(context).ConfigureAwait(false);
+        (Diagnostic Diagnostic, LocalDeclarationStatementSyntax Declaration) = await CodeFixTools.FindNodeToFix<LocalDeclarationStatementSyntax>(context).ConfigureAwait(false);
 
         // Register a code action that will invoke the fix.
         context.RegisterCodeFix(
@@ -99,7 +99,7 @@ public class CSL1000CodeFixProvider : CodeFixProvider
                                                                .WithDeclaration(VariableDeclaration);
 
         // Add an annotation to format the new node.
-        var FormattedLocal = NewLocal.WithAdditionalAnnotations(Formatter.Annotation);
+        LocalDeclarationStatementSyntax FormattedLocal = NewLocal.WithAdditionalAnnotations(Formatter.Annotation);
 
         // Replace the old local declaration with the new local declaration.
         return await document.WithReplacedNode(localDeclaration, FormattedLocal, cancellationToken).ConfigureAwait(false);

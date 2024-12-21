@@ -35,7 +35,7 @@ public class CSL1001CodeFixProvider : CodeFixProvider
     public sealed override async Task RegisterCodeFixesAsync(CodeFixContext context)
     {
         // Find the expression identified by the diagnostic.
-        var (Diagnostic, Expression) = await CodeFixTools.FindNodeToFix<BinaryExpressionSyntax>(context).ConfigureAwait(false);
+        (Diagnostic Diagnostic, BinaryExpressionSyntax Expression) = await CodeFixTools.FindNodeToFix<BinaryExpressionSyntax>(context).ConfigureAwait(false);
 
         // Register a code action that will invoke the fix.
         context.RegisterCodeFix(
@@ -66,7 +66,7 @@ public class CSL1001CodeFixProvider : CodeFixProvider
         NewExpression = NewExpression.WithTrailingTrivia(TrailingTrivia);
 
         // Add an annotation to format the new node.
-        var FormattedExpression = NewExpression.WithAdditionalAnnotations(Formatter.Annotation);
+        IsPatternExpressionSyntax FormattedExpression = NewExpression.WithAdditionalAnnotations(Formatter.Annotation);
 
         // Replace the old expression with the new expression.
         return await document.WithReplacedNode(binaryExpression, FormattedExpression, cancellationToken).ConfigureAwait(false);

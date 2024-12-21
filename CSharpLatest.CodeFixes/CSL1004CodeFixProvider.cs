@@ -39,7 +39,7 @@ public class CSL1004CodeFixProvider : CodeFixProvider
     public sealed override async Task RegisterCodeFixesAsync(CodeFixContext context)
     {
         // Find the declaration identified by the diagnostic.
-        var (Diagnostic, Declaration) = await CodeFixTools.FindNodeToFix<ClassDeclarationSyntax>(context).ConfigureAwait(false);
+        (Diagnostic Diagnostic, ClassDeclarationSyntax Declaration) = await CodeFixTools.FindNodeToFix<ClassDeclarationSyntax>(context).ConfigureAwait(false);
 
         // Register a code action that will invoke the fix.
         context.RegisterCodeFix(
@@ -57,7 +57,7 @@ public class CSL1004CodeFixProvider : CodeFixProvider
         // Save the leading and trailing trivias to restore it later.
         SyntaxTriviaList PreservedClassDeclarationLeadingTrivia = classDeclaration.GetLeadingTrivia();
         SyntaxTriviaList PreservedClassDeclarationTrailingTrivia = classDeclaration.GetTrailingTrivia();
-        var NewModifiers = classDeclaration.Modifiers;
+        SyntaxTokenList NewModifiers = classDeclaration.Modifiers;
 
         // Save the trailing trivia in the identifier part to restore it as trailing trivia of the parameter list.
         SyntaxToken NewIdentifier = classDeclaration.Identifier;
@@ -82,7 +82,7 @@ public class CSL1004CodeFixProvider : CodeFixProvider
         List<MemberDeclarationSyntax> NewMembers = new();
         SyntaxTriviaList? PassedOverLeadingTrivia = null;
 
-        foreach (var Member in classDeclaration.Members)
+        foreach (MemberDeclarationSyntax Member in classDeclaration.Members)
         {
             MemberDeclarationSyntax? ConvertedMember = Member;
 
@@ -119,11 +119,11 @@ public class CSL1004CodeFixProvider : CodeFixProvider
         }
 
         // Update the class with the modified members.
-        var NewMemberList = SyntaxFactory.List(NewMembers);
+        SyntaxList<MemberDeclarationSyntax> NewMemberList = SyntaxFactory.List(NewMembers);
 
         List<ParameterSyntax> PropertyParameters = Assignments.ToList().ConvertAll(assignment => ConstructorCodeFixes.ToParameter(assignment, classDeclaration));
-        var SeparatedParameterList = SyntaxFactory.SeparatedList(PropertyParameters);
-        var NewParameterList = SyntaxFactory.ParameterList(SeparatedParameterList);
+        SeparatedSyntaxList<ParameterSyntax> SeparatedParameterList = SyntaxFactory.SeparatedList(PropertyParameters);
+        ParameterListSyntax NewParameterList = SyntaxFactory.ParameterList(SeparatedParameterList);
 
         // Create the record.
         RecordDeclarationSyntax NewDeclaration = SyntaxFactory.RecordDeclaration(SyntaxFactory.List<AttributeListSyntax>(),
@@ -149,7 +149,7 @@ public class CSL1004CodeFixProvider : CodeFixProvider
         NewDeclaration = NewDeclaration.WithLeadingTrivia(PreservedClassDeclarationLeadingTrivia).WithTrailingTrivia(PreservedClassDeclarationTrailingTrivia);
 
         // Add an annotation to format the new node.
-        var FormattedDeclaration = NewDeclaration.WithAdditionalAnnotations(Formatter.Annotation);
+        RecordDeclarationSyntax FormattedDeclaration = NewDeclaration.WithAdditionalAnnotations(Formatter.Annotation);
 
         // Replace the old declaration with the new declaration.
         return await document.WithReplacedNode(classDeclaration, NewDeclaration, cancellationToken).ConfigureAwait(false);

@@ -27,10 +27,10 @@ public static partial class ConstructorCodeFixes
 
         // Save the leading and trailling trivias of the closing parenthesis, we will restore them at different places.
         // The trailing trivia is set to null later if it must not be restored.
-        var PreservedLeadingTrivia = constructorDeclaration.ParameterList.CloseParenToken.LeadingTrivia;
+        SyntaxTriviaList PreservedLeadingTrivia = constructorDeclaration.ParameterList.CloseParenToken.LeadingTrivia;
         SyntaxTriviaList? PreservedTrailingTrivia = constructorDeclaration.ParameterList.CloseParenToken.TrailingTrivia;
-        var CloseParenToken = constructorDeclaration.ParameterList.CloseParenToken.WithoutTrivia().WithLeadingTrivia(PreservedLeadingTrivia);
-        var NewParameterList = constructorDeclaration.ParameterList.WithCloseParenToken(CloseParenToken);
+        SyntaxToken CloseParenToken = constructorDeclaration.ParameterList.CloseParenToken.WithoutTrivia().WithLeadingTrivia(PreservedLeadingTrivia);
+        ParameterListSyntax NewParameterList = constructorDeclaration.ParameterList.WithCloseParenToken(CloseParenToken);
 
         // Use the parameter list with removed trivias.
         ConstructorDeclarationSyntax NewConstructorDeclaration = constructorDeclaration.WithParameterList(NewParameterList);
@@ -55,8 +55,8 @@ public static partial class ConstructorCodeFixes
 
             // Get statements beyond those that are removed and create the new block body..
             List<StatementSyntax> RemainingStatements = Statements.GetRange(initialAssignments.Count, Statements.Count - initialAssignments.Count);
-            var NewStatementList = SyntaxFactory.List(RemainingStatements);
-            var NewBody = Body.WithStatements(NewStatementList);
+            SyntaxList<StatementSyntax> NewStatementList = SyntaxFactory.List(RemainingStatements);
+            BlockSyntax NewBody = Body.WithStatements(NewStatementList);
 
             NewConstructorDeclaration = NewConstructorDeclaration.WithBody(NewBody);
         }
@@ -75,12 +75,12 @@ public static partial class ConstructorCodeFixes
             PreservedTrailingTrivia = constructorDeclaration.SemicolonToken.TrailingTrivia;
 
             // Use no trivia to ensure { } formatting, because the default endofline can get wrong.
-            var OpenBraceToken = SyntaxFactory.Token(SyntaxKind.OpenBraceToken).WithoutTrivia();
-            var CloseBraceToken = SyntaxFactory.Token(SyntaxKind.CloseBraceToken).WithoutTrivia().WithTrailingTrivia(PreservedTrailingTrivia);
+            SyntaxToken OpenBraceToken = SyntaxFactory.Token(SyntaxKind.OpenBraceToken).WithoutTrivia();
+            SyntaxToken CloseBraceToken = SyntaxFactory.Token(SyntaxKind.CloseBraceToken).WithoutTrivia().WithTrailingTrivia(PreservedTrailingTrivia);
             PreservedTrailingTrivia = null;
 
             // Create an empty block body to replace the expression body and its semicolon.
-            var NewBody = SyntaxFactory.Block(OpenBraceToken, SyntaxFactory.List<StatementSyntax>(), CloseBraceToken);
+            BlockSyntax NewBody = SyntaxFactory.Block(OpenBraceToken, SyntaxFactory.List<StatementSyntax>(), CloseBraceToken);
             NewConstructorDeclaration = NewConstructorDeclaration.WithExpressionBody(null).WithSemicolonToken(SyntaxFactory.Token(SyntaxKind.None)).WithBody(NewBody);
         }
 
@@ -89,10 +89,10 @@ public static partial class ConstructorCodeFixes
         SyntaxToken ThisKeyword = SyntaxFactory.Token(SyntaxKind.ThisKeyword).WithLeadingTrivia(Whitespace());
 
         List<ArgumentSyntax> Arguments = primaryConstructorParameters.ToList().ConvertAll(ToArgument);
-        var SeparatedArgumentList = SyntaxFactory.SeparatedList(Arguments);
-        var ThisOpenParenToken = SyntaxFactory.Token(SyntaxKind.OpenParenToken);
-        var ThisCloseParenToken = SyntaxFactory.Token(SyntaxKind.CloseParenToken);
-        var ArgumentList = SyntaxFactory.ArgumentList(ThisOpenParenToken, SeparatedArgumentList, ThisCloseParenToken);
+        SeparatedSyntaxList<ArgumentSyntax> SeparatedArgumentList = SyntaxFactory.SeparatedList(Arguments);
+        SyntaxToken ThisOpenParenToken = SyntaxFactory.Token(SyntaxKind.OpenParenToken);
+        SyntaxToken ThisCloseParenToken = SyntaxFactory.Token(SyntaxKind.CloseParenToken);
+        ArgumentListSyntax ArgumentList = SyntaxFactory.ArgumentList(ThisOpenParenToken, SeparatedArgumentList, ThisCloseParenToken);
         ConstructorInitializerSyntax Initializer = SyntaxFactory.ConstructorInitializer(SyntaxKind.ThisConstructorInitializer, ColonToken, ThisKeyword, ArgumentList);
 
         // Restore a previously saved trailing trivia, if any.
@@ -110,7 +110,7 @@ public static partial class ConstructorCodeFixes
     /// <param name="parameter">The parameter to convert.</param>
     private static ArgumentSyntax ToArgument(ParameterSyntax parameter)
     {
-        var IdentifierName = SyntaxFactory.IdentifierName(parameter.Identifier);
+        IdentifierNameSyntax IdentifierName = SyntaxFactory.IdentifierName(parameter.Identifier);
         return SyntaxFactory.Argument(IdentifierName);
     }
 

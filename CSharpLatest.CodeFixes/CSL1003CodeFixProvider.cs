@@ -38,7 +38,7 @@ public class CSL1003CodeFixProvider : CodeFixProvider
     public sealed override async Task RegisterCodeFixesAsync(CodeFixContext context)
     {
         // Find the declaration identified by the diagnostic.
-        var (Diagnostic, Declaration) = await CodeFixTools.FindNodeToFix<ClassDeclarationSyntax>(context).ConfigureAwait(false);
+        (Diagnostic Diagnostic, ClassDeclarationSyntax Declaration) = await CodeFixTools.FindNodeToFix<ClassDeclarationSyntax>(context).ConfigureAwait(false);
 
         // Register a code action that will invoke the fix.
         context.RegisterCodeFix(
@@ -76,7 +76,7 @@ public class CSL1003CodeFixProvider : CodeFixProvider
         List<MemberDeclarationSyntax> NewMembers = new();
         SyntaxTriviaList? PassedOverLeadingTrivia = null;
 
-        foreach (var Member in classDeclaration.Members)
+        foreach (MemberDeclarationSyntax Member in classDeclaration.Members)
         {
             MemberDeclarationSyntax? ConvertedMember = Member;
 
@@ -122,19 +122,19 @@ public class CSL1003CodeFixProvider : CodeFixProvider
         }
 
         // Update the class with the modified members.
-        var NewMemberList = SyntaxFactory.List(NewMembers);
+        SyntaxList<MemberDeclarationSyntax> NewMemberList = SyntaxFactory.List(NewMembers);
         NewDeclaration = NewDeclaration.WithMembers(NewMemberList);
 
         // Add the primary constructor to the class.
-        var SeparatedParameterList = SyntaxFactory.SeparatedList(ParameterCandidates);
-        var NewParameterList = SyntaxFactory.ParameterList(SeparatedParameterList).WithTrailingTrivia(PreservedIdentifierTrailingTrivia);
+        SeparatedSyntaxList<ParameterSyntax> SeparatedParameterList = SyntaxFactory.SeparatedList(ParameterCandidates);
+        ParameterListSyntax NewParameterList = SyntaxFactory.ParameterList(SeparatedParameterList).WithTrailingTrivia(PreservedIdentifierTrailingTrivia);
         NewDeclaration = NewDeclaration.WithParameterList(NewParameterList);
 
         // Restore the leading trivia.
         NewDeclaration = NewDeclaration.WithLeadingTrivia(PreservedClassDeclarationLeadingTrivia);
 
         // Add an annotation to format the new node.
-        var FormattedDeclaration = NewDeclaration.WithAdditionalAnnotations(Formatter.Annotation);
+        ClassDeclarationSyntax FormattedDeclaration = NewDeclaration.WithAdditionalAnnotations(Formatter.Annotation);
 
         // Replace the old declaration with the new declaration.
         return await document.WithReplacedNode(classDeclaration, FormattedDeclaration, cancellationToken).ConfigureAwait(false);
