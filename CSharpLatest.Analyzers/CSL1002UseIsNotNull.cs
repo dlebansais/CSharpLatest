@@ -1,5 +1,6 @@
 ﻿namespace CSharpLatest;
 
+using System.Collections.Generic;
 using System.Collections.Immutable;
 using Contracts;
 using Microsoft.CodeAnalysis;
@@ -60,7 +61,7 @@ public partial class CSL1002UseIsNotNull : DiagnosticAnalyzer
             new SimpleAnalysisAssertion(context => ((BinaryExpressionSyntax)context.Node).OperatorToken.IsKind(SyntaxKind.ExclamationEqualsToken)));
     }
 
-    private void AnalyzeVerifiedNode(SyntaxNodeAnalysisContext context, BinaryExpressionSyntax binaryExpression, IAnalysisAssertion[] analysisAssertions)
+    private void AnalyzeVerifiedNode(SyntaxNodeAnalysisContext context, BinaryExpressionSyntax binaryExpression, IEnumerable<IAnalysisAssertion> analysisAssertions)
     {
         ExpressionSyntax RightExpression = binaryExpression.Right;
         SyntaxToken OperatorToken = binaryExpression.OperatorToken;

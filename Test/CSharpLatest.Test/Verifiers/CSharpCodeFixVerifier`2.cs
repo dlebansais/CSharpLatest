@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿namespace CSharpLatest.Test;
+
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.CodeAnalysis;
@@ -8,9 +10,7 @@ using Microsoft.CodeAnalysis.CSharp.Testing;
 using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.CodeAnalysis.Testing;
 
-namespace CSharpLatest.Test;
-
-public static partial class CSharpCodeFixVerifier<TAnalyzer, TCodeFix>
+internal static partial class CSharpCodeFixVerifier<TAnalyzer, TCodeFix>
     where TAnalyzer : DiagnosticAnalyzer, new()
     where TCodeFix : CodeFixProvider, new()
 {
@@ -27,17 +27,17 @@ public static partial class CSharpCodeFixVerifier<TAnalyzer, TCodeFix>
         => CSharpCodeFixVerifier<TAnalyzer, TCodeFix, DefaultVerifier>.Diagnostic(descriptor);
 
     /// <inheritdoc cref="CodeFixVerifier{TAnalyzer, TCodeFix, TTest, TVerifier}.VerifyAnalyzerAsync(string, DiagnosticResult[])"/>
-    public static async Task VerifyAnalyzerAsync(string source, LanguageVersion languageVersion = LanguageVersion.Default, params DiagnosticResult[] expected)
+    public static async Task VerifyAnalyzerAsync(string source, LanguageVersion languageVersion = LanguageVersion.Default, params IEnumerable<DiagnosticResult> expected)
         => await VerifyAnalyzerAsync([], Prologs.Default, source, languageVersion, expected);
 
     /// <inheritdoc cref="CodeFixVerifier{TAnalyzer, TCodeFix, TTest, TVerifier}.VerifyAnalyzerAsync(string, DiagnosticResult[])"/>
-    public static async Task VerifyAnalyzerAsync(string prolog, string source, LanguageVersion languageVersion = LanguageVersion.Default, params DiagnosticResult[] expected)
+    public static async Task VerifyAnalyzerAsync(string prolog, string source, LanguageVersion languageVersion = LanguageVersion.Default, params IEnumerable<DiagnosticResult> expected)
         => await VerifyAnalyzerAsync([], prolog, source, languageVersion, expected);
 
     /// <inheritdoc cref="CodeFixVerifier{TAnalyzer, TCodeFix, TTest, TVerifier}.VerifyAnalyzerAsync(string, DiagnosticResult[])"/>
-    public static async Task VerifyAnalyzerAsync(Dictionary<string, string> options, string prolog, string source, LanguageVersion languageVersion = LanguageVersion.Default, params DiagnosticResult[] expected)
+    public static async Task VerifyAnalyzerAsync(Dictionary<string, string> options, string prolog, string source, LanguageVersion languageVersion = LanguageVersion.Default, params IEnumerable<DiagnosticResult> expected)
     {
-        var test = new Test
+        Test test = new()
         {
             TestCode = prolog + source,
             Version = languageVersion,
@@ -67,12 +67,12 @@ public static partial class CSharpCodeFixVerifier<TAnalyzer, TCodeFix>
 
     /// <inheritdoc cref="CodeFixVerifier{TAnalyzer, TCodeFix, TTest, TVerifier}.VerifyCodeFixAsync(string, DiagnosticResult, string)"/>
     public static async Task VerifyCodeFixAsync(Dictionary<string, string> options, string prolog, string source, DiagnosticResult expected, string fixedSource)
-        => await VerifyCodeFixAsync(options, prolog, source, new[] { expected }, fixedSource);
+        => await VerifyCodeFixAsync(options, prolog, source, [expected], fixedSource);
 
     /// <inheritdoc cref="CodeFixVerifier{TAnalyzer, TCodeFix, TTest, TVerifier}.VerifyCodeFixAsync(string, DiagnosticResult[], string)"/>
     public static async Task VerifyCodeFixAsync(Dictionary<string, string> options, string prolog, string source, DiagnosticResult[] expected, string fixedSource)
     {
-        var test = new Test
+        Test test = new()
         {
             TestCode = (prolog + source).Replace("\r\n", "\n").Replace("\n", "\r\n"),
             FixedCode = (prolog + fixedSource).Replace("\r\n", "\n").Replace("\n", "\r\n"),

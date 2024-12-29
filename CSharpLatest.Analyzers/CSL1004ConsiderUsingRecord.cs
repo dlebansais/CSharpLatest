@@ -1,5 +1,6 @@
 ﻿namespace CSharpLatest;
 
+using System.Collections.Generic;
 using System.Collections.Immutable;
 using Contracts;
 using Microsoft.CodeAnalysis;
@@ -53,7 +54,7 @@ public partial class CSL1004ConsiderUsingRecord : DiagnosticAnalyzer
 
     private void AnalyzeNode(SyntaxNodeAnalysisContext context) => AnalyzerTools.AssertSyntaxRequirements<ClassDeclarationSyntax>(context, LanguageVersion.CSharp9, AnalyzeVerifiedNode);
 
-    private void AnalyzeVerifiedNode(SyntaxNodeAnalysisContext context, ClassDeclarationSyntax classDeclaration, IAnalysisAssertion[] analysisAssertions)
+    private void AnalyzeVerifiedNode(SyntaxNodeAnalysisContext context, ClassDeclarationSyntax classDeclaration, IEnumerable<IAnalysisAssertion> analysisAssertions)
     {
         if (ConstructorAnalysis.GetBestSuggestion(classDeclaration) != ConstructorAnalysis.BestSuggestion.Record)
             return;

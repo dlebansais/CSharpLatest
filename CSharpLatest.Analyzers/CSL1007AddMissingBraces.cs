@@ -1,5 +1,6 @@
 ﻿namespace CSharpLatest;
 
+using System.Collections.Generic;
 using System.Collections.Immutable;
 using Contracts;
 using Microsoft.CodeAnalysis;
@@ -63,7 +64,7 @@ public partial class CSL1007AddMissingBraces : DiagnosticAnalyzer
 
     private void AnalyzeNode(SyntaxNodeAnalysisContext context) => AnalyzerTools.AssertSyntaxRequirements<CSharpSyntaxNode>(context, AnalyzerTools.MinimumVersionAnalyzed, AnalyzeVerifiedNode);
 
-    private void AnalyzeVerifiedNode(SyntaxNodeAnalysisContext context, CSharpSyntaxNode syntaxNode, IAnalysisAssertion[] analysisAssertions)
+    private void AnalyzeVerifiedNode(SyntaxNodeAnalysisContext context, CSharpSyntaxNode syntaxNode, IEnumerable<IAnalysisAssertion> analysisAssertions)
     {
         string BraceSettingValue = AnalyzerTools.GetUserPreference(context, BraceAnalysis.PreferBraceSetting, BraceAnalysis.PreferBraceAlways);
         StatementSyntax EmbeddedStatement = BraceAnalysis.GetEmbeddedStatement(syntaxNode);

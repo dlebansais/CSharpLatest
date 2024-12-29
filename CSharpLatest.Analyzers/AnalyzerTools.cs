@@ -1,6 +1,7 @@
 ﻿namespace CSharpLatest;
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -34,7 +35,7 @@ internal static class AnalyzerTools
     /// <param name="minimumLanguageVersion">The minimum language version supporting the feature.</param>
     /// <param name="continueAction">The next analysis step.</param>
     /// <param name="analysisAssertions">A list of assertions.</param>
-    public static void AssertSyntaxRequirements<T>(SyntaxNodeAnalysisContext context, LanguageVersion minimumLanguageVersion, Action<SyntaxNodeAnalysisContext, T, IAnalysisAssertion[]> continueAction, params IAnalysisAssertion[] analysisAssertions)
+    public static void AssertSyntaxRequirements<T>(SyntaxNodeAnalysisContext context, LanguageVersion minimumLanguageVersion, Action<SyntaxNodeAnalysisContext, T, IEnumerable<IAnalysisAssertion>> continueAction, params IEnumerable<IAnalysisAssertion> analysisAssertions)
         where T : CSharpSyntaxNode
     {
         T ValidNode = (T)context.Node;
@@ -61,7 +62,7 @@ internal static class AnalyzerTools
         return FirstDirectiveText is not null && FirstDirectiveText.StartsWith(CoverageDirectivePrefix, StringComparison.Ordinal);
     }
 
-    private static bool TrueForAll(this IAnalysisAssertion[] analysisAssertions, SyntaxNodeAnalysisContext context) => Array.TrueForAll(analysisAssertions, analysisAssertion => IsTrue(analysisAssertion, context));
+    private static bool TrueForAll(this IEnumerable<IAnalysisAssertion> analysisAssertions, SyntaxNodeAnalysisContext context) => analysisAssertions.All(analysisAssertion => IsTrue(analysisAssertion, context));
 
     private static bool IsTrue(this IAnalysisAssertion analysisAssertion, SyntaxNodeAnalysisContext context) => analysisAssertion.IsTrue(context);
 

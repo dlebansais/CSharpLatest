@@ -10,7 +10,7 @@ using Microsoft.CodeAnalysis.CSharp.Testing;
 using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.CodeAnalysis.Testing;
 
-public static partial class CSharpAnalyzerVerifier<TAnalyzer>
+internal static partial class CSharpAnalyzerVerifier<TAnalyzer>
     where TAnalyzer : DiagnosticAnalyzer, new()
 {
     public class Test : CSharpAnalyzerTest<TAnalyzer, DefaultVerifier>
@@ -23,7 +23,7 @@ public static partial class CSharpAnalyzerVerifier<TAnalyzer>
                 foreach (KeyValuePair<string, string> Entry in Options)
                     CustomOptions.Add(new KeyValuePair<string, ReportDiagnostic>($"{Entry.Key}={Entry.Value}", ReportDiagnostic.Default));
 
-                var CompilationOptions = solution.GetProject(projectId)?.CompilationOptions;
+                CompilationOptions? CompilationOptions = solution.GetProject(projectId)?.CompilationOptions;
                 CompilationOptions = CompilationOptions?.WithSpecificDiagnosticOptions(CompilationOptions.SpecificDiagnosticOptions.SetItems(CSharpVerifierHelper.NullableWarnings));
                 CompilationOptions = CompilationOptions?.WithSpecificDiagnosticOptions(CustomOptions);
 

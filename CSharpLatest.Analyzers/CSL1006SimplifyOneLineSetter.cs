@@ -1,5 +1,6 @@
 ﻿namespace CSharpLatest;
 
+using System.Collections.Generic;
 using System.Collections.Immutable;
 using Contracts;
 using Microsoft.CodeAnalysis;
@@ -53,7 +54,7 @@ public partial class CSL1006SimplifyOneLineSetter : DiagnosticAnalyzer
 
     private void AnalyzeNode(SyntaxNodeAnalysisContext context) => AnalyzerTools.AssertSyntaxRequirements<AccessorDeclarationSyntax>(context, LanguageVersion.CSharp7, AnalyzeVerifiedNode);
 
-    private void AnalyzeVerifiedNode(SyntaxNodeAnalysisContext context, AccessorDeclarationSyntax accessorDeclaration, IAnalysisAssertion[] analysisAssertions)
+    private void AnalyzeVerifiedNode(SyntaxNodeAnalysisContext context, AccessorDeclarationSyntax accessorDeclaration, IEnumerable<IAnalysisAssertion> analysisAssertions)
     {
         // We don't handle events nor indexers.
         if (accessorDeclaration.FirstAncestorOrSelf<PropertyDeclarationSyntax>() is not PropertyDeclarationSyntax PropertyDeclaration)

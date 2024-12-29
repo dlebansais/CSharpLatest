@@ -1,5 +1,6 @@
 ﻿namespace CSharpLatest;
 
+using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
 using Contracts;
@@ -55,7 +56,7 @@ public partial class CSL1000VariableshouldBeMadeConstant : DiagnosticAnalyzer
 
     private void AnalyzeNode(SyntaxNodeAnalysisContext context) => AnalyzerTools.AssertSyntaxRequirements<LocalDeclarationStatementSyntax>(context, AnalyzerTools.MinimumVersionAnalyzed, AnalyzeVerifiedNode, new DataFlowAnalysisAssertion<LocalDeclarationStatementSyntax>());
 
-    private void AnalyzeVerifiedNode(SyntaxNodeAnalysisContext context, LocalDeclarationStatementSyntax localDeclaration, IAnalysisAssertion[] analysisAssertions)
+    private void AnalyzeVerifiedNode(SyntaxNodeAnalysisContext context, LocalDeclarationStatementSyntax localDeclaration, IEnumerable<IAnalysisAssertion> analysisAssertions)
     {
         // Make sure the declaration isn't already const.
         if (localDeclaration.Modifiers.Any(SyntaxKind.ConstKeyword))
