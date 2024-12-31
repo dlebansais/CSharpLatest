@@ -18,7 +18,7 @@
     </PropertyGroup>
 
     <PropertyGroup>
-        <PackageVersion>2.0.0</PackageVersion>
+        <PackageVersion>2.1.0</PackageVersion>
         <Authors>David Le Bansais</Authors>
         <Company />
         <Product />
@@ -37,8 +37,9 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\CSharpLatest.CodeFixes\CSharpLatest.CodeFixes.csproj" />
         <ProjectReference Include="..\CSharpLatest.Analyzers\CSharpLatest.Analyzers.csproj" />
+        <ProjectReference Include="..\CSharpLatest.Attributes\CSharpLatest.Attributes.csproj" />
+        <ProjectReference Include="..\CSharpLatest.CodeFixes\CSharpLatest.CodeFixes.csproj" />
     </ItemGroup>
 
     <ItemGroup>
@@ -50,6 +51,7 @@
             <TfmSpecificPackageFile Include="main.png" PackagePath="" />
             <TfmSpecificPackageFile Include="README-short.md" PackagePath="" />
             <TfmSpecificPackageFile Include="$(OutputPath)\CSharpLatest.Analyzers.dll" PackagePath="analyzers/dotnet/cs" />
+            <TfmSpecificPackageFile Include="$(OutputPath)\CSharpLatest.Attributes.dll" PackagePath="analyzers/dotnet/cs" />
             <TfmSpecificPackageFile Include="$(OutputPath)\CSharpLatest.CodeFixes.dll" PackagePath="analyzers/dotnet/cs" />
             <TfmSpecificPackageFile Include="$(OutputPath)\RoslynHelpers.dll" PackagePath="analyzers/dotnet/cs" />
             <TfmSpecificPackageFile Include="$(OutputPath)\Method.Contracts.dll" PackagePath="analyzers/dotnet/cs" />

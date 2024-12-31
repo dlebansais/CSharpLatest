@@ -302,5 +302,32 @@ namespace CSharpLatest {
                 return ResourceManager.GetString("CSL1008AnalyzerTitle", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to PropertyAttribute is missing argument..
+        /// </summary>
+        internal static string CSL1009AnalyzerDescription {
+            get {
+                return ResourceManager.GetString("CSL1009AnalyzerDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Attribute &apos;{0}&apos; is missing argument.
+        /// </summary>
+        internal static string CSL1009AnalyzerMessageFormat {
+            get {
+                return ResourceManager.GetString("CSL1009AnalyzerMessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Attribute is missing argument.
+        /// </summary>
+        internal static string CSL1009AnalyzerTitle {
+            get {
+                return ResourceManager.GetString("CSL1009AnalyzerTitle", resourceCulture);
+            }
+        }
     }
 }

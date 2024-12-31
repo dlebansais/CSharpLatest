@@ -3,8 +3,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Contracts;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 /// <summary>
@@ -118,5 +120,29 @@ internal static class AnalyzerTools
         value = GetUserPreferenceFromCompilationOptions(context, setting, value);
 
         return value;
+    }
+
+    /// <summary>
+    /// Checks whether an attribute is of the expected type.
+    /// </summary>
+    /// <param name="context">The context.</param>
+    /// <param name="attributeType">The type.</param>
+    /// <param name="attribute">The attribute.</param>
+    public static bool IsExpectedAttribute(SyntaxNodeAnalysisContext context, Type attributeType, AttributeSyntax? attribute)
+    {
+        // There must be a parent attribute to any argument except in the most pathological cases.
+        Contract.RequireNotNull(attribute, out AttributeSyntax Attribute);
+
+        TypeInfo TypeInfo = context.SemanticModel.GetTypeInfo(Attribute);
+        ITypeSymbol? TypeSymbol = TypeInfo.Type;
+
+        return IsExpectedAttribute(context, attributeType, TypeSymbol);
+    }
+
+    private static bool IsExpectedAttribute(SyntaxNodeAnalysisContext context, Type attributeType, ITypeSymbol? typeSymbol)
+    {
+        ITypeSymbol? ExpectedTypeSymbol = context.Compilation.GetTypeByMetadataName(attributeType.FullName);
+
+        return SymbolEqualityComparer.Default.Equals(typeSymbol, ExpectedTypeSymbol);
     }
 }

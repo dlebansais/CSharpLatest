@@ -7,14 +7,14 @@
         <Platforms>x64</Platforms>
 
         <RootNamespace>CSharpLatest</RootNamespace>
-        <Version>2.0.0</Version>
+        <Version>2.1.0</Version>
         <Authors>David Le Bansais</Authors>
         <Company />
         <Product />
         <Description>Roslyn-based analysis of C# code to suggest the use of features in the latest version of the language</Description>
         <Copyright>Copyright © 2024 David Le Bansais</Copyright>
-        <AssemblyVersion>2.0.0.21</AssemblyVersion>
-        <FileVersion>2.0.0.21</FileVersion>
+        <AssemblyVersion>2.1.0.22</AssemblyVersion>
+        <FileVersion>2.1.0.22</FileVersion>
         <RepositoryUrl>https://github.com/dlebansais/CSharpLatest</RepositoryUrl>
         <SuppressTfmSupportBuildWarnings>true</SuppressTfmSupportBuildWarnings>
 
@@ -83,6 +83,11 @@
     </ItemGroup>
 
     <ItemGroup>
+        <Compile Update="AnalyzerResources.Designer.cs" DesignTime="True" AutoGen="True" DependentUpon="AnalyzerResources.resx" />
+        <EmbeddedResource Update="AnalyzerResources.resx" Generator="ResXFileCodeGenerator" LastGenOutput="AnalyzerResources.Designer.cs" />
+    </ItemGroup>
+
+    <ItemGroup>
         <None Include="$(PkgMethod_Contracts-Debug)\lib\netstandard2.0\Method.Contracts.dll" CopyToOutputDirectory="PreserveNewest" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" />
         <None Include="$(PkgMethod_Contracts)\lib\netstandard2.0\Method.Contracts.dll" CopyToOutputDirectory="PreserveNewest" Condition="'$(Configuration)|$(Platform)'!='Debug|x64'" />
         <None Include="$(Pkgdlebansais_RoslynHelpers-Debug)\lib\netstandard2.0\RoslynHelpers.dll" CopyToOutputDirectory="PreserveNewest" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" />
@@ -90,8 +95,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <Compile Update="AnalyzerResources.Designer.cs" DesignTime="True" AutoGen="True" DependentUpon="AnalyzerResources.resx" />
-        <EmbeddedResource Update="AnalyzerResources.resx" Generator="ResXFileCodeGenerator" LastGenOutput="AnalyzerResources.Designer.cs" />
+      <ProjectReference Include="..\CSharpLatest.Attributes\CSharpLatest.Attributes.csproj" />
     </ItemGroup>
 
 </Project>

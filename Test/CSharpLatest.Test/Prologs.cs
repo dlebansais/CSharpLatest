@@ -6,6 +6,8 @@ public static class Prologs
 {
     public const string Default = @"
 using System;
+using System.Threading.Tasks;
+using CSharpLatest;
 
 ";
 
@@ -13,6 +15,8 @@ using System;
 #nullable enable
 
 using System;
+using System.Threading.Tasks;
+using CSharpLatest;
 
 ";
 
@@ -21,6 +25,8 @@ using System;
 
 using System;
 using System.ComponentModel;
+using System.Threading.Tasks;
+using CSharpLatest;
 
 namespace System.Runtime.CompilerServices
 {
