@@ -53,7 +53,8 @@ before_test:
   - nuget install CodecovUploader -Version %codecov_uploader_version% -OutputDirectory packages
   - nuget install ReportGenerator -Version %report_generator_version% -OutputDirectory packages
   - |-
-    printf "dotnet test ./Test/%APPVEYOR_PROJECT_NAME%.Test/bin/x64/%CONFIGURATION%/netcoreapp3.1/%APPVEYOR_PROJECT_NAME%.Test.dll -l console;verbosity=detailed\n" > runtests.bat
+    printf "dotnet test ./Test/%APPVEYOR_PROJECT_NAME%.Test/bin/x64/%CONFIGURATION%/net8.0/%APPVEYOR_PROJECT_NAME%.Test.dll -l console;verbosity=detailed\n" > runtests.bat
+    printf "dotnet test ./Test/%APPVEYOR_PROJECT_NAME%.PropertyGenerator.Test/bin/x64/%CONFIGURATION%/net8.0/%APPVEYOR_PROJECT_NAME%.PropertyGenerator.Test.dll -l console;verbosity=detailed\n" >> runtests.bat
   - |-
     printf "@echo ************************************************************** Starting Tests..\n" > runtests1.bat
     printf "call runtests.bat\n" >> runtests1.bat
