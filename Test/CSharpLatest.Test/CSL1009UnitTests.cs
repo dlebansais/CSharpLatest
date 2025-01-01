@@ -4,7 +4,7 @@ namespace CSharpLatest.Test;
 
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using VerifyCS = CSharpAnalyzerVerifier<CSL1009PropertyAttributeIsMissingArgument>;
+using VerifyCS = CSharpAnalyzerVerifier<CSL1009FieldBackedPropertyAttributeIsMissingArgument>;
 
 [TestClass]
 public partial class CSL1009UnitTests
@@ -17,7 +17,7 @@ namespace TestSuite;
 
 internal partial class Program
 {
-    [[|Property|]]
+    [[|FieldBackedProperty|]]
     public int Test { get; }
 }
 ").ConfigureAwait(false);
@@ -31,7 +31,7 @@ namespace TestSuite;
 
 internal partial class Program
 {
-    [Property(GetterText = ""field"")]
+    [FieldBackedProperty(GetterText = ""field"")]
     public int Test { get; }
 }
 ").ConfigureAwait(false);
@@ -43,7 +43,7 @@ internal partial class Program
         await VerifyCS.VerifyAnalyzerAsync(@"
 internal partial class Program
 {
-    [[|Property()|]]
+    [[|FieldBackedProperty()|]]
     public int Test { get; }
 }
 ").ConfigureAwait(false);
@@ -67,13 +67,13 @@ internal partial class Program
         await VerifyCS.VerifyAnalyzerAsync(@"
 namespace Test;
 
-internal class PropertyAttribute : Attribute
+internal class FieldBackedPropertyAttribute : Attribute
 {
 }
 
 internal partial class Program
 {
-    [Property]
+    [FieldBackedProperty]
     public int Test { get; }
 }
 ").ConfigureAwait(false);

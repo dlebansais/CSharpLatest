@@ -4,7 +4,7 @@ namespace CSharpLatest.Test;
 
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using VerifyCS = CSharpAnalyzerVerifier<CSL1010InitAccessorNotSupportedInPropertyAttribute>;
+using VerifyCS = CSharpAnalyzerVerifier<CSL1010InitAccessorNotSupportedInFieldBackedPropertyAttribute>;
 
 public partial class CSL1010UnitTests
 {
@@ -17,7 +17,7 @@ public partial class CSL1010UnitTests
 
 internal partial class Program
 {
-    [Property(GetterText = ""field"")]
+    [FieldBackedProperty(GetterText = ""field"")]
     public int Test { get; init; }
 }
 ").ConfigureAwait(false);

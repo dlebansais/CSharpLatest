@@ -15,7 +15,7 @@ internal class TestNoGeneration
         const string Source = @"
 public class SimpleTest
 {
-    [Property(GetterText = ""field"", SetterText = ""field = value"", InitializerText = ""0"")]
+    [FieldBackedProperty(GetterText = ""field"", SetterText = ""field = value"", InitializerText = ""0"")]
     public partial int Test { get; set; }
 }
 ";
@@ -34,7 +34,7 @@ public class SimpleTest
         const string Source = @"
 namespace Contracts.TestSuite;
 
-[Property(GetterText = ""field"", SetterText = ""field = value"", InitializerText = ""0"")]
+[FieldBackedProperty(GetterText = ""field"", SetterText = ""field = value"", InitializerText = ""0"")]
 public partial int Test { get; set; }
 ";
 
@@ -75,7 +75,7 @@ public class SimpleTest
 {
     private string[] arr = new string[100];
 
-    [Property(GetterText = ""field"")]
+    [FieldBackedProperty(GetterText = ""field"")]
     public partial string this[int i]
     {
         get => arr[i];
@@ -100,7 +100,7 @@ namespace Contracts.TestSuite;
 
 public class SimpleTest
 {
-    [Property]
+    [FieldBackedProperty]
     public partial int Test { get; set; }
 }
 ";
@@ -121,7 +121,7 @@ namespace Contracts.TestSuite;
 
 public class SimpleTest
 {
-    [Property()]
+    [FieldBackedProperty()]
     public partial int Test { get; set; }
 }
 ";
@@ -142,7 +142,7 @@ namespace Contracts.TestSuite;
 
 public class SimpleTest
 {
-    [Property("""")]
+    [FieldBackedProperty("""")]
     public partial int Test { get; set; }
 }
 ";
@@ -165,7 +165,7 @@ public class SimpleTest
 {
     private const int Arg = 0;
 
-    [Property(GetterText = ""field"", Arg)]
+    [FieldBackedProperty(GetterText = ""field"", Arg)]
     public partial int Test { get; }
 }
 ";
@@ -189,7 +189,7 @@ using CSharpLatest;
 
 internal partial class Program
 {
-    [Property(GetterText = ""field"", SetterText = ""field = value"", InitializerText = ""0"")]
+    [FieldBackedProperty(GetterText = ""field"", SetterText = ""field = value"", InitializerText = ""0"")]
     public partial int Test { get; init; }
 }
 ";
@@ -211,15 +211,15 @@ namespace CSharpLatest.TestSuite;
 using System;
 using CSharpLatest;
 
-internal class PropertyAttribute : Attribute
+internal class FieldBackedPropertyAttribute : Attribute
 {
-    public PropertyAttribute(string getterText) { GetterText = getterText; }
+    public FieldBackedPropertyAttribute(string getterText) { GetterText = getterText; }
     public string GetterText { get; set; }
 }
 
 internal partial class Program
 {
-    [Property(GetterText = ""field"")]
+    [FieldBackedProperty(GetterText = ""field"")]
     public partial int Test { get; }
 }
 ";
@@ -243,7 +243,7 @@ using CSharpLatest;
 
 internal partial class Program
 {
-    [Property(InitializerText = ""0"")]
+    [FieldBackedProperty(InitializerText = ""0"")]
     public partial int Test { get; }
 }
 ";
@@ -267,7 +267,7 @@ using CSharpLatest;
 
 internal partial class Program
 {
-    [Property(SomeText = ""field"")]
+    [FieldBackedProperty(SomeText = ""field"")]
     public partial int Test { get; }
 }
 ";
@@ -288,7 +288,7 @@ namespace Contracts.TestSuite;
 
 public class SimpleTest
 {
-    [Property(GetterText = ""field"", SetterText = ""field = value"", InitializerText = ""0"")]
+    [FieldBackedProperty(GetterText = ""field"", SetterText = ""field = value"", InitializerText = ""0"")]
     public partial int Test => 0;
 }
 ";
@@ -309,7 +309,7 @@ namespace Contracts.TestSuite;
 
 public class SimpleTest
 {
-    [Property(GetterText = nameof(field))]
+    [FieldBackedProperty(GetterText = nameof(field))]
     public partial int Test { get; }
 }
 ";
@@ -330,7 +330,7 @@ namespace Contracts.TestSuite;
 
 public class SimpleTest
 {
-    [Property(GetterText = """")]
+    [FieldBackedProperty(GetterText = """")]
     public partial int Test { get; }
 }
 ";
@@ -351,7 +351,7 @@ namespace Contracts.TestSuite;
 
 public class SimpleTest
 {
-    [Property(GetterText = 0)]
+    [FieldBackedProperty(GetterText = 0)]
     public partial int Test { get; }
 }
 ";
@@ -372,7 +372,7 @@ namespace Contracts.TestSuite;
 
 public class SimpleTest
 {
-    [Property(GetterText = """")]
+    [FieldBackedProperty(GetterText = """")]
     int Test { get; }
 }
 ";

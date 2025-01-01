@@ -4,7 +4,7 @@ using System.Linq;
 using Microsoft.CodeAnalysis;
 
 /// <summary>
-/// Represents a code generator that handles <see cref="PropertyAttribute"/>.
+/// Represents a code generator that handles <see cref="FieldBackedPropertyAttribute"/>.
 /// </summary>
 [Generator]
 public partial class PropertyGenerator : IIncrementalGenerator
@@ -27,5 +27,5 @@ public partial class PropertyGenerator : IIncrementalGenerator
         context.RegisterSourceOutput(settings.Combine(pipeline.Collect()), OutputContractMethod);
     }
 
-    private static string FullyQualifiedMetadataName => $"{typeof(PropertyAttribute).Namespace}.{nameof(PropertyAttribute)}";
+    private static string FullyQualifiedMetadataName => $"{typeof(FieldBackedPropertyAttribute).Namespace}.{nameof(FieldBackedPropertyAttribute)}";
 }

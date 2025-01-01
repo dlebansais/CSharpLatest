@@ -6,7 +6,7 @@ using NUnit.Framework;
 using VerifyTests;
 
 [TestFixture]
-internal class TestProperty
+internal class TestFieldBackedProperty
 {
     [NUnit.Framework.Test]
     public async Task TestSuccessNetFramework()
@@ -20,7 +20,7 @@ using CSharpLatest;
 
 internal partial class Program
 {
-    [Property(GetterText = ""field"", SetterText = ""field = value"", InitializerText = ""0"")]
+    [FieldBackedProperty(GetterText = ""field"", SetterText = ""field = value"", InitializerText = ""0"")]
     public partial int Test { get; set; }
 }
 ";
@@ -44,7 +44,7 @@ using CSharpLatest;
 
 internal partial class Program
 {
-    [Property(GetterText = ""field"", SetterText = ""field = value"", InitializerText = ""0"")]
+    [FieldBackedProperty(GetterText = ""field"", SetterText = ""field = value"", InitializerText = ""0"")]
     public partial int Test { get; set; }
 }
 ";
@@ -68,7 +68,7 @@ using CSharpLatest;
 
 internal partial class Program
 {
-    [Property(GetterText = ""field"", SetterText = ""field = value"", InitializerText = ""0"")]
+    [FieldBackedProperty(GetterText = ""field"", SetterText = ""field = value"", InitializerText = ""0"")]
     public partial static int Test { get; set; }
 }
 ";
@@ -92,7 +92,7 @@ using CSharpLatest;
 
 internal partial class Program
 {
-    [Property(GetterText = ""field"", SetterText = ""field = value"", InitializerText = ""0"")]
+    [FieldBackedProperty(GetterText = ""field"", SetterText = ""field = value"", InitializerText = ""0"")]
     public partial static int Test { get; set; }
 }
 ";
@@ -116,7 +116,7 @@ using CSharpLatest;
 
 internal partial class Program
 {
-    [Property(GetterText = ""field"", SetterText = ""field = value"", InitializerText = ""0"")]
+    [FieldBackedProperty(GetterText = ""field"", SetterText = ""field = value"", InitializerText = ""0"")]
     protected partial int Test { get; set; }
 }
 ";
@@ -140,7 +140,7 @@ using CSharpLatest;
 
 internal partial class Program
 {
-    [Property(GetterText = ""field"", SetterText = ""field = value"", InitializerText = ""0"")]
+    [FieldBackedProperty(GetterText = ""field"", SetterText = ""field = value"", InitializerText = ""0"")]
     protected partial int Test { get; set; }
 }
 ";
@@ -164,7 +164,7 @@ using CSharpLatest;
 
 internal partial class Program
 {
-    [Property(GetterText = ""field"", SetterText = ""field = value"", InitializerText = ""0"")]
+    [FieldBackedProperty(GetterText = ""field"", SetterText = ""field = value"", InitializerText = ""0"")]
     internal partial int Test { get; set; }
 }
 ";
@@ -188,7 +188,7 @@ using CSharpLatest;
 
 internal partial class Program
 {
-    [Property(GetterText = ""field"", SetterText = ""field = value"", InitializerText = ""0"")]
+    [FieldBackedProperty(GetterText = ""field"", SetterText = ""field = value"", InitializerText = ""0"")]
     internal partial int Test { get; set; }
 }
 ";
@@ -212,7 +212,7 @@ using CSharpLatest;
 
 internal partial class Program
 {
-    [Property(GetterText = ""field"", SetterText = ""field = value"", InitializerText = ""0"")]
+    [FieldBackedProperty(GetterText = ""field"", SetterText = ""field = value"", InitializerText = ""0"")]
     file partial int Test { get; set; }
 }
 ";
@@ -236,7 +236,7 @@ using CSharpLatest;
 
 internal partial class Program
 {
-    [Property(GetterText = ""field"", SetterText = ""field = value"", InitializerText = ""0"")]
+    [FieldBackedProperty(GetterText = ""field"", SetterText = ""field = value"", InitializerText = ""0"")]
     file partial int Test { get; set; }
 }
 ";
@@ -261,7 +261,7 @@ using CSharpLatest;
 
 internal partial class Program
 {
-    [Property(GetterText = ""field"", SetterText = ""field = value"", InitializerText = ""0"")]
+    [FieldBackedProperty(GetterText = ""field"", SetterText = ""field = value"", InitializerText = ""0"")]
     private partial int Test { get; set; }
 }
 ";
@@ -285,7 +285,7 @@ using CSharpLatest;
 
 internal partial class Program
 {
-    [Property(GetterText = ""field"", SetterText = ""field = value"", InitializerText = ""0"")]
+    [FieldBackedProperty(GetterText = ""field"", SetterText = ""field = value"", InitializerText = ""0"")]
     private partial int Test { get; set; }
 }
 ";
@@ -309,7 +309,7 @@ using CSharpLatest;
 
 internal partial struct Program
 {
-    [Property(GetterText = ""field"", SetterText = ""field = value"", InitializerText = ""0"")]
+    [FieldBackedProperty(GetterText = ""field"", SetterText = ""field = value"", InitializerText = ""0"")]
     public partial int Test { get; set; }
 }
 ";
@@ -333,7 +333,7 @@ using CSharpLatest;
 
 internal partial record Program
 {
-    [Property(GetterText = ""field"", SetterText = ""field = value"", InitializerText = ""0"")]
+    [FieldBackedProperty(GetterText = ""field"", SetterText = ""field = value"", InitializerText = ""0"")]
     public partial int Test { get; set; }
 }
 ";
@@ -357,7 +357,7 @@ using CSharpLatest;
 
 internal partial record struct Program
 {
-    [Property(GetterText = ""field"", SetterText = ""field = value"", InitializerText = ""0"")]
+    [FieldBackedProperty(GetterText = ""field"", SetterText = ""field = value"", InitializerText = ""0"")]
     public partial int Test { get; set; }
 }
 ";
@@ -381,7 +381,7 @@ using CSharpLatest;
 
 internal partial class Program
 {
-    [Property(GetterText = ""field"", SetterText = ""field = value"", InitializerText = ""0"")]
+    [FieldBackedProperty(GetterText = ""field"", SetterText = ""field = value"", InitializerText = ""0"")]
     public virtual partial int Test { get; set; }
 }
 ";
@@ -405,7 +405,7 @@ using CSharpLatest;
 
 internal partial class Program
 {
-    [Property(GetterText = ""field"", SetterText = ""field = value"", InitializerText = ""0"")]
+    [FieldBackedProperty(GetterText = ""field"", SetterText = ""field = value"", InitializerText = ""0"")]
     public virtual partial int Test { get; set; }
 }
 ";
@@ -429,7 +429,7 @@ using CSharpLatest;
 
 internal partial class Program
 {
-    [Property(GetterText = ""field"", SetterText = ""field = value"", InitializerText = ""0"")]
+    [FieldBackedProperty(GetterText = ""field"", SetterText = ""field = value"", InitializerText = ""0"")]
     public override partial int Test { get; set; }
 }
 ";
@@ -453,7 +453,7 @@ using CSharpLatest;
 
 internal partial class Program
 {
-    [Property(GetterText = ""field"", SetterText = ""field = value"", InitializerText = ""0"")]
+    [FieldBackedProperty(GetterText = ""field"", SetterText = ""field = value"", InitializerText = ""0"")]
     public override partial int Test { get; set; }
 }
 ";
@@ -477,7 +477,7 @@ using CSharpLatest;
 
 internal partial class Program
 {
-    [Property(GetterText = ""field"", SetterText = ""field = value"", InitializerText = ""0"")]
+    [FieldBackedProperty(GetterText = ""field"", SetterText = ""field = value"", InitializerText = ""0"")]
     public sealed partial int Test { get; set; }
 }
 ";
@@ -501,7 +501,7 @@ using CSharpLatest;
 
 internal partial class Program
 {
-    [Property(GetterText = ""field"", SetterText = ""field = value"", InitializerText = ""0"")]
+    [FieldBackedProperty(GetterText = ""field"", SetterText = ""field = value"", InitializerText = ""0"")]
     public sealed partial int Test { get; set; }
 }
 ";
@@ -525,7 +525,7 @@ using CSharpLatest;
 
 internal partial class Program
 {
-    [Property(GetterText = ""field"", SetterText = ""field = value"", InitializerText = ""0"")]
+    [FieldBackedProperty(GetterText = ""field"", SetterText = ""field = value"", InitializerText = ""0"")]
     public partial unsafe int Test { get; set; }
 }
 ";
@@ -549,7 +549,7 @@ using CSharpLatest;
 
 internal partial class Program
 {
-    [Property(GetterText = ""field"", SetterText = ""field = value"", InitializerText = ""0"")]
+    [FieldBackedProperty(GetterText = ""field"", SetterText = ""field = value"", InitializerText = ""0"")]
     public partial unsafe int Test { get; set; }
 }
 ";
@@ -573,7 +573,7 @@ using CSharpLatest;
 
 internal partial class Program
 {
-    [Property(GetterText = ""field"", SetterText = ""field = value"", InitializerText = ""0"")]
+    [FieldBackedProperty(GetterText = ""field"", SetterText = ""field = value"", InitializerText = ""0"")]
     public required partial int Test { get; set; }
 }
 ";
@@ -597,7 +597,7 @@ using CSharpLatest;
 
 internal partial class Program
 {
-    [Property(GetterText = ""field"", SetterText = ""field = value"", InitializerText = ""0"")]
+    [FieldBackedProperty(GetterText = ""field"", SetterText = ""field = value"", InitializerText = ""0"")]
     public required partial int Test { get; set; }
 }
 ";
@@ -621,7 +621,7 @@ using CSharpLatest;
 
 internal partial class Program
 {
-    [Property(SetterText = ""field = value"", InitializerText = ""0"")]
+    [FieldBackedProperty(SetterText = ""field = value"", InitializerText = ""0"")]
     public partial int Test { set; }
 }
 ";
@@ -645,7 +645,7 @@ using CSharpLatest;
 
 internal partial class Program
 {
-    [Property(SetterText = ""field = value"", InitializerText = ""0"")]
+    [FieldBackedProperty(SetterText = ""field = value"", InitializerText = ""0"")]
     public partial int Test { set; }
 }
 ";
@@ -669,7 +669,7 @@ using CSharpLatest;
 
 internal partial class Program
 {
-    [Property(GetterText = ""field"", InitializerText = ""0"")]
+    [FieldBackedProperty(GetterText = ""field"", InitializerText = ""0"")]
     public partial int Test { get; }
 }
 ";
@@ -693,7 +693,7 @@ using CSharpLatest;
 
 internal partial class Program
 {
-    [Property(GetterText = ""field"", InitializerText = ""0"")]
+    [FieldBackedProperty(GetterText = ""field"", InitializerText = ""0"")]
     public partial int Test { get; }
 }
 ";
@@ -717,7 +717,7 @@ using CSharpLatest;
 
 internal partial class Program
 {
-    [Property(GetterText = ""{ return field; }"", SetterText = ""field = value"", InitializerText = ""0"")]
+    [FieldBackedProperty(GetterText = ""{ return field; }"", SetterText = ""field = value"", InitializerText = ""0"")]
     public partial int Test { get; set; }
 }
 ";
@@ -741,7 +741,7 @@ using CSharpLatest;
 
 internal partial class Program
 {
-    [Property(GetterText = ""{ return field; }"", SetterText = ""field = value"", InitializerText = ""0"")]
+    [FieldBackedProperty(GetterText = ""{ return field; }"", SetterText = ""field = value"", InitializerText = ""0"")]
     public partial int Test { get; set; }
 }
 ";
@@ -765,7 +765,7 @@ using CSharpLatest;
 
 internal partial class Program
 {
-    [Property(GetterText = ""field"", SetterText = ""{ field = value; }"", InitializerText = ""0"")]
+    [FieldBackedProperty(GetterText = ""field"", SetterText = ""{ field = value; }"", InitializerText = ""0"")]
     public partial int Test { get; set; }
 }
 ";
@@ -789,7 +789,7 @@ using CSharpLatest;
 
 internal partial class Program
 {
-    [Property(GetterText = ""field"", SetterText = ""{ field = value; }"", InitializerText = ""0"")]
+    [FieldBackedProperty(GetterText = ""field"", SetterText = ""{ field = value; }"", InitializerText = ""0"")]
     public partial int Test { get; set; }
 }
 ";
@@ -813,7 +813,7 @@ using CSharpLatest;
 
 internal partial class Program
 {
-    [Property(SetterText = ""field = value;"", InitializerText = ""0"")]
+    [FieldBackedProperty(SetterText = ""field = value;"", InitializerText = ""0"")]
     public partial int Test { set; }
 }
 ";
@@ -837,7 +837,7 @@ using CSharpLatest;
 
 internal partial class Program<T>
 {
-    [Property(GetterText = ""field"", SetterText = ""field = value"", InitializerText = ""0"")]
+    [FieldBackedProperty(GetterText = ""field"", SetterText = ""field = value"", InitializerText = ""0"")]
     public partial int Test { get; set; }
 }
 ";
@@ -862,7 +862,7 @@ using CSharpLatest;
 internal partial class Program<T>
     where T : class
 {
-    [Property(GetterText = ""field"", SetterText = ""field = value"", InitializerText = ""0"")]
+    [FieldBackedProperty(GetterText = ""field"", SetterText = ""field = value"", InitializerText = ""0"")]
     public partial int Test { get; set; }
 }
 ";
@@ -886,8 +886,8 @@ using CSharpLatest;
 
 internal partial class Program
 {
-    [Property(GetterText = ""field"", SetterText = ""field = value"", InitializerText = ""0"")]
-    [Property]
+    [FieldBackedProperty(GetterText = ""field"", SetterText = ""field = value"", InitializerText = ""0"")]
+    [FieldBackedProperty]
     public partial int Test { get; set; }
 }
 ";
@@ -922,7 +922,7 @@ internal partial class Program
     /// </summary>
     /// <param name=""value"">The property value.</param>
     /// <returns>The getter.</returns>
-    [Property(GetterText = ""field"", SetterText = ""field = value"", InitializerText = ""0"")]
+    [FieldBackedProperty(GetterText = ""field"", SetterText = ""field = value"", InitializerText = ""0"")]
     public partial int Test { get; set; }
 }
 ";
@@ -957,7 +957,7 @@ internal partial class Program
 /// </summary>
 /// <param name=""value"">The property value.</param>
 /// <returns>The getter.</returns>
-    [Property(GetterText = ""field"", SetterText = ""field = value"", InitializerText = ""0"")]
+    [FieldBackedProperty(GetterText = ""field"", SetterText = ""field = value"", InitializerText = ""0"")]
     public partial int Test { get; set; }
 }
 ";
@@ -981,7 +981,7 @@ using CSharpLatest;
 
 internal partial class Program
 {
-/**/[Property(GetterText = ""field"", SetterText = ""field = value"", InitializerText = ""0"")]
+/**/[FieldBackedProperty(GetterText = ""field"", SetterText = ""field = value"", InitializerText = ""0"")]
     public partial int Test { get; set; }
 }
 ";
@@ -1004,7 +1004,7 @@ using System;
 using CSharpLatest;
 
 internal partial class Program
-{[Property(GetterText = ""field"", SetterText = ""field = value"", InitializerText = ""0"")]
+{[FieldBackedProperty(GetterText = ""field"", SetterText = ""field = value"", InitializerText = ""0"")]
     public partial int Test { get; set; }
 }
 ";
@@ -1028,7 +1028,7 @@ using CSharpLatest;
 
 internal partial class Program
 {
-    [Property(GetterText = ""field"", SetterText = ""field = value"")]
+    [FieldBackedProperty(GetterText = ""field"", SetterText = ""field = value"")]
     public partial int Test { get; set; }
 }
 ";

@@ -9,10 +9,10 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 /// <summary>
-/// Analyzer for rule CSL1009: PropertyAttribute is missing argument.
+/// Analyzer for rule CSL1009: FieldBackedPropertyAttribute is missing argument.
 /// </summary>
 [DiagnosticAnalyzer(LanguageNames.CSharp)]
-public partial class CSL1009PropertyAttributeIsMissingArgument : DiagnosticAnalyzer
+public partial class CSL1009FieldBackedPropertyAttributeIsMissingArgument : DiagnosticAnalyzer
 {
     /// <summary>
     /// Diagnostic ID for this rule.
@@ -63,7 +63,7 @@ public partial class CSL1009PropertyAttributeIsMissingArgument : DiagnosticAnaly
             new SimpleAnalysisAssertion(context => IsPropertyAttribute(context, (AttributeSyntax)context.Node)));
     }
 
-    private static bool IsPropertyAttribute(SyntaxNodeAnalysisContext context, AttributeSyntax attribute) => AnalyzerTools.IsExpectedAttribute(context, typeof(PropertyAttribute), attribute);
+    private static bool IsPropertyAttribute(SyntaxNodeAnalysisContext context, AttributeSyntax attribute) => AnalyzerTools.IsExpectedAttribute(context, typeof(FieldBackedPropertyAttribute), attribute);
 
     private void AnalyzeVerifiedNode(SyntaxNodeAnalysisContext context, AttributeSyntax attribute, IEnumerable<IAnalysisAssertion> analysisAssertions)
     {

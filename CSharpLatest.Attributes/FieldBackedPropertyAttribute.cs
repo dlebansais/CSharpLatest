@@ -3,11 +3,11 @@
 using System;
 
 /// <summary>
-/// Represents an attribute to automatically generate properties.
+/// Represents an attribute to automatically generate the text of a field backed property.
 /// The 'field' keyword is converted to a field declaration for frameworks that don't support the keyword.
 /// </summary>
 [AttributeUsage(AttributeTargets.Property, Inherited = false, AllowMultiple = false)]
-public sealed class PropertyAttribute : Attribute
+public sealed class FieldBackedPropertyAttribute : Attribute
 {
     /// <summary>
     /// Gets or sets the text to generate for the getter.

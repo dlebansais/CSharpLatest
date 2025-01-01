@@ -304,7 +304,7 @@ namespace CSharpLatest {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to PropertyAttribute is missing argument..
+        ///   Looks up a localized string similar to FieldBackedPropertyAttribute is missing argument..
         /// </summary>
         internal static string CSL1009AnalyzerDescription {
             get {
@@ -322,7 +322,7 @@ namespace CSharpLatest {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Attribute is missing argument.
+        ///   Looks up a localized string similar to FieldBackedPropertyAttribute is missing argument.
         /// </summary>
         internal static string CSL1009AnalyzerTitle {
             get {
@@ -331,7 +331,7 @@ namespace CSharpLatest {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The &apos;init&apos; accessor is not supported in PropertyAttribute..
+        ///   Looks up a localized string similar to The &apos;init&apos; accessor is not supported in FieldBackedPropertyAttribute..
         /// </summary>
         internal static string CSL1010AnalyzerDescription {
             get {
@@ -349,7 +349,7 @@ namespace CSharpLatest {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &apos;init&apos; accessor not supported in PropertyAttribute.
+        ///   Looks up a localized string similar to &apos;init&apos; accessor not supported in FieldBackedPropertyAttribute.
         /// </summary>
         internal static string CSL1010AnalyzerTitle {
             get {

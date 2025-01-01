@@ -10,10 +10,10 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 /// <summary>
-/// Analyzer for rule CSL1010: 'init' accessor not supported in PropertyAttribute.
+/// Analyzer for rule CSL1010: 'init' accessor not supported in FieldBackedPropertyAttribute.
 /// </summary>
 [DiagnosticAnalyzer(LanguageNames.CSharp)]
-public partial class CSL1010InitAccessorNotSupportedInPropertyAttribute : DiagnosticAnalyzer
+public partial class CSL1010InitAccessorNotSupportedInFieldBackedPropertyAttribute : DiagnosticAnalyzer
 {
     /// <summary>
     /// Diagnostic ID for this rule.

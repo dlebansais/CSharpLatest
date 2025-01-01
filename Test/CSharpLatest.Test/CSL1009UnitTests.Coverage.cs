@@ -4,7 +4,7 @@ namespace CSharpLatest.Test;
 
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using VerifyCS = CSharpAnalyzerVerifier<CSL1009PropertyAttributeIsMissingArgument>;
+using VerifyCS = CSharpAnalyzerVerifier<CSL1009FieldBackedPropertyAttributeIsMissingArgument>;
 
 public partial class CSL1009UnitTests
 {
@@ -17,7 +17,7 @@ public partial class CSL1009UnitTests
 
 internal partial class Program
 {
-    [Property]
+    [FieldBackedProperty]
     public int Test { get; }
 }
 ").ConfigureAwait(false);

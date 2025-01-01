@@ -24,7 +24,7 @@ internal static class TestHelper
 
         // Create references for assemblies we require.
         PortableExecutableReference ReferenceBinder = MetadataReference.CreateFromFile(typeof(Binder).GetTypeInfo().Assembly.Location);
-        PortableExecutableReference ReferenceContracts = MetadataReference.CreateFromFile(typeof(PropertyAttribute).GetTypeInfo().Assembly.Location);
+        PortableExecutableReference ReferenceContracts = MetadataReference.CreateFromFile(typeof(FieldBackedPropertyAttribute).GetTypeInfo().Assembly.Location);
 
         CSharpCompilationOptions Options = new(OutputKind.ConsoleApplication,
                                                reportSuppressedDiagnostics: true,

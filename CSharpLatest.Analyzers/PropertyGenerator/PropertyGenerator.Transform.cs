@@ -94,7 +94,7 @@ public partial class PropertyGenerator
     private static (string GetterText, string SetterText, string InitializerText) GetModelText(PropertyDeclarationSyntax propertyDeclaration)
     {
         (string GetterText, string SetterText, string InitializerText) Result = (string.Empty, string.Empty, string.Empty);
-        List<AttributeSyntax> MemberAttributes = GeneratorHelper.GetMemberSupportedAttributes(context: null, propertyDeclaration, [typeof(PropertyAttribute)]);
+        List<AttributeSyntax> MemberAttributes = GeneratorHelper.GetMemberSupportedAttributes(context: null, propertyDeclaration, [typeof(FieldBackedPropertyAttribute)]);
 
         foreach (AttributeSyntax Attribute in MemberAttributes)
             if (Attribute.ArgumentList is AttributeArgumentListSyntax AttributeArgumentList)

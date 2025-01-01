@@ -7,7 +7,7 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.Testing;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using VerifyCS = CSharpAnalyzerVerifier<CSL1010InitAccessorNotSupportedInPropertyAttribute>;
+using VerifyCS = CSharpAnalyzerVerifier<CSL1010InitAccessorNotSupportedInFieldBackedPropertyAttribute>;
 
 [TestClass]
 public partial class CSL1010UnitTests
@@ -19,7 +19,7 @@ public partial class CSL1010UnitTests
 
 internal partial class Program
 {
-    [Property(GetterText = ""field"")]
+    [FieldBackedProperty(GetterText = ""field"")]
     public int Test { get; [|init;|] }
 }
 ").ConfigureAwait(false);
@@ -32,7 +32,7 @@ internal partial class Program
 
 internal partial class Program
 {
-    [Property(GetterText = ""field"", SetterText = ""field = value"", InitializerText = ""0"")]
+    [FieldBackedProperty(GetterText = ""field"", SetterText = ""field = value"", InitializerText = ""0"")]
     public int Test { get; set; }
 }
 ").ConfigureAwait(false);
@@ -45,7 +45,7 @@ internal partial class Program
 
 internal partial class Program
 {
-    [Property(GetterText = ""field"", SetterText = ""field = value"", InitializerText = ""0"")]
+    [FieldBackedProperty(GetterText = ""field"", SetterText = ""field = value"", InitializerText = ""0"")]
     public int Test => 0;
 }
 ").ConfigureAwait(false);
@@ -93,13 +93,13 @@ internal partial class Program
     {
         await VerifyCS.VerifyAnalyzerAsync(Prologs.IsExternalInit, @"
 
-internal class PropertyAttribute : Attribute
+internal class FieldBackedPropertyAttribute : Attribute
 {
 }
 
 internal partial class Program
 {
-    [Property]
+    [FieldBackedProperty]
     public int Test { get; }
 }
 ").ConfigureAwait(false);

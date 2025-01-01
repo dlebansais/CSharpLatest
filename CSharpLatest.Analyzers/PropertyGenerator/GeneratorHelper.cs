@@ -38,7 +38,7 @@ internal static class GeneratorHelper
                     SymbolInfo SymbolInfo = AvailableContext.SemanticModel.GetSymbolInfo(Attribute);
                     if (SymbolInfo.Symbol is ISymbol AttributeSymbol)
                     {
-                        ITypeSymbol PropertyTypeSymbol = Contract.AssertNotNull(AvailableContext.Compilation.GetTypeByMetadataName(typeof(PropertyAttribute).FullName));
+                        ITypeSymbol PropertyTypeSymbol = Contract.AssertNotNull(AvailableContext.Compilation.GetTypeByMetadataName(typeof(FieldBackedPropertyAttribute).FullName));
                         INamespaceSymbol ContainingNamespace = Contract.AssertNotNull(PropertyTypeSymbol.ContainingNamespace);
                         IAssemblySymbol ContainingAssembly = Contract.AssertNotNull(PropertyTypeSymbol.ContainingAssembly);
 

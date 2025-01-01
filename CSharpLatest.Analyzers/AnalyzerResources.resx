@@ -226,7 +226,7 @@
     <comment>The title of the diagnostic.</comment>
   </data>
   <data name="CSL1009AnalyzerDescription" xml:space="preserve">
-    <value>PropertyAttribute is missing argument.</value>
+    <value>FieldBackedPropertyAttribute is missing argument.</value>
     <comment>An optional longer localizable description of the diagnostic.</comment>
   </data>
   <data name="CSL1009AnalyzerMessageFormat" xml:space="preserve">
@@ -234,11 +234,11 @@
     <comment>The format-able message the diagnostic displays.</comment>
   </data>
   <data name="CSL1009AnalyzerTitle" xml:space="preserve">
-    <value>Attribute is missing argument</value>
+    <value>FieldBackedPropertyAttribute is missing argument</value>
     <comment>The title of the diagnostic.</comment>
   </data>
   <data name="CSL1010AnalyzerDescription" xml:space="preserve">
-    <value>The 'init' accessor is not supported in PropertyAttribute.</value>
+    <value>The 'init' accessor is not supported in FieldBackedPropertyAttribute.</value>
     <comment>An optional longer localizable description of the diagnostic.</comment>
   </data>
   <data name="CSL1010AnalyzerMessageFormat" xml:space="preserve">
@@ -246,7 +246,7 @@
     <comment>The format-able message the diagnostic displays.</comment>
   </data>
   <data name="CSL1010AnalyzerTitle" xml:space="preserve">
-    <value>'init' accessor not supported in PropertyAttribute</value>
+    <value>'init' accessor not supported in FieldBackedPropertyAttribute</value>
     <comment>The title of the diagnostic.</comment>
   </data>
 </root>

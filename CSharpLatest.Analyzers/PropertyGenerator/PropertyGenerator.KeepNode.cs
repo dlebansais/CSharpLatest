@@ -62,7 +62,7 @@ public partial class PropertyGenerator
         Contract.RequireNotNull(propertyDeclaration, out MemberDeclarationSyntax PropertyDeclaration);
 
         // Get a list of all supported attributes for this property.
-        List<AttributeSyntax> PropertyAttributes = GeneratorHelper.GetMemberSupportedAttributes(context, PropertyDeclaration, [typeof(PropertyAttribute)]);
+        List<AttributeSyntax> PropertyAttributes = GeneratorHelper.GetMemberSupportedAttributes(context, PropertyDeclaration, [typeof(FieldBackedPropertyAttribute)]);
         List<string> AttributeNames = [];
 
         foreach (AttributeSyntax Attribute in PropertyAttributes)
@@ -81,7 +81,7 @@ public partial class PropertyGenerator
 
             Dictionary<string, Func<MemberDeclarationSyntax, IReadOnlyList<AttributeArgumentSyntax>, AttributeValidityCheckResult>> ValidityVerifierTable = new()
             {
-                { nameof(PropertyAttribute), IsValidPropertyAttribute },
+                { nameof(FieldBackedPropertyAttribute), IsValidPropertyAttribute },
             };
 
             Contract.Assert(ValidityVerifierTable.ContainsKey(AttributeName));
@@ -104,7 +104,7 @@ public partial class PropertyGenerator
     }
 
     /// <summary>
-    /// Checks whether a list of arguments to <see cref="PropertyAttribute"/> are valid.
+    /// Checks whether a list of arguments to <see cref="FieldBackedPropertyAttribute"/> are valid.
     /// </summary>
     /// <param name="propertyDeclaration">The property with the attribute.</param>
     /// <param name="attributeArguments">The list of arguments.</param>
@@ -144,11 +144,11 @@ public partial class PropertyGenerator
         // Valid string attribute arguments are never empty.
         Contract.Assert(ArgumentValue != string.Empty);
 
-        if (ArgumentName == nameof(PropertyAttribute.GetterText))
+        if (ArgumentName == nameof(FieldBackedPropertyAttribute.GetterText))
             getterText = ArgumentValue;
-        else if (ArgumentName == nameof(PropertyAttribute.SetterText))
+        else if (ArgumentName == nameof(FieldBackedPropertyAttribute.SetterText))
             setterText = ArgumentValue;
-        else if (ArgumentName == nameof(PropertyAttribute.InitializerText))
+        else if (ArgumentName == nameof(FieldBackedPropertyAttribute.InitializerText))
             initializerText = ArgumentValue;
         else
             return false;
