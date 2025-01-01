@@ -34,6 +34,10 @@ public partial class PropertyGenerator
             return false;
         }
 
+        // Ignore properties without modifier (it has to be partial to work).
+        if (PropertyDeclaration.Modifiers.Count == 0)
+            return false;
+
         // Ignore properties with init accessor.
         if (PropertyDeclaration.AccessorList is AccessorListSyntax AccessorList &&
             AccessorList.Accessors.Any(accessor => accessor.Keyword.IsKind(SyntaxKind.InitKeyword)))
@@ -86,9 +90,14 @@ public partial class PropertyGenerator
             AttributeGeneration AttributeGeneration = CheckResult.Result;
 
             if (AttributeGeneration == AttributeGeneration.Invalid)
+            {
                 return false;
-            else if (AttributeGeneration == AttributeGeneration.Valid)
+            }
+            else
+            {
+                Contract.Assert(AttributeGeneration == AttributeGeneration.Valid);
                 attributeNames.Add(AttributeName);
+            }
         }
 
         return true;

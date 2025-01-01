@@ -23,8 +23,7 @@ public partial class PropertyGenerator
         string Tab = new(' ', Math.Max(Settings.TabLength, 1));
         SyntaxTriviaList LeadingTrivia = GetLeadingTriviaWithLineEnd(Tab);
         SyntaxTriviaList LeadingTriviaWithoutLineEnd = GetLeadingTriviaWithoutLineEnd(Tab);
-        SyntaxTriviaList? TrailingTrivia = GetModifiersTrailingTrivia(PropertyDeclaration);
-        bool SimplifyReturnTypeLeadingTrivia = PropertyDeclaration.Modifiers.Count == 0 && PropertyDeclaration.Type.HasLeadingTrivia;
+        SyntaxTriviaList TrailingTrivia = PropertyDeclaration.Modifiers.Last().TrailingTrivia;
 
         SyntaxList<AttributeListSyntax> CodeAttributes = GenerateCodeAttributes();
         PropertyDeclaration = PropertyDeclaration.WithAttributeLists(CodeAttributes);
@@ -40,9 +39,6 @@ public partial class PropertyGenerator
 
         if (IsFieldKeywordSupported && HasInitializer(model, out EqualsValueClauseSyntax Initializer))
             PropertyDeclaration = PropertyDeclaration.WithInitializer(Initializer);
-
-        if (SimplifyReturnTypeLeadingTrivia) // This case applies to properties with zero modifier that become public.
-            PropertyDeclaration = PropertyDeclaration.WithType(PropertyDeclaration.Type.WithLeadingTrivia(SyntaxFactory.Space));
 
         PropertyDeclaration = PropertyDeclaration.WithLeadingTrivia(LeadingTriviaWithoutLineEnd);
 
@@ -82,8 +78,6 @@ public partial class PropertyGenerator
         return SyntaxFactory.TriviaList(Trivias);
     }
 
-    private static SyntaxTriviaList? GetModifiersTrailingTrivia(MemberDeclarationSyntax memberDeclaration) => memberDeclaration.Modifiers.Count > 0 ? memberDeclaration.Modifiers.Last().TrailingTrivia : null;
-
     private static SyntaxList<AttributeListSyntax> GenerateCodeAttributes()
     {
         NameSyntax AttributeName = SyntaxFactory.IdentifierName(nameof(GeneratedCodeAttribute));
@@ -114,14 +108,23 @@ public partial class PropertyGenerator
 
     private static string GetToolVersion() => System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
 
-    private static SyntaxTokenList GeneratePropertyModifiers(MemberDeclarationSyntax memberDeclaration, SyntaxTriviaList leadingTrivia, SyntaxTriviaList? trailingTrivia)
+    private static SyntaxTokenList GeneratePropertyModifiers(MemberDeclarationSyntax memberDeclaration, SyntaxTriviaList leadingTrivia, SyntaxTriviaList trailingTrivia)
     {
         List<SyntaxToken> ModifierTokens = GeneratePropertyDefaultModifiers(memberDeclaration, leadingTrivia, trailingTrivia);
 
         return SyntaxFactory.TokenList(ModifierTokens);
     }
 
-    private static List<SyntaxToken> GeneratePropertyDefaultModifiers(MemberDeclarationSyntax memberDeclaration, SyntaxTriviaList leadingTrivia, SyntaxTriviaList? trailingTrivia)
+    private static void AddModifier(List<SyntaxToken> modifierTokens, SyntaxToken modifier, ref SyntaxTriviaList currentTrivia)
+    {
+        SyntaxToken StaticModifierToken = SyntaxFactory.Identifier(modifier.Text);
+        StaticModifierToken = StaticModifierToken.WithLeadingTrivia(currentTrivia);
+        modifierTokens.Add(StaticModifierToken);
+
+        UpdateTrivia(ref currentTrivia);
+    }
+
+    private static List<SyntaxToken> GeneratePropertyDefaultModifiers(MemberDeclarationSyntax memberDeclaration, SyntaxTriviaList leadingTrivia, SyntaxTriviaList trailingTrivia)
     {
         List<SyntaxToken> ModifierTokens = [];
         SyntaxTriviaList CurrentTrivia = leadingTrivia;
@@ -130,15 +133,11 @@ public partial class PropertyGenerator
         foreach (SyntaxToken Modifier in memberDeclaration.Modifiers)
         {
             string ModifierText = Modifier.Text;
+            bool IsAccessModifier = ModifierText is "public" or "protected" or "internal" or "private" or "file";
+            bool IsOtherModifier = ModifierText is "virtual" or "override" or "sealed" or "required";
 
-            if (ModifierText is "public" or "protected" or "internal" or "private" or "file")
-            {
-                SyntaxToken StaticModifierToken = SyntaxFactory.Identifier(Modifier.Text);
-                StaticModifierToken = StaticModifierToken.WithLeadingTrivia(CurrentTrivia);
-                ModifierTokens.Add(StaticModifierToken);
-
-                UpdateTrivia(ref CurrentTrivia);
-            }
+            if (IsAccessModifier || IsOtherModifier)
+                AddModifier(ModifierTokens, Modifier, ref CurrentTrivia);
         }
 
         SyntaxToken PartialModifierToken = SyntaxFactory.Identifier("partial");
@@ -147,19 +146,13 @@ public partial class PropertyGenerator
 
         UpdateTrivia(ref CurrentTrivia);
 
-        // Replicate other modifiers in the generated code.
+        // Replicate other modifiers that have to be after 'partial' in the generated code.
         foreach (SyntaxToken Modifier in memberDeclaration.Modifiers)
         {
             string ModifierText = Modifier.Text;
 
-            if (ModifierText is "static" or "virtual" or "override" or "sealed" or "unsafe" or "required")
-            {
-                SyntaxToken StaticModifierToken = SyntaxFactory.Identifier(Modifier.Text);
-                StaticModifierToken = StaticModifierToken.WithLeadingTrivia(CurrentTrivia);
-                ModifierTokens.Add(StaticModifierToken);
-
-                UpdateTrivia(ref CurrentTrivia);
-            }
+            if (ModifierText is "static" or "unsafe")
+                AddModifier(ModifierTokens, Modifier, ref CurrentTrivia);
         }
 
         int LastItemIndex = ModifierTokens.Count - 1;
@@ -191,22 +184,45 @@ public partial class PropertyGenerator
             ? null
             : Settings.FieldPrefix + model.SymbolName;
 
-        AccessorDeclarationSyntax Getter = IsTextExpressionBody(model.GetterText, FieldReplacement, out ArrowExpressionClauseSyntax GetterExpressionBody)
-            ? SyntaxFactory.AccessorDeclaration(SyntaxKind.GetAccessorDeclaration).WithExpressionBody(GetterExpressionBody).WithSemicolonToken(SyntaxFactory.Token(SyntaxKind.SemicolonToken))
-            : IsTextBlockBody(model.GetterText, FieldReplacement, out BlockSyntax GetterBlockBody)
-                ? SyntaxFactory.AccessorDeclaration(SyntaxKind.GetAccessorDeclaration, GetterBlockBody)
-                : SyntaxFactory.AccessorDeclaration(SyntaxKind.GetAccessorDeclaration);
+        AccessorDeclarationSyntax Getter = IsTextBlockBody(model.GetterText, FieldReplacement, out BlockSyntax GetterBlockBody)
+            ? SyntaxFactory.AccessorDeclaration(SyntaxKind.GetAccessorDeclaration, GetterBlockBody)
+            : IsTextExpressionBody(model.GetterText, FieldReplacement, out ArrowExpressionClauseSyntax GetterExpressionBody)
+                ? SyntaxFactory.AccessorDeclaration(SyntaxKind.GetAccessorDeclaration).WithExpressionBody(GetterExpressionBody).WithSemicolonToken(SyntaxFactory.Token(SyntaxKind.SemicolonToken))
+                : SyntaxFactory.AccessorDeclaration(SyntaxKind.GetAccessorDeclaration).WithSemicolonToken(SyntaxFactory.Token(SyntaxKind.SemicolonToken));
 
-        AccessorDeclarationSyntax Setter = IsTextExpressionBody(model.SetterText, FieldReplacement, out ArrowExpressionClauseSyntax SetterExpressionBody)
-            ? SyntaxFactory.AccessorDeclaration(SyntaxKind.SetAccessorDeclaration).WithExpressionBody(SetterExpressionBody).WithSemicolonToken(SyntaxFactory.Token(SyntaxKind.SemicolonToken))
-            : IsTextBlockBody(model.SetterText, FieldReplacement, out BlockSyntax SetterBlockBody)
-                ? SyntaxFactory.AccessorDeclaration(SyntaxKind.SetAccessorDeclaration, SetterBlockBody)
-                : SyntaxFactory.AccessorDeclaration(SyntaxKind.SetAccessorDeclaration);
+        AccessorDeclarationSyntax Setter = IsTextBlockBody(model.SetterText, FieldReplacement, out BlockSyntax SetterBlockBody)
+            ? SyntaxFactory.AccessorDeclaration(SyntaxKind.SetAccessorDeclaration, SetterBlockBody)
+            : IsTextExpressionBody(model.SetterText, FieldReplacement, out ArrowExpressionClauseSyntax SetterExpressionBody)
+                ? SyntaxFactory.AccessorDeclaration(SyntaxKind.SetAccessorDeclaration).WithExpressionBody(SetterExpressionBody).WithSemicolonToken(SyntaxFactory.Token(SyntaxKind.SemicolonToken))
+                : SyntaxFactory.AccessorDeclaration(SyntaxKind.SetAccessorDeclaration).WithSemicolonToken(SyntaxFactory.Token(SyntaxKind.SemicolonToken));
 
         Getter = Getter.WithLeadingTrivia(TabAccessorsTrivia);
         Setter = Setter.WithLeadingTrivia(TabAccessorsTrivia);
 
         return SyntaxFactory.AccessorList(OpenBraceToken, [Getter, Setter], CloseBraceToken);
+    }
+
+    private static bool IsTextBlockBody(string text, string? fieldReplacement, out BlockSyntax blockBody)
+    {
+        if (text != string.Empty)
+        {
+            if (fieldReplacement is not null)
+                text = text.Replace("field", fieldReplacement);
+
+            CompilationUnitSyntax ParsedRoot = (CompilationUnitSyntax)SyntaxFactory.ParseSyntaxTree(text).GetRoot();
+
+            Contract.Assert(ParsedRoot.Members.Count > 0);
+            GlobalStatementSyntax GlobalStatement = (GlobalStatementSyntax)ParsedRoot.Members[0];
+
+            if (GlobalStatement.Statement is BlockSyntax Block)
+            {
+                blockBody = Block.WithLeadingTrivia(SyntaxFactory.Space);
+                return true;
+            }
+        }
+
+        Contract.Unused(out blockBody);
+        return false;
     }
 
     private static bool IsTextExpressionBody(string text, string? fieldReplacement, out ArrowExpressionClauseSyntax expressionBody)
@@ -217,29 +233,15 @@ public partial class PropertyGenerator
                 text = text.Replace("field", fieldReplacement);
 
             ExpressionSyntax Invocation = SyntaxFactory.ParseExpression(text);
-            expressionBody = SyntaxFactory.ArrowExpressionClause(Invocation.WithLeadingTrivia(SyntaxFactory.Space)).WithLeadingTrivia(SyntaxFactory.Space);
-            return true;
-        }
-
-        Contract.Unused(out expressionBody);
-        return false;
-    }
-
-    private static bool IsTextBlockBody(string text, string? fieldReplacement, out BlockSyntax blockBody)
-    {
-        if (text != string.Empty)
-        {
-            if (fieldReplacement is not null)
-                text = text.Replace("field", fieldReplacement);
-
-            if (SyntaxFactory.ParseSyntaxTree(text).GetRoot() is BlockSyntax Block)
+            string FullText = Invocation.ToString();
+            if (FullText == text)
             {
-                blockBody = Block;
+                expressionBody = SyntaxFactory.ArrowExpressionClause(Invocation.WithLeadingTrivia(SyntaxFactory.Space)).WithLeadingTrivia(SyntaxFactory.Space);
                 return true;
             }
         }
 
-        Contract.Unused(out blockBody);
+        Contract.Unused(out expressionBody);
         return false;
     }
 }

@@ -329,5 +329,32 @@ namespace CSharpLatest {
                 return ResourceManager.GetString("CSL1009AnalyzerTitle", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The &apos;init&apos; accessor is not supported in PropertyAttribute..
+        /// </summary>
+        internal static string CSL1010AnalyzerDescription {
+            get {
+                return ResourceManager.GetString("CSL1010AnalyzerDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &apos;{0}&apos; accessor not supported.
+        /// </summary>
+        internal static string CSL1010AnalyzerMessageFormat {
+            get {
+                return ResourceManager.GetString("CSL1010AnalyzerMessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &apos;init&apos; accessor not supported in PropertyAttribute.
+        /// </summary>
+        internal static string CSL1010AnalyzerTitle {
+            get {
+                return ResourceManager.GetString("CSL1010AnalyzerTitle", resourceCulture);
+            }
+        }
     }
 }

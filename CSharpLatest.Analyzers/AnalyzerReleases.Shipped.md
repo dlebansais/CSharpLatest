@@ -1,4 +1,4 @@
-﻿## Release 2.1.0
+﻿## Release 2.1.1
 
 ### New Rules
 
@@ -14,3 +14,4 @@ CSL1006 |  Usage   |  Warning | CSL1006SimplifyOneLineSetter, [Documentation](do
 CSL1007 |  Style   |  Warning | CSL1007AddMissingBraces, [Documentation](doc/CSL1007.md)
 CSL1008 |  Style   |  Warning | CSL1008RemoveUnnecessaryBraces, [Documentation](doc/CSL1008.md)
 CSL1009 |  Usage   |   Error  | CSL1009PropertyAttributeIsMissingArgument, [Documentation](doc/CSL1009.md)
+CSL1010 |  Usage   |   Error  | CSL1010InitAccessorNotSupportedInPropertyAttribute, [Documentation](doc/CSL1010.md)

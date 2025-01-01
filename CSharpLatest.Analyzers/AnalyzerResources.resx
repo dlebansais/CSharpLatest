@@ -237,4 +237,16 @@
     <value>Attribute is missing argument</value>
     <comment>The title of the diagnostic.</comment>
   </data>
+  <data name="CSL1010AnalyzerDescription" xml:space="preserve">
+    <value>The 'init' accessor is not supported in PropertyAttribute.</value>
+    <comment>An optional longer localizable description of the diagnostic.</comment>
+  </data>
+  <data name="CSL1010AnalyzerMessageFormat" xml:space="preserve">
+    <value>'{0}' accessor not supported</value>
+    <comment>The format-able message the diagnostic displays.</comment>
+  </data>
+  <data name="CSL1010AnalyzerTitle" xml:space="preserve">
+    <value>'init' accessor not supported in PropertyAttribute</value>
+    <comment>The title of the diagnostic.</comment>
+  </data>
 </root>

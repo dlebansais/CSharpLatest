@@ -732,22 +732,22 @@ class Program
             );
 
         var Expected1 = new DiagnosticResult(DescriptorCS0161);
-        Expected1 = Expected1.WithLocation("/0/Test0.cs", 15, 16);
+        Expected1 = Expected1.WithLocation("/0/Test0.cs", 17, 16);
 
         var Expected2 = new DiagnosticResult(DescriptorCSL1007);
-        Expected2 = Expected2.WithLocation("/0/Test0.cs", 17, 9);
+        Expected2 = Expected2.WithLocation("/0/Test0.cs", 19, 9);
 
         var Expected3 = new DiagnosticResult(DescriptorCS1002);
-        Expected3 = Expected3.WithLocation("/0/Test0.cs", 17, 19);
+        Expected3 = Expected3.WithLocation("/0/Test0.cs", 19, 19);
 
         var Expected4 = new DiagnosticResult(DescriptorCS1525);
-        Expected4 = Expected4.WithLocation("/0/Test0.cs", 17, 19);
+        Expected4 = Expected4.WithLocation("/0/Test0.cs", 19, 19);
 
         var Expected5 = new DiagnosticResult(DescriptorCS1519);
-        Expected5 = Expected5.WithLocation("/0/Test0.cs", 20, 9);
+        Expected5 = Expected5.WithLocation("/0/Test0.cs", 22, 9);
 
         var Expected6 = new DiagnosticResult(DescriptorCS1022);
-        Expected6 = Expected6.WithLocation("/0/Test0.cs", 22, 1);
+        Expected6 = Expected6.WithLocation("/0/Test0.cs", 24, 1);
 
         await VerifyCS.VerifyAnalyzerAsync(Options, Prologs.IsExternalInit, @"
 class Program
@@ -824,19 +824,19 @@ Expected6);
             );
 
         var Expected1 = new DiagnosticResult(DescriptorCS0161);
-        Expected1 = Expected1.WithLocation("/0/Test0.cs", 15, 16);
+        Expected1 = Expected1.WithLocation("/0/Test0.cs", 17, 16);
 
         var Expected2 = new DiagnosticResult(DescriptorCS1002);
-        Expected2 = Expected2.WithLocation("/0/Test0.cs", 17, 19);
+        Expected2 = Expected2.WithLocation("/0/Test0.cs", 19, 19);
 
         var Expected3 = new DiagnosticResult(DescriptorCS1525);
-        Expected3 = Expected3.WithLocation("/0/Test0.cs", 17, 19);
+        Expected3 = Expected3.WithLocation("/0/Test0.cs", 19, 19);
 
         var Expected4 = new DiagnosticResult(DescriptorCS1519);
-        Expected4 = Expected4.WithLocation("/0/Test0.cs", 20, 9);
+        Expected4 = Expected4.WithLocation("/0/Test0.cs", 22, 9);
 
         var Expected5 = new DiagnosticResult(DescriptorCS1022);
-        Expected5 = Expected5.WithLocation("/0/Test0.cs", 22, 1);
+        Expected5 = Expected5.WithLocation("/0/Test0.cs", 24, 1);
 
         await VerifyCS.VerifyAnalyzerAsync(Options, Prologs.IsExternalInit, @"
 class Program

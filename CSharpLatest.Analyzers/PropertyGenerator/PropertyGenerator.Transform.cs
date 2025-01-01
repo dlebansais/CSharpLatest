@@ -44,49 +44,19 @@ public partial class PropertyGenerator
         if (propertyDeclaration.FirstAncestorOrSelf<ClassDeclarationSyntax>() is ClassDeclarationSyntax ClassDeclaration)
         {
             DeclarationTokens = "class";
-            FullClassName = ClassName;
-            TypeParameterListSyntax? TypeParameterList = ClassDeclaration.TypeParameterList;
-
-            if (TypeParameterList is not null)
-            {
-                FullClassName += TypeParameterList.ToString();
-
-                string ConstraintClauses = ClassDeclaration.ConstraintClauses.ToString();
-                if (ConstraintClauses != string.Empty)
-                    FullClassName += " " + ConstraintClauses;
-            }
+            FullClassName = ClassNameWithTypeParameters(ClassName, ClassDeclaration.TypeParameterList, ClassDeclaration.ConstraintClauses);
         }
 
         if (propertyDeclaration.FirstAncestorOrSelf<StructDeclarationSyntax>() is StructDeclarationSyntax StructDeclaration)
         {
             DeclarationTokens = "struct";
-            FullClassName = ClassName;
-            TypeParameterListSyntax? TypeParameterList = StructDeclaration.TypeParameterList;
-
-            if (TypeParameterList is not null)
-            {
-                FullClassName += TypeParameterList.ToString();
-
-                string ConstraintClauses = StructDeclaration.ConstraintClauses.ToString();
-                if (ConstraintClauses != string.Empty)
-                    FullClassName += " " + ConstraintClauses;
-            }
+            FullClassName = ClassNameWithTypeParameters(ClassName, StructDeclaration.TypeParameterList, StructDeclaration.ConstraintClauses);
         }
 
         if (propertyDeclaration.FirstAncestorOrSelf<RecordDeclarationSyntax>() is RecordDeclarationSyntax RecordDeclaration)
         {
             DeclarationTokens = RecordDeclaration.ClassOrStructKeyword.IsKind(SyntaxKind.StructKeyword) ? "record struct" : "record";
-            FullClassName = ClassName;
-            TypeParameterListSyntax? TypeParameterList = RecordDeclaration.TypeParameterList;
-
-            if (TypeParameterList is not null)
-            {
-                FullClassName += TypeParameterList.ToString();
-
-                string ConstraintClauses = RecordDeclaration.ConstraintClauses.ToString();
-                if (ConstraintClauses != string.Empty)
-                    FullClassName += " " + ConstraintClauses;
-            }
+            FullClassName = ClassNameWithTypeParameters(ClassName, RecordDeclaration.TypeParameterList, RecordDeclaration.ConstraintClauses);
         }
 
         string SymbolName = context.TargetSymbol.Name;
@@ -103,6 +73,22 @@ public partial class PropertyGenerator
             Documentation: string.Empty,
             GeneratedPropertyDeclaration: string.Empty,
             GeneratedFieldDeclaration: string.Empty);
+    }
+
+    private static string ClassNameWithTypeParameters(string fullClassName, TypeParameterListSyntax? typeParameterList, SyntaxList<TypeParameterConstraintClauseSyntax> constraintClauses)
+    {
+        string Result = fullClassName;
+
+        if (typeParameterList is not null)
+        {
+            Result += typeParameterList.ToString();
+
+            string ConstraintClausesText = constraintClauses.ToString();
+            if (ConstraintClausesText != string.Empty)
+                Result += " " + ConstraintClausesText;
+        }
+
+        return Result;
     }
 
     private static (string GetterText, string SetterText, string InitializerText) GetModelText(PropertyDeclarationSyntax propertyDeclaration)
@@ -168,7 +154,7 @@ public partial class PropertyGenerator
             foreach (SyntaxTrivia Trivia in LeadingTrivia)
                 if (Trivia.IsKind(SyntaxKind.SingleLineDocumentationCommentTrivia))
                 {
-                    Documentation = LeadingTrivia.ToString().Trim('\r').Trim('\n').TrimEnd(' ');
+                    Documentation = LeadingTrivia.ToFullString().Trim('\r').Trim('\n').TrimEnd(' ');
                     break;
                 }
         }

@@ -8,7 +8,7 @@ using VerifyTests;
 [TestFixture]
 internal class TestNoGeneration
 {
-    [Test]
+    [NUnit.Framework.Test]
     public async Task TestNoNamespace()
     {
         // The source code to test
@@ -27,7 +27,7 @@ public class SimpleTest
         Assert.That(Result.Files, Has.Exactly(0).Items);
     }
 
-    [Test]
+    [NUnit.Framework.Test]
     public async Task TestNoClass()
     {
         // The source code to test
@@ -45,7 +45,7 @@ public partial int Test { get; set; }
         Assert.That(Result.Files, Has.Exactly(0).Items);
     }
 
-    [Test]
+    [NUnit.Framework.Test]
     public async Task TestNoMember()
     {
         // The source code to test
@@ -64,7 +64,7 @@ public class SimpleTest
         Assert.That(Result.Files, Has.Exactly(0).Items);
     }
 
-    [Test]
+    [NUnit.Framework.Test]
     public async Task TestIndexer()
     {
         // The source code to test
@@ -91,7 +91,7 @@ public class SimpleTest
         Assert.That(Result.Files, Has.Exactly(0).Items);
     }
 
-    [Test]
+    [NUnit.Framework.Test]
     public async Task TestNoAttributeArguments()
     {
         // The source code to test
@@ -112,7 +112,7 @@ public class SimpleTest
         Assert.That(Result.Files, Has.Exactly(0).Items);
     }
 
-    [Test]
+    [NUnit.Framework.Test]
     public async Task TestEmptyAttributeArguments()
     {
         // The source code to test
@@ -133,7 +133,7 @@ public class SimpleTest
         Assert.That(Result.Files, Has.Exactly(0).Items);
     }
 
-    [Test]
+    [NUnit.Framework.Test]
     public async Task TestEmptyStringAttributeArgument()
     {
         // The source code to test
@@ -154,7 +154,7 @@ public class SimpleTest
         Assert.That(Result.Files, Has.Exactly(0).Items);
     }
 
-    [Test]
+    [NUnit.Framework.Test]
     public async Task TestInvalidAttributeArguments()
     {
         // The source code to test
@@ -177,7 +177,7 @@ public class SimpleTest
         Assert.That(Result.Files, Has.Exactly(0).Items);
     }
 
-    [Test]
+    [NUnit.Framework.Test]
     public async Task TestInitAccessor()
     {
         // The source code to test
@@ -201,7 +201,7 @@ internal partial class Program
         Assert.That(Result.Files, Has.Exactly(0).Items);
     }
 
-    [Test]
+    [NUnit.Framework.Test]
     public async Task TestOtherAttributeSameName()
     {
         // The source code to test
@@ -231,7 +231,7 @@ internal partial class Program
         Assert.That(Result.Files, Has.Exactly(0).Items);
     }
 
-    [Test]
+    [NUnit.Framework.Test]
     public async Task TestInitializerOnly()
     {
         // The source code to test
@@ -255,7 +255,7 @@ internal partial class Program
         Assert.That(Result.Files, Has.Exactly(0).Items);
     }
 
-    [Test]
+    [NUnit.Framework.Test]
     public async Task TestInvalidAttributeArgumentName()
     {
         // The source code to test
@@ -269,6 +269,111 @@ internal partial class Program
 {
     [Property(SomeText = ""field"")]
     public partial int Test { get; }
+}
+";
+
+        // Pass the source code to the helper and snapshot test the output.
+        GeneratorDriver Driver = TestHelper.GetDriver(Source);
+        VerifyResult Result = await VerifyNoGeneration.Verify(Driver).ConfigureAwait(false);
+
+        Assert.That(Result.Files, Has.Exactly(0).Items);
+    }
+
+    [NUnit.Framework.Test]
+    public async Task TestNoAccessors()
+    {
+        // The source code to test
+        const string Source = @"
+namespace Contracts.TestSuite;
+
+public class SimpleTest
+{
+    [Property(GetterText = ""field"", SetterText = ""field = value"", InitializerText = ""0"")]
+    public partial int Test => 0;
+}
+";
+
+        // Pass the source code to the helper and snapshot test the output.
+        GeneratorDriver Driver = TestHelper.GetDriver(Source);
+        VerifyResult Result = await VerifyNoGeneration.Verify(Driver).ConfigureAwait(false);
+
+        Assert.That(Result.Files, Has.Exactly(0).Items);
+    }
+
+    [NUnit.Framework.Test]
+    public async Task TestNameofArgument()
+    {
+        // The source code to test
+        const string Source = @"
+namespace Contracts.TestSuite;
+
+public class SimpleTest
+{
+    [Property(GetterText = nameof(field))]
+    public partial int Test { get; }
+}
+";
+
+        // Pass the source code to the helper and snapshot test the output.
+        GeneratorDriver Driver = TestHelper.GetDriver(Source);
+        VerifyResult Result = await VerifyNoGeneration.Verify(Driver).ConfigureAwait(false);
+
+        Assert.That(Result.Files, Has.Exactly(0).Items);
+    }
+
+    [NUnit.Framework.Test]
+    public async Task TestEmptyArgument()
+    {
+        // The source code to test
+        const string Source = @"
+namespace Contracts.TestSuite;
+
+public class SimpleTest
+{
+    [Property(GetterText = """")]
+    public partial int Test { get; }
+}
+";
+
+        // Pass the source code to the helper and snapshot test the output.
+        GeneratorDriver Driver = TestHelper.GetDriver(Source);
+        VerifyResult Result = await VerifyNoGeneration.Verify(Driver).ConfigureAwait(false);
+
+        Assert.That(Result.Files, Has.Exactly(0).Items);
+    }
+
+    [NUnit.Framework.Test]
+    public async Task TestWrongTypeArgument()
+    {
+        // The source code to test
+        const string Source = @"
+namespace Contracts.TestSuite;
+
+public class SimpleTest
+{
+    [Property(GetterText = 0)]
+    public partial int Test { get; }
+}
+";
+
+        // Pass the source code to the helper and snapshot test the output.
+        GeneratorDriver Driver = TestHelper.GetDriver(Source);
+        VerifyResult Result = await VerifyNoGeneration.Verify(Driver).ConfigureAwait(false);
+
+        Assert.That(Result.Files, Has.Exactly(0).Items);
+    }
+
+    [NUnit.Framework.Test]
+    public async Task TestNoModifiers()
+    {
+        // The source code to test
+        const string Source = @"
+namespace Contracts.TestSuite;
+
+public class SimpleTest
+{
+    [Property(GetterText = """")]
+    int Test { get; }
 }
 ";
 

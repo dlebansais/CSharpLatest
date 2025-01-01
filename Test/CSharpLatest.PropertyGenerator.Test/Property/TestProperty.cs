@@ -8,7 +8,7 @@ using VerifyTests;
 [TestFixture]
 internal class TestProperty
 {
-    [Test]
+    [NUnit.Framework.Test]
     public async Task TestSuccessNetFramework()
     {
         // The source code to test
@@ -32,7 +32,7 @@ internal partial class Program
         Assert.That(Result.Files, Has.Exactly(1).Items);
     }
 
-    [Test]
+    [NUnit.Framework.Test]
     public async Task TestSuccessNet9()
     {
         // The source code to test
@@ -56,7 +56,7 @@ internal partial class Program
         Assert.That(Result.Files, Has.Exactly(1).Items);
     }
 
-    [Test]
+    [NUnit.Framework.Test]
     public async Task TestStaticNetFramework()
     {
         // The source code to test
@@ -80,7 +80,7 @@ internal partial class Program
         Assert.That(Result.Files, Has.Exactly(1).Items);
     }
 
-    [Test]
+    [NUnit.Framework.Test]
     public async Task TestStaticNet9()
     {
         // The source code to test
@@ -104,7 +104,7 @@ internal partial class Program
         Assert.That(Result.Files, Has.Exactly(1).Items);
     }
 
-    [Test]
+    [NUnit.Framework.Test]
     public async Task TestProtectedNetFramework()
     {
         // The source code to test
@@ -128,7 +128,7 @@ internal partial class Program
         Assert.That(Result.Files, Has.Exactly(1).Items);
     }
 
-    [Test]
+    [NUnit.Framework.Test]
     public async Task TestProtectedNet9()
     {
         // The source code to test
@@ -147,6 +147,894 @@ internal partial class Program
 
         // Pass the source code to the helper and snapshot test the output.
         GeneratorDriver Driver = TestHelper.GetDriver(Source, setFieldKeywordSupport: true);
+        VerifyResult Result = await VerifyEnsure.Verify(Driver).ConfigureAwait(false);
+
+        Assert.That(Result.Files, Has.Exactly(1).Items);
+    }
+
+    [NUnit.Framework.Test]
+    public async Task TestInternalNetFramework()
+    {
+        // The source code to test
+        const string Source = @"
+namespace CSharpLatest.TestSuite;
+
+using System;
+using CSharpLatest;
+
+internal partial class Program
+{
+    [Property(GetterText = ""field"", SetterText = ""field = value"", InitializerText = ""0"")]
+    internal partial int Test { get; set; }
+}
+";
+
+        // Pass the source code to the helper and snapshot test the output.
+        GeneratorDriver Driver = TestHelper.GetDriver(Source);
+        VerifyResult Result = await VerifyEnsure.Verify(Driver).ConfigureAwait(false);
+
+        Assert.That(Result.Files, Has.Exactly(1).Items);
+    }
+
+    [NUnit.Framework.Test]
+    public async Task TestInternalNet9()
+    {
+        // The source code to test
+        const string Source = @"
+namespace CSharpLatest.TestSuite;
+
+using System;
+using CSharpLatest;
+
+internal partial class Program
+{
+    [Property(GetterText = ""field"", SetterText = ""field = value"", InitializerText = ""0"")]
+    internal partial int Test { get; set; }
+}
+";
+
+        // Pass the source code to the helper and snapshot test the output.
+        GeneratorDriver Driver = TestHelper.GetDriver(Source, setFieldKeywordSupport: true);
+        VerifyResult Result = await VerifyEnsure.Verify(Driver).ConfigureAwait(false);
+
+        Assert.That(Result.Files, Has.Exactly(1).Items);
+    }
+
+    [NUnit.Framework.Test]
+    public async Task TestFileNetFramework()
+    {
+        // The source code to test
+        const string Source = @"
+namespace CSharpLatest.TestSuite;
+
+using System;
+using CSharpLatest;
+
+internal partial class Program
+{
+    [Property(GetterText = ""field"", SetterText = ""field = value"", InitializerText = ""0"")]
+    file partial int Test { get; set; }
+}
+";
+
+        // Pass the source code to the helper and snapshot test the output.
+        GeneratorDriver Driver = TestHelper.GetDriver(Source);
+        VerifyResult Result = await VerifyEnsure.Verify(Driver).ConfigureAwait(false);
+
+        Assert.That(Result.Files, Has.Exactly(1).Items);
+    }
+
+    [NUnit.Framework.Test]
+    public async Task TestFileNet9()
+    {
+        // The source code to test
+        const string Source = @"
+namespace CSharpLatest.TestSuite;
+
+using System;
+using CSharpLatest;
+
+internal partial class Program
+{
+    [Property(GetterText = ""field"", SetterText = ""field = value"", InitializerText = ""0"")]
+    file partial int Test { get; set; }
+}
+";
+
+        // Pass the source code to the helper and snapshot test the output.
+        GeneratorDriver Driver = TestHelper.GetDriver(Source, setFieldKeywordSupport: true);
+        VerifyResult Result = await VerifyEnsure.Verify(Driver).ConfigureAwait(false);
+
+        Assert.That(Result.Files, Has.Exactly(1).Items);
+    }
+
+
+    [NUnit.Framework.Test]
+    public async Task TestPrivateNetFramework()
+    {
+        // The source code to test
+        const string Source = @"
+namespace CSharpLatest.TestSuite;
+
+using System;
+using CSharpLatest;
+
+internal partial class Program
+{
+    [Property(GetterText = ""field"", SetterText = ""field = value"", InitializerText = ""0"")]
+    private partial int Test { get; set; }
+}
+";
+
+        // Pass the source code to the helper and snapshot test the output.
+        GeneratorDriver Driver = TestHelper.GetDriver(Source);
+        VerifyResult Result = await VerifyEnsure.Verify(Driver).ConfigureAwait(false);
+
+        Assert.That(Result.Files, Has.Exactly(1).Items);
+    }
+
+    [NUnit.Framework.Test]
+    public async Task TestPrivateNet9()
+    {
+        // The source code to test
+        const string Source = @"
+namespace CSharpLatest.TestSuite;
+
+using System;
+using CSharpLatest;
+
+internal partial class Program
+{
+    [Property(GetterText = ""field"", SetterText = ""field = value"", InitializerText = ""0"")]
+    private partial int Test { get; set; }
+}
+";
+
+        // Pass the source code to the helper and snapshot test the output.
+        GeneratorDriver Driver = TestHelper.GetDriver(Source, setFieldKeywordSupport: true);
+        VerifyResult Result = await VerifyEnsure.Verify(Driver).ConfigureAwait(false);
+
+        Assert.That(Result.Files, Has.Exactly(1).Items);
+    }
+
+    [NUnit.Framework.Test]
+    public async Task TestSuccessStruct()
+    {
+        // The source code to test
+        const string Source = @"
+namespace CSharpLatest.TestSuite;
+
+using System;
+using CSharpLatest;
+
+internal partial struct Program
+{
+    [Property(GetterText = ""field"", SetterText = ""field = value"", InitializerText = ""0"")]
+    public partial int Test { get; set; }
+}
+";
+
+        // Pass the source code to the helper and snapshot test the output.
+        GeneratorDriver Driver = TestHelper.GetDriver(Source);
+        VerifyResult Result = await VerifyEnsure.Verify(Driver).ConfigureAwait(false);
+
+        Assert.That(Result.Files, Has.Exactly(1).Items);
+    }
+
+    [NUnit.Framework.Test]
+    public async Task TestSuccessRecord()
+    {
+        // The source code to test
+        const string Source = @"
+namespace CSharpLatest.TestSuite;
+
+using System;
+using CSharpLatest;
+
+internal partial record Program
+{
+    [Property(GetterText = ""field"", SetterText = ""field = value"", InitializerText = ""0"")]
+    public partial int Test { get; set; }
+}
+";
+
+        // Pass the source code to the helper and snapshot test the output.
+        GeneratorDriver Driver = TestHelper.GetDriver(Source);
+        VerifyResult Result = await VerifyEnsure.Verify(Driver).ConfigureAwait(false);
+
+        Assert.That(Result.Files, Has.Exactly(1).Items);
+    }
+
+    [NUnit.Framework.Test]
+    public async Task TestSuccessRecordStruct()
+    {
+        // The source code to test
+        const string Source = @"
+namespace CSharpLatest.TestSuite;
+
+using System;
+using CSharpLatest;
+
+internal partial record struct Program
+{
+    [Property(GetterText = ""field"", SetterText = ""field = value"", InitializerText = ""0"")]
+    public partial int Test { get; set; }
+}
+";
+
+        // Pass the source code to the helper and snapshot test the output.
+        GeneratorDriver Driver = TestHelper.GetDriver(Source);
+        VerifyResult Result = await VerifyEnsure.Verify(Driver).ConfigureAwait(false);
+
+        Assert.That(Result.Files, Has.Exactly(1).Items);
+    }
+
+    [NUnit.Framework.Test]
+    public async Task TestVirtualNetFramework()
+    {
+        // The source code to test
+        const string Source = @"
+namespace CSharpLatest.TestSuite;
+
+using System;
+using CSharpLatest;
+
+internal partial class Program
+{
+    [Property(GetterText = ""field"", SetterText = ""field = value"", InitializerText = ""0"")]
+    public virtual partial int Test { get; set; }
+}
+";
+
+        // Pass the source code to the helper and snapshot test the output.
+        GeneratorDriver Driver = TestHelper.GetDriver(Source);
+        VerifyResult Result = await VerifyEnsure.Verify(Driver).ConfigureAwait(false);
+
+        Assert.That(Result.Files, Has.Exactly(1).Items);
+    }
+
+    [NUnit.Framework.Test]
+    public async Task TestVirtualNet9()
+    {
+        // The source code to test
+        const string Source = @"
+namespace CSharpLatest.TestSuite;
+
+using System;
+using CSharpLatest;
+
+internal partial class Program
+{
+    [Property(GetterText = ""field"", SetterText = ""field = value"", InitializerText = ""0"")]
+    public virtual partial int Test { get; set; }
+}
+";
+
+        // Pass the source code to the helper and snapshot test the output.
+        GeneratorDriver Driver = TestHelper.GetDriver(Source, setFieldKeywordSupport: true);
+        VerifyResult Result = await VerifyEnsure.Verify(Driver).ConfigureAwait(false);
+
+        Assert.That(Result.Files, Has.Exactly(1).Items);
+    }
+
+    [NUnit.Framework.Test]
+    public async Task TestOverrideNetFramework()
+    {
+        // The source code to test
+        const string Source = @"
+namespace CSharpLatest.TestSuite;
+
+using System;
+using CSharpLatest;
+
+internal partial class Program
+{
+    [Property(GetterText = ""field"", SetterText = ""field = value"", InitializerText = ""0"")]
+    public override partial int Test { get; set; }
+}
+";
+
+        // Pass the source code to the helper and snapshot test the output.
+        GeneratorDriver Driver = TestHelper.GetDriver(Source);
+        VerifyResult Result = await VerifyEnsure.Verify(Driver).ConfigureAwait(false);
+
+        Assert.That(Result.Files, Has.Exactly(1).Items);
+    }
+
+    [NUnit.Framework.Test]
+    public async Task TestOverrideNet9()
+    {
+        // The source code to test
+        const string Source = @"
+namespace CSharpLatest.TestSuite;
+
+using System;
+using CSharpLatest;
+
+internal partial class Program
+{
+    [Property(GetterText = ""field"", SetterText = ""field = value"", InitializerText = ""0"")]
+    public override partial int Test { get; set; }
+}
+";
+
+        // Pass the source code to the helper and snapshot test the output.
+        GeneratorDriver Driver = TestHelper.GetDriver(Source, setFieldKeywordSupport: true);
+        VerifyResult Result = await VerifyEnsure.Verify(Driver).ConfigureAwait(false);
+
+        Assert.That(Result.Files, Has.Exactly(1).Items);
+    }
+
+    [NUnit.Framework.Test]
+    public async Task TestSealedNetFramework()
+    {
+        // The source code to test
+        const string Source = @"
+namespace CSharpLatest.TestSuite;
+
+using System;
+using CSharpLatest;
+
+internal partial class Program
+{
+    [Property(GetterText = ""field"", SetterText = ""field = value"", InitializerText = ""0"")]
+    public sealed partial int Test { get; set; }
+}
+";
+
+        // Pass the source code to the helper and snapshot test the output.
+        GeneratorDriver Driver = TestHelper.GetDriver(Source);
+        VerifyResult Result = await VerifyEnsure.Verify(Driver).ConfigureAwait(false);
+
+        Assert.That(Result.Files, Has.Exactly(1).Items);
+    }
+
+    [NUnit.Framework.Test]
+    public async Task TestSealedNet9()
+    {
+        // The source code to test
+        const string Source = @"
+namespace CSharpLatest.TestSuite;
+
+using System;
+using CSharpLatest;
+
+internal partial class Program
+{
+    [Property(GetterText = ""field"", SetterText = ""field = value"", InitializerText = ""0"")]
+    public sealed partial int Test { get; set; }
+}
+";
+
+        // Pass the source code to the helper and snapshot test the output.
+        GeneratorDriver Driver = TestHelper.GetDriver(Source, setFieldKeywordSupport: true);
+        VerifyResult Result = await VerifyEnsure.Verify(Driver).ConfigureAwait(false);
+
+        Assert.That(Result.Files, Has.Exactly(1).Items);
+    }
+
+    [NUnit.Framework.Test]
+    public async Task TestUnsafeNetFramework()
+    {
+        // The source code to test
+        const string Source = @"
+namespace CSharpLatest.TestSuite;
+
+using System;
+using CSharpLatest;
+
+internal partial class Program
+{
+    [Property(GetterText = ""field"", SetterText = ""field = value"", InitializerText = ""0"")]
+    public partial unsafe int Test { get; set; }
+}
+";
+
+        // Pass the source code to the helper and snapshot test the output.
+        GeneratorDriver Driver = TestHelper.GetDriver(Source);
+        VerifyResult Result = await VerifyEnsure.Verify(Driver).ConfigureAwait(false);
+
+        Assert.That(Result.Files, Has.Exactly(1).Items);
+    }
+
+    [NUnit.Framework.Test]
+    public async Task TestUnsafeNet9()
+    {
+        // The source code to test
+        const string Source = @"
+namespace CSharpLatest.TestSuite;
+
+using System;
+using CSharpLatest;
+
+internal partial class Program
+{
+    [Property(GetterText = ""field"", SetterText = ""field = value"", InitializerText = ""0"")]
+    public partial unsafe int Test { get; set; }
+}
+";
+
+        // Pass the source code to the helper and snapshot test the output.
+        GeneratorDriver Driver = TestHelper.GetDriver(Source, setFieldKeywordSupport: true);
+        VerifyResult Result = await VerifyEnsure.Verify(Driver).ConfigureAwait(false);
+
+        Assert.That(Result.Files, Has.Exactly(1).Items);
+    }
+
+    [NUnit.Framework.Test]
+    public async Task TestRequiredNetFramework()
+    {
+        // The source code to test
+        const string Source = @"
+namespace CSharpLatest.TestSuite;
+
+using System;
+using CSharpLatest;
+
+internal partial class Program
+{
+    [Property(GetterText = ""field"", SetterText = ""field = value"", InitializerText = ""0"")]
+    public required partial int Test { get; set; }
+}
+";
+
+        // Pass the source code to the helper and snapshot test the output.
+        GeneratorDriver Driver = TestHelper.GetDriver(Source);
+        VerifyResult Result = await VerifyEnsure.Verify(Driver).ConfigureAwait(false);
+
+        Assert.That(Result.Files, Has.Exactly(1).Items);
+    }
+
+    [NUnit.Framework.Test]
+    public async Task TestRequiredNet9()
+    {
+        // The source code to test
+        const string Source = @"
+namespace CSharpLatest.TestSuite;
+
+using System;
+using CSharpLatest;
+
+internal partial class Program
+{
+    [Property(GetterText = ""field"", SetterText = ""field = value"", InitializerText = ""0"")]
+    public required partial int Test { get; set; }
+}
+";
+
+        // Pass the source code to the helper and snapshot test the output.
+        GeneratorDriver Driver = TestHelper.GetDriver(Source, setFieldKeywordSupport: true);
+        VerifyResult Result = await VerifyEnsure.Verify(Driver).ConfigureAwait(false);
+
+        Assert.That(Result.Files, Has.Exactly(1).Items);
+    }
+
+    [NUnit.Framework.Test]
+    public async Task TestNoGetterNetFramework()
+    {
+        // The source code to test
+        const string Source = @"
+namespace CSharpLatest.TestSuite;
+
+using System;
+using CSharpLatest;
+
+internal partial class Program
+{
+    [Property(SetterText = ""field = value"", InitializerText = ""0"")]
+    public partial int Test { set; }
+}
+";
+
+        // Pass the source code to the helper and snapshot test the output.
+        GeneratorDriver Driver = TestHelper.GetDriver(Source);
+        VerifyResult Result = await VerifyEnsure.Verify(Driver).ConfigureAwait(false);
+
+        Assert.That(Result.Files, Has.Exactly(1).Items);
+    }
+
+    [NUnit.Framework.Test]
+    public async Task TestNoGetterNet9()
+    {
+        // The source code to test
+        const string Source = @"
+namespace CSharpLatest.TestSuite;
+
+using System;
+using CSharpLatest;
+
+internal partial class Program
+{
+    [Property(SetterText = ""field = value"", InitializerText = ""0"")]
+    public partial int Test { set; }
+}
+";
+
+        // Pass the source code to the helper and snapshot test the output.
+        GeneratorDriver Driver = TestHelper.GetDriver(Source, setFieldKeywordSupport: true);
+        VerifyResult Result = await VerifyEnsure.Verify(Driver).ConfigureAwait(false);
+
+        Assert.That(Result.Files, Has.Exactly(1).Items);
+    }
+
+    [NUnit.Framework.Test]
+    public async Task TestNoSetterNetFramework()
+    {
+        // The source code to test
+        const string Source = @"
+namespace CSharpLatest.TestSuite;
+
+using System;
+using CSharpLatest;
+
+internal partial class Program
+{
+    [Property(GetterText = ""field"", InitializerText = ""0"")]
+    public partial int Test { get; }
+}
+";
+
+        // Pass the source code to the helper and snapshot test the output.
+        GeneratorDriver Driver = TestHelper.GetDriver(Source);
+        VerifyResult Result = await VerifyEnsure.Verify(Driver).ConfigureAwait(false);
+
+        Assert.That(Result.Files, Has.Exactly(1).Items);
+    }
+
+    [NUnit.Framework.Test]
+    public async Task TestNoSetterNet9()
+    {
+        // The source code to test
+        const string Source = @"
+namespace CSharpLatest.TestSuite;
+
+using System;
+using CSharpLatest;
+
+internal partial class Program
+{
+    [Property(GetterText = ""field"", InitializerText = ""0"")]
+    public partial int Test { get; }
+}
+";
+
+        // Pass the source code to the helper and snapshot test the output.
+        GeneratorDriver Driver = TestHelper.GetDriver(Source, setFieldKeywordSupport: true);
+        VerifyResult Result = await VerifyEnsure.Verify(Driver).ConfigureAwait(false);
+
+        Assert.That(Result.Files, Has.Exactly(1).Items);
+    }
+
+    [NUnit.Framework.Test]
+    public async Task TestBlockGetterNetFramework()
+    {
+        // The source code to test
+        const string Source = @"
+namespace CSharpLatest.TestSuite;
+
+using System;
+using CSharpLatest;
+
+internal partial class Program
+{
+    [Property(GetterText = ""{ return field; }"", SetterText = ""field = value"", InitializerText = ""0"")]
+    public partial int Test { get; set; }
+}
+";
+
+        // Pass the source code to the helper and snapshot test the output.
+        GeneratorDriver Driver = TestHelper.GetDriver(Source);
+        VerifyResult Result = await VerifyEnsure.Verify(Driver).ConfigureAwait(false);
+
+        Assert.That(Result.Files, Has.Exactly(1).Items);
+    }
+
+    [NUnit.Framework.Test]
+    public async Task TestBlockGetterNet9()
+    {
+        // The source code to test
+        const string Source = @"
+namespace CSharpLatest.TestSuite;
+
+using System;
+using CSharpLatest;
+
+internal partial class Program
+{
+    [Property(GetterText = ""{ return field; }"", SetterText = ""field = value"", InitializerText = ""0"")]
+    public partial int Test { get; set; }
+}
+";
+
+        // Pass the source code to the helper and snapshot test the output.
+        GeneratorDriver Driver = TestHelper.GetDriver(Source, setFieldKeywordSupport: true);
+        VerifyResult Result = await VerifyEnsure.Verify(Driver).ConfigureAwait(false);
+
+        Assert.That(Result.Files, Has.Exactly(1).Items);
+    }
+
+    [NUnit.Framework.Test]
+    public async Task TestBlockSetterNetFramework()
+    {
+        // The source code to test
+        const string Source = @"
+namespace CSharpLatest.TestSuite;
+
+using System;
+using CSharpLatest;
+
+internal partial class Program
+{
+    [Property(GetterText = ""field"", SetterText = ""{ field = value; }"", InitializerText = ""0"")]
+    public partial int Test { get; set; }
+}
+";
+
+        // Pass the source code to the helper and snapshot test the output.
+        GeneratorDriver Driver = TestHelper.GetDriver(Source);
+        VerifyResult Result = await VerifyEnsure.Verify(Driver).ConfigureAwait(false);
+
+        Assert.That(Result.Files, Has.Exactly(1).Items);
+    }
+
+    [NUnit.Framework.Test]
+    public async Task TestBlockSetterNet9()
+    {
+        // The source code to test
+        const string Source = @"
+namespace CSharpLatest.TestSuite;
+
+using System;
+using CSharpLatest;
+
+internal partial class Program
+{
+    [Property(GetterText = ""field"", SetterText = ""{ field = value; }"", InitializerText = ""0"")]
+    public partial int Test { get; set; }
+}
+";
+
+        // Pass the source code to the helper and snapshot test the output.
+        GeneratorDriver Driver = TestHelper.GetDriver(Source, setFieldKeywordSupport: true);
+        VerifyResult Result = await VerifyEnsure.Verify(Driver).ConfigureAwait(false);
+
+        Assert.That(Result.Files, Has.Exactly(1).Items);
+    }
+
+    [NUnit.Framework.Test]
+    public async Task TestCorruptedBlock()
+    {
+        // The source code to test
+        const string Source = @"
+namespace CSharpLatest.TestSuite;
+
+using System;
+using CSharpLatest;
+
+internal partial class Program
+{
+    [Property(SetterText = ""field = value;"", InitializerText = ""0"")]
+    public partial int Test { set; }
+}
+";
+
+        // Pass the source code to the helper and snapshot test the output.
+        GeneratorDriver Driver = TestHelper.GetDriver(Source);
+        VerifyResult Result = await VerifyEnsure.Verify(Driver).ConfigureAwait(false);
+
+        Assert.That(Result.Files, Has.Exactly(1).Items);
+    }
+
+    [NUnit.Framework.Test]
+    public async Task TestClassWithGeneric()
+    {
+        // The source code to test
+        const string Source = @"
+namespace CSharpLatest.TestSuite;
+
+using System;
+using CSharpLatest;
+
+internal partial class Program<T>
+{
+    [Property(GetterText = ""field"", SetterText = ""field = value"", InitializerText = ""0"")]
+    public partial int Test { get; set; }
+}
+";
+
+        // Pass the source code to the helper and snapshot test the output.
+        GeneratorDriver Driver = TestHelper.GetDriver(Source);
+        VerifyResult Result = await VerifyEnsure.Verify(Driver).ConfigureAwait(false);
+
+        Assert.That(Result.Files, Has.Exactly(1).Items);
+    }
+
+    [NUnit.Framework.Test]
+    public async Task TestClassWithConstraint()
+    {
+        // The source code to test
+        const string Source = @"
+namespace CSharpLatest.TestSuite;
+
+using System;
+using CSharpLatest;
+
+internal partial class Program<T>
+    where T : class
+{
+    [Property(GetterText = ""field"", SetterText = ""field = value"", InitializerText = ""0"")]
+    public partial int Test { get; set; }
+}
+";
+
+        // Pass the source code to the helper and snapshot test the output.
+        GeneratorDriver Driver = TestHelper.GetDriver(Source);
+        VerifyResult Result = await VerifyEnsure.Verify(Driver).ConfigureAwait(false);
+
+        Assert.That(Result.Files, Has.Exactly(1).Items);
+    }
+
+    [NUnit.Framework.Test]
+    public async Task TestDuplicateWithNoArgumentProperty()
+    {
+        // The source code to test
+        const string Source = @"
+namespace CSharpLatest.TestSuite;
+
+using System;
+using CSharpLatest;
+
+internal partial class Program
+{
+    [Property(GetterText = ""field"", SetterText = ""field = value"", InitializerText = ""0"")]
+    [Property]
+    public partial int Test { get; set; }
+}
+";
+
+        // Pass the source code to the helper and snapshot test the output.
+        GeneratorDriver Driver = TestHelper.GetDriver(Source);
+        VerifyResult Result = await VerifyEnsure.Verify(Driver).ConfigureAwait(false);
+
+        Assert.That(Result.Files, Has.Exactly(1).Items);
+    }
+
+    [NUnit.Framework.Test]
+    public async Task TestDoc()
+    {
+        // The source code to test
+        const string Source = @"
+namespace CSharpLatest.TestSuite;
+
+using System;
+using CSharpLatest;
+
+internal partial class Program
+{
+    #endregion
+
+    #if DEBUG
+    #endif
+
+    #region Test
+    /// <summary>
+    /// Test doc.
+    /// </summary>
+    /// <param name=""value"">The property value.</param>
+    /// <returns>The getter.</returns>
+    [Property(GetterText = ""field"", SetterText = ""field = value"", InitializerText = ""0"")]
+    public partial int Test { get; set; }
+}
+";
+
+        // Pass the source code to the helper and snapshot test the output.
+        GeneratorDriver Driver = TestHelper.GetDriver(Source);
+        VerifyResult Result = await VerifyEnsure.Verify(Driver).ConfigureAwait(false);
+
+        Assert.That(Result.Files, Has.Exactly(1).Items);
+    }
+
+    [NUnit.Framework.Test]
+    public async Task TestDocNoTab()
+    {
+        // The source code to test
+        const string Source = @"
+namespace CSharpLatest.TestSuite;
+
+using System;
+using CSharpLatest;
+
+internal partial class Program
+{
+    #endregion
+
+#if DEBUG
+#endif
+
+#region Test
+/// <summary>
+/// Test doc.
+/// </summary>
+/// <param name=""value"">The property value.</param>
+/// <returns>The getter.</returns>
+    [Property(GetterText = ""field"", SetterText = ""field = value"", InitializerText = ""0"")]
+    public partial int Test { get; set; }
+}
+";
+
+        // Pass the source code to the helper and snapshot test the output.
+        GeneratorDriver Driver = TestHelper.GetDriver(Source);
+        VerifyResult Result = await VerifyEnsure.Verify(Driver).ConfigureAwait(false);
+
+        Assert.That(Result.Files, Has.Exactly(1).Items);
+    }
+
+    [NUnit.Framework.Test]
+    public async Task TestUnsupportedTrivia()
+    {
+        // The source code to test
+        const string Source = @"
+namespace CSharpLatest.TestSuite;
+
+using System;
+using CSharpLatest;
+
+internal partial class Program
+{
+/**/[Property(GetterText = ""field"", SetterText = ""field = value"", InitializerText = ""0"")]
+    public partial int Test { get; set; }
+}
+";
+
+        // Pass the source code to the helper and snapshot test the output.
+        GeneratorDriver Driver = TestHelper.GetDriver(Source);
+        VerifyResult Result = await VerifyEnsure.Verify(Driver).ConfigureAwait(false);
+
+        Assert.That(Result.Files, Has.Exactly(1).Items);
+    }
+
+    [NUnit.Framework.Test]
+    public async Task TestNoTrivia()
+    {
+        // The source code to test
+        const string Source = @"
+namespace CSharpLatest.TestSuite;
+
+using System;
+using CSharpLatest;
+
+internal partial class Program
+{[Property(GetterText = ""field"", SetterText = ""field = value"", InitializerText = ""0"")]
+    public partial int Test { get; set; }
+}
+";
+
+        // Pass the source code to the helper and snapshot test the output.
+        GeneratorDriver Driver = TestHelper.GetDriver(Source);
+        VerifyResult Result = await VerifyEnsure.Verify(Driver).ConfigureAwait(false);
+
+        Assert.That(Result.Files, Has.Exactly(1).Items);
+    }
+
+    [NUnit.Framework.Test]
+    public async Task TestSuccessNoInitializer()
+    {
+        // The source code to test
+        const string Source = @"
+namespace CSharpLatest.TestSuite;
+
+using System;
+using CSharpLatest;
+
+internal partial class Program
+{
+    [Property(GetterText = ""field"", SetterText = ""field = value"")]
+    public partial int Test { get; set; }
+}
+";
+
+        // Pass the source code to the helper and snapshot test the output.
+        GeneratorDriver Driver = TestHelper.GetDriver(Source);
         VerifyResult Result = await VerifyEnsure.Verify(Driver).ConfigureAwait(false);
 
         Assert.That(Result.Files, Has.Exactly(1).Items);

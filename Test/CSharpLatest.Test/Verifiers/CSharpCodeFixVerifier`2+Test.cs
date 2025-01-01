@@ -4,6 +4,9 @@ namespace CSharpLatest.Test;
 
 using System;
 using System.Collections.Generic;
+using System.Globalization;
+using System.IO;
+using Contracts;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.CSharp;
@@ -28,8 +31,24 @@ internal static partial class CSharpCodeFixVerifier<TAnalyzer, TCodeFix>
                 CompilationOptions? CompilationOptions = solution.GetProject(projectId)?.CompilationOptions;
                 CompilationOptions = CompilationOptions?.WithSpecificDiagnosticOptions(CompilationOptions.SpecificDiagnosticOptions.SetItems(CSharpVerifierHelper.NullableWarnings));
                 CompilationOptions = CompilationOptions?.WithSpecificDiagnosticOptions(CustomOptions);
-
                 solution = solution.WithProjectCompilationOptions(projectId, CompilationOptions ?? throw new NullReferenceException());
+
+                string RuntimePath = GetRuntimePath();
+
+                List<MetadataReference> DefaultReferences =
+                [
+                    MetadataReference.CreateFromFile("CSharpLatest.Attributes.dll"),
+                    MetadataReference.CreateFromFile(string.Format(CultureInfo.InvariantCulture, RuntimePath, "mscorlib")),
+                    MetadataReference.CreateFromFile(string.Format(CultureInfo.InvariantCulture, RuntimePath, "System")),
+                    MetadataReference.CreateFromFile(string.Format(CultureInfo.InvariantCulture, RuntimePath, "System.Core")),
+                    MetadataReference.CreateFromFile(string.Format(CultureInfo.InvariantCulture, RuntimePath, "System.Xaml")),
+                    MetadataReference.CreateFromFile(string.Format(CultureInfo.InvariantCulture, RuntimePath, "PresentationCore")),
+                    MetadataReference.CreateFromFile(string.Format(CultureInfo.InvariantCulture, RuntimePath, "PresentationFramework")),
+                    MetadataReference.CreateFromFile(string.Format(CultureInfo.InvariantCulture, RuntimePath, @"Facades\System.Runtime")),
+                    MetadataReference.CreateFromFile(string.Format(CultureInfo.InvariantCulture, RuntimePath, @"Facades\System.Collections")),
+                ];
+
+                solution = solution.WithProjectMetadataReferences(projectId, DefaultReferences);
 
                 if (Version != LanguageVersion.Default)
                 {
@@ -44,5 +63,45 @@ internal static partial class CSharpCodeFixVerifier<TAnalyzer, TCodeFix>
 
         public LanguageVersion Version { get; set; } = LanguageVersion.Default;
         public Dictionary<string, string> Options { get; set; } = [];
+
+        private static string GetRuntimePath()
+        {
+            const string RuntimeDirectoryBase = @"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework";
+            string RuntimeDirectory = string.Empty;
+
+            foreach (string FolderPath in GetRuntimeDirectories(RuntimeDirectoryBase))
+                if (IsValidRuntimeDirectory(FolderPath))
+                    RuntimeDirectory = FolderPath;
+
+            string RuntimePath = RuntimeDirectory + @"\{0}.dll";
+
+            return RuntimePath;
+        }
+
+        private static List<string> GetRuntimeDirectories(string runtimeDirectoryBase)
+        {
+            string[] Directories = Directory.GetDirectories(runtimeDirectoryBase);
+            List<string> DirectoryList = [.. Directories];
+            DirectoryList.Sort(CompareIgnoreCase);
+
+            return DirectoryList;
+        }
+
+        private static int CompareIgnoreCase(string s1, string s2) => string.Compare(s1, s2, StringComparison.OrdinalIgnoreCase);
+
+        private static bool IsValidRuntimeDirectory(string folderPath)
+        {
+            string FolderName = Path.GetFileName(folderPath);
+            const string Prefix = "v";
+
+            Contract.Assert(FolderName.StartsWith(Prefix, StringComparison.Ordinal));
+
+            string[] Parts = FolderName[Prefix.Length..].Split('.');
+            foreach (string Part in Parts)
+                if (!int.TryParse(Part, out _))
+                    return false;
+
+            return true;
+        }
     }
 }

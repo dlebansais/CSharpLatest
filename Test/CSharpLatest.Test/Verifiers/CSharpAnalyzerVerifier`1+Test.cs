@@ -12,7 +12,6 @@ using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Testing;
 using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.CodeAnalysis.Testing;
-using NuGet.Configuration;
 
 internal static partial class CSharpAnalyzerVerifier<TAnalyzer>
     where TAnalyzer : DiagnosticAnalyzer, new()
@@ -33,13 +32,10 @@ internal static partial class CSharpAnalyzerVerifier<TAnalyzer>
                 solution = solution.WithProjectCompilationOptions(projectId, CompilationOptions ?? throw new NullReferenceException());
 
                 string RuntimePath = GetRuntimePath();
-                string ContractAssemblyPath = GetContractAssemblyPath();
-                PortableExecutableReference ReferenceContracts = MetadataReference.CreateFromFile(@"C:\Users\DLB\.nuget\packages\dlebansais.csharplatest\2.0.0\analyzers\dotnet\cs\CSharpLatest.Analyzers.dll");
 
                 List<MetadataReference> DefaultReferences =
                 [
-                    //MetadataReference.CreateFromFile(typeof(Binder).GetTypeInfo().Assembly.Location),
-                    ReferenceContracts,
+                    MetadataReference.CreateFromFile("CSharpLatest.Attributes.dll"),
                     MetadataReference.CreateFromFile(string.Format(CultureInfo.InvariantCulture, RuntimePath, "mscorlib")),
                     MetadataReference.CreateFromFile(string.Format(CultureInfo.InvariantCulture, RuntimePath, "System")),
                     MetadataReference.CreateFromFile(string.Format(CultureInfo.InvariantCulture, RuntimePath, "System.Core")),
@@ -48,6 +44,7 @@ internal static partial class CSharpAnalyzerVerifier<TAnalyzer>
                     MetadataReference.CreateFromFile(string.Format(CultureInfo.InvariantCulture, RuntimePath, "PresentationFramework")),
                     MetadataReference.CreateFromFile(string.Format(CultureInfo.InvariantCulture, RuntimePath, @"Facades\System.Runtime")),
                     MetadataReference.CreateFromFile(string.Format(CultureInfo.InvariantCulture, RuntimePath, @"Facades\System.Collections")),
+                    MetadataReference.CreateFromFile(string.Format(CultureInfo.InvariantCulture, RuntimePath, @"Facades\netstandard")),
                 ];
 
                 solution = solution.WithProjectMetadataReferences(projectId, DefaultReferences);
@@ -104,28 +101,6 @@ internal static partial class CSharpAnalyzerVerifier<TAnalyzer>
                     return false;
 
             return true;
-        }
-
-        private static string GetContractAssemblyPath()
-        {
-#if DEBUG
-            string AssemblyPath = GetContractAssemblyPath("dlebansais.CSharpLatest-Debug");
-            if (File.Exists(AssemblyPath))
-                return AssemblyPath;
-#endif
-
-            return GetContractAssemblyPath("dlebansais.CSharpLatest");
-        }
-
-        private static string GetContractAssemblyPath(string assemblyName)
-        {
-            ISettings settings = Settings.LoadDefaultSettings(null);
-            string nugetPath = SettingsUtility.GetGlobalPackagesFolder(settings);
-            Version AssemblyVersion = typeof(PropertyAttribute).Assembly.GetName().Version!;
-            string AssemblyVersionString = $"{AssemblyVersion.Major}.{AssemblyVersion.Minor}.{AssemblyVersion.Build}";
-            string AssemblyPath = Path.Combine(nugetPath, assemblyName, AssemblyVersionString, "lib", "net481", "CSharpLatest.CSharpAnalyzers.dll");
-
-            return AssemblyPath;
         }
     }
 }

@@ -9,7 +9,7 @@ using GeneratorSettingsEntry = Analyzers::CSharpLatest.GeneratorSettingsEntry;
 [TestFixture]
 internal class TestSettings
 {
-    [Test]
+    [NUnit.Framework.Test]
     public void TestAsString()
     {
         const string TestValue = "test";
@@ -30,7 +30,7 @@ internal class TestSettings
         Assert.That(IsValueDefault, Is.False);
     }
 
-    [Test]
+    [NUnit.Framework.Test]
     public void TestAsInt()
     {
         const string InvalidIntTestValue = "test";

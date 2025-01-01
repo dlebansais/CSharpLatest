@@ -113,7 +113,7 @@ public partial class CSL1005UnitTests
             );
 
         var Expected = new DiagnosticResult(DescriptorCS0126);
-        Expected = Expected.WithLocation("/0/Test0.cs", 15, 36);
+        Expected = Expected.WithLocation("/0/Test0.cs", 17, 36);
 
         await VerifyCS.VerifyAnalyzerAsync(Prologs.IsExternalInit, @"
     class Program

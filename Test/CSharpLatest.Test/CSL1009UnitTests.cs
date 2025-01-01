@@ -3,9 +3,6 @@
 namespace CSharpLatest.Test;
 
 using System.Threading.Tasks;
-using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp;
-using Microsoft.CodeAnalysis.Testing;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using VerifyCS = CSharpAnalyzerVerifier<CSL1009PropertyAttributeIsMissingArgument>;
 
@@ -20,7 +17,7 @@ namespace TestSuite;
 
 internal partial class Program
 {
-    [[|CSharpLatest.Property|]]
+    [[|Property|]]
     public int Test { get; }
 }
 ").ConfigureAwait(false);
@@ -30,6 +27,8 @@ internal partial class Program
     public async Task OneArgument_NoDiagnostic()
     {
         await VerifyCS.VerifyAnalyzerAsync(Prologs.Nullable, @"
+namespace TestSuite;
+
 internal partial class Program
 {
     [Property(GetterText = ""field"")]
@@ -63,34 +62,20 @@ internal partial class Program
     }
 
     [TestMethod]
-    public async Task NoArgumentOtherAccess_NoDiagnostic()
+    public async Task NoArgumentOtherProperty_NoDiagnostic()
     {
-        DiagnosticDescriptor DescriptorCS7036 = new(
-            "CS7036",
-            "title",
-            "There is no argument given that corresponds to the required parameter 'value' of 'AccessAttribute.AccessAttribute(string)'",
-            "description",
-            DiagnosticSeverity.Error,
-            true
-            );
-
-        DiagnosticResult Expected = new(DescriptorCS7036);
-        Expected = Expected.WithLocation("/0/Test0.cs", 13, 6);
-
         await VerifyCS.VerifyAnalyzerAsync(@"
 namespace Test;
 
 internal class PropertyAttribute : Attribute
 {
-    public PropertyAttribute(string getterText) { GetterText = getterText; }
-    public string GetterText { get; set; }
 }
 
 internal partial class Program
 {
-    [PropertyAttribute]
+    [Property]
     public int Test { get; }
 }
-", LanguageVersion.Default, Expected).ConfigureAwait(false);
+").ConfigureAwait(false);
     }
 }

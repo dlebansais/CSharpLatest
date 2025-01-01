@@ -14,11 +14,12 @@ public partial class CSL1009UnitTests
         await VerifyCS.VerifyAnalyzerAsync(@"
 #define COVERAGE_A25BDFABDDF8402785EB75AD812DA952
 " + Prologs.IsExternalInit, @"
+
 internal partial class Program
 {
     [Property]
-    public partial int Test { get; set; }
+    public int Test { get; }
 }
-");
+").ConfigureAwait(false);
     }
 }

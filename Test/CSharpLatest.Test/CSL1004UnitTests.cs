@@ -451,7 +451,7 @@ class Program
             );
 
         var Expected = new DiagnosticResult(DescriptorCS0246);
-        Expected = Expected.WithLocation("/0/Test0.cs", 13, 21);
+        Expected = Expected.WithLocation("/0/Test0.cs", 15, 21);
 
         await VerifyCS.VerifyAnalyzerAsync(Prologs.IsExternalInit, @"
     class Program : ProgramBase
@@ -479,7 +479,7 @@ class Program
             );
 
         var Expected = new DiagnosticResult(DescriptorCS0246);
-        Expected = Expected.WithLocation("/0/Test0.cs", 13, 21);
+        Expected = Expected.WithLocation("/0/Test0.cs", 15, 21);
 
         await VerifyCS.VerifyAnalyzerAsync(Prologs.IsExternalInit, @"
     class Program : List<string>

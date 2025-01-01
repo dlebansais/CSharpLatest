@@ -11,11 +11,6 @@ public enum AttributeGeneration
     Invalid,
 
     /// <summary>
-    /// The attribute is for debug only, ignore it for release.
-    /// </summary>
-    DebugOnly,
-
-    /// <summary>
     /// The attribute is valid and should be generated.
     /// </summary>
     Valid,
