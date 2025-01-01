@@ -236,5 +236,5 @@ public partial class PropertyGenerator
     }
 
     private static bool CheckFieldKeywordSupport(PropertyDeclarationSyntax propertyDeclaration)
-        => propertyDeclaration.SyntaxTree.Options.PreprocessorSymbolNames.Contains("NET9_0_OR_GREATER");
+        => ((CSharpParseOptions)propertyDeclaration.SyntaxTree.Options).LanguageVersion > LanguageVersion.CSharp13;
 }

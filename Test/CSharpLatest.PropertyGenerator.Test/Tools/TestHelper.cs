@@ -12,15 +12,30 @@ internal static class TestHelper
 {
     public static GeneratorDriver GetDriver(string source, bool setFieldKeywordSupport = false)
     {
-        List<string> PreprocessorDirectives = [];
+        CSharpParseOptions CSharpParseOptions = CSharpParseOptions.Default;
+
         if (setFieldKeywordSupport)
-            PreprocessorDirectives.Add("NET9_0_OR_GREATER");
+        {
+            LanguageVersion VersionToUse = LanguageVersion.Preview;
+
+            System.Array Values = typeof(LanguageVersion).GetEnumValues();
+            foreach (object? value in Values)
+                if (value is LanguageVersion LanguageVersionValue && LanguageVersionValue > LanguageVersion.CSharp13)
+                {
+                    if (LanguageVersionValue < LanguageVersion.LatestMajor)
+                        VersionToUse = LanguageVersionValue;
+
+                    break;
+                }
+
+            CSharpParseOptions = CSharpParseOptions.WithLanguageVersion(VersionToUse);
+        }
+
+        List<string> PreprocessorSymbols = [];
+        CSharpParseOptions = CSharpParseOptions.WithPreprocessorSymbols(PreprocessorSymbols);
 
         // Parse the provided string into a C# syntax tree.
-        SyntaxTree SyntaxTree = CSharpSyntaxTree.ParseText(source);
-        SyntaxNode Root = SyntaxTree.GetRoot();
-        CSharpParseOptions CSharpParseOptions = new(preprocessorSymbols: PreprocessorDirectives);
-        SyntaxTree = SyntaxTree.WithRootAndOptions(Root, CSharpParseOptions);
+        SyntaxTree SyntaxTree = CSharpSyntaxTree.ParseText(source, CSharpParseOptions);
 
         // Create references for assemblies we require.
         PortableExecutableReference ReferenceBinder = MetadataReference.CreateFromFile(typeof(Binder).GetTypeInfo().Assembly.Location);
@@ -44,6 +59,7 @@ internal static class TestHelper
 
         // The GeneratorDriver is used to run our generator against a compilation.
         GeneratorDriver Driver = CSharpGeneratorDriver.Create(Generator);
+        Driver = Driver.WithUpdatedParseOptions(CSharpParseOptions);
 
         // Run the generation pass.
         Driver = Driver.RunGeneratorsAndUpdateCompilation(Compilation, out _, out _);
