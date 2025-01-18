@@ -40,9 +40,12 @@ public partial class PropertyGenerator
         if (PropertyDeclaration.Modifiers.Count == 0)
             return false;
 
+        // Ignore properties with no accessor.
+        if (PropertyDeclaration.AccessorList is not AccessorListSyntax AccessorList || AccessorList.Accessors.Count == 0)
+            return false;
+
         // Ignore properties with init accessor.
-        if (PropertyDeclaration.AccessorList is AccessorListSyntax AccessorList &&
-            AccessorList.Accessors.Any(accessor => accessor.Keyword.IsKind(SyntaxKind.InitKeyword)))
+        if (AccessorList.Accessors.Any(accessor => accessor.Keyword.IsKind(SyntaxKind.InitKeyword)))
         {
             return false;
         }
@@ -68,18 +71,17 @@ public partial class PropertyGenerator
         List<string> AttributeNames = [];
 
         foreach (AttributeSyntax Attribute in PropertyAttributes)
-            if (!IsValidAttribute(Attribute, PropertyDeclaration, AttributeNames))
-                return null;
+            CheckValidAttribute(Attribute, PropertyDeclaration, AttributeNames);
 
         return AttributeNames.Count > 0 ? AttributeNames[0] : null;
     }
 
-    private static bool IsValidAttribute(AttributeSyntax attribute, MemberDeclarationSyntax propertyDeclaration, List<string> attributeNames)
+    private static void CheckValidAttribute(AttributeSyntax attribute, MemberDeclarationSyntax propertyDeclaration, List<string> attributeNames)
     {
         if (attribute.ArgumentList is AttributeArgumentListSyntax AttributeArgumentList)
         {
             string AttributeName = AttributeHelper.ToAttributeName(attribute);
-            IReadOnlyList<AttributeArgumentSyntax> AttributeArguments = AttributeArgumentList.Arguments;
+            SeparatedSyntaxList<AttributeArgumentSyntax> AttributeArguments = AttributeArgumentList.Arguments;
 
             Dictionary<string, Func<MemberDeclarationSyntax, IReadOnlyList<AttributeArgumentSyntax>, AttributeValidityCheckResult>> ValidityVerifierTable = new()
             {
@@ -91,18 +93,18 @@ public partial class PropertyGenerator
             AttributeValidityCheckResult CheckResult = ValidityVerifier(propertyDeclaration, AttributeArguments);
             AttributeGeneration AttributeGeneration = CheckResult.Result;
 
-            if (AttributeGeneration == AttributeGeneration.Invalid)
+            if (AttributeGeneration == AttributeGeneration.Valid)
             {
-                return false;
+                Contract.Assert(CheckResult.PositionOfFirstInvalidArgument == -1);
+                attributeNames.Add(AttributeName);
             }
             else
             {
-                Contract.Assert(AttributeGeneration == AttributeGeneration.Valid);
-                attributeNames.Add(AttributeName);
+                Contract.Assert(AttributeGeneration == AttributeGeneration.Invalid);
+                Contract.Assert(CheckResult.PositionOfFirstInvalidArgument >= -1);
+                Contract.Assert(CheckResult.PositionOfFirstInvalidArgument < AttributeArguments.Count);
             }
         }
-
-        return true;
     }
 
     /// <summary>
@@ -179,7 +181,7 @@ public partial class PropertyGenerator
             }
         }
 
-        argumentValue = string.Empty;
+        Contract.Unused(out argumentValue);
         return false;
     }
 }

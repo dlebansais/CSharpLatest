@@ -13,6 +13,9 @@ internal class TestNoGeneration
     {
         // The source code to test
         const string Source = @"
+using System;
+using CSharpLatest;
+
 public class SimpleTest
 {
     [FieldBackedProperty(GetterText = ""field"", SetterText = ""field = value"", InitializerText = ""0"")]
@@ -104,6 +107,9 @@ public class SimpleTest
         const string Source = @"
 namespace Contracts.TestSuite;
 
+using System;
+using CSharpLatest;
+
 public class SimpleTest
 {
     [FieldBackedProperty]
@@ -124,6 +130,9 @@ public class SimpleTest
         // The source code to test
         const string Source = @"
 namespace Contracts.TestSuite;
+
+using System;
+using CSharpLatest;
 
 public class SimpleTest
 {
@@ -146,6 +155,9 @@ public class SimpleTest
         const string Source = @"
 namespace Contracts.TestSuite;
 
+using System;
+using CSharpLatest;
+
 public class SimpleTest
 {
     [FieldBackedProperty("""")]
@@ -166,6 +178,9 @@ public class SimpleTest
         // The source code to test
         const string Source = @"
 namespace Contracts.TestSuite;
+
+using System;
+using CSharpLatest;
 
 public class SimpleTest
 {
@@ -273,8 +288,8 @@ using CSharpLatest;
 
 internal partial class Program
 {
-    [FieldBackedProperty(SomeText = ""field"")]
-    public partial int Test { get; }
+    [FieldBackedProperty(SomeText = ""field"", SetterText = ""field = value"")]
+    public partial int Test { get; set; }
 }
 ";
 
@@ -292,6 +307,9 @@ internal partial class Program
         const string Source = @"
 namespace Contracts.TestSuite;
 
+using System;
+using CSharpLatest;
+
 public class SimpleTest
 {
     [FieldBackedProperty(GetterText = ""field"", SetterText = ""field = value"", InitializerText = ""0"")]
@@ -307,16 +325,43 @@ public class SimpleTest
     }
 
     [NUnit.Framework.Test]
-    public async Task TestNameofArgument()
+    public async Task TestNameofGetterArgument()
     {
         // The source code to test
         const string Source = @"
 namespace Contracts.TestSuite;
 
+using System;
+using CSharpLatest;
+
 public class SimpleTest
 {
-    [FieldBackedProperty(GetterText = nameof(field))]
-    public partial int Test { get; }
+    [FieldBackedProperty(GetterText = nameof(field), SetterText = ""field = value"")]
+    public partial int Test { get; set; }
+}
+";
+
+        // Pass the source code to the helper and snapshot test the output.
+        GeneratorDriver Driver = TestHelper.GetDriver(Source);
+        VerifyResult Result = await VerifyNoGeneration.Verify(Driver).ConfigureAwait(false);
+
+        Assert.That(Result.Files, Has.Exactly(0).Items);
+    }
+
+    [NUnit.Framework.Test]
+    public async Task TestNameofSetterArgument()
+    {
+        // The source code to test
+        const string Source = @"
+namespace Contracts.TestSuite;
+
+using System;
+using CSharpLatest;
+
+public class SimpleTest
+{
+    [FieldBackedProperty(GetterText = ""field"", SetterText = nameof(field))]
+    public partial int Test { get; set; }
 }
 ";
 
@@ -333,6 +378,9 @@ public class SimpleTest
         // The source code to test
         const string Source = @"
 namespace Contracts.TestSuite;
+
+using System;
+using CSharpLatest;
 
 public class SimpleTest
 {
@@ -355,6 +403,9 @@ public class SimpleTest
         const string Source = @"
 namespace Contracts.TestSuite;
 
+using System;
+using CSharpLatest;
+
 public class SimpleTest
 {
     [FieldBackedProperty(GetterText = 0)]
@@ -375,6 +426,9 @@ public class SimpleTest
         // The source code to test
         const string Source = @"
 namespace Contracts.TestSuite;
+
+using System;
+using CSharpLatest;
 
 public class SimpleTest
 {

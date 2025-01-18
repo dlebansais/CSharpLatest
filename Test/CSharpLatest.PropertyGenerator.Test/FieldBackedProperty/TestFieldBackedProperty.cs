@@ -298,6 +298,56 @@ internal partial class Program
     }
 
     [NUnit.Framework.Test]
+    public async Task TestMultilineModifierNetFramework()
+    {
+        // The source code to test
+        const string Source = @"
+namespace CSharpLatest.TestSuite;
+
+using System;
+using CSharpLatest;
+
+internal partial class Program
+{
+    [FieldBackedProperty(GetterText = ""field"", SetterText = ""field = value"", InitializerText = ""0"")]
+    public
+    partial int Test { get; set; }
+}
+";
+
+        // Pass the source code to the helper and snapshot test the output.
+        GeneratorDriver Driver = TestHelper.GetDriver(Source);
+        VerifyResult Result = await VerifyEnsure.Verify(Driver).ConfigureAwait(false);
+
+        Assert.That(Result.Files, Has.Exactly(1).Items);
+    }
+
+    [NUnit.Framework.Test]
+    public async Task TestMultilineModifierNet9()
+    {
+        // The source code to test
+        const string Source = @"
+namespace CSharpLatest.TestSuite;
+
+using System;
+using CSharpLatest;
+
+internal partial class Program
+{
+    [FieldBackedProperty(GetterText = ""field"", SetterText = ""field = value"", InitializerText = ""0"")]
+    public
+    partial int Test { get; set; }
+}
+";
+
+        // Pass the source code to the helper and snapshot test the output.
+        GeneratorDriver Driver = TestHelper.GetDriver(Source, setFieldKeywordSupport: true);
+        VerifyResult Result = await VerifyEnsure.Verify(Driver).ConfigureAwait(false);
+
+        Assert.That(Result.Files, Has.Exactly(1).Items);
+    }
+
+    [NUnit.Framework.Test]
     public async Task TestSuccessStruct()
     {
         // The source code to test
