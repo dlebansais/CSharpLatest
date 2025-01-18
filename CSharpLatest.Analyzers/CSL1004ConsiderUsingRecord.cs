@@ -60,10 +60,9 @@ public partial class CSL1004ConsiderUsingRecord : DiagnosticAnalyzer
             return;
 
         // If the class inherits from a base, we can't change it to a record: no diagnostic.
-        // BaseInfo.IsObject is false when we don't know what the base is.
         INamedTypeSymbol? TypeSymbol = context.SemanticModel.GetDeclaredSymbol(classDeclaration);
-        BaseInfo BaseInfo = AnalyzerTools.GetBaseInfo(TypeSymbol);
-        if (!BaseInfo.IsObject || BaseInfo.Depth > 1)
+        int BaseBepth = AnalyzerTools.GetBaseDepth(TypeSymbol);
+        if (BaseBepth > 1)
             return;
 
         context.ReportDiagnostic(Diagnostic.Create(Rule, classDeclaration.Identifier.GetLocation(), classDeclaration.Identifier.Text));
