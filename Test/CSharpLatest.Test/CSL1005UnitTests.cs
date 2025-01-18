@@ -90,6 +90,24 @@ public partial class CSL1005UnitTests
     }
 
     [TestMethod]
+    public async Task ReturnFollowedByStatement_NoDiagnostic()
+    {
+        await VerifyCS.VerifyAnalyzerAsync(Prologs.IsExternalInit, @"
+    class Program
+    {
+        public string Prop 
+        {
+            get
+            {
+                return ""x"";
+                string Result = ""Test"";
+            }
+        }
+    }
+");
+    }
+
+    [TestMethod]
     public async Task NotReturn_NoDiagnostic()
     {
         await VerifyCS.VerifyAnalyzerAsync(Prologs.IsExternalInit, @"
@@ -259,6 +277,17 @@ public partial class CSL1005UnitTests
             get { return index; }
             set { }
         }
+    }
+");
+    }
+
+    [TestMethod]
+    public async Task NoAccessors_NoDiagnostic()
+    {
+        await VerifyCS.VerifyAnalyzerAsync(Prologs.IsExternalInit, @"
+    class Program
+    {
+        public string Prop { get; set; }
     }
 ");
     }

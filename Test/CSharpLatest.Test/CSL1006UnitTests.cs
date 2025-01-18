@@ -314,4 +314,15 @@ public partial class CSL1006UnitTests
     }
 ");
     }
+
+    [TestMethod]
+    public async Task NoAccessors_NoDiagnostic()
+    {
+        await VerifyCS.VerifyAnalyzerAsync(Prologs.IsExternalInit, @"
+    class Program
+    {
+        public string Prop { get; set; }
+    }
+");
+    }
 }

@@ -4,6 +4,7 @@ using System.Collections.Immutable;
 using System.Composition;
 using System.Threading;
 using System.Threading.Tasks;
+using Contracts;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeActions;
 using Microsoft.CodeAnalysis.CodeFixes;
@@ -36,6 +37,14 @@ public class CSL1002CodeFixProvider : CodeFixProvider
     {
         // Find the expression identified by the diagnostic.
         (Diagnostic Diagnostic, BinaryExpressionSyntax Expression) = await CodeFixTools.FindNodeToFix<BinaryExpressionSyntax>(context).ConfigureAwait(false);
+
+        LocalizableString MessageFormat = CSL1002UseIsNotNull.MessageFormat;
+        ExpressionSyntax RightExpression = Expression.Right;
+        SyntaxToken OperatorToken = Expression.OperatorToken;
+        string FormatParameter = $"{OperatorToken} {RightExpression}";
+        string ExpectedDiagnosticMessage = string.Format(null, MessageFormat.ToString(null), FormatParameter);
+        string Message = Diagnostic.GetMessage(null);
+        Contract.Assert(ExpectedDiagnosticMessage == Message);
 
         // Register a code action that will invoke the fix.
         context.RegisterCodeFix(

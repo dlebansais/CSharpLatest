@@ -64,7 +64,7 @@ class Program
     }
 
     [TestMethod]
-    public async Task NoInitializer_NoDiagnostic()
+    public async Task NoInitializerWithAssignment_NoDiagnostic()
     {
         await VerifyCS.VerifyAnalyzerAsync(@"
 class Program
@@ -74,6 +74,21 @@ class Program
         int i;
         i = 0;
         Console.WriteLine(i);
+    }
+}
+");
+    }
+
+    [TestMethod]
+    public async Task NoInitializerNoAssignment_NoDiagnostic()
+    {
+        await VerifyCS.VerifyAnalyzerAsync(@"
+class Program
+{
+    static void Main()
+    {
+        int i;
+        Console.WriteLine({|CS0165:i|});
     }
 }
 ");
@@ -147,6 +162,28 @@ class Program
     static void Main()
     {
         object s = 0;
+    }
+}
+");
+    }
+
+    [TestMethod]
+    public async Task UserDefinedConversion_NoDiagnostic()
+    {
+        await VerifyCS.VerifyAnalyzerAsync(@"
+
+class MyString
+{
+    private string s;
+    public static implicit operator string(MyString myString) => myString.s;
+    public static implicit operator MyString(string s) => new MyString { s = s };
+}
+
+class Program
+{
+    static void Main()
+    {
+        MyString x = ""x"";
     }
 }
 ");

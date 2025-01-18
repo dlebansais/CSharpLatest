@@ -80,11 +80,7 @@ public partial class CSL1006SimplifyOneLineSetter : DiagnosticAnalyzer
             Location = Block.GetLocation();
         }
 
-        // Ignore the property if already simplified.
-        if (accessorDeclaration.ExpressionBody is not null)
-            return;
-
-        // Ignore multi-line statements.
+        // Ignore: multi-line statements empty accessors, properties already simplified.
         if (StartLineNumber < EndLineNumber)
             return;
 

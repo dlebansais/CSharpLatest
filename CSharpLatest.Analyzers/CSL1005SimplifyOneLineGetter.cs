@@ -103,7 +103,7 @@ public partial class CSL1005SimplifyOneLineGetter : DiagnosticAnalyzer
             Location = Block.GetLocation();
         }
 
-        // Ignore multi-line statements.
+        // Ignore multi-line statements and empty accessors.
         if (StartLineNumber < EndLineNumber)
             return;
 

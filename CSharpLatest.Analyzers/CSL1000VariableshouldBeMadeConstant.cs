@@ -64,8 +64,6 @@ public partial class CSL1000VariableshouldBeMadeConstant : DiagnosticAnalyzer
 
         TypeSyntax VariableTypeName = localDeclaration.Declaration.Type;
         ITypeSymbol? VariableType = VariableTypeName.GetTypeValidType(context);
-        if (VariableType is null)
-            return;
 
         // Ensure that all variables in the local declaration have initializers that are assigned with constant values.
         foreach (VariableDeclaratorSyntax Variable in localDeclaration.Declaration.Variables)
@@ -86,7 +84,7 @@ public partial class CSL1000VariableshouldBeMadeConstant : DiagnosticAnalyzer
         context.ReportDiagnostic(Diagnostic.Create(Rule, context.Node.GetLocation(), localDeclaration.Declaration.Variables[0].Identifier.ValueText));
     }
 
-    private static bool IsVariableAssignedToConstantValue(SyntaxNodeAnalysisContext context, ITypeSymbol variableType, VariableDeclaratorSyntax variable)
+    private static bool IsVariableAssignedToConstantValue(SyntaxNodeAnalysisContext context, ITypeSymbol? variableType, VariableDeclaratorSyntax variable)
     {
         EqualsValueClauseSyntax? Initializer = variable.Initializer;
         if (Initializer is null)
@@ -95,6 +93,8 @@ public partial class CSL1000VariableshouldBeMadeConstant : DiagnosticAnalyzer
         Optional<object?> ConstantValue = context.SemanticModel.GetConstantValue(Initializer.Value, context.CancellationToken);
         if (!ConstantValue.HasValue)
             return false;
+
+        variableType = Contract.AssertNotNull(variableType);
 
         // Ensure that the initializer value can be converted to the type of the local declaration without a user-defined conversion.
         Conversion Conversion = context.SemanticModel.ClassifyConversion(Initializer.Value, variableType);

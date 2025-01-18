@@ -21,8 +21,13 @@ public partial class CSL1002UseIsNotNull : DiagnosticAnalyzer
     public const string DiagnosticId = "CSL1002";
 
     private static readonly LocalizableString Title = new LocalizableResourceString(nameof(AnalyzerResources.CSL1002AnalyzerTitle), AnalyzerResources.ResourceManager, typeof(AnalyzerResources));
-    private static readonly LocalizableString MessageFormat = new LocalizableResourceString(nameof(AnalyzerResources.CSL1002AnalyzerMessageFormat), AnalyzerResources.ResourceManager, typeof(AnalyzerResources));
     private static readonly LocalizableString Description = new LocalizableResourceString(nameof(AnalyzerResources.CSL1002AnalyzerDescription), AnalyzerResources.ResourceManager, typeof(AnalyzerResources));
+
+    /// <summary>
+    /// Gets the message format.
+    /// </summary>
+    public static LocalizableString MessageFormat => new LocalizableResourceString(nameof(AnalyzerResources.CSL1002AnalyzerMessageFormat), AnalyzerResources.ResourceManager, typeof(AnalyzerResources));
+
     private const string Category = "Usage";
 
     private static readonly DiagnosticDescriptor Rule = new(DiagnosticId,
