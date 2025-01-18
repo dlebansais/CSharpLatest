@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading;
 using Contracts;
@@ -9,6 +10,7 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
+using RoslynHelpers;
 
 /// <summary>
 /// Represents a code generator.
@@ -62,21 +64,21 @@ public partial class PropertyGenerator
         Contract.RequireNotNull(propertyDeclaration, out MemberDeclarationSyntax PropertyDeclaration);
 
         // Get a list of all supported attributes for this property.
-        List<AttributeSyntax> PropertyAttributes = GeneratorHelper.GetMemberSupportedAttributes(context, PropertyDeclaration, [typeof(FieldBackedPropertyAttribute)]);
+        Collection<AttributeSyntax> PropertyAttributes = AttributeHelper.GetMemberSupportedAttributes(context, PropertyDeclaration, [typeof(FieldBackedPropertyAttribute)]);
         List<string> AttributeNames = [];
 
         foreach (AttributeSyntax Attribute in PropertyAttributes)
             if (!IsValidAttribute(Attribute, PropertyDeclaration, AttributeNames))
                 return null;
 
-        return AttributeNames.Count > 0 ? AttributeNames.First() : null;
+        return AttributeNames.Count > 0 ? AttributeNames[0] : null;
     }
 
     private static bool IsValidAttribute(AttributeSyntax attribute, MemberDeclarationSyntax propertyDeclaration, List<string> attributeNames)
     {
         if (attribute.ArgumentList is AttributeArgumentListSyntax AttributeArgumentList)
         {
-            string AttributeName = GeneratorHelper.ToAttributeName(attribute);
+            string AttributeName = AttributeHelper.ToAttributeName(attribute);
             IReadOnlyList<AttributeArgumentSyntax> AttributeArguments = AttributeArgumentList.Arguments;
 
             Dictionary<string, Func<MemberDeclarationSyntax, IReadOnlyList<AttributeArgumentSyntax>, AttributeValidityCheckResult>> ValidityVerifierTable = new()

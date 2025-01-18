@@ -1,0 +1,2 @@
+@echo off
+dotnet stryker --test-project "CSharpLatest.PropertyGenerator.Test\CSharpLatest.PropertyGenerator.Test.csproj" --test-project "CSharpLatest.Test\CSharpLatest.Test.csproj" -p CSharpLatest.Analyzers.csproj

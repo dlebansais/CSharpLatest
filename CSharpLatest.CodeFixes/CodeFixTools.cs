@@ -24,7 +24,7 @@ internal static class CodeFixTools
     {
         SyntaxNode Root = Contract.AssertNotNull(await context.Document.GetSyntaxRootAsync(context.CancellationToken).ConfigureAwait(false));
 
-        Diagnostic Diagnostic = context.Diagnostics.First();
+        Diagnostic Diagnostic = context.Diagnostics[0];
         Microsoft.CodeAnalysis.Text.TextSpan DiagnosticSpan = Diagnostic.Location.SourceSpan;
 
         SyntaxNode Parent = Contract.AssertNotNull(Root.FindToken(DiagnosticSpan.Start).Parent);

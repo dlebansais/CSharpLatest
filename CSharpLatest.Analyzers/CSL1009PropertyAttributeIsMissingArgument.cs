@@ -7,6 +7,7 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
+using RoslynHelpers;
 
 /// <summary>
 /// Analyzer for rule CSL1009: FieldBackedPropertyAttribute is missing argument.
@@ -71,6 +72,6 @@ public partial class CSL1009FieldBackedPropertyAttributeIsMissingArgument : Diag
         if (attribute.ArgumentList is AttributeArgumentListSyntax AttributeArgumentList && AttributeArgumentList.Arguments.Count > 0)
             return;
 
-        context.ReportDiagnostic(Diagnostic.Create(Rule, context.Node.GetLocation(), GeneratorHelper.ToAttributeName(attribute)));
+        context.ReportDiagnostic(Diagnostic.Create(Rule, context.Node.GetLocation(), AttributeHelper.ToAttributeName(attribute)));
     }
 }

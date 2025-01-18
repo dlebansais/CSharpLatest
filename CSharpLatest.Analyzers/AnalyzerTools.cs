@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using Contracts;
 using Microsoft.CodeAnalysis;
@@ -37,7 +38,7 @@ internal static class AnalyzerTools
     /// <param name="minimumLanguageVersion">The minimum language version supporting the feature.</param>
     /// <param name="continueAction">The next analysis step.</param>
     /// <param name="analysisAssertions">A list of assertions.</param>
-    public static void AssertSyntaxRequirements<T>(SyntaxNodeAnalysisContext context, LanguageVersion minimumLanguageVersion, Action<SyntaxNodeAnalysisContext, T, IEnumerable<IAnalysisAssertion>> continueAction, params IEnumerable<IAnalysisAssertion> analysisAssertions)
+    public static void AssertSyntaxRequirements<T>(SyntaxNodeAnalysisContext context, LanguageVersion minimumLanguageVersion, Action<SyntaxNodeAnalysisContext, T, Collection<IAnalysisAssertion>> continueAction, params Collection<IAnalysisAssertion> analysisAssertions)
         where T : CSharpSyntaxNode
     {
         T ValidNode = (T)context.Node;

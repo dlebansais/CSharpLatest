@@ -1,7 +1,7 @@
 ﻿namespace CSharpLatest;
 
-using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.Collections.ObjectModel;
 using System.Linq;
 using Contracts;
 using Microsoft.CodeAnalysis;
@@ -56,7 +56,7 @@ public partial class CSL1000VariableshouldBeMadeConstant : DiagnosticAnalyzer
 
     private void AnalyzeNode(SyntaxNodeAnalysisContext context) => AnalyzerTools.AssertSyntaxRequirements<LocalDeclarationStatementSyntax>(context, AnalyzerTools.MinimumVersionAnalyzed, AnalyzeVerifiedNode, new DataFlowAnalysisAssertion<LocalDeclarationStatementSyntax>());
 
-    private void AnalyzeVerifiedNode(SyntaxNodeAnalysisContext context, LocalDeclarationStatementSyntax localDeclaration, IEnumerable<IAnalysisAssertion> analysisAssertions)
+    private void AnalyzeVerifiedNode(SyntaxNodeAnalysisContext context, LocalDeclarationStatementSyntax localDeclaration, Collection<IAnalysisAssertion> analysisAssertions)
     {
         // Make sure the declaration isn't already const.
         if (localDeclaration.Modifiers.Any(SyntaxKind.ConstKeyword))
@@ -73,7 +73,7 @@ public partial class CSL1000VariableshouldBeMadeConstant : DiagnosticAnalyzer
                 return;
 
         // Gets the data flow analysis performed on the local declaration during the analysis assertion phase.
-        DataFlowAnalysis DataFlowAnalysis = Contract.AssertNotNull(((DataFlowAnalysisAssertion<LocalDeclarationStatementSyntax>)analysisAssertions.First()).DataFlowAnalysis);
+        DataFlowAnalysis DataFlowAnalysis = Contract.AssertNotNull(((DataFlowAnalysisAssertion<LocalDeclarationStatementSyntax>)analysisAssertions[0]).DataFlowAnalysis);
 
         foreach (VariableDeclaratorSyntax Variable in localDeclaration.Declaration.Variables)
         {
@@ -83,7 +83,7 @@ public partial class CSL1000VariableshouldBeMadeConstant : DiagnosticAnalyzer
                 return;
         }
 
-        context.ReportDiagnostic(Diagnostic.Create(Rule, context.Node.GetLocation(), localDeclaration.Declaration.Variables.First().Identifier.ValueText));
+        context.ReportDiagnostic(Diagnostic.Create(Rule, context.Node.GetLocation(), localDeclaration.Declaration.Variables[0].Identifier.ValueText));
     }
 
     private static bool IsVariableAssignedToConstantValue(SyntaxNodeAnalysisContext context, ITypeSymbol variableType, VariableDeclaratorSyntax variable)

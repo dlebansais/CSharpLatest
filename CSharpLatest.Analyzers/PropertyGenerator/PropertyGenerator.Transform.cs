@@ -2,12 +2,13 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Collections.ObjectModel;
 using System.Threading;
 using Contracts;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using RoslynHelpers;
 
 /// <summary>
 /// Represents a code generator.
@@ -94,7 +95,7 @@ public partial class PropertyGenerator
     private static (string GetterText, string SetterText, string InitializerText) GetModelText(PropertyDeclarationSyntax propertyDeclaration)
     {
         (string GetterText, string SetterText, string InitializerText) Result = (string.Empty, string.Empty, string.Empty);
-        List<AttributeSyntax> MemberAttributes = GeneratorHelper.GetMemberSupportedAttributes(context: null, propertyDeclaration, [typeof(FieldBackedPropertyAttribute)]);
+        Collection<AttributeSyntax> MemberAttributes = AttributeHelper.GetMemberSupportedAttributes(context: null, propertyDeclaration, [typeof(FieldBackedPropertyAttribute)]);
 
         foreach (AttributeSyntax Attribute in MemberAttributes)
             if (Attribute.ArgumentList is AttributeArgumentListSyntax AttributeArgumentList)
@@ -175,7 +176,7 @@ public partial class PropertyGenerator
         // If we reach this method there is at least one end of line, therefore at least one trivia.
         Contract.Assert(trivias.Count > 0);
 
-        SyntaxTrivia FirstTrivia = trivias.First();
+        SyntaxTrivia FirstTrivia = trivias[0];
 
         return FirstTrivia.IsKind(SyntaxKind.WhitespaceTrivia);
     }

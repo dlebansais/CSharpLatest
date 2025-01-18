@@ -1,0 +1,12 @@
+{
+    "stryker-config": {
+        "ignore-methods": [
+            "ConfigureAwait", // Ignores all ConfigureAwait
+            "EnableConcurrentExecution", // Ignores enabling concurrent execution
+            "Assert*", // Ignores all assertions
+            "Unused", // Ignores all unused parameters
+            "Require*", // Ignores all preconditions
+            "Ensure*" // Ignores all postconditions
+        ]
+    }
+}

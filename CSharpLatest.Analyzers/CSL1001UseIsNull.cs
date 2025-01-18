@@ -82,7 +82,7 @@ public partial class CSL1001UseIsNull : DiagnosticAnalyzer
             return;
 
         // If the == operator is overloaded, 'is null' behaves differently. Do not replace.
-        if (ExpressionType.IsOverloadingEqualsOperator(context))
+        if (ExpressionType.IsOverloadingEqualsEqualsOperator(context))
             return;
 
         // If a value type, and not nullable, the comparison with null is going to generate an error. Do not emit a diagnostic.

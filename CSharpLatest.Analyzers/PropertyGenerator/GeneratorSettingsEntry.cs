@@ -21,6 +21,7 @@ internal record GeneratorSettingsEntry(string BuildKey, string DefaultValue)
     private const string BuilProperty = "build_property";
     private const string PropertySourceGenerator = "PropertySourceGenerator";
 
+    // Stryker disable once String: this line is untestable.
     private static string ProjectKey(string key) => $"{BuilProperty}.{PropertySourceGenerator}_{key}";
 
     /// <summary>

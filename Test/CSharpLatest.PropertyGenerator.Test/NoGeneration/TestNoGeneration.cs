@@ -34,6 +34,9 @@ public class SimpleTest
         const string Source = @"
 namespace Contracts.TestSuite;
 
+using System;
+using CSharpLatest;
+
 [FieldBackedProperty(GetterText = ""field"", SetterText = ""field = value"", InitializerText = ""0"")]
 public partial int Test { get; set; }
 ";
@@ -70,6 +73,9 @@ public class SimpleTest
         // The source code to test
         const string Source = @"
 namespace Contracts.TestSuite;
+
+using System;
+using CSharpLatest;
 
 public class SimpleTest
 {
