@@ -115,15 +115,6 @@ public partial class PropertyGenerator
         return SyntaxFactory.TokenList(ModifierTokens);
     }
 
-    private static void AddModifier(List<SyntaxToken> modifierTokens, SyntaxToken modifier, ref SyntaxTriviaList currentTrivia)
-    {
-        SyntaxToken StaticModifierToken = SyntaxFactory.Identifier(modifier.Text);
-        StaticModifierToken = StaticModifierToken.WithLeadingTrivia(currentTrivia);
-        modifierTokens.Add(StaticModifierToken);
-
-        UpdateTrivia(ref currentTrivia);
-    }
-
     private static List<SyntaxToken> GeneratePropertyDefaultModifiers(MemberDeclarationSyntax memberDeclaration, SyntaxTriviaList leadingTrivia, SyntaxTriviaList trailingTrivia)
     {
         List<SyntaxToken> ModifierTokens = [];
@@ -144,7 +135,7 @@ public partial class PropertyGenerator
         PartialModifierToken = PartialModifierToken.WithLeadingTrivia(CurrentTrivia);
         ModifierTokens.Add(PartialModifierToken);
 
-        // UpdateTrivia(ref CurrentTrivia);
+        UpdateTrivia(ref CurrentTrivia);
 
         // Replicate other modifiers that have to be after 'partial' in the generated code.
         foreach (SyntaxToken Modifier in memberDeclaration.Modifiers)
@@ -159,6 +150,15 @@ public partial class PropertyGenerator
         ModifierTokens[LastItemIndex] = ModifierTokens[LastItemIndex].WithTrailingTrivia(trailingTrivia);
 
         return ModifierTokens;
+    }
+
+    private static void AddModifier(List<SyntaxToken> modifierTokens, SyntaxToken modifier, ref SyntaxTriviaList currentTrivia)
+    {
+        SyntaxToken StaticModifierToken = SyntaxFactory.Identifier(modifier.Text);
+        StaticModifierToken = StaticModifierToken.WithLeadingTrivia(currentTrivia);
+        modifierTokens.Add(StaticModifierToken);
+
+        UpdateTrivia(ref currentTrivia);
     }
 
     private static void UpdateTrivia(ref SyntaxTriviaList triviaList) => triviaList = SyntaxFactory.TriviaList(SyntaxFactory.Space);

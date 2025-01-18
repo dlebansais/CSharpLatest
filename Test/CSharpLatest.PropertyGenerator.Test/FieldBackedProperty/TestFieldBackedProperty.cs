@@ -310,8 +310,8 @@ using CSharpLatest;
 internal partial class Program
 {
     [FieldBackedProperty(GetterText = ""field"", SetterText = ""field = value"", InitializerText = ""0"")]
-    public
-    partial    static int Test { get; set; }
+    partial
+    static int Test { get; set; }
 }
 ";
 
@@ -335,8 +335,8 @@ using CSharpLatest;
 internal partial class Program
 {
     [FieldBackedProperty(GetterText = ""field"", SetterText = ""field = value"", InitializerText = ""0"")]
-    public
-    partial    static int Test { get; set; }
+    partial
+    static int Test { get; set; }
 }
 ";
 
