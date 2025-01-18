@@ -27,7 +27,7 @@ internal static class AnalyzerTools
     /// <summary>
     /// Gets the help link for a diagnostic id.
     /// </summary>
-    /// <param name="diagnosticId">The diagnostic id.</param>
+    /// <param name="diagnosticId">The diagnostic id (test).</param>
     public static string GetHelpLink(string diagnosticId) => $"https://github.com/dlebansais/CSharpLatest/blob/master/doc/{diagnosticId}.md";
 
     /// <summary>

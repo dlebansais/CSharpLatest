@@ -14,8 +14,8 @@ using VerifyCS = CSharpCodeFixVerifier<CSL1007AddMissingBraces, CSL1007CodeFixPr
 public partial class CSL1007UnitTests
 {
     [TestMethod]
-    [DataRow(";foo;")]
-    [DataRow("true;foo;")]
+    [DataRow(";false;")]
+    [DataRow("true;false;")]
     public async Task OneLineIf_Diagnostic(string args)
     {
         Dictionary<string, string> Options = TestTools.ToOptions(args);
