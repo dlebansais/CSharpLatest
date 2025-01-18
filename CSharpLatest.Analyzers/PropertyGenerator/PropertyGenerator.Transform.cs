@@ -243,9 +243,11 @@ public partial class PropertyGenerator
     private static void UpdateWithInitializer(PropertyTextModel propertyTextModel, ref VariableDeclaratorSyntax variableDeclarator)
     {
         string InitializerText = propertyTextModel.InitializerText;
-        if (InitializerText != string.Empty)
+        if (InitializerText.Length > 0)
         {
             ExpressionSyntax InitializerExpression = SyntaxFactory.ParseExpression(InitializerText);
+            Contract.Assert(InitializerExpression is not IdentifierNameSyntax IdentifierName || IdentifierName.Identifier.ValueText.Length > 0);
+
             EqualsValueClauseSyntax Initializer = SyntaxFactory.EqualsValueClause(InitializerExpression.WithLeadingTrivia(SyntaxFactory.Space)).WithLeadingTrivia(SyntaxFactory.Space);
             variableDeclarator = variableDeclarator.WithInitializer(Initializer);
         }
@@ -257,6 +259,8 @@ public partial class PropertyGenerator
         if (InitializerText.Length > 0)
         {
             ExpressionSyntax InitializerExpression = SyntaxFactory.ParseExpression(InitializerText);
+            Contract.Assert(InitializerExpression is not IdentifierNameSyntax IdentifierName || IdentifierName.Identifier.ValueText.Length > 0);
+
             EqualsValueClauseSyntax Initializer = SyntaxFactory.EqualsValueClause(InitializerExpression.WithLeadingTrivia(SyntaxFactory.Space)).WithLeadingTrivia(SyntaxFactory.Space);
             propertyDeclaration = propertyDeclaration.WithInitializer(Initializer);
         }

@@ -43,10 +43,10 @@ public partial class CSL1009FieldBackedPropertyAttributeIsMissingArgument : Diag
     /// Initializes the rule analyzer.
     /// </summary>
     /// <param name="context">The analysis context.</param>
-    [Access("public", "override")]
-    [RequireNotNull(nameof(context))]
-    private void InitializeVerified(AnalysisContext context)
+    public override void Initialize(AnalysisContext context)
     {
+        context = Contract.AssertNotNull(context);
+
         context = Contract.AssertNotNull(context);
 
         context.ConfigureGeneratedCodeAnalysis(GeneratedCodeAnalysisFlags.None);

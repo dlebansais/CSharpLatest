@@ -95,16 +95,11 @@ public static partial class BraceAnalysis
             { typeof(WhileStatementSyntax), (n) => ((WhileStatementSyntax)n).CloseParenToken },
         };
 
-        SyntaxToken Result = statement.GetLastToken();
-
         foreach (KeyValuePair<Type, Func<CSharpSyntaxNode, SyntaxToken>> Entry in Table)
             if (Entry.Key.IsAssignableFrom(statement.GetType()))
-            {
-                Result = Entry.Value(statement);
-                break;
-            }
+                return Entry.Value(statement);
 
-        return Result;
+        return statement.GetLastToken();
     }
 
     /// <summary>

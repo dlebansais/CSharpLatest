@@ -98,14 +98,16 @@ internal static class AnalyzerTools
 
     private static string GetUserPreferenceFromCompilationOptions(SyntaxNodeAnalysisContext context, string setting, string defaultValue)
     {
+        string Result = defaultValue;
+
         foreach (string Key in context.Compilation.Options.SpecificDiagnosticOptions.Keys)
         {
             string[] KeyAndValue = Key.Split('=');
             if (KeyAndValue.Length == 2 && KeyAndValue[0].Trim() == setting)
-                return KeyAndValue[1].Trim();
+                Result = KeyAndValue[1].Trim();
         }
 
-        return defaultValue;
+        return Result;
     }
 
     /// <summary>
