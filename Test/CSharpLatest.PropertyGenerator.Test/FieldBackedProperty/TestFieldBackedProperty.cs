@@ -996,6 +996,35 @@ using CSharpLatest;
 
 internal partial class Program
 {
+/// <summary>
+/// Test doc.
+/// </summary>
+/// <param name=""value"">The property value.</param>
+/// <returns>The getter.</returns>
+    [FieldBackedProperty(GetterText = ""field"", SetterText = ""field = value"", InitializerText = ""0"")]
+    public partial int Test { get; set; }
+}
+";
+
+        // Pass the source code to the helper and snapshot test the output.
+        GeneratorDriver Driver = TestHelper.GetDriver(Source);
+        VerifyResult Result = await VerifyEnsure.Verify(Driver).ConfigureAwait(false);
+
+        Assert.That(Result.Files, Has.Exactly(1).Items);
+    }
+
+    [NUnit.Framework.Test]
+    public async Task TestDocNoTabWithRegion()
+    {
+        // The source code to test
+        const string Source = @"
+namespace CSharpLatest.TestSuite;
+
+using System;
+using CSharpLatest;
+
+internal partial class Program
+{
     #endregion
 
 #if DEBUG
@@ -1007,6 +1036,37 @@ internal partial class Program
 /// </summary>
 /// <param name=""value"">The property value.</param>
 /// <returns>The getter.</returns>
+    [FieldBackedProperty(GetterText = ""field"", SetterText = ""field = value"", InitializerText = ""0"")]
+    public partial int Test { get; set; }
+}
+";
+
+        // Pass the source code to the helper and snapshot test the output.
+        GeneratorDriver Driver = TestHelper.GetDriver(Source);
+        VerifyResult Result = await VerifyEnsure.Verify(Driver).ConfigureAwait(false);
+
+        Assert.That(Result.Files, Has.Exactly(1).Items);
+    }
+
+    [NUnit.Framework.Test]
+    public async Task TestDocMultiple()
+    {
+        // The source code to test
+        const string Source = @"
+namespace CSharpLatest.TestSuite;
+
+using System;
+using CSharpLatest;
+
+internal partial class Program
+{
+    /// <summary>
+    /// Test doc.
+    /// </summary>
+
+    /// <param name=""value"">The property value.</param>
+
+    /// <returns>The getter.</returns>
     [FieldBackedProperty(GetterText = ""field"", SetterText = ""field = value"", InitializerText = ""0"")]
     public partial int Test { get; set; }
 }

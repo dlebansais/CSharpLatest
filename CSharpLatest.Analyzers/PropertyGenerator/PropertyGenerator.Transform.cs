@@ -219,8 +219,7 @@ public partial class PropertyGenerator
         SyntaxToken Identifier = SyntaxFactory.Identifier(Settings.FieldPrefix + symbolName);
         VariableDeclaratorSyntax VariableDeclarator = SyntaxFactory.VariableDeclarator(Identifier);
 
-        if (HasInitializer(propertyTextModel, out EqualsValueClauseSyntax Initializer))
-            VariableDeclarator = VariableDeclarator.WithInitializer(Initializer);
+        UpdateWithInitializer(propertyTextModel, ref VariableDeclarator);
 
         VariableDeclarationSyntax VariableDeclaration = SyntaxFactory.VariableDeclaration(propertyDeclaration.Type.WithLeadingTrivia(SyntaxFactory.Space), SyntaxFactory.SingletonSeparatedList(VariableDeclarator));
         FieldDeclarationSyntax FieldDeclaration = SyntaxFactory.FieldDeclaration([], Modifiers, VariableDeclaration);
@@ -233,18 +232,26 @@ public partial class PropertyGenerator
         model = model with { GeneratedFieldDeclaration = FieldDeclaration.ToFullString() };
     }
 
-    private static bool HasInitializer(PropertyTextModel propertyTextModel, out EqualsValueClauseSyntax initializer)
+    private static void UpdateWithInitializer(PropertyTextModel propertyTextModel, ref VariableDeclaratorSyntax variableDeclarator)
     {
         string InitializerText = propertyTextModel.InitializerText;
         if (InitializerText != string.Empty)
         {
             ExpressionSyntax InitializerExpression = SyntaxFactory.ParseExpression(InitializerText);
-            initializer = SyntaxFactory.EqualsValueClause(InitializerExpression.WithLeadingTrivia(SyntaxFactory.Space)).WithLeadingTrivia(SyntaxFactory.Space);
-            return true;
+            EqualsValueClauseSyntax Initializer = SyntaxFactory.EqualsValueClause(InitializerExpression.WithLeadingTrivia(SyntaxFactory.Space)).WithLeadingTrivia(SyntaxFactory.Space);
+            variableDeclarator = variableDeclarator.WithInitializer(Initializer);
         }
+    }
 
-        Contract.Unused(out initializer);
-        return false;
+    private static void UpdateWithInitializer(PropertyTextModel propertyTextModel, ref PropertyDeclarationSyntax propertyDeclaration)
+    {
+        string InitializerText = propertyTextModel.InitializerText;
+        if (InitializerText != string.Empty)
+        {
+            ExpressionSyntax InitializerExpression = SyntaxFactory.ParseExpression(InitializerText);
+            EqualsValueClauseSyntax Initializer = SyntaxFactory.EqualsValueClause(InitializerExpression.WithLeadingTrivia(SyntaxFactory.Space)).WithLeadingTrivia(SyntaxFactory.Space);
+            propertyDeclaration = propertyDeclaration.WithInitializer(Initializer);
+        }
     }
 
     private static bool CheckFieldKeywordSupport(PropertyDeclarationSyntax propertyDeclaration)

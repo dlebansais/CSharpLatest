@@ -37,8 +37,8 @@ public partial class PropertyGenerator
         AccessorListSyntax PropertyAccessorList = GenerateAccessorList(symbolName, propertyTextModel, IsFieldKeywordSupported, LeadingTrivia, LeadingTriviaWithoutLineEnd, Tab);
         PropertyDeclaration = PropertyDeclaration.WithAccessorList(PropertyAccessorList);
 
-        if (IsFieldKeywordSupported && HasInitializer(propertyTextModel, out EqualsValueClauseSyntax Initializer))
-            PropertyDeclaration = PropertyDeclaration.WithInitializer(Initializer);
+        if (IsFieldKeywordSupported)
+            UpdateWithInitializer(propertyTextModel, ref PropertyDeclaration);
 
         PropertyDeclaration = PropertyDeclaration.WithLeadingTrivia(LeadingTriviaWithoutLineEnd);
 
