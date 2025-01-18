@@ -173,10 +173,6 @@ public partial class PropertyGenerator
         List<SyntaxTrivia> TrivialList = [.. tabTrivia, SyntaxFactory.Whitespace(tab)];
         SyntaxTriviaList TabAccessorsTrivia = SyntaxFactory.TriviaList(TrivialList);
 
-        List<SyntaxTrivia> TrivialListExtraLineEnd = new(TrivialList);
-        TrivialListExtraLineEnd.Insert(0, SyntaxFactory.EndOfLine("\n"));
-        TrivialListExtraLineEnd.Add(SyntaxFactory.Whitespace(tab));
-
         SyntaxToken CloseBraceToken = SyntaxFactory.Token(SyntaxKind.CloseBraceToken);
         CloseBraceToken = CloseBraceToken.WithLeadingTrivia(tabTrivia);
 
@@ -184,17 +180,33 @@ public partial class PropertyGenerator
             ? null
             : Settings.FieldPrefix + model.SymbolName;
 
-        AccessorDeclarationSyntax Getter = IsTextBlockBody(model.GetterText, FieldReplacement, out BlockSyntax GetterBlockBody)
-            ? SyntaxFactory.AccessorDeclaration(SyntaxKind.GetAccessorDeclaration, GetterBlockBody)
-            : IsTextExpressionBody(model.GetterText, FieldReplacement, out ArrowExpressionClauseSyntax GetterExpressionBody)
-                ? SyntaxFactory.AccessorDeclaration(SyntaxKind.GetAccessorDeclaration).WithExpressionBody(GetterExpressionBody).WithSemicolonToken(SyntaxFactory.Token(SyntaxKind.SemicolonToken))
-                : SyntaxFactory.AccessorDeclaration(SyntaxKind.GetAccessorDeclaration).WithSemicolonToken(SyntaxFactory.Token(SyntaxKind.SemicolonToken));
+        AccessorDeclarationSyntax Getter = SyntaxFactory.AccessorDeclaration(SyntaxKind.GetAccessorDeclaration);
 
-        AccessorDeclarationSyntax Setter = IsTextBlockBody(model.SetterText, FieldReplacement, out BlockSyntax SetterBlockBody)
-            ? SyntaxFactory.AccessorDeclaration(SyntaxKind.SetAccessorDeclaration, SetterBlockBody)
-            : IsTextExpressionBody(model.SetterText, FieldReplacement, out ArrowExpressionClauseSyntax SetterExpressionBody)
-                ? SyntaxFactory.AccessorDeclaration(SyntaxKind.SetAccessorDeclaration).WithExpressionBody(SetterExpressionBody).WithSemicolonToken(SyntaxFactory.Token(SyntaxKind.SemicolonToken))
-                : SyntaxFactory.AccessorDeclaration(SyntaxKind.SetAccessorDeclaration).WithSemicolonToken(SyntaxFactory.Token(SyntaxKind.SemicolonToken));
+        if (IsTextBlockBody(model.GetterText, FieldReplacement, out BlockSyntax GetterBlockBody))
+        {
+            Getter = Getter.WithBody(GetterBlockBody);
+        }
+        else
+        {
+            ArrowExpressionClauseSyntax? GetterExpressionBody = ToTextExpressionBody(model.GetterText, FieldReplacement);
+
+            Getter = Getter.WithExpressionBody(GetterExpressionBody);
+            Getter = Getter.WithSemicolonToken(SyntaxFactory.Token(SyntaxKind.SemicolonToken));
+        }
+
+        AccessorDeclarationSyntax Setter = SyntaxFactory.AccessorDeclaration(SyntaxKind.SetAccessorDeclaration);
+
+        if (IsTextBlockBody(model.SetterText, FieldReplacement, out BlockSyntax SetterBlockBody))
+        {
+            Setter = Setter.WithBody(SetterBlockBody);
+        }
+        else
+        {
+            ArrowExpressionClauseSyntax? SetterExpressionBody = ToTextExpressionBody(model.SetterText, FieldReplacement);
+
+            Setter = Setter.WithExpressionBody(SetterExpressionBody);
+            Setter = Setter.WithSemicolonToken(SyntaxFactory.Token(SyntaxKind.SemicolonToken));
+        }
 
         Getter = Getter.WithLeadingTrivia(TabAccessorsTrivia);
         Setter = Setter.WithLeadingTrivia(TabAccessorsTrivia);
@@ -225,8 +237,10 @@ public partial class PropertyGenerator
         return false;
     }
 
-    private static bool IsTextExpressionBody(string text, string? fieldReplacement, out ArrowExpressionClauseSyntax expressionBody)
+    private static ArrowExpressionClauseSyntax? ToTextExpressionBody(string text, string? fieldReplacement)
     {
+        ArrowExpressionClauseSyntax? expressionBody = null;
+
         if (text != string.Empty)
         {
             if (fieldReplacement is not null)
@@ -237,11 +251,9 @@ public partial class PropertyGenerator
             if (FullText == text)
             {
                 expressionBody = SyntaxFactory.ArrowExpressionClause(Invocation.WithLeadingTrivia(SyntaxFactory.Space)).WithLeadingTrivia(SyntaxFactory.Space);
-                return true;
             }
         }
 
-        Contract.Unused(out expressionBody);
-        return false;
+        return expressionBody;
     }
 }
