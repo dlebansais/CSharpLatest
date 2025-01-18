@@ -124,10 +124,16 @@ public partial class PropertyGenerator
 
             // Trim consecutive end of lines until there is only at most one at the beginning.
             bool HadEndOfLine = false;
-            while (CountStartingEndOfLineTrivias(SupportedTrivias) > 1)
+            while (HasStartingEndOfLineTrivias(SupportedTrivias))
             {
+                int PreviousRemaining = SupportedTrivias.Count;
+
                 HadEndOfLine = true;
                 SupportedTrivias.RemoveAt(0);
+
+                // Ensures that this while loop is not infinite.
+                int Remaining = SupportedTrivias.Count;
+                Contract.Assert(Remaining + 1 == PreviousRemaining);
             }
 
             if (HadEndOfLine)
@@ -140,19 +146,24 @@ public partial class PropertyGenerator
             // Remove successive whitespace trivias.
             int i = 0;
             while (i + 1 < SupportedTrivias.Count)
+            {
+                int PreviousRemaining = SupportedTrivias.Count - i;
+
                 if (SupportedTrivias[i].IsKind(SyntaxKind.WhitespaceTrivia) && SupportedTrivias[i + 1].IsKind(SyntaxKind.WhitespaceTrivia))
                     SupportedTrivias.RemoveAt(i);
                 else
                     i++;
 
+                int Remaining = SupportedTrivias.Count - i;
+
+                // Ensures that this while loop is not infinite.
+                Contract.Assert(Remaining + 1 == PreviousRemaining);
+            }
+
             LeadingTrivia = SyntaxFactory.TriviaList(SupportedTrivias);
 
-            foreach (SyntaxTrivia Trivia in LeadingTrivia)
-                if (Trivia.IsKind(SyntaxKind.SingleLineDocumentationCommentTrivia))
-                {
-                    model = model with { Documentation = LeadingTrivia.ToFullString().Trim('\r').Trim('\n').TrimEnd(' ') };
-                    break;
-                }
+            if (LeadingTrivia.Any(SyntaxKind.SingleLineDocumentationCommentTrivia))
+                model = model with { Documentation = LeadingTrivia.ToFullString().Trim('\r').Trim('\n').TrimEnd(' ') };
         }
     }
 
@@ -174,7 +185,7 @@ public partial class PropertyGenerator
         return FirstTrivia.IsKind(SyntaxKind.WhitespaceTrivia);
     }
 
-    private static int CountStartingEndOfLineTrivias(List<SyntaxTrivia> trivias)
+    private static bool HasStartingEndOfLineTrivias(List<SyntaxTrivia> trivias)
     {
         int Count = 0;
 
@@ -183,12 +194,19 @@ public partial class PropertyGenerator
             SyntaxTrivia Trivia = trivias[i];
 
             if (Trivia.IsKind(SyntaxKind.EndOfLineTrivia))
+            {
                 Count++;
+
+                if (Count > 1)
+                    return true;
+            }
             else if (!Trivia.IsKind(SyntaxKind.WhitespaceTrivia))
-                break;
+            {
+                return false;
+            }
         }
 
-        return Count;
+        return false;
     }
 
     private static void UpdateWithGeneratedFieldDeclaration(PropertyDeclarationSyntax propertyDeclaration, string symbolName, PropertyTextModel propertyTextModel, ref PropertyModel model)
