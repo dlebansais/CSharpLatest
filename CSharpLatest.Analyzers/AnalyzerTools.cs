@@ -89,9 +89,11 @@ internal static class AnalyzerTools
     {
         AnalyzerConfigOptions Options = context.Options.AnalyzerConfigOptionsProvider.GetOptions(context.Node.SyntaxTree);
 
-        // Trick to cover the case where TryGetValue returns true, since it proved impossible to unit test.
         _ = Options.TryGetValue(setting, out string? UserPreference);
-        return $"{UserPreference};{defaultValue}".Split(';').Where(s => s.Length > 0).First();
+
+        // Trick to cover the case where TryGetValue returns true, since it proved impossible to unit test.
+        // Stryker disable once Equality: this line is untestable.
+        return $"{UserPreference};{defaultValue}".Split(';').Where(s => s.Length > 0).ToList()[0];
     }
 
     private static string GetUserPreferenceFromCompilationOptions(SyntaxNodeAnalysisContext context, string setting, string defaultValue)

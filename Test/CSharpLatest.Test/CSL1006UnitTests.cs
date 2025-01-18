@@ -12,7 +12,7 @@ public partial class CSL1006UnitTests
     [TestMethod]
     public async Task OneLineSetter_Diagnostic()
     {
-        await VerifyCS.VerifyCodeFixAsync(Prologs.IsExternalInit, @"
+        await VerifyCS.VerifyCodeFixAsync(Prologs.IsExternalInitNoNullable, @"
     class Program
     {
         public string Prop { set [|{ _prop = value; }|] }
@@ -24,7 +24,7 @@ public partial class CSL1006UnitTests
         public string Prop { set => _prop = value; }
         private string _prop = string.Empty;
     }
-");
+", Microsoft.CodeAnalysis.CSharp.LanguageVersion.CSharp7);
     }
 
     [TestMethod]

@@ -68,7 +68,7 @@ class Program(string prop)
 
     public string Prop { get; } = prop;
 }
-");
+", Microsoft.CodeAnalysis.CSharp.LanguageVersion.CSharp12);
     }
 
     [TestMethod]

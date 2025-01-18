@@ -12,12 +12,12 @@ public partial class CSL1001UnitTests
     [TestMethod]
     public async Task SystemType_Diagnostic()
     {
-        await VerifyCS.VerifyCodeFixAsync(Prologs.Nullable, @"
+        await VerifyCS.VerifyCodeFixAsync(Prologs.Default, @"
 class Program
 {
     static void Main(string[] args)
     {
-        string? s = args.Length > 0 ? null : ""test"";
+        string s = args.Length > 0 ? null : ""test"";
 
         if ([|s == null|])
             Console.WriteLine(string.Empty);
@@ -28,13 +28,13 @@ class Program
 {
     static void Main(string[] args)
     {
-        string? s = args.Length > 0 ? null : ""test"";
+        string s = args.Length > 0 ? null : ""test"";
 
         if (s is null)
             Console.WriteLine(string.Empty);
     }
 }
-");
+", Microsoft.CodeAnalysis.CSharp.LanguageVersion.CSharp7);
     }
 
     [TestMethod]

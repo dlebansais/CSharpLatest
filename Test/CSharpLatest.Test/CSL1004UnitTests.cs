@@ -27,7 +27,7 @@ public partial class CSL1004UnitTests
     }
 ", @"
     record Program(string Prop);
-");
+", LanguageVersion.CSharp9);
     }
 
     [TestMethod]

@@ -3,9 +3,11 @@
 namespace CSharpLatest.Test;
 
 using System;
+using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeRefactorings;
 using Microsoft.CodeAnalysis.CSharp.Testing;
+using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.CodeAnalysis.Testing;
 
 internal static partial class CSharpCodeRefactoringVerifier<TCodeRefactoring>
@@ -23,6 +25,26 @@ internal static partial class CSharpCodeRefactoringVerifier<TCodeRefactoring>
 
                 return solution;
             });
+        }
+
+        public bool IsDiagnosticEnabledd
+        {
+            get
+            {
+                DiagnosticAnalyzer[] Analyzers = GetDiagnosticAnalyzers().ToArray();
+                DiagnosticDescriptor? Diagnostics = GetDefaultDiagnostic(Analyzers);
+                return Diagnostics is not null && Diagnostics.IsEnabledByDefault;
+            }
+        }
+
+        public bool HasHelpLink
+        {
+            get
+            {
+                DiagnosticAnalyzer[] Analyzers = GetDiagnosticAnalyzers().ToArray();
+                DiagnosticDescriptor? Diagnostics = GetDefaultDiagnostic(Analyzers);
+                return Diagnostics is not null && Diagnostics.HelpLinkUri is string Uri && Uri.StartsWith("https://github.com/dlebansais/CSharpLatest", StringComparison.Ordinal);
+            }
         }
     }
 }

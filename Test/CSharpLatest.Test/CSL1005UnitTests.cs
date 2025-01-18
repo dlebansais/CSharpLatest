@@ -15,7 +15,7 @@ public partial class CSL1005UnitTests
     [TestMethod]
     public async Task OneLineGetter_Diagnostic()
     {
-        await VerifyCS.VerifyCodeFixAsync(Prologs.IsExternalInit, @"
+        await VerifyCS.VerifyCodeFixAsync(Prologs.IsExternalInitNoNullable, @"
     class Program
     {
         public string Prop { get [|{ return ""Test""; }|] }
@@ -25,7 +25,7 @@ public partial class CSL1005UnitTests
     {
         public string Prop => ""Test"";
     }
-");
+", LanguageVersion.CSharp7);
     }
 
     [TestMethod]

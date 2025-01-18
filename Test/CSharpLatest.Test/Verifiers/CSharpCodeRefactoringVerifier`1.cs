@@ -19,11 +19,16 @@ internal static partial class CSharpCodeRefactoringVerifier<TCodeRefactoring>
     /// <inheritdoc cref="CodeRefactoringVerifier{TCodeRefactoring, TTest, TVerifier}.VerifyRefactoringAsync(string, DiagnosticResult[], string)"/>
     public static async Task VerifyRefactoringAsync(string source, DiagnosticResult[] expected, string fixedSource)
     {
-        Test test = new()
+        Test test = new();
+
+        if (test.IsDiagnosticEnabledd && test.HasHelpLink)
         {
-            TestCode = source,
-            FixedCode = fixedSource,
-        };
+            test = new()
+            {
+                TestCode = source,
+                FixedCode = fixedSource,
+            };
+        }
 
         test.ExpectedDiagnostics.AddRange(expected);
         await test.RunAsync(CancellationToken.None);

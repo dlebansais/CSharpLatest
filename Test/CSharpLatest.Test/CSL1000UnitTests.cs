@@ -30,7 +30,7 @@ class Program
         Console.WriteLine(i);
     }
 }
-");
+", Microsoft.CodeAnalysis.CSharp.LanguageVersion.CSharp4);
     }
 
     [TestMethod]

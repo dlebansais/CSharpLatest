@@ -140,7 +140,15 @@ public partial class PropertyGenerator
             {
                 // Trim whitespace trivias at start.
                 while (IsFirstTriviaWhitespace(SupportedTrivias))
+                {
+                    int PreviousRemaining = SupportedTrivias.Count;
+
                     SupportedTrivias.RemoveAt(0);
+
+                    // Ensures that this while loop is not infinite.
+                    int Remaining = SupportedTrivias.Count;
+                    Contract.Assert(Remaining + 1 == PreviousRemaining);
+                }
             }
 
             // Remove successive whitespace trivias.

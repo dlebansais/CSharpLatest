@@ -40,12 +40,14 @@ internal static partial class CSharpCodeFixVerifier<TAnalyzer, TCodeFix>
         Test test = new();
 
         if (test.IsDiagnosticEnabledd && test.HasHelpLink)
+        {
             test = new()
             {
                 TestCode = prolog + source,
                 Version = languageVersion,
                 Options = options,
             };
+        }
 
         test.ExpectedDiagnostics.AddRange(expected);
 
@@ -53,34 +55,40 @@ internal static partial class CSharpCodeFixVerifier<TAnalyzer, TCodeFix>
     }
 
     /// <inheritdoc cref="CodeFixVerifier{TAnalyzer, TCodeFix, TTest, TVerifier}.VerifyCodeFixAsync(string, string)"/>
-    public static async Task VerifyCodeFixAsync(string source, string fixedSource)
-        => await VerifyCodeFixAsync([], Prologs.Default, source, DiagnosticResult.EmptyDiagnosticResults, fixedSource);
+    public static async Task VerifyCodeFixAsync(string source, string fixedSource, LanguageVersion languageVersion = LanguageVersion.Default)
+        => await VerifyCodeFixAsync([], Prologs.Default, source, DiagnosticResult.EmptyDiagnosticResults, fixedSource, languageVersion);
 
     /// <inheritdoc cref="CodeFixVerifier{TAnalyzer, TCodeFix, TTest, TVerifier}.VerifyCodeFixAsync(string, string)"/>
-    public static async Task VerifyCodeFixAsync(string prolog, string source, string fixedSource)
-        => await VerifyCodeFixAsync([], prolog, source, DiagnosticResult.EmptyDiagnosticResults, fixedSource);
+    public static async Task VerifyCodeFixAsync(string prolog, string source, string fixedSource, LanguageVersion languageVersion = LanguageVersion.Default)
+        => await VerifyCodeFixAsync([], prolog, source, DiagnosticResult.EmptyDiagnosticResults, fixedSource, languageVersion);
 
     /// <inheritdoc cref="CodeFixVerifier{TAnalyzer, TCodeFix, TTest, TVerifier}.VerifyCodeFixAsync(string, string)"/>
-    public static async Task VerifyCodeFixAsync(Dictionary<string, string> options, string source, string fixedSource)
-        => await VerifyCodeFixAsync(options, Prologs.Default, source, DiagnosticResult.EmptyDiagnosticResults, fixedSource);
+    public static async Task VerifyCodeFixAsync(Dictionary<string, string> options, string source, string fixedSource, LanguageVersion languageVersion = LanguageVersion.Default)
+        => await VerifyCodeFixAsync(options, Prologs.Default, source, DiagnosticResult.EmptyDiagnosticResults, fixedSource, languageVersion);
 
     /// <inheritdoc cref="CodeFixVerifier{TAnalyzer, TCodeFix, TTest, TVerifier}.VerifyCodeFixAsync(string, string)"/>
-    public static async Task VerifyCodeFixAsync(Dictionary<string, string> options, string prolog, string source, string fixedSource)
-        => await VerifyCodeFixAsync(options, prolog, source, DiagnosticResult.EmptyDiagnosticResults, fixedSource);
+    public static async Task VerifyCodeFixAsync(Dictionary<string, string> options, string prolog, string source, string fixedSource, LanguageVersion languageVersion = LanguageVersion.Default)
+        => await VerifyCodeFixAsync(options, prolog, source, DiagnosticResult.EmptyDiagnosticResults, fixedSource, languageVersion);
 
     /// <inheritdoc cref="CodeFixVerifier{TAnalyzer, TCodeFix, TTest, TVerifier}.VerifyCodeFixAsync(string, DiagnosticResult, string)"/>
-    public static async Task VerifyCodeFixAsync(Dictionary<string, string> options, string prolog, string source, DiagnosticResult expected, string fixedSource)
-        => await VerifyCodeFixAsync(options, prolog, source, [expected], fixedSource);
+    public static async Task VerifyCodeFixAsync(Dictionary<string, string> options, string prolog, string source, DiagnosticResult expected, string fixedSource, LanguageVersion languageVersion = LanguageVersion.Default)
+        => await VerifyCodeFixAsync(options, prolog, source, [expected], fixedSource, languageVersion);
 
     /// <inheritdoc cref="CodeFixVerifier{TAnalyzer, TCodeFix, TTest, TVerifier}.VerifyCodeFixAsync(string, DiagnosticResult[], string)"/>
-    public static async Task VerifyCodeFixAsync(Dictionary<string, string> options, string prolog, string source, DiagnosticResult[] expected, string fixedSource)
+    public static async Task VerifyCodeFixAsync(Dictionary<string, string> options, string prolog, string source, DiagnosticResult[] expected, string fixedSource, LanguageVersion languageVersion = LanguageVersion.Default)
     {
-        Test test = new()
+        Test test = new();
+
+        if (test.IsDiagnosticEnabledd && test.HasHelpLink)
         {
-            TestCode = (prolog + source).Replace("\r\n", "\n").Replace("\n", "\r\n"),
-            FixedCode = (prolog + fixedSource).Replace("\r\n", "\n").Replace("\n", "\r\n"),
-            Options = options,
-        };
+            test = new()
+            {
+                TestCode = (prolog + source).Replace("\r\n", "\n").Replace("\n", "\r\n"),
+                FixedCode = (prolog + fixedSource).Replace("\r\n", "\n").Replace("\n", "\r\n"),
+                Version = languageVersion,
+                Options = options,
+            };
+        }
 
         test.ExpectedDiagnostics.AddRange(expected);
 
