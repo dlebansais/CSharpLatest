@@ -23,7 +23,7 @@ class Program
 
     public string Prop { get; }
 }
-");
+", Microsoft.CodeAnalysis.CSharp.LanguageVersion.CSharp9);
     }
 
     [TestMethod]

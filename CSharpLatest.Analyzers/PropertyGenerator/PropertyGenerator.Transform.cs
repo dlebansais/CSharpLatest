@@ -246,7 +246,7 @@ public partial class PropertyGenerator
     private static void UpdateWithInitializer(PropertyTextModel propertyTextModel, ref PropertyDeclarationSyntax propertyDeclaration)
     {
         string InitializerText = propertyTextModel.InitializerText;
-        if (InitializerText != string.Empty)
+        if (InitializerText.Length > 0)
         {
             ExpressionSyntax InitializerExpression = SyntaxFactory.ParseExpression(InitializerText);
             EqualsValueClauseSyntax Initializer = SyntaxFactory.EqualsValueClause(InitializerExpression.WithLeadingTrivia(SyntaxFactory.Space)).WithLeadingTrivia(SyntaxFactory.Space);

@@ -22,7 +22,7 @@ class Program
         Console.WriteLine(i);
     }
 }
-");
+", Microsoft.CodeAnalysis.CSharp.LanguageVersion.CSharp4);
     }
 
     [TestMethod]
@@ -37,7 +37,7 @@ class Program
         Console.WriteLine(i);
     }
 }
-", Microsoft.CodeAnalysis.CSharp.LanguageVersion.CSharp1);
+", Microsoft.CodeAnalysis.CSharp.LanguageVersion.CSharp3);
     }
 
     [TestMethod]

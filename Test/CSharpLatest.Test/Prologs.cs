@@ -34,4 +34,17 @@ namespace System.Runtime.CompilerServices
 }
 
 ";
+
+    public const string IsExternalInitNoNullable = @"
+using System;
+using System.ComponentModel;
+using System.Threading.Tasks;
+using CSharpLatest;
+
+namespace System.Runtime.CompilerServices
+{
+    internal class IsExternalInit { }
+}
+
+";
 }

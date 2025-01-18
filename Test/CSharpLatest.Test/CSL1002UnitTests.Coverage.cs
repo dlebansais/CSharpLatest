@@ -24,7 +24,7 @@ class Program
             Console.WriteLine(string.Empty);
     }
 }
-");
+", Microsoft.CodeAnalysis.CSharp.LanguageVersion.CSharp9);
     }
 
     [TestMethod]

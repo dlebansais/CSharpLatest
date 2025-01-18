@@ -23,7 +23,7 @@ class Program
 
     public string Prop { get; }
 }
-");
+", Microsoft.CodeAnalysis.CSharp.LanguageVersion.CSharp12);
     }
 
     [TestMethod]
@@ -66,6 +66,34 @@ class BaseProgram
 class Program : BaseProgram
 {
     public Program(string prop) : base()
+    {
+        Prop = prop;
+    }
+
+    public string Prop { get; }
+}
+");
+    }
+
+    [TestMethod]
+    public async Task MultipleConstructorsOneWithBase_NoDiagnostic()
+    {
+        await VerifyCS.VerifyAnalyzerAsync(Prologs.Nullable, @"
+class BaseProgram
+{
+    public BaseProgram()
+    {
+    }
+}
+
+class Program : BaseProgram
+{
+    public Program(string prop) : base()
+    {
+        Prop = prop;
+    }
+
+    public Program(string prop, int i)
     {
         Prop = prop;
     }

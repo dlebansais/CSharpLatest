@@ -144,6 +144,42 @@ class Program(string prop)
     }
 
     [TestMethod]
+    public async Task ConstructorWithOtherAndMoreParameters_Diagnostic()
+    {
+        await VerifyCS.VerifyCodeFixAsync(@"
+    class [|Program|]
+    {
+        public Program(string prop, int other, double more)
+        {
+            Prop = prop;
+            Other = other;
+        }
+
+        public Program(string prop, int other)
+        {
+            Prop = prop;
+            Other = other;
+        }
+
+        public string Prop { get; }
+        public int Other { get; }
+    }
+", @"
+class Program(string prop, int other)
+{
+    public Program(string prop, int other, double more) : this(prop, other)
+    {
+    }
+
+    public string Prop { get; } = prop;
+    public int Other { get; } = other;
+}
+");
+        await VerifyCS.VerifyAnalyzerAsync(Prologs.Nullable, @"
+");
+    }
+
+    [TestMethod]
     public async Task Decoration1_Diagnostic()
     {
         await VerifyCS.VerifyCodeFixAsync(@"

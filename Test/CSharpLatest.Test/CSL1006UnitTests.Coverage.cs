@@ -13,13 +13,13 @@ public partial class CSL1006UnitTests
     {
         await VerifyCS.VerifyAnalyzerAsync(@"
 #define COVERAGE_A25BDFABDDF8402785EB75AD812DA952
-" + Prologs.IsExternalInit, @"
+" + Prologs.IsExternalInitNoNullable, @"
     class Program
     {
         public string Prop { set { _prop = value; } }
         private string _prop = string.Empty;
     }
-");
+", Microsoft.CodeAnalysis.CSharp.LanguageVersion.CSharp7);
     }
 
     [TestMethod]

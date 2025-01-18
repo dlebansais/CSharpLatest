@@ -13,18 +13,18 @@ public partial class CSL1001UnitTests
     {
         await VerifyCS.VerifyAnalyzerAsync(@"
 #define COVERAGE_A25BDFABDDF8402785EB75AD812DA952
-" + Prologs.Nullable, @"
+" + Prologs.Default, @"
 class Program
 {
     static void Main(string[] args)
     {
-        string? s = args.Length > 0 ? null : ""test"";
+        string s = args.Length > 0 ? null : ""test"";
 
         if (s == null)
             Console.WriteLine(string.Empty);
     }
 }
-");
+", Microsoft.CodeAnalysis.CSharp.LanguageVersion.CSharp7);
     }
 
     [TestMethod]

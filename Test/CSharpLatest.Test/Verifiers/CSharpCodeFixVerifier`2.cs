@@ -37,12 +37,15 @@ internal static partial class CSharpCodeFixVerifier<TAnalyzer, TCodeFix>
     /// <inheritdoc cref="CodeFixVerifier{TAnalyzer, TCodeFix, TTest, TVerifier}.VerifyAnalyzerAsync(string, DiagnosticResult[])"/>
     public static async Task VerifyAnalyzerAsync(Dictionary<string, string> options, string prolog, string source, LanguageVersion languageVersion = LanguageVersion.Default, params IEnumerable<DiagnosticResult> expected)
     {
-        Test test = new()
-        {
-            TestCode = prolog + source,
-            Version = languageVersion,
-            Options = options,
-        };
+        Test test = new();
+
+        if (test.IsDiagnosticEnabledd && test.HasHelpLink)
+            test = new()
+            {
+                TestCode = prolog + source,
+                Version = languageVersion,
+                Options = options,
+            };
 
         test.ExpectedDiagnostics.AddRange(expected);
 

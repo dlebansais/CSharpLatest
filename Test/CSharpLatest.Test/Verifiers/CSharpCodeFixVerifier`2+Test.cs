@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using Contracts;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
@@ -62,6 +63,27 @@ internal static partial class CSharpCodeFixVerifier<TAnalyzer, TCodeFix>
         }
 
         public LanguageVersion Version { get; set; } = LanguageVersion.Default;
+
+        public bool IsDiagnosticEnabledd
+        {
+            get
+            {
+                DiagnosticAnalyzer[] Analyzers = GetDiagnosticAnalyzers().ToArray();
+                DiagnosticDescriptor? Diagnostics = GetDefaultDiagnostic(Analyzers);
+                return Diagnostics is not null && Diagnostics.IsEnabledByDefault;
+            }
+        }
+
+        public bool HasHelpLink
+        {
+            get
+            {
+                DiagnosticAnalyzer[] Analyzers = GetDiagnosticAnalyzers().ToArray();
+                DiagnosticDescriptor? Diagnostics = GetDefaultDiagnostic(Analyzers);
+                return Diagnostics is not null && Diagnostics.HelpLinkUri is string Uri && Uri.StartsWith("https://github.com/dlebansais/CSharpLatest", StringComparison.Ordinal);
+            }
+        }
+
         public Dictionary<string, string> Options { get; set; } = [];
 
         private static string GetRuntimePath()

@@ -41,7 +41,7 @@ public static partial class ConstructorAnalysis
     private static BestSuggestion GetBestSuggestionVerified(ClassDeclarationSyntax classDeclaration)
     {
         // Make sure the class has a name to display.
-        if (classDeclaration.Identifier.Text == string.Empty)
+        if (classDeclaration.Identifier.Text.Length == 0)
             return BestSuggestion.None;
 
         // Make sure the declaration doesn't already use a primary contructor.
