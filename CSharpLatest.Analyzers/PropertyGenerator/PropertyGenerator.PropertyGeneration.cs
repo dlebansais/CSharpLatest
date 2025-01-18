@@ -144,7 +144,7 @@ public partial class PropertyGenerator
         PartialModifierToken = PartialModifierToken.WithLeadingTrivia(CurrentTrivia);
         ModifierTokens.Add(PartialModifierToken);
 
-        UpdateTrivia(ref CurrentTrivia);
+        // UpdateTrivia(ref CurrentTrivia);
 
         // Replicate other modifiers that have to be after 'partial' in the generated code.
         foreach (SyntaxToken Modifier in memberDeclaration.Modifiers)

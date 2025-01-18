@@ -298,7 +298,7 @@ internal partial class Program
     }
 
     [NUnit.Framework.Test]
-    public async Task TestMultilineModifierNetFramework()
+    public async Task TestWeirdModifierTriviaNetFramework()
     {
         // The source code to test
         const string Source = @"
@@ -311,7 +311,7 @@ internal partial class Program
 {
     [FieldBackedProperty(GetterText = ""field"", SetterText = ""field = value"", InitializerText = ""0"")]
     public
-    partial int Test { get; set; }
+    partial    static int Test { get; set; }
 }
 ";
 
@@ -323,7 +323,7 @@ internal partial class Program
     }
 
     [NUnit.Framework.Test]
-    public async Task TestMultilineModifierNet9()
+    public async Task TestWeirdModifierTriviaNet9()
     {
         // The source code to test
         const string Source = @"
@@ -336,7 +336,7 @@ internal partial class Program
 {
     [FieldBackedProperty(GetterText = ""field"", SetterText = ""field = value"", InitializerText = ""0"")]
     public
-    partial int Test { get; set; }
+    partial    static int Test { get; set; }
 }
 ";
 
