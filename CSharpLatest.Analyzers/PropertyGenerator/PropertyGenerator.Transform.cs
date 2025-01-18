@@ -21,13 +21,10 @@ public partial class PropertyGenerator
         PropertyDeclarationSyntax PropertyDeclaration = Contract.AssertOfType<PropertyDeclarationSyntax>(TargetNode);
 
         PropertyModel Model = GetBareboneModel(context, PropertyDeclaration);
-        (string GetterText, string SetterText, string InitializerText) = GetModelText(PropertyDeclaration);
-        Model = Model with { GetterText = GetterText };
-        Model = Model with { SetterText = SetterText };
-        Model = Model with { InitializerText = InitializerText };
-        Model = Model with { Documentation = GetMemberDocumentation(PropertyDeclaration) };
-        Model = Model with { GeneratedPropertyDeclaration = GetGeneratedPropertyDeclaration(Model, context) };
-        Model = Model with { GeneratedFieldDeclaration = GetGeneratedFieldDeclaration(Model, PropertyDeclaration) };
+        UpdateWithText(PropertyDeclaration, ref Model);
+        UpdateWithDocumentation(PropertyDeclaration, ref Model);
+        UpdateWithGeneratedPropertyDeclaration(context, ref Model);
+        UpdateWithGeneratedFieldDeclaration(PropertyDeclaration, ref Model);
 
         return Model;
     }
@@ -92,9 +89,8 @@ public partial class PropertyGenerator
         return Result;
     }
 
-    private static (string GetterText, string SetterText, string InitializerText) GetModelText(PropertyDeclarationSyntax propertyDeclaration)
+    private static void UpdateWithText(PropertyDeclarationSyntax propertyDeclaration, ref PropertyModel model)
     {
-        (string GetterText, string SetterText, string InitializerText) Result = (string.Empty, string.Empty, string.Empty);
         Collection<AttributeSyntax> MemberAttributes = AttributeHelper.GetMemberSupportedAttributes(context: null, propertyDeclaration, [typeof(FieldBackedPropertyAttribute)]);
 
         foreach (AttributeSyntax Attribute in MemberAttributes)
@@ -106,18 +102,14 @@ public partial class PropertyGenerator
                 Contract.Assert(PropertyAttributeResult.Result == AttributeGeneration.Valid);
                 Contract.Assert(PropertyAttributeResult.ArgumentValues.Count == 3);
 
-                Result.GetterText = PropertyAttributeResult.ArgumentValues[0];
-                Result.SetterText = PropertyAttributeResult.ArgumentValues[1];
-                Result.InitializerText = PropertyAttributeResult.ArgumentValues[2];
+                model = model with { GetterText = PropertyAttributeResult.ArgumentValues[0] };
+                model = model with { SetterText = PropertyAttributeResult.ArgumentValues[1] };
+                model = model with { InitializerText = PropertyAttributeResult.ArgumentValues[2] };
             }
-
-        return Result;
     }
 
-    private static string GetMemberDocumentation(PropertyDeclarationSyntax propertyDeclaration)
+    private static void UpdateWithDocumentation(PropertyDeclarationSyntax propertyDeclaration, ref PropertyModel model)
     {
-        string Documentation = string.Empty;
-
         if (propertyDeclaration.HasLeadingTrivia)
         {
             SyntaxTriviaList LeadingTrivia = propertyDeclaration.GetLeadingTrivia();
@@ -155,12 +147,10 @@ public partial class PropertyGenerator
             foreach (SyntaxTrivia Trivia in LeadingTrivia)
                 if (Trivia.IsKind(SyntaxKind.SingleLineDocumentationCommentTrivia))
                 {
-                    Documentation = LeadingTrivia.ToFullString().Trim('\r').Trim('\n').TrimEnd(' ');
+                    model = model with { Documentation = LeadingTrivia.ToFullString().Trim('\r').Trim('\n').TrimEnd(' ') };
                     break;
                 }
         }
-
-        return Documentation;
     }
 
     private static bool IsSupportedTrivia(SyntaxTrivia trivia)
@@ -198,10 +188,10 @@ public partial class PropertyGenerator
         return Count;
     }
 
-    private static string GetGeneratedFieldDeclaration(PropertyModel model, PropertyDeclarationSyntax propertyDeclaration)
+    private static void UpdateWithGeneratedFieldDeclaration(PropertyDeclarationSyntax propertyDeclaration, ref PropertyModel model)
     {
         if (CheckFieldKeywordSupport(propertyDeclaration))
-            return string.Empty;
+            return;
 
         SyntaxTokenList Modifiers = SyntaxFactory.TokenList([SyntaxFactory.Token(SyntaxKind.PrivateKeyword)]);
 
@@ -219,7 +209,7 @@ public partial class PropertyGenerator
 
         FieldDeclaration = FieldDeclaration.WithLeadingTrivia(LeadingTrivia);
 
-        return FieldDeclaration.ToFullString();
+        model = model with { GeneratedFieldDeclaration = FieldDeclaration.ToFullString() };
     }
 
     private static bool HasInitializer(PropertyModel model, out EqualsValueClauseSyntax initializer)

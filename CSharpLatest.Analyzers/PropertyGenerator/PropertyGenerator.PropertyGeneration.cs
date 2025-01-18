@@ -14,7 +14,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 /// </summary>
 public partial class PropertyGenerator
 {
-    private static string GetGeneratedPropertyDeclaration(PropertyModel model, GeneratorAttributeSyntaxContext context)
+    private static void UpdateWithGeneratedPropertyDeclaration(GeneratorAttributeSyntaxContext context, ref PropertyModel model)
     {
         SyntaxNode TargetNode = context.TargetNode;
         PropertyDeclarationSyntax PropertyDeclaration = Contract.AssertOfType<PropertyDeclarationSyntax>(TargetNode);
@@ -42,7 +42,7 @@ public partial class PropertyGenerator
 
         PropertyDeclaration = PropertyDeclaration.WithLeadingTrivia(LeadingTriviaWithoutLineEnd);
 
-        return PropertyDeclaration.ToFullString();
+        model = model with { GeneratedPropertyDeclaration = PropertyDeclaration.ToFullString() };
     }
 
     private static SyntaxTriviaList GetLeadingTriviaWithTwoLineEnd(string tab)
