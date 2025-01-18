@@ -14,7 +14,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 /// </summary>
 public partial class PropertyGenerator
 {
-    private static void UpdateWithGeneratedPropertyDeclaration(GeneratorAttributeSyntaxContext context, ref PropertyModel model)
+    private static string GetGeneratedPropertyDeclaration(GeneratorAttributeSyntaxContext context, string symbolName, PropertyTextModel propertyTextModel)
     {
         SyntaxNode TargetNode = context.TargetNode;
         PropertyDeclarationSyntax PropertyDeclaration = Contract.AssertOfType<PropertyDeclarationSyntax>(TargetNode);
@@ -28,21 +28,21 @@ public partial class PropertyGenerator
         SyntaxList<AttributeListSyntax> CodeAttributes = GenerateCodeAttributes();
         PropertyDeclaration = PropertyDeclaration.WithAttributeLists(CodeAttributes);
 
-        SyntaxToken SymbolIdentifier = SyntaxFactory.Identifier(model.SymbolName);
+        SyntaxToken SymbolIdentifier = SyntaxFactory.Identifier(symbolName);
         PropertyDeclaration = PropertyDeclaration.WithIdentifier(SymbolIdentifier);
 
         SyntaxTokenList Modifiers = GeneratePropertyModifiers(PropertyDeclaration, LeadingTrivia, TrailingTrivia);
         PropertyDeclaration = PropertyDeclaration.WithModifiers(Modifiers);
 
-        AccessorListSyntax PropertyAccessorList = GenerateAccessorList(model, IsFieldKeywordSupported, LeadingTrivia, LeadingTriviaWithoutLineEnd, Tab);
+        AccessorListSyntax PropertyAccessorList = GenerateAccessorList(symbolName, propertyTextModel, IsFieldKeywordSupported, LeadingTrivia, LeadingTriviaWithoutLineEnd, Tab);
         PropertyDeclaration = PropertyDeclaration.WithAccessorList(PropertyAccessorList);
 
-        if (IsFieldKeywordSupported && HasInitializer(model, out EqualsValueClauseSyntax Initializer))
+        if (IsFieldKeywordSupported && HasInitializer(propertyTextModel, out EqualsValueClauseSyntax Initializer))
             PropertyDeclaration = PropertyDeclaration.WithInitializer(Initializer);
 
         PropertyDeclaration = PropertyDeclaration.WithLeadingTrivia(LeadingTriviaWithoutLineEnd);
 
-        model = model with { GeneratedPropertyDeclaration = PropertyDeclaration.ToFullString() };
+        return PropertyDeclaration.ToFullString();
     }
 
     private static SyntaxTriviaList GetLeadingTriviaWithTwoLineEnd(string tab)
@@ -163,7 +163,7 @@ public partial class PropertyGenerator
 
     private static void UpdateTrivia(ref SyntaxTriviaList triviaList) => triviaList = SyntaxFactory.TriviaList(SyntaxFactory.Space);
 
-    private static AccessorListSyntax GenerateAccessorList(PropertyModel model, bool isFieldKeywordSupported, SyntaxTriviaList tabTrivia, SyntaxTriviaList tabTriviaWithoutLineEnd, string tab)
+    private static AccessorListSyntax GenerateAccessorList(string symbolName, PropertyTextModel propertyTextModel, bool isFieldKeywordSupported, SyntaxTriviaList tabTrivia, SyntaxTriviaList tabTriviaWithoutLineEnd, string tab)
     {
         Debug.Assert(tabTriviaWithoutLineEnd.Count > 0);
 
@@ -178,17 +178,17 @@ public partial class PropertyGenerator
 
         string? FieldReplacement = isFieldKeywordSupported
             ? null
-            : Settings.FieldPrefix + model.SymbolName;
+            : Settings.FieldPrefix + symbolName;
 
         AccessorDeclarationSyntax Getter = SyntaxFactory.AccessorDeclaration(SyntaxKind.GetAccessorDeclaration);
 
-        if (IsTextBlockBody(model.GetterText, FieldReplacement, out BlockSyntax GetterBlockBody))
+        if (IsTextBlockBody(propertyTextModel.GetterText, FieldReplacement, out BlockSyntax GetterBlockBody))
         {
             Getter = Getter.WithBody(GetterBlockBody);
         }
         else
         {
-            ArrowExpressionClauseSyntax? GetterExpressionBody = ToTextExpressionBody(model.GetterText, FieldReplacement);
+            ArrowExpressionClauseSyntax? GetterExpressionBody = ToTextExpressionBody(propertyTextModel.GetterText, FieldReplacement);
 
             Getter = Getter.WithExpressionBody(GetterExpressionBody);
             Getter = Getter.WithSemicolonToken(SyntaxFactory.Token(SyntaxKind.SemicolonToken));
@@ -196,13 +196,13 @@ public partial class PropertyGenerator
 
         AccessorDeclarationSyntax Setter = SyntaxFactory.AccessorDeclaration(SyntaxKind.SetAccessorDeclaration);
 
-        if (IsTextBlockBody(model.SetterText, FieldReplacement, out BlockSyntax SetterBlockBody))
+        if (IsTextBlockBody(propertyTextModel.SetterText, FieldReplacement, out BlockSyntax SetterBlockBody))
         {
             Setter = Setter.WithBody(SetterBlockBody);
         }
         else
         {
-            ArrowExpressionClauseSyntax? SetterExpressionBody = ToTextExpressionBody(model.SetterText, FieldReplacement);
+            ArrowExpressionClauseSyntax? SetterExpressionBody = ToTextExpressionBody(propertyTextModel.SetterText, FieldReplacement);
 
             Setter = Setter.WithExpressionBody(SetterExpressionBody);
             Setter = Setter.WithSemicolonToken(SyntaxFactory.Token(SyntaxKind.SemicolonToken));

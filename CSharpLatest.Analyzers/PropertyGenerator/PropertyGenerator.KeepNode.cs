@@ -56,13 +56,13 @@ public partial class PropertyGenerator
     }
 
     /// <summary>
-    /// Checks whether a method or property contains at least one attribute we support and returns its name.
+    /// Checks whether a property contains at least one attribute we support and returns its name.
     /// All attributes we support must be valid.
     /// </summary>
     /// <param name="context">The analysis context. Can be <see langword="null"/> if no context is available.</param>
     /// <param name="propertyDeclaration">The member declaration.</param>
     /// <returns><see langword="null"/> if any of the attributes we support is invalid, or none was found; Otherwise, the name of the first attribute.</returns>
-    public static string? GetFirstSupportedAttribute(SyntaxNodeAnalysisContext? context, MemberDeclarationSyntax propertyDeclaration)
+    public static string? GetFirstSupportedAttribute(SyntaxNodeAnalysisContext? context, PropertyDeclarationSyntax propertyDeclaration)
     {
         Contract.RequireNotNull(propertyDeclaration, out MemberDeclarationSyntax PropertyDeclaration);
 

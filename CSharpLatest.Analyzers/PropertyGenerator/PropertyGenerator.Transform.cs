@@ -19,17 +19,43 @@ public partial class PropertyGenerator
     {
         SyntaxNode TargetNode = context.TargetNode;
         PropertyDeclarationSyntax PropertyDeclaration = Contract.AssertOfType<PropertyDeclarationSyntax>(TargetNode);
+        string SymbolName = context.TargetSymbol.Name;
 
-        PropertyModel Model = GetBareboneModel(context, PropertyDeclaration);
-        UpdateWithText(PropertyDeclaration, ref Model);
+        PropertyTextModel TextModel = GetPropertyText(PropertyDeclaration);
+        string GeneratedPropertyDeclaration = GetGeneratedPropertyDeclaration(context, SymbolName, TextModel);
+        PropertyModel Model = GetBareboneModel(context, PropertyDeclaration, SymbolName, TextModel, GeneratedPropertyDeclaration);
         UpdateWithDocumentation(PropertyDeclaration, ref Model);
-        UpdateWithGeneratedPropertyDeclaration(context, ref Model);
-        UpdateWithGeneratedFieldDeclaration(PropertyDeclaration, ref Model);
+        UpdateWithGeneratedFieldDeclaration(PropertyDeclaration, SymbolName, TextModel, ref Model);
 
         return Model;
     }
 
-    private static PropertyModel GetBareboneModel(GeneratorAttributeSyntaxContext context, PropertyDeclarationSyntax propertyDeclaration)
+    private static PropertyTextModel GetPropertyText(PropertyDeclarationSyntax propertyDeclaration)
+    {
+        Collection<AttributeSyntax> MemberAttributes = AttributeHelper.GetMemberSupportedAttributes(context: null, propertyDeclaration, [typeof(FieldBackedPropertyAttribute)]);
+        AttributeValidityCheckResult? PropertyAttributeResult = null;
+
+        foreach (AttributeSyntax Attribute in MemberAttributes)
+            if (Attribute.ArgumentList is AttributeArgumentListSyntax AttributeArgumentList)
+            {
+                IReadOnlyList<AttributeArgumentSyntax> AttributeArguments = AttributeArgumentList.Arguments;
+                PropertyAttributeResult = IsValidPropertyAttribute(propertyDeclaration, AttributeArguments);
+            }
+
+        PropertyAttributeResult = Contract.AssertNotNull(PropertyAttributeResult);
+        Contract.Assert(PropertyAttributeResult.Result == AttributeGeneration.Valid);
+        Contract.Assert(PropertyAttributeResult.ArgumentValues.Count == 3);
+
+        return new PropertyTextModel(GetterText: PropertyAttributeResult.ArgumentValues[0],
+                                     SetterText: PropertyAttributeResult.ArgumentValues[1],
+                                     InitializerText: PropertyAttributeResult.ArgumentValues[2]);
+    }
+
+    private static PropertyModel GetBareboneModel(GeneratorAttributeSyntaxContext context,
+                                                  PropertyDeclarationSyntax propertyDeclaration,
+                                                  string symbolName,
+                                                  PropertyTextModel propertyTextModel,
+                                                  string generatedPropertyDeclaration)
     {
         INamedTypeSymbol ContainingClass = Contract.AssertNotNull(context.TargetSymbol.ContainingType);
         INamespaceSymbol ContainingNamespace = Contract.AssertNotNull(ContainingClass.ContainingNamespace);
@@ -57,19 +83,15 @@ public partial class PropertyGenerator
             FullClassName = ClassNameWithTypeParameters(ClassName, RecordDeclaration.TypeParameterList, RecordDeclaration.ConstraintClauses);
         }
 
-        string SymbolName = context.TargetSymbol.Name;
-
         return new PropertyModel(
             Namespace: Namespace,
             ClassName: ClassName,
             DeclarationTokens: Contract.AssertNotNull(DeclarationTokens),
             FullClassName: Contract.AssertNotNull(FullClassName),
-            SymbolName: SymbolName,
-            GetterText: string.Empty,
-            SetterText: string.Empty,
-            InitializerText: string.Empty,
+            SymbolName: symbolName,
+            PropertyTextModel: propertyTextModel,
             Documentation: string.Empty,
-            GeneratedPropertyDeclaration: string.Empty,
+            GeneratedPropertyDeclaration: generatedPropertyDeclaration,
             GeneratedFieldDeclaration: string.Empty);
     }
 
@@ -87,25 +109,6 @@ public partial class PropertyGenerator
         }
 
         return Result;
-    }
-
-    private static void UpdateWithText(PropertyDeclarationSyntax propertyDeclaration, ref PropertyModel model)
-    {
-        Collection<AttributeSyntax> MemberAttributes = AttributeHelper.GetMemberSupportedAttributes(context: null, propertyDeclaration, [typeof(FieldBackedPropertyAttribute)]);
-
-        foreach (AttributeSyntax Attribute in MemberAttributes)
-            if (Attribute.ArgumentList is AttributeArgumentListSyntax AttributeArgumentList)
-            {
-                IReadOnlyList<AttributeArgumentSyntax> AttributeArguments = AttributeArgumentList.Arguments;
-                AttributeValidityCheckResult PropertyAttributeResult = IsValidPropertyAttribute(propertyDeclaration, AttributeArguments);
-
-                Contract.Assert(PropertyAttributeResult.Result == AttributeGeneration.Valid);
-                Contract.Assert(PropertyAttributeResult.ArgumentValues.Count == 3);
-
-                model = model with { GetterText = PropertyAttributeResult.ArgumentValues[0] };
-                model = model with { SetterText = PropertyAttributeResult.ArgumentValues[1] };
-                model = model with { InitializerText = PropertyAttributeResult.ArgumentValues[2] };
-            }
     }
 
     private static void UpdateWithDocumentation(PropertyDeclarationSyntax propertyDeclaration, ref PropertyModel model)
@@ -188,17 +191,17 @@ public partial class PropertyGenerator
         return Count;
     }
 
-    private static void UpdateWithGeneratedFieldDeclaration(PropertyDeclarationSyntax propertyDeclaration, ref PropertyModel model)
+    private static void UpdateWithGeneratedFieldDeclaration(PropertyDeclarationSyntax propertyDeclaration, string symbolName, PropertyTextModel propertyTextModel, ref PropertyModel model)
     {
         if (CheckFieldKeywordSupport(propertyDeclaration))
             return;
 
         SyntaxTokenList Modifiers = SyntaxFactory.TokenList([SyntaxFactory.Token(SyntaxKind.PrivateKeyword)]);
 
-        SyntaxToken Identifier = SyntaxFactory.Identifier(Settings.FieldPrefix + model.SymbolName);
+        SyntaxToken Identifier = SyntaxFactory.Identifier(Settings.FieldPrefix + symbolName);
         VariableDeclaratorSyntax VariableDeclarator = SyntaxFactory.VariableDeclarator(Identifier);
 
-        if (HasInitializer(model, out EqualsValueClauseSyntax Initializer))
+        if (HasInitializer(propertyTextModel, out EqualsValueClauseSyntax Initializer))
             VariableDeclarator = VariableDeclarator.WithInitializer(Initializer);
 
         VariableDeclarationSyntax VariableDeclaration = SyntaxFactory.VariableDeclaration(propertyDeclaration.Type.WithLeadingTrivia(SyntaxFactory.Space), SyntaxFactory.SingletonSeparatedList(VariableDeclarator));
@@ -212,9 +215,9 @@ public partial class PropertyGenerator
         model = model with { GeneratedFieldDeclaration = FieldDeclaration.ToFullString() };
     }
 
-    private static bool HasInitializer(PropertyModel model, out EqualsValueClauseSyntax initializer)
+    private static bool HasInitializer(PropertyTextModel propertyTextModel, out EqualsValueClauseSyntax initializer)
     {
-        string InitializerText = model.InitializerText;
+        string InitializerText = propertyTextModel.InitializerText;
         if (InitializerText != string.Empty)
         {
             ExpressionSyntax InitializerExpression = SyntaxFactory.ParseExpression(InitializerText);
