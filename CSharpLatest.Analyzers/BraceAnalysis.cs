@@ -68,10 +68,7 @@ public static partial class BraceAnalysis
 
         foreach (KeyValuePair<Type, Func<CSharpSyntaxNode, StatementSyntax>> Entry in Table)
             if (Entry.Key.IsAssignableFrom(syntaxNode.GetType()))
-            {
                 Result = Entry.Value(syntaxNode);
-                break;
-            }
 
         return Contract.AssertNotNull(Result);
     }

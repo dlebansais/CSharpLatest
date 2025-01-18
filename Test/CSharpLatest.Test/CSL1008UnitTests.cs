@@ -593,4 +593,66 @@ class Program
 }
 ");
     }
+
+    [TestMethod]
+    [DataRow("never;;")]
+    public async Task IfMultiline_Diagnostic(string args)
+    {
+        Dictionary<string, string> Options = TestTools.ToOptions(args);
+
+        await VerifyCS.VerifyCodeFixAsync(Options, Prologs.IsExternalInit, @"
+class Program
+{
+    public int Foo(int n)
+    {
+        [|if|] (n > 0)
+        {
+            return
+                1;
+        }
+
+        return 0;
+    }
+}
+", @"
+class Program
+{
+    public int Foo(int n)
+    {
+        if (n > 0)
+            return
+                1;
+
+        return 0;
+    }
+}
+");
+    }
+
+    [TestMethod]
+    [DataRow(";;")]
+    [DataRow("true;;")]
+    [DataRow("false;;")]
+    [DataRow("when_multiline;;")]
+    [DataRow("recursive;;")]
+    public async Task IfMultiline_NoDiagnostic(string args)
+    {
+        Dictionary<string, string> Options = TestTools.ToOptions(args);
+
+        await VerifyCS.VerifyAnalyzerAsync(Options, Prologs.IsExternalInit, @"
+class Program
+{
+    public int Foo(int n)
+    {
+        if (n > 0)
+        {
+            return
+                1;
+        }
+
+        return 0;
+    }
+}
+");
+    }
 }
