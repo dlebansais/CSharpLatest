@@ -1,3 +1,3 @@
 ﻿using System.Runtime.CompilerServices;
 
-[assembly: InternalsVisibleTo("CSharpLatest.PropertyGenerator.Test")]
+[assembly: InternalsVisibleTo("CSharpLatest.Test")]

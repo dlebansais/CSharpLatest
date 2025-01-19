@@ -9,7 +9,7 @@
             "Ensure*" // Ignores all postconditions
         ],
         "test-projects": [
-            "CSharpLatest.PropertyGenerator.Test/CSharpLatest.PropertyGenerator.Test.csproj"
+            "CSharpLatest.Test/CSharpLatest.Test.csproj"
         ],
         "target-framework": "net9.0"
     }
