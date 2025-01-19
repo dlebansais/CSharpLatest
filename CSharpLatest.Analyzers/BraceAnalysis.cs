@@ -197,7 +197,7 @@ public static partial class BraceAnalysis
         //   if (something)
         //     obj.Method(   // <-- This embedded statement spans two lines.
         //       arg);
-        // Stryker disable once Logical: TODO find a good test case for this line.
+        // Stryker disable once Boolean: TODO find a good test case for this line.
         if (!AreTwoTokensOnSameLine(singleStatement.GetFirstToken(), LastToken))
             if (RequiresBracesToMatchContext(singleStatement))
                 return false;
