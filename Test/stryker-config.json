@@ -2,6 +2,7 @@
     "stryker-config": {
         "ignore-methods": [
             "ConfigureAwait", // Ignores all ConfigureAwait
+            "ConfigureGeneratedCodeAnalysis", // TODO: remove this line and fix the code
             "EnableConcurrentExecution", // Ignores enabling concurrent execution
             "Assert*", // Ignores all assertions
             "Unused", // Ignores all unused parameters
