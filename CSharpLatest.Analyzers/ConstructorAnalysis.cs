@@ -212,25 +212,17 @@ public static partial class ConstructorAnalysis
         if (constructorDeclaration.Body is BlockSyntax Body)
             foreach (StatementSyntax Statement in Body.Statements)
             {
-                if (Statement is not ExpressionStatementSyntax ExpressionStatement)
+                if (Statement is ExpressionStatementSyntax ExpressionStatement &&
+                    ExpressionStatement.Expression is AssignmentExpressionSyntax Assignment &&
+                    Assignment.Left is IdentifierNameSyntax && Assignment.Right is IdentifierNameSyntax)
+                {
+                    Assignments.Add(Assignment);
+                }
+                else
                 {
                     HasOtherStatements = true;
                     break;
                 }
-
-                if (ExpressionStatement.Expression is not AssignmentExpressionSyntax Assignment)
-                {
-                    HasOtherStatements = true;
-                    break;
-                }
-
-                if (Assignment.Left is not IdentifierNameSyntax || Assignment.Right is not IdentifierNameSyntax)
-                {
-                    HasOtherStatements = true;
-                    break;
-                }
-
-                Assignments.Add(Assignment);
             }
 
         if (constructorDeclaration.ExpressionBody is ArrowExpressionClauseSyntax ExpressionBody)
