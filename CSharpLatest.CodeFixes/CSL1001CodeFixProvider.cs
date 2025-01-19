@@ -46,10 +46,6 @@ public class CSL1001CodeFixProvider : CodeFixProvider
         string Message = Diagnostic.GetMessage(null);
         Contract.Assert(ExpectedDiagnosticMessage == Message);
 
-        // Check whether the comparison is '== null'.
-        if (RightExpression is not LiteralExpressionSyntax literalExpressionRight)
-            return;
-
         // Register a code action that will invoke the fix.
         context.RegisterCodeFix(
             CodeAction.Create(

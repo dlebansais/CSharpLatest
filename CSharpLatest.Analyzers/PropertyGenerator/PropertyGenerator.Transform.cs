@@ -249,8 +249,6 @@ public partial class PropertyGenerator
         if (InitializerText.Length > 0)
         {
             ExpressionSyntax InitializerExpression = SyntaxFactory.ParseExpression(InitializerText);
-            Contract.Assert(InitializerExpression is not IdentifierNameSyntax IdentifierName || IdentifierName.Identifier.ValueText.Length > 0);
-
             Initializer = SyntaxFactory.EqualsValueClause(InitializerExpression.WithLeadingTrivia(SyntaxFactory.Space)).WithLeadingTrivia(SyntaxFactory.Space);
         }
 

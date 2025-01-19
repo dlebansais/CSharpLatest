@@ -28,7 +28,7 @@ internal static class AnalyzerTools
     /// Gets the help link for a diagnostic id.
     /// </summary>
     /// <param name="diagnosticId">The diagnostic id.</param>
-    // Stryker disable once: TODO figure out why stryker can successfully mutate here.
+    // Stryker disable once String: TODO figure out why stryker can successfully mutate here.
     public static string GetHelpLink(string diagnosticId) => $"https://github.com/dlebansais/CSharpLatest/blob/master/doc/{diagnosticId}.md";
 
     /// <summary>
