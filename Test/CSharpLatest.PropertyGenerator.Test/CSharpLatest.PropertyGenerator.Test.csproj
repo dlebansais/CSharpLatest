@@ -6,9 +6,9 @@
         <Nullable>enable</Nullable>
         <Platforms>x64</Platforms>
         <IsTestProject>true</IsTestProject>
-        
+
         <RootNamespace>CSharpLatest.PropertyGenerator.Test</RootNamespace>
-        
+
         <NeutralLanguage>en-US</NeutralLanguage>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
         <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
@@ -57,7 +57,8 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\CSharpLatest.Analyzers\CSharpLatest.Analyzers.csproj" Aliases="Analyzers" />
+        <ProjectReference Include="..\..\CSharpLatest.Analyzers\CSharpLatest.Analyzers.csproj" Aliases="Analyzers" />
+        <ProjectReference Include="..\..\CSharpLatest.CodeFixes\CSharpLatest.CodeFixes.csproj" />
     </ItemGroup>
-    
+
 </Project>

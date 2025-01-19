@@ -9,8 +9,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CSharpLatest.CodeFixes", "C
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CSharpLatest.Package", "CSharpLatest.Package\CSharpLatest.Package.csproj", "{5F2D6806-6B5B-4878-B7BF-15BF8352D078}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CSharpLatest.Test", "Test\CSharpLatest.Test\CSharpLatest.Test.csproj", "{E8F2BAD7-5F69-4033-851C-F989CDA31BDB}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CSharpLatest.Vsix", "Test\CSharpLatest.Vsix\CSharpLatest.Vsix.csproj", "{371F52C5-CBD9-4A5A-8CE5-8AC2A30023A3}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSharpLatest.PropertyGenerator.Test", "Test\CSharpLatest.PropertyGenerator.Test\CSharpLatest.PropertyGenerator.Test.csproj", "{B17394E1-D659-438C-A06D-D6953DBD470F}"
@@ -35,10 +33,6 @@ Global
 		{5F2D6806-6B5B-4878-B7BF-15BF8352D078}.Debug|x64.Build.0 = Debug|x64
 		{5F2D6806-6B5B-4878-B7BF-15BF8352D078}.Release|x64.ActiveCfg = Release|x64
 		{5F2D6806-6B5B-4878-B7BF-15BF8352D078}.Release|x64.Build.0 = Release|x64
-		{E8F2BAD7-5F69-4033-851C-F989CDA31BDB}.Debug|x64.ActiveCfg = Debug|x64
-		{E8F2BAD7-5F69-4033-851C-F989CDA31BDB}.Debug|x64.Build.0 = Debug|x64
-		{E8F2BAD7-5F69-4033-851C-F989CDA31BDB}.Release|x64.ActiveCfg = Release|x64
-		{E8F2BAD7-5F69-4033-851C-F989CDA31BDB}.Release|x64.Build.0 = Release|x64
 		{371F52C5-CBD9-4A5A-8CE5-8AC2A30023A3}.Debug|x64.ActiveCfg = Debug|x64
 		{371F52C5-CBD9-4A5A-8CE5-8AC2A30023A3}.Debug|x64.Build.0 = Debug|x64
 		{371F52C5-CBD9-4A5A-8CE5-8AC2A30023A3}.Debug|x64.Deploy.0 = Debug|x64

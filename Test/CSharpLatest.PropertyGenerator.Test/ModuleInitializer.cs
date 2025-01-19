@@ -1,4 +1,6 @@
-﻿namespace CSharpLatest.PropertyGenerator.Test;
+﻿[assembly: Microsoft.VisualStudio.TestTools.UnitTesting.DiscoverInternals]
+
+namespace CSharpLatest.PropertyGenerator.Test;
 
 using System.Runtime.CompilerServices;
 using VerifyTests;
