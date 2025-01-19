@@ -212,7 +212,13 @@ public static partial class ConstructorAnalysis
         if (constructorDeclaration.Body is BlockSyntax Body)
             foreach (StatementSyntax Statement in Body.Statements)
             {
-                if (Statement is not ExpressionStatementSyntax ExpressionStatement || ExpressionStatement.Expression is not AssignmentExpressionSyntax Assignment)
+                if (Statement is not ExpressionStatementSyntax ExpressionStatement)
+                {
+                    HasOtherStatements = true;
+                    break;
+                }
+
+                if (ExpressionStatement.Expression is not AssignmentExpressionSyntax Assignment)
                 {
                     HasOtherStatements = true;
                     break;

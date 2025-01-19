@@ -38,11 +38,10 @@ public partial class PropertyGenerator
         PropertyDeclaration = PropertyDeclaration.WithAccessorList(PropertyAccessorList);
 
         if (IsFieldKeywordSupported)
-            if (GetInitializer(propertyTextModel, out EqualsValueClauseSyntax Initializer))
-                PropertyDeclaration = PropertyDeclaration.WithInitializer(Initializer);
-            else
-            {
-            }
+        {
+            EqualsValueClauseSyntax? Initializer = GetInitializer(propertyTextModel);
+            PropertyDeclaration = PropertyDeclaration.WithInitializer(Initializer);
+        }
 
         PropertyDeclaration = PropertyDeclaration.WithLeadingTrivia(LeadingTriviaWithoutLineEnd);
 
