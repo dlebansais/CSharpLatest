@@ -445,4 +445,54 @@ class Program
 }
 ").ConfigureAwait(false);
     }
+
+    [TestMethod]
+    public async Task ExpressionBody_Diagnostic()
+    {
+        await VerifyCS.VerifyCodeFixAsync(@"
+class [|Program|]
+{
+    public Program(string prop) => Prop = prop;
+
+    public Program(string prop, int other)
+    {
+        Prop = prop;
+    }
+
+    public string Prop { get; private set; }
+}
+", @"
+class Program(string prop)
+{
+    public Program(string prop, int other) : this(prop)
+    {
+    }
+
+    public string Prop { get; private set; } = prop;
+}
+").ConfigureAwait(false);
+    }
+
+    [TestMethod]
+    public async Task ExpressionBodyNotAssignment_NoDiagnostic()
+    {
+        await VerifyCS.VerifyAnalyzerAsync(@"
+class Program
+{
+    public Program(string prop) => Initialize(this, prop);
+
+    public Program(string prop, int other)
+    {
+        Prop = prop;
+    }
+
+    public string Prop { get; private set; }
+
+    private static void Initialize(Program pThis, string prop)
+    {
+        pThis.Prop = prop;
+    }
+}
+").ConfigureAwait(false);
+    }
 }

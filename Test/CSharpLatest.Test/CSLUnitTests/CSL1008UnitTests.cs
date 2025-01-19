@@ -575,7 +575,7 @@ class Program
     [DataRow("when_multiline;;")]
     [DataRow("recursive;;")]
     [DataRow("never;;")]
-    public async Task IfWithTrivia_NoDiagnostic(string args)
+    public async Task IfWithTrivia1_NoDiagnostic(string args)
     {
         Dictionary<string, string> Options = TestTools.ToOptions(args);
 
@@ -588,6 +588,54 @@ class Program
         {
             // Trivia
             return 1;
+        }
+
+        return 0;
+    }
+}
+").ConfigureAwait(false);
+    }
+
+    [TestMethod]
+    [DataRow("never;;")]
+    public async Task IfWithTrivia2_Diagnostic(string args)
+    {
+        Dictionary<string, string> Options = TestTools.ToOptions(args);
+
+        await VerifyCS.VerifyAnalyzerAsync(Options, Prologs.IsExternalInit, @"
+class Program
+{
+    public int Foo(int n)
+    {
+        [|if|] (n > 0)
+        {
+            /* Trivia */return 1;
+        }
+
+        return 0;
+    }
+}
+").ConfigureAwait(false);
+    }
+
+    [TestMethod]
+    [DataRow(";;")]
+    [DataRow("true;;")]
+    [DataRow("false;;")]
+    [DataRow("when_multiline;;")]
+    [DataRow("recursive;;")]
+    public async Task IfWithTrivia2_NoDiagnostic(string args)
+    {
+        Dictionary<string, string> Options = TestTools.ToOptions(args);
+
+        await VerifyCS.VerifyAnalyzerAsync(Options, Prologs.IsExternalInit, @"
+class Program
+{
+    public int Foo(int n)
+    {
+        if (n > 0)
+        {
+            /* Trivia */return 1;
         }
 
         return 0;

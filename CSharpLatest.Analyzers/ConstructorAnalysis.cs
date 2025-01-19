@@ -221,15 +221,13 @@ public static partial class ConstructorAnalysis
                 else
                 {
                     HasOtherStatements = true;
-                    break;
                 }
             }
 
+        // If the expression body is not an assignment, no need to set HasOtherStatements, an empty Assignments array is enough.
         if (constructorDeclaration.ExpressionBody is ArrowExpressionClauseSyntax ExpressionBody)
             if (ExpressionBody.Expression is AssignmentExpressionSyntax Assignment)
                 Assignments = [Assignment];
-            else
-                HasOtherStatements = true;
 
         return (HasOtherStatements, Assignments);
     }

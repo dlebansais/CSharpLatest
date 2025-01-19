@@ -192,6 +192,28 @@ class Program
     }
 
     [TestMethod]
+    public async Task UserDefinedConversionNonString_NoDiagnostic()
+    {
+        await VerifyCS.VerifyAnalyzerAsync(@"
+
+struct MyInt
+{
+    private int n;
+    public static implicit operator int(MyInt myInt) => myInt.n;
+    public static implicit operator MyInt(int n) => new MyInt{ n = n };
+}
+
+class Program
+{
+    static void Main()
+    {
+        MyInt x = 10;
+    }
+}
+").ConfigureAwait(false);
+    }
+
+    [TestMethod]
     public async Task StringCouldBeConstant_Diagnostic()
     {
         await VerifyCS.VerifyCodeFixAsync(@"
