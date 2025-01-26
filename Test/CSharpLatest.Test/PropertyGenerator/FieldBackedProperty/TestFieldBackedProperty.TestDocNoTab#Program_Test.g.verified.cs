@@ -10,7 +10,7 @@ partial class Program
 /// </summary>
 /// <param name="value">The property value.</param>
 /// <returns>The getter.</returns>
-    [GeneratedCodeAttribute("CSharpLatest.Analyzers","2.1.1.23")]
+    [GeneratedCodeAttribute("CSharpLatest.Analyzers","2.1.2.24")]
     public partial int Test
     {
         get => fieldTest;
