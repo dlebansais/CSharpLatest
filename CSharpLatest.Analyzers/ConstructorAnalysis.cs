@@ -126,7 +126,7 @@ public static partial class ConstructorAnalysis
                 }
             }
 
-        return new Collection<ParameterSyntax>(Result);
+        return [.. Result];
     }
 
     private static bool IsSameParameter(ParameterSyntax p1, ParameterSyntax p2) => IsSyntaxNodeEquivalent(p1, p2);

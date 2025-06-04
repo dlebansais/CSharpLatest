@@ -38,7 +38,7 @@ public static partial class ConstructorCodeFixes
         // In the case of a block body, we remove the first statements.
         if (constructorDeclaration.Body is BlockSyntax Body)
         {
-            List<StatementSyntax> Statements = new(Body.Statements);
+            List<StatementSyntax> Statements = [.. Body.Statements];
 
             // Perfom some consistency checks.
             Contract.Assert(initialAssignments.Count <= Statements.Count);
