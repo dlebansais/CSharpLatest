@@ -31,30 +31,35 @@
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="NUnit.Analyzers" Version="4.8.1">
+        <PackageReference Include="NUnit.Analyzers" Version="4.9.2">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
 
-        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.12.0" />
-        <PackageReference Include="MSTest.TestAdapter" Version="3.9.1" />
-        <PackageReference Include="MSTest.TestFramework" Version="3.9.1" />
+        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.14.1" />
+        <PackageReference Include="MSTest.TestAdapter" Version="3.9.3" />
+        <PackageReference Include="MSTest.TestFramework" Version="3.9.3" />
         <PackageReference Include="NUnit" Version="4.3.2" />
         <PackageReference Include="NUnit3TestAdapter" Version="5.0.0" />
-        <PackageReference Include="Verify.NUnit" Version="30.3.1" />
+        <PackageReference Include="Verify.NUnit" Version="30.4.0" />
         <PackageReference Include="Verify.SourceGenerators" Version="2.5.0" />
         <PackageReference Include="NuGet.Configuration" Version="6.14.0" />
-        <PackageReference Include="Microsoft.CodeAnalysis" Version="4.12.0" />
+        <PackageReference Include="Microsoft.CodeAnalysis" Version="4.14.0" />
         <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Analyzer.Testing.MSTest" Version="1.1.2" />
         <PackageReference Include="Microsoft.CodeAnalysis.CSharp.CodeFix.Testing.MSTest" Version="1.1.2" />
         <PackageReference Include="Microsoft.CodeAnalysis.CSharp.CodeRefactoring.Testing.MSTest" Version="1.1.2" />
-        <PackageReference Include="Method.Contracts-Debug" Version="2.0.1" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" />
-        <PackageReference Include="Method.Contracts" Version="2.0.1" Condition="'$(Configuration)|$(Platform)'!='Debug|x64'" />
+        <PackageReference Include="Method.Contracts-Debug" Version="2.0.2" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" />
+        <PackageReference Include="Method.Contracts" Version="2.0.2" Condition="'$(Configuration)|$(Platform)'!='Debug|x64'" />
 
         <!-- System.Formats.Asn1 is added to mitigate vulnerability. -->
         <!-- Remove as soon as one of the packages above no longer depends on the vulnerable version -->
-        <PackageReference Include="System.Formats.Asn1" Version="9.0.5" />
+        <PackageReference Include="System.Formats.Asn1" Version="9.0.6" />
     </ItemGroup>
+
+    <PropertyGroup>
+        <SignAssembly>true</SignAssembly>
+        <AssemblyOriginatorKeyFile>..\..\signing.snk</AssemblyOriginatorKeyFile>
+    </PropertyGroup>
 
     <ItemGroup>
         <ProjectReference Include="..\..\CSharpLatest.Analyzers\CSharpLatest.Analyzers.csproj" Aliases="Analyzers" />

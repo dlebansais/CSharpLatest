@@ -28,4 +28,9 @@
         <EnforceExtendedAnalyzerRules>true</EnforceExtendedAnalyzerRules>
     </PropertyGroup>
 
+    <PropertyGroup>
+        <SignAssembly>true</SignAssembly>
+        <AssemblyOriginatorKeyFile>..\signing.snk</AssemblyOriginatorKeyFile>
+    </PropertyGroup>
+
 </Project>
