@@ -7,14 +7,14 @@
         <Platforms>x64</Platforms>
 
         <RootNamespace>CSharpLatest</RootNamespace>
-        <Version>2.1.3</Version>
+        <Version>2.1.4</Version>
         <Authors>David Le Bansais</Authors>
         <Company />
         <Product />
         <Description>Roslyn-based analysis of C# code to suggest the use of features in the latest version of the language</Description>
         <Copyright>Copyright © 2025 David Le Bansais</Copyright>
-        <AssemblyVersion>2.1.3.25</AssemblyVersion>
-        <FileVersion>2.1.3.25</FileVersion>
+        <AssemblyVersion>2.1.4.26</AssemblyVersion>
+        <FileVersion>2.1.4.26</FileVersion>
         <RepositoryUrl>https://github.com/dlebansais/CSharpLatest</RepositoryUrl>
         <SuppressTfmSupportBuildWarnings>true</SuppressTfmSupportBuildWarnings>
 
