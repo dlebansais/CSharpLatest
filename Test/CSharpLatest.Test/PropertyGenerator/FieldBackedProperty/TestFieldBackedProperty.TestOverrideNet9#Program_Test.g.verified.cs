@@ -5,7 +5,7 @@ namespace CSharpLatest.TestSuite;
 
 partial class Program
 {
-    [GeneratedCodeAttribute("CSharpLatest.Analyzers","2.1.3.25")]
+    [GeneratedCodeAttribute("CSharpLatest.Analyzers","2.1.4.26")]
     public override partial int Test
     {
         get => field;
