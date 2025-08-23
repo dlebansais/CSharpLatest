@@ -81,8 +81,8 @@
         </PackageReference>
 
         <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.14.0" />
-        <PackageReference Include="dlebansais.RoslynHelpers-Debug" Version="2.2.3" GeneratePathProperty="true" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" />
-        <PackageReference Include="dlebansais.RoslynHelpers" Version="2.2.3" GeneratePathProperty="true" Condition="'$(Configuration)|$(Platform)'!='Debug|x64'" />
+        <PackageReference Include="dlebansais.RoslynHelpers-Debug" Version="2.2.4" GeneratePathProperty="true" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" />
+        <PackageReference Include="dlebansais.RoslynHelpers" Version="2.2.4" GeneratePathProperty="true" Condition="'$(Configuration)|$(Platform)'!='Debug|x64'" />
         <PackageReference Include="dlebansais.Method.Contracts-Debug" Version="2.0.5" GeneratePathProperty="true" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" />
         <PackageReference Include="dlebansais.Method.Contracts" Version="2.0.5" GeneratePathProperty="true" Condition="'$(Configuration)|$(Platform)'!='Debug|x64'" />
     </ItemGroup>
