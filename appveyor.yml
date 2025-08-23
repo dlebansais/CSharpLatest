@@ -17,9 +17,8 @@ init:
   - git config --global core.autocrlf input
 
 environment:
-  NuGetPackageSourceCredentials_github:     # value: Username=dlebansais;Password={github package token}
-    secure: Fd8cbeFRzxym3D4FpbJo2m943iBsBRgrAGOEFhMHDO8fjmexYLxPFiT7r6EH/m/+gLVf7ft79axHnnaPYwiyO/VL8bwpli1lCEVaTGhPUjM=
-  SnkPassword:                              # value: <password to decrypt snk file>
+# value: <password to decrypt snk file>
+  SnkPassword:
     secure: 1svE5KENguPZZA9WI7jqI4rFGWREjMTmt//xbbv+POFKS8BdTi/TE2zB7jU0e7BsYW8G1ZP/4NxjfvnM/EOuH/VxpbyUo8p6fayCu3fDKbLBAt7PWIRCy4mo7SWR0vHAw/Q6cFQHWfA7EVu7eVC66Q==
   opencover_version: 4.7.1221
   codecov_uploader_version: 0.7.1
@@ -27,13 +26,15 @@ environment:
   PACKAGE_PREFIX: dlebansais
 
 matrix:
-  fast_finish: true     # set this flag to immediately finish build once one of the jobs fails.
+# set this flag to immediately finish build once one of the jobs fails.
+  fast_finish: true
 
 before_build:
   - nuget restore %APPVEYOR_PROJECT_NAME%.sln
-  - nuget install GitCommitId -DependencyVersion Highest -OutputDirectory packages
+  - nuget install dlebansais.GitCommitId -DependencyVersion Highest -OutputDirectory packages
   - dotnet restore
-  - C:/PROGRA~1/7-Zip/7z.exe e -p%SnkPassword% .signing\key.zip > nul           # Extract signing.snk to the current directory
+# Extract signing.snk to the current directory. Do not extract for a PR because they don't have access to secrets, but we don't need to sign assemblies in that case.
+  - if '%APPVEYOR_PULL_REQUEST_NUMBER%'=='' C:/PROGRA~1/7-Zip/7z.exe e -p%SnkPassword% .signing\key.zip > nul
 
 configuration:
   - Debug
@@ -71,10 +72,10 @@ before_test:
     printf "powershell $stryker_summary = Get-Content ./reports/mutation-report.md -Raw ; Write-Output $stryker_summary ; $pattern = 'The final mutation score is 100' ; if ($stryker_summary -NotMatch $pattern) { exit -1 }\n" >> after-test.bat
 
 test_script:
-  - if '%APPVEYOR_REPO_BRANCH%' == 'master' opencover.bat runtests1.bat
+  - if '%APPVEYOR_REPO_BRANCH%' == 'master' call opencover.bat runtests1.bat
 
 after_test:
-  - if '%APPVEYOR_REPO_BRANCH%' == 'master' after-test.bat
+  - if '%APPVEYOR_REPO_BRANCH%' == 'master' call after-test.bat
 
 artifacts:
   - path: $(APPVEYOR_PROJECT_NAME).Package\bin\x64\Debug\$(PACKAGE_PREFIX).$(APPVEYOR_PROJECT_NAME)-Debug.*.nupkg
@@ -113,6 +114,14 @@ deploy:
     on:
       branch: deployment
       configuration: Release
+  - provider: NuGet
+    artifact: $(APPVEYOR_PROJECT_NAME)-Package-Debug
+    symbol_server: https://api.nuget.org/v3/index.json
+    api_key:
+      secure: Wrt1RLR81rx4nHwWR3jbGRqiaevBfViPxp9R08sRQKTQ24v6ZOiHcNHcBKZ8do4+
+    on:
+      branch: deployment
+      configuration: Debug
   - provider: NuGet
     server: https://nuget.pkg.github.com/dlebansais/index.json
     symbol_server: https://nuget.pkg.github.com/dlebansais/index.json

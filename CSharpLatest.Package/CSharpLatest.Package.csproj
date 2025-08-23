@@ -18,13 +18,13 @@
     </PropertyGroup>
 
     <PropertyGroup>
-        <PackageVersion>2.1.4</PackageVersion>
+        <PackageVersion>2.1.5</PackageVersion>
         <Authors>David Le Bansais</Authors>
         <Company />
         <Product />
         <PackageProjectUrl>https://github.com/dlebansais/CSharpLatest</PackageProjectUrl>
         <RepositoryUrl>https://github.com/dlebansais/CSharpLatest</RepositoryUrl>
-        <PackageIcon>main.png</PackageIcon>
+        <PackageIcon>package-icon.png</PackageIcon>
         <PackageLicenseExpression>0BSD</PackageLicenseExpression>
         <PackageReadmeFile>README-short.md</PackageReadmeFile>
         <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
@@ -48,7 +48,7 @@
 
     <Target Name="_AddAnalyzersToOutput">
         <ItemGroup>
-            <TfmSpecificPackageFile Include="main.png" PackagePath="" />
+            <TfmSpecificPackageFile Include="package-icon.png" PackagePath="" />
             <TfmSpecificPackageFile Include="README-short.md" PackagePath="" />
             <TfmSpecificPackageFile Include="$(OutputPath)\CSharpLatest.Analyzers.dll" PackagePath="analyzers/dotnet/cs" />
             <TfmSpecificPackageFile Include="$(OutputPath)\CSharpLatest.Attributes.dll" PackagePath="analyzers/dotnet/cs" />
