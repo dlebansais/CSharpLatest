@@ -718,7 +718,7 @@ class Program
         DiagnosticDescriptor DescriptorCS1519 = new(
             "CS1519",
             "title",
-            "Invalid token 'return' in class, record, struct, or interface member declaration",
+            "Invalid token 'return' in a member declaration",
             "description",
             DiagnosticSeverity.Error,
             true
@@ -810,7 +810,7 @@ Expected6).ConfigureAwait(false);
         DiagnosticDescriptor DescriptorCS1519 = new(
             "CS1519",
             "title",
-            "Invalid token 'return' in class, record, struct, or interface member declaration",
+            "Invalid token 'return' in a member declaration",
             "description",
             DiagnosticSeverity.Error,
             true
