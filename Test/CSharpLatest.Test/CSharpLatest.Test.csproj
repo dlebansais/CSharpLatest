@@ -52,7 +52,7 @@
         <PackageReference Include="System.Formats.Asn1" Version="9.0.8" />
     </ItemGroup>
 
-    <PropertyGroup>
+    <PropertyGroup Condition="'$(APPVEYOR_PULL_REQUEST_NUMBER)' == ''">
         <SignAssembly>true</SignAssembly>
         <AssemblyOriginatorKeyFile>..\..\signing.snk</AssemblyOriginatorKeyFile>
     </PropertyGroup>

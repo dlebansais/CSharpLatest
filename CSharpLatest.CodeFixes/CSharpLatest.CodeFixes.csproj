@@ -65,7 +65,7 @@
         <PackageReference Include="dlebansais.Method.Contracts" Version="2.0.5" Condition="'$(Configuration)|$(Platform)'!='Debug|x64'" />
     </ItemGroup>
 
-    <PropertyGroup>
+    <PropertyGroup Condition="'$(APPVEYOR_PULL_REQUEST_NUMBER)' == ''">
         <SignAssembly>true</SignAssembly>
         <AssemblyOriginatorKeyFile>..\signing.snk</AssemblyOriginatorKeyFile>
     </PropertyGroup>
