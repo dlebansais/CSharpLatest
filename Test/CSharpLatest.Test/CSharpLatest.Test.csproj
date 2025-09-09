@@ -49,7 +49,7 @@
 
         <!-- System.Formats.Asn1 is added to mitigate vulnerability. -->
         <!-- Remove as soon as one of the packages above no longer depends on the vulnerable version -->
-        <PackageReference Include="System.Formats.Asn1" Version="9.0.8" />
+        <PackageReference Include="System.Formats.Asn1" Version="9.0.9" />
     </ItemGroup>
 
     <PropertyGroup Condition="'$(APPVEYOR_PULL_REQUEST_NUMBER)' == ''">
