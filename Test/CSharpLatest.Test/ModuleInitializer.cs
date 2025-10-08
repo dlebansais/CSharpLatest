@@ -1,4 +1,7 @@
-﻿[assembly: Microsoft.VisualStudio.TestTools.UnitTesting.DiscoverInternals]
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+[assembly: DiscoverInternals]
+[assembly: Parallelize(Scope = ExecutionScope.MethodLevel)]
 
 namespace CSharpLatest.PropertyGenerator.Test;
 
