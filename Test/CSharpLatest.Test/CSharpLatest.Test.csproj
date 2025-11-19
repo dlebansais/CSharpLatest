@@ -19,7 +19,7 @@
     </PropertyGroup>
 
     <PropertyGroup>
-        <NoWarn>NU1608;NU1510</NoWarn>
+        <NoWarn>NU1608;NU1510;NU1504</NoWarn>
     </PropertyGroup>
 
     <ItemGroup>
