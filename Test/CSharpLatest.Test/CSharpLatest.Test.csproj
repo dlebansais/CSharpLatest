@@ -50,7 +50,7 @@
         <!-- System.Formats.Asn1 is added to mitigate vulnerability. -->
         <!-- Remove as soon as one of the packages above no longer depends on the vulnerable version -->
         <!-- Also reenable NU1510 -->
-        <PackageReference Include="System.Formats.Asn1" Version="9.0.10" />
+        <PackageReference Include="System.Formats.Asn1" Version="10.0.0" />
     </ItemGroup>
 
     <PropertyGroup Condition="'$(APPVEYOR_PULL_REQUEST_NUMBER)' == ''">
@@ -59,7 +59,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="System.Formats.Asn1" Version="6.0.1" />
+      <PackageReference Include="System.Formats.Asn1" Version="10.0.0" />
         <ProjectReference Include="..\..\CSharpLatest.Analyzers\CSharpLatest.Analyzers.csproj" Aliases="Analyzers" />
         <ProjectReference Include="..\..\CSharpLatest.CodeFixes\CSharpLatest.CodeFixes.csproj" />
     </ItemGroup>
