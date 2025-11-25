@@ -12,7 +12,7 @@ internal static class TestHelper
 {
     public static GeneratorDriver GetDriver(string source, bool setFieldKeywordSupport = false)
     {
-        CSharpParseOptions CSharpParseOptions = CSharpParseOptions.Default;
+        CSharpParseOptions CSharpParseOptions = CSharpParseOptions.Default.WithLanguageVersion(LanguageVersion.CSharp13);
 
         if (setFieldKeywordSupport)
         {

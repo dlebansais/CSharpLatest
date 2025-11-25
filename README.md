@@ -76,5 +76,5 @@ Improves on rule [IDE0011](https://learn.microsoft.com/en-us/dotnet/fundamentals
 
 ### CSL1009 and CSL1010
 
-The `FieldBackedProperty` attribute can be used in code conditionally compiled with and without C#13+ ('Preview') to emulate the functionality of the [`field` keyword](https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/proposals/field-keyword).
+The `FieldBackedProperty` attribute can be used in code conditionally compiled with and without C# 14 to emulate the functionality of the [`field` keyword](https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/proposals/field-keyword).
 
