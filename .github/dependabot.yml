@@ -6,9 +6,6 @@ updates:
     schedule:
       interval: daily
     ignore:
-      - dependency-name: "Microsoft.CodeAnalysis"
-      - dependency-name: "Microsoft.CodeAnalysis.CSharp"
-      - dependency-name: "Microsoft.CodeAnalysis.CSharp.Workspaces"
       - dependency-name: "NuGet.Configuration"
     open-pull-requests-limit: 1
     groups:
