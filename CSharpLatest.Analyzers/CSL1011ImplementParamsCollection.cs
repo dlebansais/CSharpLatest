@@ -104,7 +104,7 @@ public partial class CSL1011ImplementParamsCollection : DiagnosticAnalyzer
 
         Location Location = parameter.GetLocation();
 
-        context.ReportDiagnostic(Diagnostic.Create(Rule, Location, parameter.Identifier.Text));
+        context.ReportDiagnostic(Diagnostic.Create(Rule, Location, methodSymbol.Name));
     }
 
     private static bool IsParams(ParameterSyntax parameter)

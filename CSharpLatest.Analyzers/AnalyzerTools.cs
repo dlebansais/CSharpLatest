@@ -185,4 +185,22 @@ internal static class AnalyzerTools
 
         return name == "netstandard" && version < maximumVersion;
     }
+
+    /// <summary>
+    /// Checks whether the compilation is for .NET.
+    /// </summary>
+    /// <param name="compilation">The compilation.</param>
+    /// <param name="maximumVersion">The maximum version to to check.</param>
+    public static bool IsDotNet(Compilation compilation, Version maximumVersion)
+    {
+        IAssemblySymbol? systemRuntime = compilation.GetTypeByMetadataName("System.Runtime.GCSettings")?.ContainingAssembly;
+
+        if (systemRuntime is null)
+            return false;
+
+        string name = systemRuntime.Identity.Name;
+        Version version = systemRuntime.Identity.Version;
+
+        return name == "System.Runtime" && version < maximumVersion;
+    }
 }

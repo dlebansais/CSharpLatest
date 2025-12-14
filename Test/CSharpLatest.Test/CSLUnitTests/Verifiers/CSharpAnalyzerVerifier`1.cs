@@ -25,15 +25,15 @@ internal static partial class CSharpAnalyzerVerifier<TAnalyzer>
         => CSharpAnalyzerVerifier<TAnalyzer, DefaultVerifier>.Diagnostic(descriptor);
 
     /// <inheritdoc cref="AnalyzerVerifier{TAnalyzer, TTest, TVerifier}.VerifyAnalyzerAsync(string, DiagnosticResult[])"/>
-    public static async Task VerifyAnalyzerAsync(string source, LanguageVersion languageVersion = LanguageVersion.Default, params IEnumerable<DiagnosticResult> expected)
-        => await VerifyAnalyzerAsync([], Prologs.Default, source, languageVersion, expected).ConfigureAwait(false);
+    public static async Task VerifyAnalyzerAsync(string source, LanguageVersion languageVersion = LanguageVersion.Default, FrameworkChoice frameworkChoice = FrameworkChoice.Default, params IEnumerable<DiagnosticResult> expected)
+        => await VerifyAnalyzerAsync([], Prologs.Default, source, languageVersion, frameworkChoice, expected).ConfigureAwait(false);
 
     /// <inheritdoc cref="AnalyzerVerifier{TAnalyzer, TTest, TVerifier}.VerifyAnalyzerAsync(string, DiagnosticResult[])"/>
-    public static async Task VerifyAnalyzerAsync(string prolog, string source, LanguageVersion languageVersion = LanguageVersion.Default, params IEnumerable<DiagnosticResult> expected)
-        => await VerifyAnalyzerAsync([], prolog, source, languageVersion, expected).ConfigureAwait(false);
+    public static async Task VerifyAnalyzerAsync(string prolog, string source, LanguageVersion languageVersion = LanguageVersion.Default, FrameworkChoice frameworkChoice = FrameworkChoice.Default, params IEnumerable<DiagnosticResult> expected)
+        => await VerifyAnalyzerAsync([], prolog, source, languageVersion, frameworkChoice, expected).ConfigureAwait(false);
 
     /// <inheritdoc cref="AnalyzerVerifier{TAnalyzer, TTest, TVerifier}.VerifyAnalyzerAsync(string, DiagnosticResult[])"/>
-    public static async Task VerifyAnalyzerAsync(Dictionary<string, string> options, string prolog, string source, LanguageVersion languageVersion = LanguageVersion.Default, params IEnumerable<DiagnosticResult> expected)
+    public static async Task VerifyAnalyzerAsync(Dictionary<string, string> options, string prolog, string source, LanguageVersion languageVersion = LanguageVersion.Default, FrameworkChoice frameworkChoice = FrameworkChoice.Default, params IEnumerable<DiagnosticResult> expected)
     {
         Test test = new();
 
@@ -43,6 +43,7 @@ internal static partial class CSharpAnalyzerVerifier<TAnalyzer>
             {
                 TestCode = prolog + source,
                 Version = languageVersion,
+                FrameworkChoice = frameworkChoice,
                 Options = options,
             };
         }

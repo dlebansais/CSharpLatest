@@ -42,6 +42,7 @@ To uninstall this analyzer, in Visual Studio:
 | [CSL1009](doc/CSL1009.md) | `FieldBackedPropertyAttribute` is missing argument.              |
 | [CSL1010](doc/CSL1010.md) | `init` accessor not supported in `FieldBackedPropertyAttribute`. |
 | [CSL1011](doc/CSL1011.md) | Implement `params` collection.                                   |
+| [CSL1012](doc/CSL1012.md) | Use `System.Threading.Lock` to lock.                             |
 
 ### CSL1000: Variables that are not modified should be made constants
 
@@ -82,4 +83,8 @@ The `FieldBackedProperty` attribute can be used in code conditionally compiled w
 ### CSL1011: Implement `params` collection
 
 Feature available since C# 13: [`params` collections](https://learn.microsoft.com/en-us/dotnet/csharp/whats-new/csharp-13#params-collections).
+
+### CSL1012: Use `System.Threading.Lock` to lock
+
+Feature available since C# 13: [New lock object](https://learn.microsoft.com/en-us/dotnet/csharp/whats-new/csharp-13#new-lock-object).
 

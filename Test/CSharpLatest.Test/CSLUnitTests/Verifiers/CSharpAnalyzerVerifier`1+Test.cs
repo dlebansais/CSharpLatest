@@ -38,12 +38,45 @@ internal static partial class CSharpAnalyzerVerifier<TAnalyzer>
                 return solution;
             });
 
-            ReferenceAssemblies = ReferenceAssemblies.NetStandard.NetStandard21;
-
             TestState.AdditionalReferences.Add(MetadataReference.CreateFromFile("CSharpLatest.Attributes.dll"));
         }
 
         public LanguageVersion Version { get; set; } = LanguageVersion.Default;
+
+        private FrameworkChoice FrameworkChoiceInternal = FrameworkChoice.Default;
+
+        public FrameworkChoice FrameworkChoice
+        {
+            get => FrameworkChoiceInternal;
+            set
+            {
+                FrameworkChoiceInternal = value;
+
+                switch (value)
+                {
+                    case FrameworkChoice.DotNetStandard:
+                        ReferenceAssemblies = ReferenceAssemblies.NetStandard.NetStandard21;
+                        break;
+                    case FrameworkChoice.DotNetFramework:
+                        ReferenceAssemblies = ReferenceAssemblies.NetFramework.Net472.Wpf;
+                        break;
+                    case FrameworkChoice.OldDotNetStandard:
+                        ReferenceAssemblies = ReferenceAssemblies.NetStandard.NetStandard20;
+                        break;
+                    case FrameworkChoice.DotNet8:
+                        ReferenceAssemblies = ReferenceAssemblies.Net.Net80;
+                        break;
+                    case FrameworkChoice.DotNet9:
+                        ReferenceAssemblies = ReferenceAssemblies.Net.Net90;
+                        break;
+
+                    case FrameworkChoice.Default:
+                    case FrameworkChoice.None:
+                    default:
+                        break;
+                }
+            }
+        }
 
         public bool IsDiagnosticEnabledd
         {

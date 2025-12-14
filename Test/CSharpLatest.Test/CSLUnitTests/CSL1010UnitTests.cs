@@ -87,7 +87,7 @@ internal partial class Program
     [Foo]
     public int Test { get; }
 }
-", LanguageVersion.Default, Expected1, Expected2).ConfigureAwait(false);
+", LanguageVersion.Default, FrameworkChoice.Default, Expected1, Expected2).ConfigureAwait(false);
     }
 
     [TestMethod]

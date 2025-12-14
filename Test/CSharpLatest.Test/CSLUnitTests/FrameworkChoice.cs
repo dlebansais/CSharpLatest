@@ -7,4 +7,6 @@ internal enum FrameworkChoice
     DotNetStandard,
     DotNetFramework,
     OldDotNetStandard,
+    DotNet8,
+    DotNet9,
 }

@@ -241,8 +241,16 @@
     <value>FieldBackedPropertyAttribute is missing argument.</value>
     <comment>An optional longer localizable description of the diagnostic.</comment>
   </data>
+  <data name="CSL1012AnalyzerDescription" xml:space="preserve">
+    <value>Use System.Threading.Lock to lock.</value>
+    <comment>An optional longer localizable description of the diagnostic.</comment>
+  </data>
   <data name="CSL1009AnalyzerMessageFormat" xml:space="preserve">
     <value>Attribute '{0}' is missing argument</value>
+    <comment>The format-able message the diagnostic displays.</comment>
+  </data>
+  <data name="CSL1012AnalyzerMessageFormat" xml:space="preserve">
+    <value>Use System.Threading.Lock in {0}</value>
     <comment>The format-able message the diagnostic displays.</comment>
   </data>
   <data name="CSL1009AnalyzerTitle" xml:space="preserve">
@@ -259,6 +267,10 @@
   </data>
   <data name="CSL1010AnalyzerTitle" xml:space="preserve">
     <value>'init' accessor not supported in FieldBackedPropertyAttribute</value>
+    <comment>The title of the diagnostic.</comment>
+  </data>
+  <data name="CSL1012AnalyzerTitle" xml:space="preserve">
+    <value>Use System.Threading.Lock to lock</value>
     <comment>The title of the diagnostic.</comment>
   </data>
 </root>

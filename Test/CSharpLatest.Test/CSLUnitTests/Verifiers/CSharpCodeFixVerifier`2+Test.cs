@@ -75,6 +75,12 @@ internal static partial class CSharpCodeFixVerifier<TAnalyzer, TCodeFix>
                     case FrameworkChoice.OldDotNetStandard:
                         ReferenceAssemblies = ReferenceAssemblies.NetStandard.NetStandard20;
                         break;
+                    case FrameworkChoice.DotNet8:
+                        ReferenceAssemblies = ReferenceAssemblies.Net.Net80;
+                        break;
+                    case FrameworkChoice.DotNet9:
+                        ReferenceAssemblies = ReferenceAssemblies.Net.Net90;
+                        break;
 
                     case FrameworkChoice.Default:
                     case FrameworkChoice.None:

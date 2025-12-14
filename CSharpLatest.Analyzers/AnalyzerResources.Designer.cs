@@ -383,5 +383,32 @@ namespace CSharpLatest {
                 return ResourceManager.GetString("CSL1011AnalyzerTitle", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use System.Threading.Lock to lock..
+        /// </summary>
+        internal static string CSL1012AnalyzerDescription {
+            get {
+                return ResourceManager.GetString("CSL1012AnalyzerDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use System.Threading.Lock in {0}.
+        /// </summary>
+        internal static string CSL1012AnalyzerMessageFormat {
+            get {
+                return ResourceManager.GetString("CSL1012AnalyzerMessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use System.Threading.Lock to lock.
+        /// </summary>
+        internal static string CSL1012AnalyzerTitle {
+            get {
+                return ResourceManager.GetString("CSL1012AnalyzerTitle", resourceCulture);
+            }
+        }
     }
 }
