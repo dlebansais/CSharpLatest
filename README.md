@@ -41,6 +41,7 @@ To uninstall this analyzer, in Visual Studio:
 | [CSL1008](doc/CSL1008.md) | Remove unnecessary braces.                                       |
 | [CSL1009](doc/CSL1009.md) | `FieldBackedPropertyAttribute` is missing argument.              |
 | [CSL1010](doc/CSL1010.md) | `init` accessor not supported in `FieldBackedPropertyAttribute`. |
+| [CSL1011](doc/CSL1011.md) | Implement `params` collection.                                   |
 
 ### CSL1000: Variables that are not modified should be made constants
 
@@ -77,4 +78,8 @@ Improves on rule [IDE0011](https://learn.microsoft.com/en-us/dotnet/fundamentals
 ### CSL1009 and CSL1010
 
 The `FieldBackedProperty` attribute can be used in code conditionally compiled with and without C# 14 to emulate the functionality of the [`field` keyword](https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/proposals/field-keyword).
+
+### CSL1011: Implement `params` collection
+
+Feature available since C# 13: [`params` collections](https://learn.microsoft.com/en-us/dotnet/csharp/whats-new/csharp-13#params-collections).
 

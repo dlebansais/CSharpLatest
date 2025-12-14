@@ -151,4 +151,38 @@ internal static class AnalyzerTools
 
         return SymbolEqualityComparer.Default.Equals(typeSymbol, ExpectedTypeSymbol);
     }
+
+    /// <summary>
+    /// Checks whether the compilation is for .NET Framework.
+    /// </summary>
+    /// <param name="compilation">The compilation.</param>
+    public static bool IsNetFramework(Compilation compilation)
+    {
+        IAssemblySymbol? systemRuntime = compilation.GetTypeByMetadataName("System.Runtime.GCSettings")?.ContainingAssembly;
+
+        if (systemRuntime is null)
+            return false;
+
+        string name = systemRuntime.Identity.Name;
+
+        return name == "mscorlib";
+    }
+
+    /// <summary>
+    /// Checks whether the compilation is for .NET Standard.
+    /// </summary>
+    /// <param name="compilation">The compilation.</param>
+    /// <param name="maximumVersion">The maximum version to to check.</param>
+    public static bool IsOldNetStandard(Compilation compilation, Version maximumVersion)
+    {
+        IAssemblySymbol? systemRuntime = compilation.GetTypeByMetadataName("System.Runtime.GCSettings")?.ContainingAssembly;
+
+        if (systemRuntime is null)
+            return false;
+
+        string name = systemRuntime.Identity.Name;
+        Version version = systemRuntime.Identity.Version;
+
+        return name == "netstandard" && version < maximumVersion;
+    }
 }

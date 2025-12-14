@@ -465,7 +465,7 @@ class Program
 
         public string Prop { get; }
     }
-", LanguageVersion.Default, Expected).ConfigureAwait(false);
+", LanguageVersion.Default, FrameworkChoice.Default, Expected).ConfigureAwait(false);
     }
 
     [TestMethod]
@@ -493,6 +493,6 @@ class Program
 
         public string Prop { get; }
     }
-", LanguageVersion.Default, Expected).ConfigureAwait(false);
+", LanguageVersion.Default, FrameworkChoice.Default, Expected).ConfigureAwait(false);
     }
 }

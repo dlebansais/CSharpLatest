@@ -15,3 +15,4 @@ CSL1007 |  Style   |  Warning | CSL1007AddMissingBraces, [Documentation](doc/CSL
 CSL1008 |  Style   |  Warning | CSL1008RemoveUnnecessaryBraces, [Documentation](doc/CSL1008.md)
 CSL1009 |  Usage   |   Error  | CSL1009FieldBackedPropertyAttributeIsMissingArgument, [Documentation](doc/CSL1009.md)
 CSL1010 |  Usage   |   Error  | CSL1010InitAccessorNotSupportedInFieldBackedPropertyAttribute, [Documentation](doc/CSL1010.md)
+CSL1011 |  Usage   |  Warning | CSL1011ImplementParamsCollection, [Documentation](doc/CSL1011.md)

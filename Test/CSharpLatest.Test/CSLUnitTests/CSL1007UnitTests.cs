@@ -766,7 +766,7 @@ class Program
         return 0;
     }
 }
-", LanguageVersion.Default,
+", LanguageVersion.Default, FrameworkChoice.Default,
 Expected1,
 Expected2,
 Expected3,
@@ -859,7 +859,7 @@ class Program
         return 0;
     }
 }
-", LanguageVersion.Default,
+", LanguageVersion.Default, FrameworkChoice.Default,
 Expected1,
 Expected2,
 Expected3,

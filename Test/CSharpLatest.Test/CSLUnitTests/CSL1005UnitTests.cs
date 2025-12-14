@@ -140,7 +140,7 @@ internal partial class CSL1005UnitTests
     {
         public string Prop { get { return; } }
     }
-", LanguageVersion.Default, Expected).ConfigureAwait(false);
+", LanguageVersion.Default, FrameworkChoice.Default, Expected).ConfigureAwait(false);
     }
 
     [TestMethod]

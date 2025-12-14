@@ -181,12 +181,24 @@
     <value>Simplify this one line getter to remove unnecessary clutter.</value>
     <comment>An optional longer localizable description of the diagnostic.</comment>
   </data>
+  <data name="CSL1011AnalyzerDescription" xml:space="preserve">
+    <value>Implement params collection for this method.</value>
+    <comment>An optional longer localizable description of the diagnostic.</comment>
+  </data>
   <data name="CSL1005AnalyzerMessageFormat" xml:space="preserve">
     <value>Simplify property {0} one line getter</value>
     <comment>The format-able message the diagnostic displays.</comment>
   </data>
+  <data name="CSL1011AnalyzerMessageFormat" xml:space="preserve">
+    <value>Implement params collection in '{0}'</value>
+    <comment>The format-able message the diagnostic displays.</comment>
+  </data>
   <data name="CSL1005AnalyzerTitle" xml:space="preserve">
     <value>Simplify this one line getter</value>
+    <comment>The title of the diagnostic.</comment>
+  </data>
+  <data name="CSL1011AnalyzerTitle" xml:space="preserve">
+    <value>Implement params collection</value>
     <comment>The title of the diagnostic.</comment>
   </data>
   <data name="CSL1006AnalyzerDescription" xml:space="preserve">

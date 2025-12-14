@@ -19,7 +19,7 @@ namespace CSharpLatest {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "18.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class AnalyzerResources {
@@ -354,6 +354,33 @@ namespace CSharpLatest {
         internal static string CSL1010AnalyzerTitle {
             get {
                 return ResourceManager.GetString("CSL1010AnalyzerTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Implement params collection for this method..
+        /// </summary>
+        internal static string CSL1011AnalyzerDescription {
+            get {
+                return ResourceManager.GetString("CSL1011AnalyzerDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Implement params collection in &apos;{0}&apos;.
+        /// </summary>
+        internal static string CSL1011AnalyzerMessageFormat {
+            get {
+                return ResourceManager.GetString("CSL1011AnalyzerMessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Implement params collection.
+        /// </summary>
+        internal static string CSL1011AnalyzerTitle {
+            get {
+                return ResourceManager.GetString("CSL1011AnalyzerTitle", resourceCulture);
             }
         }
     }
