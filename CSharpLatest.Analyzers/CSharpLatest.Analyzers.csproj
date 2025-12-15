@@ -81,7 +81,7 @@
         </PackageReference>
 
         <!-- Only use 4.14.0 until AppVeyor is upgraded -->
-        <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.14.0" />
+        <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="5.0.0" />
         <PackageReference Include="dlebansais.RoslynHelpers-Debug" Version="2.2.8" GeneratePathProperty="true" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" />
         <PackageReference Include="dlebansais.RoslynHelpers" Version="2.2.8" GeneratePathProperty="true" Condition="'$(Configuration)|$(Platform)'!='Debug|x64'" />
         <PackageReference Include="dlebansais.Method.Contracts-Debug" Version="2.0.5" GeneratePathProperty="true" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" />
