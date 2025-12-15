@@ -113,12 +113,7 @@ public partial class CSL1011ImplementParamsCollection : DiagnosticAnalyzer
             return false;
 
         SyntaxToken Modifier = parameter.Modifiers[0];
-#pragma warning disable IDE0046 // Convert to conditional expression
-        if (!Modifier.IsKind(SyntaxKind.ParamsKeyword))
-            return false;
-#pragma warning restore IDE0046 // Convert to conditional expression
-
-        return true;
+        return Modifier.IsKind(SyntaxKind.ParamsKeyword);
     }
 
     private static bool IsReadOnlySpanOverride(IMethodSymbol methodSymbol, int parameterIndex, ISymbol symbol)
@@ -137,18 +132,9 @@ public partial class CSL1011ImplementParamsCollection : DiagnosticAnalyzer
             return false;
 
         ITypeSymbol ParameterTypeSymbol = ParameterSymbol.Type;
-        if (ParameterTypeSymbol is not INamedTypeSymbol NamedTypeSymbol)
-            return false;
-
-        if (NamedTypeSymbol.Name != "ReadOnlySpan")
-            return false;
-
-#pragma warning disable IDE0046 // Convert to conditional expression
-        if (MethodMember.Name != methodSymbol.Name)
-            return false;
-#pragma warning restore IDE0046 // Convert to conditional expression
-
-        return true;
+        return ParameterTypeSymbol is INamedTypeSymbol NamedTypeSymbol &&
+               NamedTypeSymbol.Name == "ReadOnlySpan" &&
+               MethodMember.Name == methodSymbol.Name;
     }
 
     private static bool IsSymbolUsed(IOperation operation, IParameterSymbol parameterSymbol)

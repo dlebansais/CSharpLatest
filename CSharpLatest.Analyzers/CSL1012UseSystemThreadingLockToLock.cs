@@ -63,8 +63,6 @@ public partial class CSL1012UseSystemThreadingLockToLock : DiagnosticAnalyzer
             AnalyzeVerifiedNode);
     }
 
-#pragma warning disable IDE0059 // Unnecessary assignment of a value
-
     private void AnalyzeVerifiedNode(SyntaxNodeAnalysisContext context, LockStatementSyntax lockStatement, IEnumerable<IAnalysisAssertion> analysisAssertions)
     {
         // Get the statement symbol.

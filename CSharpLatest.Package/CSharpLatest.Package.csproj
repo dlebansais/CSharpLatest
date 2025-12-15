@@ -18,7 +18,7 @@
     </PropertyGroup>
 
     <PropertyGroup>
-        <PackageVersion>2.1.6</PackageVersion>
+        <PackageVersion>2.2.0</PackageVersion>
         <Authors>David Le Bansais</Authors>
         <Company />
         <Product />
