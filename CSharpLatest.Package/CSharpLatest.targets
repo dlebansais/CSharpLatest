@@ -3,11 +3,11 @@
     <_RoslynVersion>$(MicrosoftNetCompilersToolsetVersion)</_RoslynVersion>
   </PropertyGroup>
 
-  <ItemGroup Condition="$([MSBuild]::VersionLessThan(_RoslynVersion, '5.0.0'))">
+  <ItemGroup Condition="$([MSBuild]::VersionLessThan($(_RoslynVersion), 5.0.0))">
     <Analyzer Include="$(MSBuildThisFileDirectory)..\analyzers\dotnet\cs\4-14-0\CSharpLatest.Analyzers.dll" />
   </ItemGroup>
 
-  <ItemGroup Condition="$([MSBuild]::VersionGreaterThanOrEquals(_RoslynVersion, '5.0.0'))">
+  <ItemGroup Condition="$([MSBuild]::VersionGreaterThanOrEquals($(_RoslynVersion), 5.0.0))">
     <Analyzer Include="$(MSBuildThisFileDirectory)..\analyzers\dotnet\cs\CSharpLatest.Analyzers.dll" />
   </ItemGroup>
 </Project>
