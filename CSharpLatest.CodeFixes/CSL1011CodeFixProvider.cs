@@ -34,14 +34,14 @@ public class CSL1011CodeFixProvider : CodeFixProvider
     /// <param name="context">The code fix context.</param>
     public sealed override async Task RegisterCodeFixesAsync(CodeFixContext context)
     {
-        // Find the declaration identified by the diagnostic.
-        (Diagnostic Diagnostic, ParameterSyntax Declaration) = await CodeFixTools.FindNodeToFix<ParameterSyntax>(context).ConfigureAwait(false);
+        // Find the parameter identified by the diagnostic.
+        (Diagnostic Diagnostic, ParameterSyntax Parameter) = await CodeFixTools.FindNodeToFix<ParameterSyntax>(context).ConfigureAwait(false);
 
         // Register a code action that will invoke the fix.
         context.RegisterCodeFix(
             CodeAction.Create(
                 title: CodeFixResources.CSL1011CodeFixTitle,
-                createChangedDocument: c => ReplaceWithReadOnlySpan(context.Document, Declaration, c),
+                createChangedDocument: c => ReplaceWithReadOnlySpan(context.Document, Parameter, c),
                 equivalenceKey: nameof(CodeFixResources.CSL1011CodeFixTitle)),
             Diagnostic);
     }

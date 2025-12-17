@@ -410,5 +410,32 @@ namespace CSharpLatest {
                 return ResourceManager.GetString("CSL1012AnalyzerTitle", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Change an extension function to become an extension member..
+        /// </summary>
+        internal static string CSL1013AnalyzerDescription {
+            get {
+                return ResourceManager.GetString("CSL1013AnalyzerDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Change &apos;{0}&apos; to an extension member.
+        /// </summary>
+        internal static string CSL1013AnalyzerMessageFormat {
+            get {
+                return ResourceManager.GetString("CSL1013AnalyzerMessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Change extension function to extension member.
+        /// </summary>
+        internal static string CSL1013AnalyzerTitle {
+            get {
+                return ResourceManager.GetString("CSL1013AnalyzerTitle", resourceCulture);
+            }
+        }
     }
 }

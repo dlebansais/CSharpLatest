@@ -2,6 +2,7 @@
 
     <PropertyGroup>
         <TargetFrameworks>netstandard2.0</TargetFrameworks>
+        <Configurations>Debug;Release;Release-4-14-0;Release-5-0-0</Configurations>
         <LangVersion>13</LangVersion>
         <Nullable>enable</Nullable>
         <Platforms>x64</Platforms>
@@ -36,5 +37,9 @@
         <SignAssembly>true</SignAssembly>
         <AssemblyOriginatorKeyFile>..\signing.snk</AssemblyOriginatorKeyFile>
     </PropertyGroup>
+
+    <Target Name="PostBuild" AfterTargets="PostBuildEvent" Condition="'$(SolutionDir)'!='*Undefined*'">
+        <Exec Command="set" />
+    </Target>
 
 </Project>

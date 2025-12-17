@@ -17,3 +17,4 @@ CSL1009 |  Usage   |   Error  | CSL1009FieldBackedPropertyAttributeIsMissingArgu
 CSL1010 |  Usage   |   Error  | CSL1010InitAccessorNotSupportedInFieldBackedPropertyAttribute, [Documentation](doc/CSL1010.md)
 CSL1011 |  Usage   |  Warning | CSL1011ImplementParamsCollection, [Documentation](doc/CSL1011.md)
 CSL1012 |  Usage   |  Warning | CSL1012UseSystemThreadingLockToLock, [Documentation](doc/CSL1012.md)
+CSL1013 |  Usage   |  Warning | CSL1013ChangeExtensionFunctionToExtensionMember, [Documentation](doc/CSL1013.md)

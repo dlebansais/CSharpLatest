@@ -185,6 +185,10 @@
     <value>Implement params collection for this method.</value>
     <comment>An optional longer localizable description of the diagnostic.</comment>
   </data>
+  <data name="CSL1013AnalyzerDescription" xml:space="preserve">
+    <value>Change an extension function to become an extension member.</value>
+    <comment>An optional longer localizable description of the diagnostic.</comment>
+  </data>
   <data name="CSL1005AnalyzerMessageFormat" xml:space="preserve">
     <value>Simplify property {0} one line getter</value>
     <comment>The format-able message the diagnostic displays.</comment>
@@ -193,12 +197,20 @@
     <value>Implement params collection in '{0}'</value>
     <comment>The format-able message the diagnostic displays.</comment>
   </data>
+  <data name="CSL1013AnalyzerMessageFormat" xml:space="preserve">
+    <value>Change '{0}' to an extension member</value>
+    <comment>The format-able message the diagnostic displays.</comment>
+  </data>
   <data name="CSL1005AnalyzerTitle" xml:space="preserve">
     <value>Simplify this one line getter</value>
     <comment>The title of the diagnostic.</comment>
   </data>
   <data name="CSL1011AnalyzerTitle" xml:space="preserve">
     <value>Implement params collection</value>
+    <comment>The title of the diagnostic.</comment>
+  </data>
+  <data name="CSL1013AnalyzerTitle" xml:space="preserve">
+    <value>Change extension function to extension member</value>
     <comment>The title of the diagnostic.</comment>
   </data>
   <data name="CSL1006AnalyzerDescription" xml:space="preserve">

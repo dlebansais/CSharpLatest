@@ -149,5 +149,14 @@ namespace CSharpLatest {
                 return ResourceManager.GetString("CSL1011CodeFixTitle", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Change to extension member.
+        /// </summary>
+        internal static string CSL1013CodeFixTitle {
+            get {
+                return ResourceManager.GetString("CSL1013CodeFixTitle", resourceCulture);
+            }
+        }
     }
 }

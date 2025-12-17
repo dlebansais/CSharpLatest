@@ -38,6 +38,8 @@ before_build:
 
 configuration:
   - Debug
+  - Release-4-14-0
+  - Release-5-0-0
   - Release
 
 build:
@@ -72,10 +74,12 @@ before_test:
     printf "powershell $stryker_summary = Get-Content ./reports/mutation-report.md -Raw ; Write-Output $stryker_summary ; $pattern = 'The final mutation score is 100' ; if ($stryker_summary -NotMatch $pattern) { exit -1 }\n" >> after-test.bat
 
 test_script:
-  - if '%APPVEYOR_REPO_BRANCH%' == 'master' call opencover.bat runtests1.bat
+  - if '%APPVEYOR_REPO_BRANCH%/%CONFIGURATION%' == 'master/Debug' call opencover.bat runtests1.bat
+  - if '%APPVEYOR_REPO_BRANCH%/%CONFIGURATION%' == 'master/Release' call opencover.bat runtests1.bat
 
 after_test:
-  - if '%APPVEYOR_REPO_BRANCH%' == 'master' call after-test.bat
+  - if '%APPVEYOR_REPO_BRANCH%/%CONFIGURATION%' == 'master/Debug' call after-test.bat
+  - if '%APPVEYOR_REPO_BRANCH%/%CONFIGURATION%' == 'master/Release' call after-test.bat
 
 artifacts:
   - path: $(APPVEYOR_PROJECT_NAME).Package\bin\x64\Debug\$(PACKAGE_PREFIX).$(APPVEYOR_PROJECT_NAME)-Debug.*.nupkg

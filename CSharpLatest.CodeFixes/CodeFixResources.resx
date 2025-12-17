@@ -145,6 +145,10 @@
     <value>Replace with ReadOnlySpan&lt;&gt;</value>
     <comment>The title of the code fix.</comment>
   </data>
+  <data name="CSL1013CodeFixTitle" xml:space="preserve">
+    <value>Change to extension member</value>
+    <comment>The title of the code fix.</comment>
+  </data>
   <data name="CSL1006CodeFixTitle" xml:space="preserve">
     <value>Simplify setter</value>
     <comment>The title of the code fix.</comment>

@@ -2,6 +2,7 @@
 
 	<PropertyGroup>
         <TargetFrameworks>netstandard2.0</TargetFrameworks>
+        <Configurations>Debug;Release;Release-4-14-0;Release-5-0-0</Configurations>
         <LangVersion>13</LangVersion>
         <Nullable>enable</Nullable>
         <Platforms>x64</Platforms>
@@ -34,7 +35,11 @@
         <IsPackable>false</IsPackable>
     </PropertyGroup>
 
-	<ItemGroup>
+    <PropertyGroup Condition="'$(Configuration)' == 'Release-5-0-0' Or '$(Configuration)' == 'Debug' Or '$(Configuration)' == 'Release'">
+        <DefineConstants>$(DefineConstants);ENABLE_CSL1013</DefineConstants>
+    </PropertyGroup>
+
+    <ItemGroup>
         <PackageReference Include="StyleCop.Analyzers.Unstable" Version="1.2.0.556">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -61,9 +66,16 @@
         </PackageReference>
 
         <!-- Only use 4.14.0 until AppVeyor is upgraded -->
-        <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="4.14.0" />
         <PackageReference Include="dlebansais.Method.Contracts-Debug" Version="2.0.5" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" />
         <PackageReference Include="dlebansais.Method.Contracts" Version="2.0.5" Condition="'$(Configuration)|$(Platform)'!='Debug|x64'" />
+    </ItemGroup>
+
+    <ItemGroup Condition="'$(Configuration)' == 'Release-4-14-0'">
+        <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="4.14.0" />
+    </ItemGroup>
+
+    <ItemGroup Condition="'$(Configuration)' == 'Release-5-0-0' Or '$(Configuration)' == 'Debug' Or '$(Configuration)' == 'Release'">
+        <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="5.0.0" />
     </ItemGroup>
 
     <PropertyGroup Condition="'$(APPVEYOR_PULL_REQUEST_NUMBER)' == ''">

@@ -43,6 +43,7 @@ To uninstall this analyzer, in Visual Studio:
 | [CSL1010](doc/CSL1010.md) | `init` accessor not supported in `FieldBackedPropertyAttribute`. |
 | [CSL1011](doc/CSL1011.md) | Implement `params` collection.                                   |
 | [CSL1012](doc/CSL1012.md) | Use `System.Threading.Lock` to lock.                             |
+| [CSL1013](doc/CSL1013.md) | Change extension function to extension member                    |
 
 ### CSL1000: Variables that are not modified should be made constants
 
@@ -88,3 +89,6 @@ Feature available since C# 13: [`params` collections](https://learn.microsoft.co
 
 Feature available since C# 13: [New lock object](https://learn.microsoft.com/en-us/dotnet/csharp/whats-new/csharp-13#new-lock-object).
 
+### CSL1013: Change extension function to extension member
+
+Feature available since C# 14: [Extension members](https://learn.microsoft.com/en-us/dotnet/csharp/whats-new/csharp-14#extension-members).

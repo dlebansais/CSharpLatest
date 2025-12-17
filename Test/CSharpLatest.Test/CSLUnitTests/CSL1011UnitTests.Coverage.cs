@@ -76,7 +76,7 @@ internal partial class CSL1011UnitTests
     }
 
     [TestMethod]
-    public async Task NoFrameswork_NoDiagnostic()
+    public async Task NoFramework_NoDiagnostic()
     {
         DiagnosticDescriptor DescriptorCS0518_1 = new(
             "CS0518",

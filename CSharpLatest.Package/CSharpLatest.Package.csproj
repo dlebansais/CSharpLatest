@@ -2,6 +2,7 @@
 
     <PropertyGroup>
         <TargetFrameworks>netstandard2.0</TargetFrameworks>
+        <Configurations>Debug;Release</Configurations>
         <IncludeBuildOutput>false</IncludeBuildOutput>
         <SuppressDependenciesWhenPacking>true</SuppressDependenciesWhenPacking>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
@@ -9,12 +10,12 @@
         <Platforms>x64</Platforms>
     </PropertyGroup>
 
-    <PropertyGroup Condition="'$(Configuration)'=='Release'">
-        <PackageId>dlebansais.CSharpLatest</PackageId>
-    </PropertyGroup>
-
     <PropertyGroup Condition="'$(Configuration)'=='Debug'">
         <PackageId>dlebansais.CSharpLatest-Debug</PackageId>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)'=='Release'">
+        <PackageId>dlebansais.CSharpLatest</PackageId>
     </PropertyGroup>
 
     <PropertyGroup>
@@ -47,14 +48,35 @@
     </ItemGroup>
 
     <Target Name="_AddAnalyzersToOutput">
-        <ItemGroup>
+        <ItemGroup Condition="'$(Configuration)'=='Debug'">
             <TfmSpecificPackageFile Include="package-icon.png" PackagePath="" />
             <TfmSpecificPackageFile Include="README-short.md" PackagePath="" />
-            <TfmSpecificPackageFile Include="$(OutputPath)\CSharpLatest.Analyzers.dll" PackagePath="analyzers/dotnet/cs" />
-            <TfmSpecificPackageFile Include="$(OutputPath)\CSharpLatest.Attributes.dll" PackagePath="analyzers/dotnet/cs" />
-            <TfmSpecificPackageFile Include="$(OutputPath)\CSharpLatest.CodeFixes.dll" PackagePath="analyzers/dotnet/cs" />
-            <TfmSpecificPackageFile Include="$(OutputPath)\RoslynHelpers.dll" PackagePath="analyzers/dotnet/cs" />
-            <TfmSpecificPackageFile Include="$(OutputPath)\Method.Contracts.dll" PackagePath="analyzers/dotnet/cs" />
+
+            <TfmSpecificPackageFile Include="$(SolutionDir)\CSharpLatest.CodeFixes\bin\$(Platform)\$(Configuration)\netstandard2.0\CSharpLatest.Analyzers.dll" PackagePath="analyzers/dotnet/cs" />
+            <TfmSpecificPackageFile Include="$(SolutionDir)\CSharpLatest.CodeFixes\bin\$(Platform)\$(Configuration)\netstandard2.0\CSharpLatest.Attributes.dll" PackagePath="analyzers/dotnet/cs" />
+            <TfmSpecificPackageFile Include="$(SolutionDir)\CSharpLatest.CodeFixes\bin\$(Platform)\$(Configuration)\netstandard2.0\CSharpLatest.CodeFixes.dll" PackagePath="analyzers/dotnet/cs" />
+            <TfmSpecificPackageFile Include="$(SolutionDir)\CSharpLatest.CodeFixes\bin\$(Platform)\$(Configuration)\netstandard2.0\RoslynHelpers.dll" PackagePath="analyzers/dotnet/cs" />
+            <TfmSpecificPackageFile Include="$(SolutionDir)\CSharpLatest.CodeFixes\bin\$(Platform)\$(Configuration)\netstandard2.0\Method.Contracts.dll" PackagePath="analyzers/dotnet/cs" />
+
+            <TfmSpecificPackageFile Include="CSharpLatest.targets" PackagePath="build/CSharpLatest.targets" />
+        </ItemGroup>
+        <ItemGroup Condition="'$(Configuration)'=='Release'">
+            <TfmSpecificPackageFile Include="package-icon.png" PackagePath="" />
+            <TfmSpecificPackageFile Include="README-short.md" PackagePath="" />
+            
+            <TfmSpecificPackageFile Include="$(SolutionDir)\CSharpLatest.CodeFixes\bin\$(Platform)\Release-5-0-0\netstandard2.0\CSharpLatest.Analyzers.dll" PackagePath="analyzers/dotnet/cs" />
+            <TfmSpecificPackageFile Include="$(SolutionDir)\CSharpLatest.CodeFixes\bin\$(Platform)\Release-5-0-0\netstandard2.0\CSharpLatest.Attributes.dll" PackagePath="analyzers/dotnet/cs" />
+            <TfmSpecificPackageFile Include="$(SolutionDir)\CSharpLatest.CodeFixes\bin\$(Platform)\Release-5-0-0\netstandard2.0\CSharpLatest.CodeFixes.dll" PackagePath="analyzers/dotnet/cs" />
+            <TfmSpecificPackageFile Include="$(SolutionDir)\CSharpLatest.CodeFixes\bin\$(Platform)\Release-5-0-0\netstandard2.0\RoslynHelpers.dll" PackagePath="analyzers/dotnet/cs" />
+            <TfmSpecificPackageFile Include="$(SolutionDir)\CSharpLatest.CodeFixes\bin\$(Platform)\Release-5-0-0\netstandard2.0\Method.Contracts.dll" PackagePath="analyzers/dotnet/cs" />
+
+            <TfmSpecificPackageFile Include="$(SolutionDir)\CSharpLatest.CodeFixes\bin\$(Platform)\Release-4-14-0\netstandard2.0\CSharpLatest.Analyzers.dll" PackagePath="analyzers/dotnet/cs/4-14-0" />
+            <TfmSpecificPackageFile Include="$(SolutionDir)\CSharpLatest.CodeFixes\bin\$(Platform)\Release-4-14-0\netstandard2.0\CSharpLatest.Attributes.dll" PackagePath="analyzers/dotnet/cs/4-14-0" />
+            <TfmSpecificPackageFile Include="$(SolutionDir)\CSharpLatest.CodeFixes\bin\$(Platform)\Release-4-14-0\netstandard2.0\CSharpLatest.CodeFixes.dll" PackagePath="analyzers/dotnet/cs/4-14-0" />
+            <TfmSpecificPackageFile Include="$(SolutionDir)\CSharpLatest.CodeFixes\bin\$(Platform)\Release-4-14-0\netstandard2.0\RoslynHelpers.dll" PackagePath="analyzers/dotnet/cs/4-14-0" />
+            <TfmSpecificPackageFile Include="$(SolutionDir)\CSharpLatest.CodeFixes\bin\$(Platform)\Release-4-14-0\netstandard2.0\Method.Contracts.dll" PackagePath="analyzers/dotnet/cs/4-14-0" />
+
+            <TfmSpecificPackageFile Include="CSharpLatest.targets" PackagePath="build/CSharpLatest.targets" />
         </ItemGroup>
     </Target>
 
