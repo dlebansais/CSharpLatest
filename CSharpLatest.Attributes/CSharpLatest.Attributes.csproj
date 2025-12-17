@@ -38,8 +38,4 @@
         <AssemblyOriginatorKeyFile>..\signing.snk</AssemblyOriginatorKeyFile>
     </PropertyGroup>
 
-    <Target Name="PostBuild" AfterTargets="PostBuildEvent" Condition="'$(SolutionDir)'!='*Undefined*'">
-        <Exec Command="set" />
-    </Target>
-
 </Project>

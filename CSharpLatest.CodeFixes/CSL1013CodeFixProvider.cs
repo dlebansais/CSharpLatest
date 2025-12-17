@@ -104,6 +104,7 @@ public class CSL1013CodeFixProvider : CodeFixProvider
         Result = await Formatter.FormatAsync(Result, cancellationToken: cancellationToken).ConfigureAwait(false);
 #else
         // Don't fix anything.
+        await Task.CompletedTask.ConfigureAwait(false);
 #endif
 
         return Result;
