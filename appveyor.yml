@@ -40,8 +40,9 @@ before_build:
   - |-
     curl -L -H "Authorization: Bearer %ApiToken%" https://ci.appveyor.com/api/projects/dlebansais/%APPVEYOR_PROJECT_NAME%/artifacts/%APPVEYOR_PROJECT_NAME%.CodeFixes/bin/x64/Release/Release-4-14-0/netstandard2.0?job=Release-4-14-0
     curl -L -H "Authorization: Bearer %ApiToken%" https://ci.appveyor.com/api/projects/dlebansais/%APPVEYOR_PROJECT_NAME%/artifacts/%APPVEYOR_PROJECT_NAME%.CodeFixes/bin/x64/Release/Release-5-0-0/netstandard2.0?job=Release-5-0-0
+    appveyor DownloadFile --help
+    appveyor DownloadFile https://ci.appveyor.com/api/buildjobs/Release-4-14-0/artifacts/CSharpLatest.CodeFixes/bin/x64/Release/Release-4-14-0/netstandard2.0.zip
     dir
-    appveyor --help
     if exist Release-4-14-0.zip C:/PROGRA~1/7-Zip/7z.exe -o%APPVEYOR_PROJECT_NAME%.CodeFixes/bin/x64/Release/Release-4-14-0/netstandard2.0 e Release-4-14-0.zip
     if exist Release-5-0-0.zip C:/PROGRA~1/7-Zip/7z.exe -o%APPVEYOR_PROJECT_NAME%.CodeFixes/bin/x64/Release/Release-5-0-0/netstandard2.0  e Release-5-0-0.zip
 
