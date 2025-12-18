@@ -36,6 +36,7 @@ matrix:
 # https://ci.appveyor.com/api/buildjobs/6a3clha95gk554ii/artifacts/CSharpLatest.CodeFixes%2Fbin%2Fx64%2FRelease-5-0-0%2FCSharpLatest-Release-5-0-0.zip
 # curl -L -H "Authorization: Bearer " "https://ci.appveyor.com/api/buildjobs/m9h7k5nkp83f9cl4/artifacts/CSharpLatest.CodeFixes%2Fbin%2Fx64%2FRelease-4-14-0%2FCSharpLatest-Release-4-14-0.zip" -o Release.zip
 # appveyor DownloadFile "https://ci.appveyor.com/api/projects/dlebansais/CSharpLatest/artifacts/CSharpLatest.CodeFixes%2Fbin%2Fx64%2FRelease-4-14-0%2FCSharpLatest-Release-4-14-0.zip?all=true&job=Configuration%3A+Release-4-14-0" -FileName Release-4-14-0.zip
+# https://ci.appveyor.com/api/buildjobs/txn2isiebngdoc6f/artifacts/CSharpLatest.CodeFixes%2Fbin%2Fx64%2FRelease-5-0-0%2FCSharpLatest-Release-5-0-0.zip
 
 before_build:
   - nuget restore %APPVEYOR_PROJECT_NAME%.sln
@@ -53,6 +54,7 @@ before_build:
   - ps: |-
         $auth = (Get-Content token.txt)
         curl -OutFile Release-4-14-0.zip -Headers @{ Authorization = "Bearer $token" } https://ci.appveyor.com/api/buildjobs/m9h7k5nkp83f9cl4/artifacts/CSharpLatest.CodeFixes%2Fbin%2Fx64%2FRelease-4-14-0%2FCSharpLatest-Release-4-14-0.zip
+        curl -OutFile Release-5-0-0.zip -Headers @{ Authorization = "Bearer $token" } https://ci.appveyor.com/api/buildjobs/txn2isiebngdoc6f/artifacts/CSharpLatest.CodeFixes%2Fbin%2Fx64%2FRelease-5-0-0%2FCSharpLatest-Release-5-0-0.zip
   - |-
     dir
     if exist Release-4-14-0.zip C:/PROGRA~1/7-Zip/7z.exe -o%APPVEYOR_PROJECT_NAME%.CodeFixes/bin/x64/Release/Release-4-14-0/netstandard2.0 e Release-4-14-0.zip
