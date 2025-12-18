@@ -41,6 +41,7 @@ before_build:
     curl -L -H "Authorization: Bearer %ApiToken%" https://ci.appveyor.com/api/projects/dlebansais/%APPVEYOR_PROJECT_NAME%/artifacts/%APPVEYOR_PROJECT_NAME%.CodeFixes/bin/x64/Release/Release-4-14-0/netstandard2.0?job=Release-4-14-0
     curl -L -H "Authorization: Bearer %ApiToken%" https://ci.appveyor.com/api/projects/dlebansais/%APPVEYOR_PROJECT_NAME%/artifacts/%APPVEYOR_PROJECT_NAME%.CodeFixes/bin/x64/Release/Release-5-0-0/netstandard2.0?job=Release-5-0-0
     dir
+    appveyor --help
     if exist Release-4-14-0.zip C:/PROGRA~1/7-Zip/7z.exe -o%APPVEYOR_PROJECT_NAME%.CodeFixes/bin/x64/Release/Release-4-14-0/netstandard2.0 e Release-4-14-0.zip
     if exist Release-5-0-0.zip C:/PROGRA~1/7-Zip/7z.exe -o%APPVEYOR_PROJECT_NAME%.CodeFixes/bin/x64/Release/Release-5-0-0/netstandard2.0  e Release-5-0-0.zip
 
@@ -90,9 +91,9 @@ after_test:
   - if '%APPVEYOR_REPO_BRANCH%/%CONFIGURATION%' == 'master/Release' call after-test.bat
 
 artifacts:
-  - path: $(APPVEYOR_PROJECT_NAME).CodeFixes\bin\x64\Release\Release-4-14-0\netstandard2.0
+  - path: $(APPVEYOR_PROJECT_NAME).CodeFixes\bin\x64\Release-4-14-0\netstandard2.0
     name: $(APPVEYOR_PROJECT_NAME)-Release-4-14-0
-  - path: $(APPVEYOR_PROJECT_NAME).CodeFixes\bin\x64\Release\Release-5-0-0\netstandard2.0
+  - path: $(APPVEYOR_PROJECT_NAME).CodeFixes\bin\x64\Release-5-0-0\netstandard2.0
     name: $(APPVEYOR_PROJECT_NAME)-Release-5-0-0
   - path: $(APPVEYOR_PROJECT_NAME).Package\bin\x64\Debug\$(PACKAGE_PREFIX).$(APPVEYOR_PROJECT_NAME)-Debug.*.nupkg
     name: $(APPVEYOR_PROJECT_NAME)-Package-Debug
