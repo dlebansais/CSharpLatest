@@ -52,8 +52,7 @@ before_build:
     dir
   - ps: |-
         $auth = (Get-Content token.txt)
-        curl -OutFile Release-4-14-0.zip -ErrorAction SilentlyContinue -Headers @{ Authorization = "Bearer $token" } https://ci.appveyor.com/api/buildjobs/m9h7k5nkp83f9cl4/artifacts/CSharpLatest.CodeFixes%2Fbin%2Fx64%2FRelease-4-14-0%2FCSharpLatest-Release-4-14-0.zip
-        curl -OutFile Release-5-0-0.zip -Verbose:$false -ErrorAction SilentlyContinue -Headers @{ Authorization = "Bearer $token" } https://ci.appveyor.com/api/buildjobs/m9h7k5nkp83f9cl4/artifacts/CSharpLatest.CodeFixes%2Fbin%2Fx64%2FRelease-5-0-0%2FCSharpLatest-Release-5-0-0.zip
+        curl -OutFile Release-4-14-0.zip -Headers @{ Authorization = "Bearer $token" } https://ci.appveyor.com/api/buildjobs/m9h7k5nkp83f9cl4/artifacts/CSharpLatest.CodeFixes%2Fbin%2Fx64%2FRelease-4-14-0%2FCSharpLatest-Release-4-14-0.zip
   - |-
     dir
     if exist Release-4-14-0.zip C:/PROGRA~1/7-Zip/7z.exe -o%APPVEYOR_PROJECT_NAME%.CodeFixes/bin/x64/Release/Release-4-14-0/netstandard2.0 e Release-4-14-0.zip
