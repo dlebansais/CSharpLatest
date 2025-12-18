@@ -37,11 +37,12 @@ before_build:
   - dotnet restore
 # Extract signing.snk to the current directory. Do not extract for a PR because they don't have access to secrets, but we don't need to sign assemblies in that case.
   - if '%APPVEYOR_PULL_REQUEST_NUMBER%'=='' C:/PROGRA~1/7-Zip/7z.exe e -p%SnkPassword% .signing\key.zip > nul
-  - dir
   - |-
-    curl -L -H "Authorization: Bearer %ApiToken%" https://ci.appveyor.com/api/projects/dlebansais/CSharpLatest/artifacts/CSharpLatest.Package/bin/x64/Debug/dlebansais.CSharpLatest-Debug.2.2.1.nupkg?job=Debug -o myfile.zip
-  - ps: |-
-      Get-AppVeyorArtifact CSharpLatest.Package/bin/x64/Debug/dlebansais.CSharpLatest-Debug.2.2.1.nupkg
+    curl -L -H "Authorization: Bearer %ApiToken%" https://ci.appveyor.com/api/projects/dlebansais/%APPVEYOR_PROJECT_NAME%/artifacts/%APPVEYOR_PROJECT_NAME%.CodeFixes/bin/x64/Release/Release-4-14-0/netstandard2.0?job=Release-4-14-0 -o Release-4-14-0.zip
+    C:/PROGRA~1/7-Zip/7z.exe e Release-4-14-0.zip o %APPVEYOR_PROJECT_NAME%.CodeFixes/bin/x64/Release/Release-4-14-0/netstandard2.0
+    curl -L -H "Authorization: Bearer %ApiToken%" https://ci.appveyor.com/api/projects/dlebansais/%APPVEYOR_PROJECT_NAME%/artifacts/%APPVEYOR_PROJECT_NAME%.CodeFixes/bin/x64/Release/Release-5-0-0/netstandard2.0?job=Release-5-0-0 -o Release-5-0-0.zip
+    C:/PROGRA~1/7-Zip/7z.exe e Release-5-0-0.zip o %APPVEYOR_PROJECT_NAME%.CodeFixes/bin/x64/Release/Release-5-0-0/netstandard2.0
+
 configuration:
   - Debug
   - Release-4-14-0
@@ -88,6 +89,10 @@ after_test:
   - if '%APPVEYOR_REPO_BRANCH%/%CONFIGURATION%' == 'master/Release' call after-test.bat
 
 artifacts:
+  - path: $(APPVEYOR_PROJECT_NAME).CodeFixes\bin\x64\Release\Release-4-14-0\netstandard2.0
+    name: $(APPVEYOR_PROJECT_NAME)-Release-4-14-0
+  - path: $(APPVEYOR_PROJECT_NAME).CodeFixes\bin\x64\Release\Release-5-0-0\netstandard2.0
+    name: $(APPVEYOR_PROJECT_NAME)-Release-5-0-0
   - path: $(APPVEYOR_PROJECT_NAME).Package\bin\x64\Debug\$(PACKAGE_PREFIX).$(APPVEYOR_PROJECT_NAME)-Debug.*.nupkg
     name: $(APPVEYOR_PROJECT_NAME)-Package-Debug
   - path: $(APPVEYOR_PROJECT_NAME).Package\bin\x64\Release\$(PACKAGE_PREFIX).$(APPVEYOR_PROJECT_NAME).*.nupkg
