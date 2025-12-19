@@ -20,6 +20,7 @@ environment:
 # value: <password to decrypt snk file>
   SnkPassword:
     secure: 1svE5KENguPZZA9WI7jqI4rFGWREjMTmt//xbbv+POFKS8BdTi/TE2zB7jU0e7BsYW8G1ZP/4NxjfvnM/EOuH/VxpbyUo8p6fayCu3fDKbLBAt7PWIRCy4mo7SWR0vHAw/Q6cFQHWfA7EVu7eVC66Q==
+  release_4_12_0_jobid: m9h7k5nkp83f9cl4
   release_4_14_0_jobid: m9h7k5nkp83f9cl4
   release_5_0_0_jobid: txn2isiebngdoc6f
   opencover_version: 4.7.1221
@@ -39,16 +40,20 @@ before_build:
   - if '%APPVEYOR_PULL_REQUEST_NUMBER%'=='' C:/PROGRA~1/7-Zip/7z.exe e -p%SnkPassword% .signing\key.zip > nul
 # Get artifacts from previous release builds for different versions of the Microsoft.CodeAnalysis package.
   - ps: |-
+        $release_4_12_0_jobid = $env:release_4_12_0_jobid
         $release_4_14_0_jobid = $env:release_4_14_0_jobid
         $release_5_0_0_jobid = $env:release_5_0_0_jobid
+        curl -OutFile Release-4-12-0.zip -Headers @{ Authorization = "Bearer $token" } https://ci.appveyor.com/api/buildjobs/$release_4_14_0_jobid/artifacts/CSharpLatest.CodeFixes%2Fbin%2Fx64%2FRelease-4-14-0%2FCSharpLatest-Release-4-14-0.zip
         curl -OutFile Release-4-14-0.zip -Headers @{ Authorization = "Bearer $token" } https://ci.appveyor.com/api/buildjobs/$release_4_14_0_jobid/artifacts/CSharpLatest.CodeFixes%2Fbin%2Fx64%2FRelease-4-14-0%2FCSharpLatest-Release-4-14-0.zip
         curl -OutFile Release-5-0-0.zip -Headers @{ Authorization = "Bearer $token" } https://ci.appveyor.com/api/buildjobs/$release_5_0_0_jobid/artifacts/CSharpLatest.CodeFixes%2Fbin%2Fx64%2FRelease-5-0-0%2FCSharpLatest-Release-5-0-0.zip
   - |-
+    if exist Release-4-12-0.zip C:/PROGRA~1/7-Zip/7z.exe -o%APPVEYOR_PROJECT_NAME%.CodeFixes/bin/x64/Release-4-12-0/netstandard2.0 e Release-4-12-0.zip
     if exist Release-4-14-0.zip C:/PROGRA~1/7-Zip/7z.exe -o%APPVEYOR_PROJECT_NAME%.CodeFixes/bin/x64/Release-4-14-0/netstandard2.0 e Release-4-14-0.zip
     if exist Release-5-0-0.zip C:/PROGRA~1/7-Zip/7z.exe -o%APPVEYOR_PROJECT_NAME%.CodeFixes/bin/x64/Release-5-0-0/netstandard2.0  e Release-5-0-0.zip
 
 configuration:
   - Debug
+  - Release-4-12-0
   - Release-4-14-0
   - Release-5-0-0
   - Release
@@ -93,6 +98,8 @@ after_test:
   - if '%APPVEYOR_REPO_BRANCH%/%CONFIGURATION%' == 'master/Release' call after-test.bat
 
 artifacts:
+  - path: $(APPVEYOR_PROJECT_NAME).CodeFixes\bin\x64\Release-4-12-0\netstandard2.0
+    name: $(APPVEYOR_PROJECT_NAME)-Release-4-12-0
   - path: $(APPVEYOR_PROJECT_NAME).CodeFixes\bin\x64\Release-4-14-0\netstandard2.0
     name: $(APPVEYOR_PROJECT_NAME)-Release-4-14-0
   - path: $(APPVEYOR_PROJECT_NAME).CodeFixes\bin\x64\Release-5-0-0\netstandard2.0
