@@ -7,7 +7,7 @@
         <RootNamespace>CSharpLatest.Vsix</RootNamespace>
         <AssemblyName>CSharpLatest.Vsix</AssemblyName>
         <Platforms>x64</Platforms>
-        <Configurations>Debug;Release;Release-4-14-0;Release-5-0-0</Configurations>
+        <Configurations>Debug;Release</Configurations>
     </PropertyGroup>
 
     <PropertyGroup>

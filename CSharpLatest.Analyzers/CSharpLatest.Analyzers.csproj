@@ -2,7 +2,7 @@
 
     <PropertyGroup>
         <TargetFrameworks>netstandard2.0</TargetFrameworks>
-        <Configurations>Debug;Release;Release-4-14-0;Release-5-0-0</Configurations>
+        <Configurations>Debug;Release-4-12-0;Release-4-14-0;Release-5-0-0;Release</Configurations>
         <LangVersion>13</LangVersion>
         <Nullable>enable</Nullable>
         <Platforms>x64</Platforms>
@@ -85,11 +85,14 @@
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
 
-        <!-- Only use 4.14.0 until AppVeyor is upgraded -->
         <PackageReference Include="dlebansais.RoslynHelpers-Debug" Version="2.2.8" GeneratePathProperty="true" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" />
         <PackageReference Include="dlebansais.RoslynHelpers" Version="2.2.8" GeneratePathProperty="true" Condition="'$(Configuration)|$(Platform)'!='Debug|x64'" />
         <PackageReference Include="dlebansais.Method.Contracts-Debug" Version="2.0.5" GeneratePathProperty="true" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" />
         <PackageReference Include="dlebansais.Method.Contracts" Version="2.0.5" GeneratePathProperty="true" Condition="'$(Configuration)|$(Platform)'!='Debug|x64'" />
+    </ItemGroup>
+
+    <ItemGroup Condition="'$(Configuration)' == 'Release-4-12-0'">
+        <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.14.0" />
     </ItemGroup>
 
     <ItemGroup Condition="'$(Configuration)' == 'Release-4-14-0'">
