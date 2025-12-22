@@ -63,13 +63,27 @@ public static partial class ConstructorAnalysis
 
         // If the constructor is doing anything else than assigning properties, let's not try to second-guess the code.
         (bool HasPropertyAssignmentsOnly, Collection<AssignmentExpressionSyntax> Assignments) = GetPropertyAssignments(classDeclaration, ConstructorCandidate);
+#pragma warning disable IDE0046 // Convert to conditional expression
         if (!HasPropertyAssignmentsOnly || Assignments.Count == 0)
             return BestSuggestion.None;
+#pragma warning restore IDE0046 // Convert to conditional expression
+
+        return CountConstructors(classDeclaration, ConstructorCandidate, Assignments);
+    }
+
+    private static BestSuggestion CountConstructors(ClassDeclarationSyntax classDeclaration, ConstructorDeclarationSyntax constructorCandidate, Collection<AssignmentExpressionSyntax> assignments)
+    {
+        int ConstructorCount = 0;
 
         // If other constructors don't do the same, let's not try to second-guess the code.
-        (bool SuggestNone, int ConstructorCount) = CountContructors(classDeclaration, ConstructorCandidate, Assignments);
-        if (SuggestNone)
-            return BestSuggestion.None;
+        foreach (MemberDeclarationSyntax Member in classDeclaration.Members)
+            if (Member is ConstructorDeclarationSyntax ConstructorDeclaration)
+            {
+                ConstructorCount++;
+
+                if (ConstructorDeclaration != constructorCandidate && !IsConstructorStartingWithAssignments(ConstructorDeclaration, assignments))
+                    return BestSuggestion.None;
+            }
 
         // If there is only one constructor, considering our constraints a record is a better option.
         if (ConstructorCount > 1)
@@ -85,23 +99,6 @@ public static partial class ConstructorAnalysis
         }*/
 
         return BestSuggestion.Record;
-    }
-
-    private static (bool SuggestNone, int Count) CountContructors(ClassDeclarationSyntax classDeclaration, ConstructorDeclarationSyntax constructorCandidate, Collection<AssignmentExpressionSyntax> assignments)
-    {
-        int ConstructorCount = 0;
-
-        // If other constructors don't do the same, let's not try to second-guess the code.
-        foreach (MemberDeclarationSyntax Member in classDeclaration.Members)
-            if (Member is ConstructorDeclarationSyntax ConstructorDeclaration)
-            {
-                ConstructorCount++;
-
-                if (ConstructorDeclaration != constructorCandidate && !IsConstructorStartingWithAssignments(ConstructorDeclaration, assignments))
-                    return (true, 0);
-            }
-
-        return (false, ConstructorCount);
     }
 
     /// <summary>
