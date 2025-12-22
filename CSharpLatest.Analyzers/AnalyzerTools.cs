@@ -183,15 +183,7 @@ internal static class AnalyzerTools
         string name = systemRuntime.Identity.Name;
         Version version = systemRuntime.Identity.Version;
 
-        if (name != "netstandard")
-            return false;
-
-#pragma warning disable IDE0046 // Convert to conditional expression
-        if (version < minimumVersion)
-            return false;
-#pragma warning restore IDE0046 // Convert to conditional expression
-
-        return true;
+        return name == "netstandard" && version >= minimumVersion;
     }
 
     /// <summary>

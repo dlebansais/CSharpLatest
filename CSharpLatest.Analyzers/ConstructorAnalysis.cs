@@ -63,12 +63,9 @@ public static partial class ConstructorAnalysis
 
         // If the constructor is doing anything else than assigning properties, let's not try to second-guess the code.
         (bool HasPropertyAssignmentsOnly, Collection<AssignmentExpressionSyntax> Assignments) = GetPropertyAssignments(classDeclaration, ConstructorCandidate);
-#pragma warning disable IDE0046 // Convert to conditional expression
-        if (!HasPropertyAssignmentsOnly || Assignments.Count == 0)
-            return BestSuggestion.None;
-#pragma warning restore IDE0046 // Convert to conditional expression
-
-        return CountConstructors(classDeclaration, ConstructorCandidate, Assignments);
+        return !HasPropertyAssignmentsOnly || Assignments.Count == 0
+               ? BestSuggestion.None
+               : CountConstructors(classDeclaration, ConstructorCandidate, Assignments);
     }
 
     private static BestSuggestion CountConstructors(ClassDeclarationSyntax classDeclaration, ConstructorDeclarationSyntax constructorCandidate, Collection<AssignmentExpressionSyntax> assignments)

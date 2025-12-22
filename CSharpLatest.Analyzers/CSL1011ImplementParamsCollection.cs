@@ -108,12 +108,7 @@ public partial class CSL1011ImplementParamsCollection : DiagnosticAnalyzer
         // Get the parameter symbol (I could not figure out a way to get null here).
         IParameterSymbol ParameterSymbol = Contract.AssertNotNull(context.SemanticModel.GetDeclaredSymbol(parameter, context.CancellationToken));
 
-#pragma warning disable IDE0046 // Convert to conditional expression
-        if (!IsSymbolUsed(Operation, ParameterSymbol))
-            return false;
-#pragma warning restore IDE0046 // Convert to conditional expression
-
-        return true;
+        return IsSymbolUsed(Operation, ParameterSymbol);
     }
 
     private static bool IsValidFramework(Compilation compilation)
