@@ -78,7 +78,7 @@ public partial class CSL1012UseSystemThreadingLockToLock : DiagnosticAnalyzer
             return;
 
         // .NET older than 9 don't have System.Threading.Lock.
-        if (AnalyzerTools.IsDotNet(context.Compilation, maximumVersion: new Version(9, 0)))
+        if (!AnalyzerTools.IsDotNet(context.Compilation, minimumVersion: new Version(9, 0)))
             return;
 
         // Get the containing member (I could not figure out a way to get null here).

@@ -72,8 +72,7 @@ public partial class CSL1011ImplementParamsCollection : DiagnosticAnalyzer
             return;
 
         // .NET Framework and .NET Standard older than 2.1 don't have ReadOnlySpan.
-        if (AnalyzerTools.IsNetFramework(context.Compilation) ||
-            AnalyzerTools.IsOldNetStandard(context.Compilation, maximumVersion: new Version(2, 1)))
+        if (!IsValidFramework(context.Compilation))
             return;
 
         // Get the method symbol (I could not figure out a way to get null here).
@@ -105,6 +104,15 @@ public partial class CSL1011ImplementParamsCollection : DiagnosticAnalyzer
         Location Location = parameter.GetLocation();
 
         context.ReportDiagnostic(Diagnostic.Create(Rule, Location, methodSymbol.Name));
+    }
+
+    private static bool IsValidFramework(Compilation compilation)
+    {
+        bool IsDotNetFramework = AnalyzerTools.IsDotNetFramework(compilation);
+        bool IsDotNet = AnalyzerTools.IsDotNet(compilation);
+        bool IsLastDotNetStandard = AnalyzerTools.IsDotNetStandard(compilation, minimumVersion: new Version(2, 1));
+
+        return !IsDotNetFramework && (IsDotNet || IsLastDotNetStandard);
     }
 
     private static bool IsParams(ParameterSyntax parameter)

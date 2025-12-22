@@ -35,6 +35,16 @@ internal static partial class CSharpAnalyzerVerifier<TAnalyzer>
                     solution = solution.WithProjectParseOptions(projectId, ParseOptions ?? throw new InvalidOperationException());
                 }
 
+                if (FrameworkChoiceInternal == FrameworkChoice.None)
+                {
+                    List<MetadataReference> DefaultReferences =
+                    [
+                        MetadataReference.CreateFromFile("CSharpLatest.Attributes.dll"),
+                    ];
+
+                    solution = solution.WithProjectMetadataReferences(projectId, DefaultReferences);
+                }
+
                 return solution;
             });
 

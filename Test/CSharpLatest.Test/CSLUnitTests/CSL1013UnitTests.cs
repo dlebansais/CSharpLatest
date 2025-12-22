@@ -42,6 +42,51 @@ static class Program
 }
 ", LanguageVersion.CSharp14, FrameworkChoice.DotNet10).ConfigureAwait(false);
     }
-}
 
+    [TestMethod]
+    public async Task NoParameter_NoDiagnostic()
+    {
+        await VerifyCS.VerifyAnalyzerAsync(@"
+static class Program
+{
+    public static int GetLength()
+    {
+        return 0;
+    }
+}
+", LanguageVersion.CSharp14, FrameworkChoice.DotNet9).ConfigureAwait(false);
+    }
+
+    [TestMethod]
+    public async Task NoModifier_NoDiagnostic()
+    {
+        await VerifyCS.VerifyAnalyzerAsync(@"
+static class Program
+{
+    public static int GetLength(string s)
+    {
+        ArgumentNullException.ThrowIfNull(s);
+
+        return s.Length;
+    }
+}
+", LanguageVersion.CSharp14, FrameworkChoice.DotNet9).ConfigureAwait(false);
+    }
+
+    [TestMethod]
+    public async Task OtherModifier_NoDiagnostic()
+    {
+        await VerifyCS.VerifyAnalyzerAsync(@"
+static class Program
+{
+    public static int GetLength(in string s)
+    {
+        ArgumentNullException.ThrowIfNull(s);
+
+        return s.Length;
+    }
+}
+", LanguageVersion.CSharp14, FrameworkChoice.DotNet9).ConfigureAwait(false);
+    }
+}
 #endif

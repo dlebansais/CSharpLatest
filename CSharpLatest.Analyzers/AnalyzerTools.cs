@@ -156,7 +156,7 @@ internal static class AnalyzerTools
     /// Checks whether the compilation is for .NET Framework.
     /// </summary>
     /// <param name="compilation">The compilation.</param>
-    public static bool IsNetFramework(Compilation compilation)
+    public static bool IsDotNetFramework(Compilation compilation)
     {
         IAssemblySymbol? systemRuntime = compilation.GetTypeByMetadataName("System.Runtime.GCSettings")?.ContainingAssembly;
 
@@ -172,8 +172,8 @@ internal static class AnalyzerTools
     /// Checks whether the compilation is for .NET Standard.
     /// </summary>
     /// <param name="compilation">The compilation.</param>
-    /// <param name="maximumVersion">The maximum version to to check.</param>
-    public static bool IsOldNetStandard(Compilation compilation, Version maximumVersion)
+    /// <param name="minimumVersion">The minimum version to to check.</param>
+    public static bool IsDotNetStandard(Compilation compilation, Version minimumVersion)
     {
         IAssemblySymbol? systemRuntime = compilation.GetTypeByMetadataName("System.Runtime.GCSettings")?.ContainingAssembly;
 
@@ -183,15 +183,30 @@ internal static class AnalyzerTools
         string name = systemRuntime.Identity.Name;
         Version version = systemRuntime.Identity.Version;
 
-        return name == "netstandard" && version < maximumVersion;
+        if (name != "netstandard")
+            return false;
+
+#pragma warning disable IDE0046 // Convert to conditional expression
+        if (version < minimumVersion)
+            return false;
+#pragma warning restore IDE0046 // Convert to conditional expression
+
+        return true;
     }
 
     /// <summary>
     /// Checks whether the compilation is for .NET.
     /// </summary>
     /// <param name="compilation">The compilation.</param>
-    /// <param name="maximumVersion">The maximum version to to check.</param>
-    public static bool IsDotNet(Compilation compilation, Version maximumVersion)
+    public static bool IsDotNet(Compilation compilation)
+        => IsDotNet(compilation, minimumVersion: new Version(0, 0));
+
+    /// <summary>
+    /// Checks whether the compilation is for .NET.
+    /// </summary>
+    /// <param name="compilation">The compilation.</param>
+    /// <param name="minimumVersion">The minimum version to to check.</param>
+    public static bool IsDotNet(Compilation compilation, Version minimumVersion)
     {
         IAssemblySymbol? systemRuntime = compilation.GetTypeByMetadataName("System.Runtime.GCSettings")?.ContainingAssembly;
 
@@ -201,6 +216,6 @@ internal static class AnalyzerTools
         string name = systemRuntime.Identity.Name;
         Version version = systemRuntime.Identity.Version;
 
-        return name == "System.Runtime" && version < maximumVersion;
+        return name == "System.Runtime" && version >= minimumVersion;
     }
 }
