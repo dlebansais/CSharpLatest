@@ -84,13 +84,23 @@ public partial class CSL1011ImplementParamsCollection : DiagnosticAnalyzer
         if (Overrides.Any())
             return;
 
+        if (!IsUsed(context, MethodDeclaration, parameter))
+            return;
+
+        Location Location = parameter.GetLocation();
+
+        context.ReportDiagnostic(Diagnostic.Create(Rule, Location, methodSymbol.Name));
+    }
+
+    private static bool IsUsed(SyntaxNodeAnalysisContext context, MethodDeclarationSyntax methodDeclaration, ParameterSyntax parameter)
+    {
         SyntaxNode Body;
-        if (MethodDeclaration.Body is BlockSyntax MethodBlock)
+        if (methodDeclaration.Body is BlockSyntax MethodBlock)
             Body = MethodBlock;
-        else if (MethodDeclaration.ExpressionBody is ArrowExpressionClauseSyntax ExpressionBody)
+        else if (methodDeclaration.ExpressionBody is ArrowExpressionClauseSyntax ExpressionBody)
             Body = ExpressionBody;
         else
-            return;
+            return false;
 
         // Get the method operation (I could not figure out a way to get null here).
         IOperation Operation = Contract.AssertNotNull(context.SemanticModel.GetOperation(Body, context.CancellationToken));
@@ -98,12 +108,12 @@ public partial class CSL1011ImplementParamsCollection : DiagnosticAnalyzer
         // Get the parameter symbol (I could not figure out a way to get null here).
         IParameterSymbol ParameterSymbol = Contract.AssertNotNull(context.SemanticModel.GetDeclaredSymbol(parameter, context.CancellationToken));
 
+#pragma warning disable IDE0046 // Convert to conditional expression
         if (!IsSymbolUsed(Operation, ParameterSymbol))
-            return;
+            return false;
+#pragma warning restore IDE0046 // Convert to conditional expression
 
-        Location Location = parameter.GetLocation();
-
-        context.ReportDiagnostic(Diagnostic.Create(Rule, Location, methodSymbol.Name));
+        return true;
     }
 
     private static bool IsValidFramework(Compilation compilation)
