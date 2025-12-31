@@ -1,4 +1,4 @@
-﻿## Release 2.1.2
+﻿## Release 2.4.0
 
 ### New Rules
 
@@ -18,3 +18,4 @@ CSL1010 |  Usage   |   Error  | CSL1010InitAccessorNotSupportedInFieldBackedProp
 CSL1011 |  Usage   |  Warning | CSL1011ImplementParamsCollection, [Documentation](doc/CSL1011.md)
 CSL1012 |  Usage   |  Warning | CSL1012UseSystemThreadingLockToLock, [Documentation](doc/CSL1012.md)
 CSL1013 |  Usage   |  Warning | CSL1013ChangeExtensionFunctionToExtensionMember, [Documentation](doc/CSL1013.md)
+CSL1014 |  Style   |  Warning | CSL1014ConsiderUsingInheritDoc, [Documentation](doc/CSL1014.md)

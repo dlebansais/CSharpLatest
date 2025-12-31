@@ -44,6 +44,7 @@ To uninstall this analyzer, in Visual Studio:
 | [CSL1011](doc/CSL1011.md) | Implement `params` collection.                                   |
 | [CSL1012](doc/CSL1012.md) | Use `System.Threading.Lock` to lock.                             |
 | [CSL1013](doc/CSL1013.md) | Change extension function to extension member                    |
+| [CSL1014](doc/CSL1014.md) | Consider using `<inheritdoc />`                                  |
 
 ### CSL1000: Variables that are not modified should be made constants
 
@@ -92,3 +93,7 @@ Feature available since C# 13: [New lock object](https://learn.microsoft.com/en-
 ### CSL1013: Change extension function to extension member
 
 Feature available since C# 14: [Extension members](https://learn.microsoft.com/en-us/dotnet/csharp/whats-new/csharp-14#extension-members).
+
+### CSL1014: Consider using `<inheritdoc />`
+
+Improve your code documentation with Visual Studio 2022 full support of this tag.

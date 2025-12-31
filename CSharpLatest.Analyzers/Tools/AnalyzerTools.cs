@@ -210,4 +210,13 @@ internal static class AnalyzerTools
 
         return name == "System.Runtime" && version >= minimumVersion;
     }
+
+    /// <summary>
+    /// Checks whether a trivia is a doc trivia.
+    /// </summary>
+    /// <param name="trivia">The trivia.</param>
+    public static bool IsDocTrivia(SyntaxTrivia trivia)
+        => trivia.IsKind(SyntaxKind.SingleLineDocumentationCommentTrivia) ||
+           trivia.IsKind(SyntaxKind.DocumentationCommentExteriorTrivia) ||
+           trivia.IsKind(SyntaxKind.MultiLineDocumentationCommentTrivia);
 }

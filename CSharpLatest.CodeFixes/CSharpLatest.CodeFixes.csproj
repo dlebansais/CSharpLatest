@@ -8,14 +8,14 @@
         <Platforms>x64</Platforms>
 
         <RootNamespace>CSharpLatest</RootNamespace>
-        <Version>2.3.1</Version>
+        <Version>2.4.0</Version>
         <Authors>David Le Bansais</Authors>
         <Company />
         <Product />
         <Description>Roslyn-based code fixer</Description>
         <Copyright>Copyright © 2025 David Le Bansais</Copyright>
-        <AssemblyVersion>2.3.1.32</AssemblyVersion>
-        <FileVersion>2.3.1.32</FileVersion>
+        <AssemblyVersion>2.4.0.33</AssemblyVersion>
+        <FileVersion>2.4.0.33</FileVersion>
         <RepositoryUrl>https://github.com/dlebansais/CSharpLatest</RepositoryUrl>
         <SuppressTfmSupportBuildWarnings>true</SuppressTfmSupportBuildWarnings>
 

@@ -47,8 +47,6 @@ public partial class CSL1010InitAccessorNotSupportedInFieldBackedPropertyAttribu
     {
         context = Contract.AssertNotNull(context);
 
-        context = Contract.AssertNotNull(context);
-
         context.ConfigureGeneratedCodeAnalysis(GeneratedCodeAnalysisFlags.None);
         context.EnableConcurrentExecution();
 

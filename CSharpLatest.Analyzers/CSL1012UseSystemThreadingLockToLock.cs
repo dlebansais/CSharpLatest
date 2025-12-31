@@ -47,8 +47,6 @@ public partial class CSL1012UseSystemThreadingLockToLock : DiagnosticAnalyzer
     {
         context = Contract.AssertNotNull(context);
 
-        context = Contract.AssertNotNull(context);
-
         context.ConfigureGeneratedCodeAnalysis(GeneratedCodeAnalysisFlags.None);
         context.EnableConcurrentExecution();
 
@@ -85,11 +83,11 @@ public partial class CSL1012UseSystemThreadingLockToLock : DiagnosticAnalyzer
         MemberDeclarationSyntax MemberDeclaration = Contract.AssertNotNull(lockStatement.FirstAncestorOrSelf<MemberDeclarationSyntax>());
 
         // Get the member symbol.
-        if (context.SemanticModel.GetDeclaredSymbol(MemberDeclaration, context.CancellationToken) is not ISymbol MemberSymbolInfo)
+        if (context.SemanticModel.GetDeclaredSymbol(MemberDeclaration, context.CancellationToken) is not ISymbol MemberSymbol)
             return;
 
         // Ignore custom lock types declared in the same assembly.
-        if (SymbolEqualityComparer.Default.Equals(MemberSymbolInfo.ContainingAssembly, LockExpressionTypeSymbol.ContainingAssembly))
+        if (SymbolEqualityComparer.Default.Equals(MemberSymbol.ContainingAssembly, LockExpressionTypeSymbol.ContainingAssembly))
             return;
 
         Location Location = lockStatement.Expression.GetLocation();

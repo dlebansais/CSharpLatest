@@ -437,5 +437,32 @@ namespace CSharpLatest {
                 return ResourceManager.GetString("CSL1013AnalyzerTitle", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Consider using the &lt;inheritdoc/&gt; tag to document your code..
+        /// </summary>
+        internal static string CSL1014AnalyzerDescription {
+            get {
+                return ResourceManager.GetString("CSL1014AnalyzerDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Consider using the &lt;inheritdoc/&gt; tag to document &apos;{0}&apos;.
+        /// </summary>
+        internal static string CSL1014AnalyzerMessageFormat {
+            get {
+                return ResourceManager.GetString("CSL1014AnalyzerMessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Consider using the &lt;inheritdoc/&gt; tag.
+        /// </summary>
+        internal static string CSL1014AnalyzerTitle {
+            get {
+                return ResourceManager.GetString("CSL1014AnalyzerTitle", resourceCulture);
+            }
+        }
     }
 }

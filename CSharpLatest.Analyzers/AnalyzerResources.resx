@@ -285,4 +285,16 @@
     <value>Use System.Threading.Lock to lock</value>
     <comment>The title of the diagnostic.</comment>
   </data>
+  <data name="CSL1014AnalyzerDescription" xml:space="preserve">
+    <value>Consider using the &lt;inheritdoc/&gt; tag to document your code.</value>
+    <comment>An optional longer localizable description of the diagnostic.</comment>
+  </data>
+  <data name="CSL1014AnalyzerMessageFormat" xml:space="preserve">
+    <value>Consider using the &lt;inheritdoc/&gt; tag to document '{0}'</value>
+    <comment>The format-able message the diagnostic displays.</comment>
+  </data>
+  <data name="CSL1014AnalyzerTitle" xml:space="preserve">
+    <value>Consider using the &lt;inheritdoc/&gt; tag</value>
+    <comment>The title of the diagnostic.</comment>
+  </data>
 </root>

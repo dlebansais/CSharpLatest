@@ -5,7 +5,7 @@ namespace CSharpLatest.TestSuite;
 
 partial class Program
 {
-    [GeneratedCodeAttribute("CSharpLatest.Analyzers","2.3.1.32")]
+    [GeneratedCodeAttribute("CSharpLatest.Analyzers","2.4.0.33")]
     public partial int Test
     {
         get { return field; }
