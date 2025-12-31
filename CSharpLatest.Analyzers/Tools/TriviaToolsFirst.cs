@@ -1,6 +1,5 @@
 ﻿namespace CSharpLatest;
 
-using System;
 using System.Linq;
 using Microsoft.CodeAnalysis;
 
