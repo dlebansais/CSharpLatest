@@ -20,9 +20,6 @@ environment:
 # Value: <password to decrypt snk file>
   SnkPassword:
     secure: 1svE5KENguPZZA9WI7jqI4rFGWREjMTmt//xbbv+POFKS8BdTi/TE2zB7jU0e7BsYW8G1ZP/4NxjfvnM/EOuH/VxpbyUo8p6fayCu3fDKbLBAt7PWIRCy4mo7SWR0vHAw/Q6cFQHWfA7EVu7eVC66Q==
-  release_4_12_0_jobid: 1705li82toldr8gp
-  release_4_14_0_jobid: m9h7k5nkp83f9cl4
-  release_5_0_0_jobid: txn2isiebngdoc6f
   opencover_version: 4.7.1221
   codecov_uploader_version: 0.7.1
   report_generator_version: 5.2.0
@@ -60,9 +57,6 @@ before_build:
   - if '%APPVEYOR_PULL_REQUEST_NUMBER%'=='' C:/PROGRA~1/7-Zip/7z.exe e -p%SnkPassword% .signing\key.zip > nul
 # Get artifacts from previous release builds for different versions of the Microsoft.CodeAnalysis package.
   - ps: |-
-        $release_4_12_0_jobid = $env:release_4_12_0_jobid
-        $release_4_14_0_jobid = $env:release_4_14_0_jobid
-        $release_5_0_0_jobid = $env:release_5_0_0_jobid
         curl -OutFile Release-4-12-0.zip -Headers @{ Authorization = "Bearer $token" } -Uri "https://ci.appveyor.com/api/projects/dlebansais/CSharpLatest/artifacts/CSharpLatest.CodeFixes/bin/x64/Release-4-12-0/CSharpLatest-Release-4-12-0.zip?job=Release%2D4%2D12%2D0"
         curl -OutFile Release-4-14-0.zip -Headers @{ Authorization = "Bearer $token" } -Uri "https://ci.appveyor.com/api/projects/dlebansais/CSharpLatest/artifacts/CSharpLatest.CodeFixes/bin/x64/Release-4-14-0/CSharpLatest-Release-4-14-0.zip?job=Release%2D4%2D14%2D0"
         curl -OutFile Release-5-0-0.zip -Headers @{ Authorization = "Bearer $token" } -Uri "https://ci.appveyor.com/api/projects/dlebansais/CSharpLatest/artifacts/CSharpLatest.CodeFixes/bin/x64/Release-5-0-0/CSharpLatest-Release-5-0-0.zip?job=Release%2D5%2D0%2D0"
