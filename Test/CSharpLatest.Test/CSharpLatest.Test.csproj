@@ -28,7 +28,7 @@
         <AssemblyOriginatorKeyFile>..\..\signing.snk</AssemblyOriginatorKeyFile>
     </PropertyGroup>
 
-    <PropertyGroup Condition="'$(Configuration)' == 'Release-5-0-0' Or '$(Configuration)' == 'Debug' Or '$(Configuration)' == 'Release'">
+    <PropertyGroup Condition="'$(Configuration)' != 'Release-4-12-0' And '$(Configuration)' != 'Release-4-14-0'">
         <DefineConstants>$(DefineConstants);ENABLE_CSL1013</DefineConstants>
     </PropertyGroup>
 
@@ -70,7 +70,7 @@
         <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.14.0" />
     </ItemGroup>
 
-    <ItemGroup Condition="'$(Configuration)' == 'Release-5-0-0' Or '$(Configuration)' == 'Debug' Or '$(Configuration)' == 'Release'">
+    <ItemGroup Condition="'$(Configuration)' != 'Release-4-12-0' And '$(Configuration)' != 'Release-4-14-0'">
         <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="5.0.0" />
     </ItemGroup>
 
