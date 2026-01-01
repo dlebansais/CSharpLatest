@@ -57,9 +57,9 @@ before_build:
   - if '%APPVEYOR_PULL_REQUEST_NUMBER%'=='' C:/PROGRA~1/7-Zip/7z.exe e -p%SnkPassword% .signing\key.zip > nul
 # Get artifacts from previous release builds for different versions of the Microsoft.CodeAnalysis package.
   - ps: |-
-        if ($env:CONFIGURATION -eq 'Release') curl -OutFile Release-4-12-0.zip -Headers @{ Authorization = "Bearer $token" } -Uri "https://ci.appveyor.com/api/projects/dlebansais/CSharpLatest/artifacts/CSharpLatest.CodeFixes/bin/x64/Release-4-12-0/CSharpLatest-Release-4-12-0.zip?job=Release%2D4%2D12%2D0"
-        if ($env:CONFIGURATION -eq 'Release') curl -OutFile Release-4-14-0.zip -Headers @{ Authorization = "Bearer $token" } -Uri "https://ci.appveyor.com/api/projects/dlebansais/CSharpLatest/artifacts/CSharpLatest.CodeFixes/bin/x64/Release-4-14-0/CSharpLatest-Release-4-14-0.zip?job=Release%2D4%2D14%2D0"
-        if ($env:CONFIGURATION -eq 'Release') curl -OutFile Release-5-0-0.zip  -Headers @{ Authorization = "Bearer $token" } -Uri "https://ci.appveyor.com/api/projects/dlebansais/CSharpLatest/artifacts/CSharpLatest.CodeFixes/bin/x64/Release-5-0-0/CSharpLatest-Release-5-0-0.zip?job=Release%2D5%2D0%2D0"
+        if ($env:CONFIGURATION -eq 'Release') { curl -OutFile Release-4-12-0.zip -Headers @{ Authorization = "Bearer $token" } -Uri "https://ci.appveyor.com/api/projects/dlebansais/CSharpLatest/artifacts/CSharpLatest.CodeFixes/bin/x64/Release-4-12-0/CSharpLatest-Release-4-12-0.zip?job=Release%2D4%2D12%2D0" }
+        if ($env:CONFIGURATION -eq 'Release') { curl -OutFile Release-4-14-0.zip -Headers @{ Authorization = "Bearer $token" } -Uri "https://ci.appveyor.com/api/projects/dlebansais/CSharpLatest/artifacts/CSharpLatest.CodeFixes/bin/x64/Release-4-14-0/CSharpLatest-Release-4-14-0.zip?job=Release%2D4%2D14%2D0" }
+        if ($env:CONFIGURATION -eq 'Release') { curl -OutFile Release-5-0-0.zip  -Headers @{ Authorization = "Bearer $token" } -Uri "https://ci.appveyor.com/api/projects/dlebansais/CSharpLatest/artifacts/CSharpLatest.CodeFixes/bin/x64/Release-5-0-0/CSharpLatest-Release-5-0-0.zip?job=Release%2D5%2D0%2D0" }
   - |-
     if exist Release-4-12-0.zip C:/PROGRA~1/7-Zip/7z.exe -o%APPVEYOR_PROJECT_NAME%.CodeFixes/bin/x64/Release-4-12-0 e Release-4-12-0.zip
     if exist Release-4-14-0.zip C:/PROGRA~1/7-Zip/7z.exe -o%APPVEYOR_PROJECT_NAME%.CodeFixes/bin/x64/Release-4-14-0 e Release-4-14-0.zip
