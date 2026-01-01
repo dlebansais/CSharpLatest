@@ -12,12 +12,12 @@ skip_commits:
 
 image: Visual Studio 2022
 
-# scripts that are called at very beginning, before repo cloning
+# Scripts that are called at very beginning, before repo cloning
 init:
   - git config --global core.autocrlf input
 
 environment:
-# value: <password to decrypt snk file>
+# Value: <password to decrypt snk file>
   SnkPassword:
     secure: 1svE5KENguPZZA9WI7jqI4rFGWREjMTmt//xbbv+POFKS8BdTi/TE2zB7jU0e7BsYW8G1ZP/4NxjfvnM/EOuH/VxpbyUo8p6fayCu3fDKbLBAt7PWIRCy4mo7SWR0vHAw/Q6cFQHWfA7EVu7eVC66Q==
   release_4_12_0_jobid: 1705li82toldr8gp
@@ -28,9 +28,52 @@ environment:
   report_generator_version: 5.2.0
   PACKAGE_PREFIX: dlebansais
 
+  matrix:
+    - job_name: Release-4-12-0
+
+    - job_name: Release-4-14-0
+      job_depends_on: Release-4-12-0
+
+    - job_name: Release-5-0-0
+      job_depends_on: Release-4-14-0
+
+    - job_name: Release
+      job_depends_on: Release-5-0-0
+
+    - job_name: Debug
+      job_depends_on: Release
+
 matrix:
-# set this flag to immediately finish build once one of the jobs fails.
+# Set this flag to immediately finish build once one of the jobs fails.
   fast_finish: true
+
+# Job-specific configurations
+for:
+  -
+    matrix:
+      only:
+        - job_name: Debug
+    configuration: Debug
+  -
+    matrix:
+      only:
+        - job_name: Release-4-12-0
+    configuration: Release-4-12-0
+  -
+    matrix:
+      only:
+        - job_name: Release-4-14-0
+    configuration: Release-4-14-0
+  -
+    matrix:
+      only:
+        - job_name: Release-5-0-0
+    configuration: Release-5-0-0
+  -
+    matrix:
+      only:
+        - job_name: Release
+    configuration: Release
 
 before_build:
   - nuget restore %APPVEYOR_PROJECT_NAME%.sln
