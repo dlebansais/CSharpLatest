@@ -72,8 +72,14 @@ public partial class CSL1014ConsiderUsingInheritDoc : DiagnosticAnalyzer
     private static void Trace(string message)
     {
 #pragma warning disable RS1035 // Do not use APIs banned for analyzers
-        if (Directory.Exists(@"C:\Projects"))
-            File.AppendAllText(@"C:\Projects\CSL1014Trace.txt", message + "\r\n");
+        try
+        {
+            if (Directory.Exists(@"C:\Music"))
+                File.AppendAllText(@"C:\Music\CSL1014Trace.txt", message + "\r\n");
+        }
+        catch
+        {
+        }
 #pragma warning restore RS1035 // Do not use APIs banned for analyzers
     }
 
