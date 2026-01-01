@@ -63,9 +63,7 @@ before_build:
         $release_4_12_0_jobid = $env:release_4_12_0_jobid
         $release_4_14_0_jobid = $env:release_4_14_0_jobid
         $release_5_0_0_jobid = $env:release_5_0_0_jobid
-        $appveyorid = $env:APPVEYOR_BUILD_ID
-        echo appveyorid=$appveyorid
-        curl -OutFile Release-4-12-0.zip -Headers @{ Authorization = "Bearer $token" } -Uri "https://ci.appveyor.com/api/builds/$appveyorid/artifacts/bin/CSharpLatest-Release-4-12-0.zip"
+        curl -OutFile Release-4-12-0.zip -Headers @{ Authorization = "Bearer $token" } -Uri "https://ci.appveyor.com/api/projects/dlebansais/CSharpLatest/artifacts/bin/CSharpLatest-Release-4-12-0.zip?job=Configuration%3A+Release-4-12-0"
         curl -OutFile Release-4-12-0.zip -Headers @{ Authorization = "Bearer $token" } https://ci.appveyor.com/api/buildjobs/$release_4_12_0_jobid/artifacts/CSharpLatest.CodeFixes%2Fbin%2Fx64%2FRelease-4-12-0%2FCSharpLatest-Release-4-12-0.zip
         curl -OutFile Release-4-14-0.zip -Headers @{ Authorization = "Bearer $token" } https://ci.appveyor.com/api/buildjobs/$release_4_14_0_jobid/artifacts/CSharpLatest.CodeFixes%2Fbin%2Fx64%2FRelease-4-14-0%2FCSharpLatest-Release-4-14-0.zip
         curl -OutFile Release-5-0-0.zip -Headers @{ Authorization = "Bearer $token" } https://ci.appveyor.com/api/buildjobs/$release_5_0_0_jobid/artifacts/CSharpLatest.CodeFixes%2Fbin%2Fx64%2FRelease-5-0-0%2FCSharpLatest-Release-5-0-0.zip
