@@ -64,8 +64,8 @@ before_build:
         $release_4_14_0_jobid = $env:release_4_14_0_jobid
         $release_5_0_0_jobid = $env:release_5_0_0_jobid
         curl -OutFile Release-4-12-0.zip -Headers @{ Authorization = "Bearer $token" } -Uri "https://ci.appveyor.com/api/projects/dlebansais/CSharpLatest/artifacts/CSharpLatest.CodeFixes/bin/x64/Release-4-12-0/CSharpLatest-Release-4-12-0.zip?job=Release%2D4%2D12%2D0"
-        curl -OutFile Release-4-14-0.zip -Headers @{ Authorization = "Bearer $token" } -Uri "https://ci.appveyor.com/api/projects/dlebansais/CSharpLatest/artifacts/CSharpLatest.CodeFixes%2Fbin%2Fx64%2FRelease-4-14-0%2FCSharpLatest-Release-4-14-0.zip?job=Release%2D4%2D14%2D0"
-        curl -OutFile Release-5-0-0.zip -Headers @{ Authorization = "Bearer $token" } -Uri "https://ci.appveyor.com/api/projects/dlebansais/CSharpLatest/artifacts/CSharpLatest.CodeFixes%2Fbin%2Fx64%2FRelease-5-0-0%2FCSharpLatest-Release-5-0-0.zip?job=Release%2D5%2D0%2D0"
+        curl -OutFile Release-4-14-0.zip -Headers @{ Authorization = "Bearer $token" } -Uri "https://ci.appveyor.com/api/projects/dlebansais/CSharpLatest/artifacts/CSharpLatest.CodeFixes/bin/x64/Release-4-14-0/CSharpLatest-Release-4-14-0.zip?job=Release%2D4%2D14%2D0"
+        curl -OutFile Release-5-0-0.zip -Headers @{ Authorization = "Bearer $token" } -Uri "https://ci.appveyor.com/api/projects/dlebansais/CSharpLatest/artifacts/CSharpLatest.CodeFixes/bin/x64/Release-5-0-0/CSharpLatest-Release-5-0-0.zip?job=Release%2D5%2D0%2D0"
   - |-
     if exist Release-4-12-0.zip C:/PROGRA~1/7-Zip/7z.exe -o%APPVEYOR_PROJECT_NAME%.CodeFixes/bin/x64/Release-4-12-0/netstandard2.0 e Release-4-12-0.zip
     if exist Release-4-14-0.zip C:/PROGRA~1/7-Zip/7z.exe -o%APPVEYOR_PROJECT_NAME%.CodeFixes/bin/x64/Release-4-14-0/netstandard2.0 e Release-4-14-0.zip
