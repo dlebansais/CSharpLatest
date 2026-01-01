@@ -30,50 +30,27 @@ environment:
 
   matrix:
     - job_name: Release-4-12-0
+      configuration: Foo
 
     - job_name: Release-4-14-0
       job_depends_on: Release-4-12-0
+      configuration: Release-4-14-0
 
     - job_name: Release-5-0-0
       job_depends_on: Release-4-14-0
+      configuration: Release-5-0-0
 
     - job_name: Release
       job_depends_on: Release-5-0-0
+      configuration: Release
 
     - job_name: Debug
       job_depends_on: Release
+      configuration: Debug
 
 matrix:
 # Set this flag to immediately finish build once one of the jobs fails.
   fast_finish: true
-
-# Job-specific configurations
-for:
-  -
-    matrix:
-      only:
-        - job_name: Debug
-          configuration: Debug
-  -
-    matrix:
-      only:
-        - job_name: Release-4-12-0
-          configuration: Foo
-  -
-    matrix:
-      only:
-        - job_name: Release-4-14-0
-          configuration: Release-4-14-0
-  -
-    matrix:
-      only:
-        - job_name: Release-5-0-0
-          configuration: Release-5-0-0
-  -
-    matrix:
-      only:
-        - job_name: Release
-          configuration: Release
 
 before_build:
   - nuget restore %APPVEYOR_PROJECT_NAME%.sln
