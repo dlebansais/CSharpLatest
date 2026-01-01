@@ -13,7 +13,7 @@
         <Company />
         <Product />
         <Description>Roslyn-based code fixer</Description>
-        <Copyright>Copyright © 2025 David Le Bansais</Copyright>
+        <Copyright>Copyright © 2026 David Le Bansais</Copyright>
         <AssemblyVersion>2.4.2.35</AssemblyVersion>
         <FileVersion>2.4.2.35</FileVersion>
         <RepositoryUrl>https://github.com/dlebansais/CSharpLatest</RepositoryUrl>

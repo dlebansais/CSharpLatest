@@ -61,9 +61,9 @@ before_build:
         curl -OutFile Release-4-14-0.zip -Headers @{ Authorization = "Bearer $token" } -Uri "https://ci.appveyor.com/api/projects/dlebansais/CSharpLatest/artifacts/CSharpLatest.CodeFixes/bin/x64/Release-4-14-0/CSharpLatest-Release-4-14-0.zip?job=Release%2D4%2D14%2D0"
         curl -OutFile Release-5-0-0.zip  -Headers @{ Authorization = "Bearer $token" } -Uri "https://ci.appveyor.com/api/projects/dlebansais/CSharpLatest/artifacts/CSharpLatest.CodeFixes/bin/x64/Release-5-0-0/CSharpLatest-Release-5-0-0.zip?job=Release%2D5%2D0%2D0"
   - |-
-    if exist Release-4-12-0.zip C:/PROGRA~1/7-Zip/7z.exe -o%APPVEYOR_PROJECT_NAME%.CodeFixes/bin/x64/Release-4-12-0/netstandard2.0 e Release-4-12-0.zip
-    if exist Release-4-14-0.zip C:/PROGRA~1/7-Zip/7z.exe -o%APPVEYOR_PROJECT_NAME%.CodeFixes/bin/x64/Release-4-14-0/netstandard2.0 e Release-4-14-0.zip
-    if exist Release-5-0-0.zip C:/PROGRA~1/7-Zip/7z.exe -o%APPVEYOR_PROJECT_NAME%.CodeFixes/bin/x64/Release-5-0-0/netstandard2.0  e Release-5-0-0.zip
+    if exist Release-4-12-0.zip C:/PROGRA~1/7-Zip/7z.exe -o%APPVEYOR_PROJECT_NAME%.CodeFixes/bin/x64/Release-4-12-0 e Release-4-12-0.zip
+    if exist Release-4-14-0.zip C:/PROGRA~1/7-Zip/7z.exe -o%APPVEYOR_PROJECT_NAME%.CodeFixes/bin/x64/Release-4-14-0 e Release-4-14-0.zip
+    if exist Release-5-0-0.zip C:/PROGRA~1/7-Zip/7z.exe -o%APPVEYOR_PROJECT_NAME%.CodeFixes/bin/x64/Release-5-0-0  e Release-5-0-0.zip
 
 build:
   project: $(APPVEYOR_PROJECT_NAME).sln
@@ -105,11 +105,11 @@ after_test:
   - if '%APPVEYOR_REPO_BRANCH%/%CONFIGURATION%' == 'master/Release' call after-test.bat
 
 artifacts:
-  - path: $(APPVEYOR_PROJECT_NAME).CodeFixes\bin\x64\Release-4-12-0\netstandard2.0
+  - path: $(APPVEYOR_PROJECT_NAME).CodeFixes\bin\x64\Release-4-12-0
     name: $(APPVEYOR_PROJECT_NAME)-Release-4-12-0
-  - path: $(APPVEYOR_PROJECT_NAME).CodeFixes\bin\x64\Release-4-14-0\netstandard2.0
+  - path: $(APPVEYOR_PROJECT_NAME).CodeFixes\bin\x64\Release-4-14-0
     name: $(APPVEYOR_PROJECT_NAME)-Release-4-14-0
-  - path: $(APPVEYOR_PROJECT_NAME).CodeFixes\bin\x64\Release-5-0-0\netstandard2.0
+  - path: $(APPVEYOR_PROJECT_NAME).CodeFixes\bin\x64\Release-5-0-0
     name: $(APPVEYOR_PROJECT_NAME)-Release-5-0-0
   - path: $(APPVEYOR_PROJECT_NAME).Package\bin\x64\Debug\$(PACKAGE_PREFIX).$(APPVEYOR_PROJECT_NAME)-Debug.*.nupkg
     name: $(APPVEYOR_PROJECT_NAME)-Package-Debug
