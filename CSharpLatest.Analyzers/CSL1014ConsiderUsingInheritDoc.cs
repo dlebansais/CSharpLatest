@@ -70,9 +70,12 @@ public partial class CSL1014ConsiderUsingInheritDoc : DiagnosticAnalyzer
     private void AnalyzeProperty(SyntaxNodeAnalysisContext context) => AnalyzerTools.AssertSyntaxRequirements<PropertyDeclarationSyntax>(context, LanguageVersion.CSharp6, AnalyzeVerifiedProperty);
 
     private static void Trace(string message)
+    {
 #pragma warning disable RS1035 // Do not use APIs banned for analyzers
-        => File.AppendAllText(@"C:\Projects\CSL1014Trace.txt", message + "\r\n");
+        if (Directory.Exists(@"C:\Projects"))
+            File.AppendAllText(@"C:\Projects\CSL1014Trace.txt", message + "\r\n");
 #pragma warning restore RS1035 // Do not use APIs banned for analyzers
+    }
 
     private void AnalyzeVerifiedMethod(SyntaxNodeAnalysisContext context, MethodDeclarationSyntax methodDeclaration, IEnumerable<IAnalysisAssertion> analysisAssertions)
     {
