@@ -2,7 +2,6 @@
 
 using System.Collections.Generic;
 using System.Collections.Immutable;
-using System.IO;
 using System.Linq;
 using Contracts;
 using Microsoft.CodeAnalysis;
@@ -69,23 +68,8 @@ public partial class CSL1014ConsiderUsingInheritDoc : DiagnosticAnalyzer
 
     private void AnalyzeProperty(SyntaxNodeAnalysisContext context) => AnalyzerTools.AssertSyntaxRequirements<PropertyDeclarationSyntax>(context, LanguageVersion.CSharp6, AnalyzeVerifiedProperty);
 
-    private static void Trace(string message)
-    {
-#pragma warning disable RS1035 // Do not use APIs banned for analyzers
-        try
-        {
-            if (Directory.Exists(@"C:\Music"))
-                File.AppendAllText(@"C:\Music\CSL1014Trace.txt", message + "\r\n");
-        }
-        catch
-        {
-        }
-#pragma warning restore RS1035 // Do not use APIs banned for analyzers
-    }
-
     private void AnalyzeVerifiedMethod(SyntaxNodeAnalysisContext context, MethodDeclarationSyntax methodDeclaration, IEnumerable<IAnalysisAssertion> analysisAssertions)
     {
-        Trace("AnalyzeVerifiedMethod");
         IMethodSymbol MethodSymbol = Contract.AssertNotNull(context.SemanticModel.GetDeclaredSymbol(methodDeclaration, context.CancellationToken));
         AnalyzeVerifiedNode(context, methodDeclaration, MethodSymbol);
     }
@@ -125,38 +109,22 @@ public partial class CSL1014ConsiderUsingInheritDoc : DiagnosticAnalyzer
 
     private static void AnalyzeVerifiedNode(SyntaxNodeAnalysisContext context, MemberDeclarationSyntax memberDeclaration, ISymbol symbol)
     {
-        Trace($"AnalyzeVerifiedNode: {symbol.Name}");
-
         // Only analyze members that override a base member or implement an interface member.
         bool HasAncestor = symbol.IsOverride;
         bool HasInterface = ImplementsInterfaceMember(symbol);
-
-        Trace($"HasAncestor: {HasAncestor}, HasInterface: {HasInterface}");
-
         if (!HasAncestor && !HasInterface)
             return;
 
-        Trace("1");
-
         // Ignore symbols without documentation comments.
         string? XmlDoc = symbol.GetDocumentationCommentXml(expandIncludes: false);
-        Trace($"XmlDoc is null: {XmlDoc is null}");
-
         if (string.IsNullOrEmpty(XmlDoc))
             return;
 
-        Trace("2");
-
         XmlDoc = Contract.AssertNotNull(XmlDoc);
-
-        Trace($"XmlDoc: {XmlDoc}");
-        Trace(string.Empty);
 
         // Ignore documentation already containing <inheritdoc />.
         if (XmlDoc.Contains("<inheritdoc"))
             return;
-
-        Trace("3");
 
         // Gets the location of the documentation comment.
         SyntaxTriviaList xmlTrivia = memberDeclaration.GetLeadingTrivia();
@@ -168,21 +136,9 @@ public partial class CSL1014ConsiderUsingInheritDoc : DiagnosticAnalyzer
         string TrimmedLastTriviaString = LastTriviaString.TrimEnd('\r', '\n');
         int TrimmedLength = LastTriviaString.Length - TrimmedLastTriviaString.Length;
 
-        Trace($"TrimmedLength: {TrimmedLength}");
-
-        Trace("4");
-
         TextSpan DocSpan = TextSpan.FromBounds(First.FullSpan.Start, Last.Span.End - TrimmedLength);
-
-        Trace("5");
-
         Location DocLocation = Location.Create(context.Node.SyntaxTree, DocSpan);
-
-        Trace("6");
-
         context.ReportDiagnostic(Diagnostic.Create(Rule, DocLocation, symbol.Name));
-
-        Trace("7");
     }
 
     private static bool ImplementsInterfaceMember(ISymbol symbol)
