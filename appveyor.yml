@@ -29,24 +29,24 @@ environment:
   PACKAGE_PREFIX: dlebansais
 
   matrix:
+    - job_name: Debug
+      configuration: Debug
+
     - job_name: Release-4-12-0
+      job_group: Specific-Release-Group
       configuration: Release-4-12-0
 
     - job_name: Release-4-14-0
-      job_depends_on: Release-4-12-0
+      job_group: Specific-Release-Group
       configuration: Release-4-14-0
 
     - job_name: Release-5-0-0
-      job_depends_on: Release-4-14-0
+      job_group: Specific-Release-Group
       configuration: Release-5-0-0
 
     - job_name: Release
-      job_depends_on: Release-5-0-0
+      job_depends_on: Specific-Release-Group
       configuration: Release
-
-    - job_name: Debug
-      job_depends_on: Release
-      configuration: Debug
 
 matrix:
 # Set this flag to immediately finish build once one of the jobs fails.
