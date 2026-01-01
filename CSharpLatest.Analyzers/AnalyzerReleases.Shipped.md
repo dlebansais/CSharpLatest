@@ -1,4 +1,4 @@
-﻿## Release 2.4.1
+﻿## Release 2.4.2
 
 ### New Rules
 
