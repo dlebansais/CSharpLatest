@@ -106,11 +106,11 @@ after_test:
   - if '%APPVEYOR_REPO_BRANCH%/%CONFIGURATION%' == 'master/Release' call after-test.bat
 
 artifacts:
-  - path: $(APPVEYOR_PROJECT_NAME).CodeFixes\bin\x64\Release-4-12-0
+  - path: $(APPVEYOR_PROJECT_NAME).CodeFixes\bin\x64\Release-4-12-0\**
     name: $(APPVEYOR_PROJECT_NAME)-Release-4-12-0
-  - path: $(APPVEYOR_PROJECT_NAME).CodeFixes\bin\x64\Release-4-14-0
+  - path: $(APPVEYOR_PROJECT_NAME).CodeFixes\bin\x64\Release-4-14-0\**
     name: $(APPVEYOR_PROJECT_NAME)-Release-4-14-0
-  - path: $(APPVEYOR_PROJECT_NAME).CodeFixes\bin\x64\Release-5-0-0
+  - path: $(APPVEYOR_PROJECT_NAME).CodeFixes\bin\x64\Release-5-0-0\**
     name: $(APPVEYOR_PROJECT_NAME)-Release-5-0-0
   - path: $(APPVEYOR_PROJECT_NAME).Package\bin\x64\Debug\$(PACKAGE_PREFIX).$(APPVEYOR_PROJECT_NAME)-Debug.*.nupkg
     name: $(APPVEYOR_PROJECT_NAME)-Package-Debug
