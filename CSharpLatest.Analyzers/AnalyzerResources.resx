@@ -297,4 +297,16 @@
     <value>Consider using the &lt;inheritdoc/&gt; tag</value>
     <comment>The title of the diagnostic.</comment>
   </data>
+  <data name="CSL1015AnalyzerDescription" xml:space="preserve">
+    <value>Do not declare async methods that returns void instead of Task.</value>
+    <comment>An optional longer localizable description of the diagnostic.</comment>
+  </data>
+  <data name="CSL1015AnalyzerMessageFormat" xml:space="preserve">
+    <value>Avoid async void: method '{0}' should return Task</value>
+    <comment>The format-able message the diagnostic displays.</comment>
+  </data>
+  <data name="CSL1015AnalyzerTitle" xml:space="preserve">
+    <value>Do not declare async void methods</value>
+    <comment>The title of the diagnostic.</comment>
+  </data>
 </root>

@@ -158,5 +158,14 @@ namespace CSharpLatest {
                 return ResourceManager.GetString("CSL1013CodeFixTitle", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Change return type from &apos;void&apos; to &apos;Task&apos;.
+        /// </summary>
+        internal static string CSL1015CodeFixTitle {
+            get {
+                return ResourceManager.GetString("CSL1015CodeFixTitle", resourceCulture);
+            }
+        }
     }
 }

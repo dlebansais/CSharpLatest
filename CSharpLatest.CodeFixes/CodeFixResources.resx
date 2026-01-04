@@ -161,4 +161,8 @@
     <value>Remove unnecessary braces</value>
     <comment>The title of the code fix.</comment>
   </data>
+  <data name="CSL1015CodeFixTitle" xml:space="preserve">
+    <value>Change return type from 'void' to 'Task'</value>
+    <comment>The title of the code fix.</comment>
+  </data>
 </root>

@@ -1,4 +1,4 @@
-﻿## Release 2.4.4
+﻿## Release 2.5.0
 
 ### New Rules
 
@@ -19,3 +19,4 @@ CSL1011 |  Usage   |  Warning | CSL1011ImplementParamsCollection, [Documentation
 CSL1012 |  Usage   |  Warning | CSL1012UseSystemThreadingLockToLock, [Documentation](doc/CSL1012.md)
 CSL1013 |  Usage   |  Warning | CSL1013ChangeExtensionFunctionToExtensionMember, [Documentation](doc/CSL1013.md)
 CSL1014 |  Style   |  Warning | CSL1014ConsiderUsingInheritDoc, [Documentation](doc/CSL1014.md)
+CSL1015 |  Usage   |  Warning | CSL1015DoNotDeclareAsyncVoidMethods, [Documentation](doc/CSL1015.md)

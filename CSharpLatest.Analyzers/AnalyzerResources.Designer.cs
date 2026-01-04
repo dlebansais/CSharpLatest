@@ -464,5 +464,32 @@ namespace CSharpLatest {
                 return ResourceManager.GetString("CSL1014AnalyzerTitle", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not declare async methods that returns void instead of Task..
+        /// </summary>
+        internal static string CSL1015AnalyzerDescription {
+            get {
+                return ResourceManager.GetString("CSL1015AnalyzerDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Avoid async void: method &apos;{0}&apos; should return Task.
+        /// </summary>
+        internal static string CSL1015AnalyzerMessageFormat {
+            get {
+                return ResourceManager.GetString("CSL1015AnalyzerMessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not declare async void methods.
+        /// </summary>
+        internal static string CSL1015AnalyzerTitle {
+            get {
+                return ResourceManager.GetString("CSL1015AnalyzerTitle", resourceCulture);
+            }
+        }
     }
 }

@@ -19,7 +19,7 @@
     </PropertyGroup>
 
     <PropertyGroup>
-        <PackageVersion>2.4.4</PackageVersion>
+        <PackageVersion>2.5.0</PackageVersion>
         <Authors>David Le Bansais</Authors>
         <Company />
         <Product />
