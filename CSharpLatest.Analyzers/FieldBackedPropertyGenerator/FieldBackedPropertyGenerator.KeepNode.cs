@@ -15,7 +15,7 @@ using RoslynHelpers;
 /// <summary>
 /// Represents a code generator.
 /// </summary>
-public partial class PropertyGenerator
+public partial class FieldBackedPropertyGenerator
 {
     private static bool KeepNodeForPipeline(SyntaxNode syntaxNode, CancellationToken cancellationToken)
     {

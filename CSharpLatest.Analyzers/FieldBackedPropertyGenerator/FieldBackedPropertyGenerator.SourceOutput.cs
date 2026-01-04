@@ -7,7 +7,7 @@ using Microsoft.CodeAnalysis;
 /// <summary>
 /// Represents a code generator.
 /// </summary>
-public partial class PropertyGenerator
+public partial class FieldBackedPropertyGenerator
 {
     private static void OutputContractMethod(SourceProductionContext context, (GeneratorSettings Settings, ImmutableArray<PropertyModel> Models) modelAndSettings)
     {

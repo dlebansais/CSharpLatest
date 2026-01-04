@@ -7,7 +7,7 @@ using Microsoft.CodeAnalysis.Diagnostics;
 /// <summary>
 /// Represents a code generator.
 /// </summary>
-public partial class PropertyGenerator
+public partial class FieldBackedPropertyGenerator
 {
     /// <summary>
     /// The key in .csproj for the field prefix.

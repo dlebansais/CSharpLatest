@@ -55,7 +55,7 @@ internal static class TestHelper
             Options);
 
         // Create an instance of our incremental source generator.
-        PropertyGenerator Generator = new();
+        FieldBackedPropertyGenerator Generator = new();
 
         // The GeneratorDriver is used to run our generator against a compilation.
         GeneratorDriver Driver = CSharpGeneratorDriver.Create(Generator);

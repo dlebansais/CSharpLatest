@@ -7,7 +7,7 @@ using Microsoft.CodeAnalysis;
 /// Represents a code generator that handles <see cref="FieldBackedPropertyAttribute"/>.
 /// </summary>
 [Generator]
-public partial class PropertyGenerator : IIncrementalGenerator
+public partial class FieldBackedPropertyGenerator : IIncrementalGenerator
 {
     /// <inheritdoc cref="IIncrementalGenerator.Initialize"/>
     public void Initialize(IncrementalGeneratorInitializationContext context)

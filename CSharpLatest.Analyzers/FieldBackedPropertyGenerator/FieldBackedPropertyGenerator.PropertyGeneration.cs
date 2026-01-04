@@ -12,7 +12,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 /// <summary>
 /// Represents a code generator.
 /// </summary>
-public partial class PropertyGenerator
+public partial class FieldBackedPropertyGenerator
 {
     private static string GetGeneratedPropertyDeclaration(GeneratorAttributeSyntaxContext context, string symbolName, PropertyTextModel propertyTextModel)
     {

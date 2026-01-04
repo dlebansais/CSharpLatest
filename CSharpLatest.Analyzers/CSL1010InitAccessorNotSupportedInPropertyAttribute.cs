@@ -59,7 +59,7 @@ public partial class CSL1010InitAccessorNotSupportedInFieldBackedPropertyAttribu
             context,
             LanguageVersion.CSharp7,
             AnalyzeVerifiedNode,
-            new SimpleAnalysisAssertion(context => PropertyGenerator.GetFirstSupportedAttribute(context, (PropertyDeclarationSyntax)context.Node) is not null));
+            new SimpleAnalysisAssertion(context => FieldBackedPropertyGenerator.GetFirstSupportedAttribute(context, (PropertyDeclarationSyntax)context.Node) is not null));
     }
 
     private void AnalyzeVerifiedNode(SyntaxNodeAnalysisContext context, PropertyDeclarationSyntax propertyDeclaration, IEnumerable<IAnalysisAssertion> analysisAssertions)

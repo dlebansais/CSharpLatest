@@ -13,7 +13,7 @@ using RoslynHelpers;
 /// <summary>
 /// Represents a code generator.
 /// </summary>
-public partial class PropertyGenerator
+public partial class FieldBackedPropertyGenerator
 {
     private static PropertyModel TransformContractAttributes(GeneratorAttributeSyntaxContext context, CancellationToken cancellationToken)
     {
