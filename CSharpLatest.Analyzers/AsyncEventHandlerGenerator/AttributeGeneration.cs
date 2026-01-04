@@ -1,4 +1,4 @@
-﻿namespace CSharpLatest.FieldBackedProperty;
+﻿namespace CSharpLatest.AsyncEventHandler;
 
 /// <summary>
 /// Describes how to handle an attribute.

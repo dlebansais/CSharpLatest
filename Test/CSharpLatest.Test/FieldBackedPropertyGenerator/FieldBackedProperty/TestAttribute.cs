@@ -1,4 +1,4 @@
-﻿namespace CSharpLatest.PropertyGenerator.Test;
+﻿namespace CSharpLatest.FieldBackedPropertyGenerator.Test;
 
 using NUnit.Framework;
 

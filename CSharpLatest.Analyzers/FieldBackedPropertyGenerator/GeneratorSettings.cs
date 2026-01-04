@@ -1,4 +1,4 @@
-﻿namespace CSharpLatest;
+﻿namespace CSharpLatest.FieldBackedProperty;
 
 /// <summary>
 /// Represents the settings of the code generator.

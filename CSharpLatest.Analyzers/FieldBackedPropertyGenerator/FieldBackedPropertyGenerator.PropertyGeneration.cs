@@ -1,4 +1,4 @@
-﻿namespace CSharpLatest;
+﻿namespace CSharpLatest.FieldBackedProperty;
 
 using System;
 using System.CodeDom.Compiler;
@@ -14,7 +14,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 /// </summary>
 public partial class FieldBackedPropertyGenerator
 {
-    private static string GetGeneratedPropertyDeclaration(GeneratorAttributeSyntaxContext context, string symbolName, PropertyTextModel propertyTextModel)
+    private static string GetGeneratedPropertyDeclaration(GeneratorAttributeSyntaxContext context, string symbolName, PropertyAttributeModel propertyTextModel)
     {
         SyntaxNode TargetNode = context.TargetNode;
         PropertyDeclarationSyntax PropertyDeclaration = Contract.AssertOfType<PropertyDeclarationSyntax>(TargetNode);
@@ -166,7 +166,7 @@ public partial class FieldBackedPropertyGenerator
 
     private static void UpdateTrivia(ref SyntaxTriviaList triviaList) => triviaList = SyntaxFactory.TriviaList(SyntaxFactory.Space);
 
-    private static AccessorListSyntax GenerateAccessorList(string symbolName, PropertyTextModel propertyTextModel, bool isFieldKeywordSupported, SyntaxTriviaList tabTrivia, SyntaxTriviaList tabTriviaWithoutLineEnd, string tab)
+    private static AccessorListSyntax GenerateAccessorList(string symbolName, PropertyAttributeModel propertyTextModel, bool isFieldKeywordSupported, SyntaxTriviaList tabTrivia, SyntaxTriviaList tabTriviaWithoutLineEnd, string tab)
     {
         Debug.Assert(tabTriviaWithoutLineEnd.Count > 0);
 

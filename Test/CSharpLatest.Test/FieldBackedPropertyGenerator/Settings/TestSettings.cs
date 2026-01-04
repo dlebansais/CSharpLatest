@@ -1,10 +1,10 @@
-﻿namespace CSharpLatest.PropertyGenerator.Test;
+﻿namespace CSharpLatest.FieldBackedPropertyGenerator.Test;
 
 extern alias Analyzers;
 
 using NUnit.Framework;
-using FieldBackedPropertyGenerator = Analyzers::CSharpLatest.FieldBackedPropertyGenerator;
-using GeneratorSettingsEntry = Analyzers::CSharpLatest.GeneratorSettingsEntry;
+using FieldBackedPropertyGenerator = Analyzers::CSharpLatest.FieldBackedProperty.FieldBackedPropertyGenerator;
+using GeneratorSettingsEntry = Analyzers::CSharpLatest.FieldBackedProperty.GeneratorSettingsEntry;
 
 [TestFixture]
 internal class TestSettings

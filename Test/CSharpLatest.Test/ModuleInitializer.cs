@@ -3,7 +3,7 @@
 [assembly: DiscoverInternals]
 [assembly: Parallelize(Scope = ExecutionScope.MethodLevel)]
 
-namespace CSharpLatest.PropertyGenerator.Test;
+namespace CSharpLatest.Test;
 
 using System.Runtime.CompilerServices;
 using VerifyTests;

@@ -1,4 +1,4 @@
-﻿namespace CSharpLatest;
+﻿namespace CSharpLatest.FieldBackedProperty;
 
 using System.Linq;
 using Microsoft.CodeAnalysis;
@@ -22,9 +22,9 @@ public partial class FieldBackedPropertyGenerator : IIncrementalGenerator
         IncrementalValuesProvider<PropertyModel> pipeline = context.SyntaxProvider.ForAttributeWithMetadataName(
             fullyQualifiedMetadataName: FullyQualifiedMetadataName,
             predicate: KeepNodeForPipeline,
-            transform: TransformContractAttributes);
+            transform: TransformFieldBackedPropertyAttribute);
 
-        context.RegisterSourceOutput(settings.Combine(pipeline.Collect()), OutputContractMethod);
+        context.RegisterSourceOutput(settings.Combine(pipeline.Collect()), OutputFieldBackedMethod);
     }
 
     private static string FullyQualifiedMetadataName => $"{typeof(FieldBackedPropertyAttribute).Namespace}.{nameof(FieldBackedPropertyAttribute)}";

@@ -8,7 +8,7 @@
         <Platforms>x64</Platforms>
         <IsTestProject>true</IsTestProject>
 
-        <RootNamespace>CSharpLatest.PropertyGenerator.Test</RootNamespace>
+        <RootNamespace>CSharpLatest.Test</RootNamespace>
 
         <NeutralLanguage>en-US</NeutralLanguage>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>

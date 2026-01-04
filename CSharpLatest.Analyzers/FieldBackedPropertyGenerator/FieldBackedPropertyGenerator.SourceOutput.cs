@@ -1,4 +1,4 @@
-﻿namespace CSharpLatest;
+﻿namespace CSharpLatest.FieldBackedProperty;
 
 using System.Collections.Immutable;
 using System.Text;
@@ -9,7 +9,7 @@ using Microsoft.CodeAnalysis;
 /// </summary>
 public partial class FieldBackedPropertyGenerator
 {
-    private static void OutputContractMethod(SourceProductionContext context, (GeneratorSettings Settings, ImmutableArray<PropertyModel> Models) modelAndSettings)
+    private static void OutputFieldBackedMethod(SourceProductionContext context, (GeneratorSettings Settings, ImmutableArray<PropertyModel> Models) modelAndSettings)
     {
         foreach (PropertyModel Model in modelAndSettings.Models)
         {

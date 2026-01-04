@@ -1,7 +1,7 @@
-﻿namespace CSharpLatest;
+﻿namespace CSharpLatest.FieldBackedProperty;
 
 /// <summary>
-/// Represents the model of a property contract.
+/// Represents the model of a field backed property.
 /// </summary>
 /// <param name="Namespace">The namespace containing the class that contains the property.</param>
 /// <param name="ClassName">The name of the class containing the property.</param>
@@ -17,7 +17,7 @@ internal record PropertyModel(string Namespace,
                               string DeclarationTokens,
                               string FullClassName,
                               string SymbolName,
-                              PropertyTextModel PropertyTextModel,
+                              PropertyAttributeModel PropertyTextModel,
                               string Documentation,
                               string GeneratedPropertyDeclaration,
                               string GeneratedFieldDeclaration);

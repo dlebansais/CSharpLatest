@@ -1,12 +1,12 @@
-﻿namespace CSharpLatest.PropertyGenerator.Test;
+﻿namespace CSharpLatest.FieldBackedPropertyGenerator.Test;
 
 extern alias Analyzers;
 
 using System.Collections.Generic;
 using System.Reflection;
-using Analyzers::CSharpLatest;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
+using FieldBackedPropertyGenerator = Analyzers::CSharpLatest.FieldBackedProperty.FieldBackedPropertyGenerator;
 
 internal static class TestHelper
 {
