@@ -106,15 +106,11 @@ public partial class AsyncEventHandlerGenerator
         {
             string ModifierText = Modifier.Text;
             bool IsAccessModifier = ModifierText is "public" or "protected" or "internal" or "private" or "file";
-            bool IsOtherModifier = ModifierText is "virtual" or "override" or "sealed" or "required";
+            bool IsOtherModifier = ModifierText is "virtual" or "override" or "sealed";
 
             if (IsAccessModifier || IsOtherModifier)
                 AddModifier(ModifierTokens, Modifier, ref CurrentTrivia);
         }
-
-        SyntaxToken PartialModifierToken = SyntaxFactory.Identifier("partial");
-        PartialModifierToken = PartialModifierToken.WithLeadingTrivia(CurrentTrivia);
-        ModifierTokens.Add(PartialModifierToken);
 
         UpdateTrivia(ref CurrentTrivia);
 

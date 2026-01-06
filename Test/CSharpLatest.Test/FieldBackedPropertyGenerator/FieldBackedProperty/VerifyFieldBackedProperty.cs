@@ -5,7 +5,7 @@ using Microsoft.CodeAnalysis;
 using VerifyNUnit;
 using VerifyTests;
 
-internal static class VerifyEnsure
+internal static class VerifyFieldBackedProperty
 {
     // Use verify to snapshot test the source generator output.
     public static async Task<VerifyResult> Verify(GeneratorDriver driver) => await Verifier.Verify(driver);

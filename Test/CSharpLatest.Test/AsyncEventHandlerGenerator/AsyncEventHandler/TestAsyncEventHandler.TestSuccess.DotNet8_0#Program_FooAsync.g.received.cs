@@ -1,4 +1,4 @@
-﻿//HintName: Program_Test.g.cs
+﻿//HintName: Program_FooAsync.g.cs
 #nullable enable
 
 namespace CSharpLatest.TestSuite;
@@ -6,9 +6,9 @@ namespace CSharpLatest.TestSuite;
 partial class Program
 {
     [GeneratedCodeAttribute("CSharpLatest.Analyzers","2.5.0.37")]
-    protected partial int Test
+    public Task FooAsync()
     {
-        get => field;
-        set => field = value;
-    } = 0
+        await Task.Delay(0);
+    }
+
 }

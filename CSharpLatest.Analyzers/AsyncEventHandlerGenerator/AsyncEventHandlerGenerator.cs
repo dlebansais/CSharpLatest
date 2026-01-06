@@ -19,5 +19,5 @@ public partial class AsyncEventHandlerGenerator : IIncrementalGenerator
         context.RegisterSourceOutput(pipeline, OutputEventHandlerMethod);
     }
 
-    private static string FullyQualifiedMetadataName => $"{typeof(FieldBackedPropertyAttribute).Namespace}.{nameof(FieldBackedPropertyAttribute)}";
+    private static string FullyQualifiedMetadataName => $"{typeof(AsyncEventHandlerAttribute).Namespace}.{nameof(AsyncEventHandlerAttribute)}";
 }

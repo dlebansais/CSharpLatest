@@ -22,6 +22,10 @@ public partial class AsyncEventHandlerGenerator
         if (syntaxNode is not MethodDeclarationSyntax MethodDeclaration)
             return false;
 
+        // TODO: remove this.
+        if (syntaxNode is MethodDeclarationSyntax)
+            return false;
+
         // Ignore methods that are not in a class and a namespace.
         if ((syntaxNode.FirstAncestorOrSelf<ClassDeclarationSyntax>() is null &&
              syntaxNode.FirstAncestorOrSelf<StructDeclarationSyntax>() is null &&
@@ -63,9 +67,11 @@ public partial class AsyncEventHandlerGenerator
 
     private static void CheckValidAttribute(AttributeSyntax attribute, MethodDeclarationSyntax methodDeclaration, List<string> attributeNames)
     {
+        string AttributeName = AttributeHelper.ToAttributeName(attribute);
+
+        // If the attribute has arguments, validate them.
         if (attribute.ArgumentList is AttributeArgumentListSyntax AttributeArgumentList)
         {
-            string AttributeName = AttributeHelper.ToAttributeName(attribute);
             SeparatedSyntaxList<AttributeArgumentSyntax> AttributeArguments = AttributeArgumentList.Arguments;
 
             Dictionary<string, Func<MethodDeclarationSyntax, IReadOnlyList<AttributeArgumentSyntax>, AttributeValidityCheckResult>> ValidityVerifierTable = new()
@@ -89,6 +95,10 @@ public partial class AsyncEventHandlerGenerator
                 Contract.Assert(CheckResult.PositionOfFirstInvalidArgument >= -1);
                 Contract.Assert(CheckResult.PositionOfFirstInvalidArgument < AttributeArguments.Count);
             }
+        }
+        else
+        {
+            attributeNames.Add(AttributeName);
         }
     }
 

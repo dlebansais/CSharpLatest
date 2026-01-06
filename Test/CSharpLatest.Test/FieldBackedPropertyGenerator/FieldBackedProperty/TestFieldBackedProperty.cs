@@ -27,7 +27,7 @@ internal partial class Program
 
         // Pass the source code to the helper and snapshot test the output.
         GeneratorDriver Driver = TestHelper.GetDriver(Source);
-        VerifyResult Result = await VerifyEnsure.Verify(Driver).ConfigureAwait(false);
+        VerifyResult Result = await VerifyFieldBackedProperty.Verify(Driver).ConfigureAwait(false);
 
         Assert.That(Result.Files, Has.Exactly(1).Items);
     }
@@ -51,7 +51,7 @@ internal partial class Program
 
         // Pass the source code to the helper and snapshot test the output.
         GeneratorDriver Driver = TestHelper.GetDriver(Source, setFieldKeywordSupport: true);
-        VerifyResult Result = await VerifyEnsure.Verify(Driver).ConfigureAwait(false);
+        VerifyResult Result = await VerifyFieldBackedProperty.Verify(Driver).ConfigureAwait(false);
 
         Assert.That(Result.Files, Has.Exactly(1).Items);
     }
@@ -75,7 +75,7 @@ internal partial class Program
 
         // Pass the source code to the helper and snapshot test the output.
         GeneratorDriver Driver = TestHelper.GetDriver(Source);
-        VerifyResult Result = await VerifyEnsure.Verify(Driver).ConfigureAwait(false);
+        VerifyResult Result = await VerifyFieldBackedProperty.Verify(Driver).ConfigureAwait(false);
 
         Assert.That(Result.Files, Has.Exactly(1).Items);
     }
@@ -99,7 +99,7 @@ internal partial class Program
 
         // Pass the source code to the helper and snapshot test the output.
         GeneratorDriver Driver = TestHelper.GetDriver(Source, setFieldKeywordSupport: true);
-        VerifyResult Result = await VerifyEnsure.Verify(Driver).ConfigureAwait(false);
+        VerifyResult Result = await VerifyFieldBackedProperty.Verify(Driver).ConfigureAwait(false);
 
         Assert.That(Result.Files, Has.Exactly(1).Items);
     }
@@ -123,7 +123,7 @@ internal partial class Program
 
         // Pass the source code to the helper and snapshot test the output.
         GeneratorDriver Driver = TestHelper.GetDriver(Source);
-        VerifyResult Result = await VerifyEnsure.Verify(Driver).ConfigureAwait(false);
+        VerifyResult Result = await VerifyFieldBackedProperty.Verify(Driver).ConfigureAwait(false);
 
         Assert.That(Result.Files, Has.Exactly(1).Items);
     }
@@ -147,7 +147,7 @@ internal partial class Program
 
         // Pass the source code to the helper and snapshot test the output.
         GeneratorDriver Driver = TestHelper.GetDriver(Source, setFieldKeywordSupport: true);
-        VerifyResult Result = await VerifyEnsure.Verify(Driver).ConfigureAwait(false);
+        VerifyResult Result = await VerifyFieldBackedProperty.Verify(Driver).ConfigureAwait(false);
 
         Assert.That(Result.Files, Has.Exactly(1).Items);
     }
@@ -171,7 +171,7 @@ internal partial class Program
 
         // Pass the source code to the helper and snapshot test the output.
         GeneratorDriver Driver = TestHelper.GetDriver(Source);
-        VerifyResult Result = await VerifyEnsure.Verify(Driver).ConfigureAwait(false);
+        VerifyResult Result = await VerifyFieldBackedProperty.Verify(Driver).ConfigureAwait(false);
 
         Assert.That(Result.Files, Has.Exactly(1).Items);
     }
@@ -195,7 +195,7 @@ internal partial class Program
 
         // Pass the source code to the helper and snapshot test the output.
         GeneratorDriver Driver = TestHelper.GetDriver(Source, setFieldKeywordSupport: true);
-        VerifyResult Result = await VerifyEnsure.Verify(Driver).ConfigureAwait(false);
+        VerifyResult Result = await VerifyFieldBackedProperty.Verify(Driver).ConfigureAwait(false);
 
         Assert.That(Result.Files, Has.Exactly(1).Items);
     }
@@ -219,7 +219,7 @@ internal partial class Program
 
         // Pass the source code to the helper and snapshot test the output.
         GeneratorDriver Driver = TestHelper.GetDriver(Source);
-        VerifyResult Result = await VerifyEnsure.Verify(Driver).ConfigureAwait(false);
+        VerifyResult Result = await VerifyFieldBackedProperty.Verify(Driver).ConfigureAwait(false);
 
         Assert.That(Result.Files, Has.Exactly(1).Items);
     }
@@ -243,7 +243,7 @@ internal partial class Program
 
         // Pass the source code to the helper and snapshot test the output.
         GeneratorDriver Driver = TestHelper.GetDriver(Source, setFieldKeywordSupport: true);
-        VerifyResult Result = await VerifyEnsure.Verify(Driver).ConfigureAwait(false);
+        VerifyResult Result = await VerifyFieldBackedProperty.Verify(Driver).ConfigureAwait(false);
 
         Assert.That(Result.Files, Has.Exactly(1).Items);
     }
@@ -268,7 +268,7 @@ internal partial class Program
 
         // Pass the source code to the helper and snapshot test the output.
         GeneratorDriver Driver = TestHelper.GetDriver(Source);
-        VerifyResult Result = await VerifyEnsure.Verify(Driver).ConfigureAwait(false);
+        VerifyResult Result = await VerifyFieldBackedProperty.Verify(Driver).ConfigureAwait(false);
 
         Assert.That(Result.Files, Has.Exactly(1).Items);
     }
@@ -292,7 +292,7 @@ internal partial class Program
 
         // Pass the source code to the helper and snapshot test the output.
         GeneratorDriver Driver = TestHelper.GetDriver(Source, setFieldKeywordSupport: true);
-        VerifyResult Result = await VerifyEnsure.Verify(Driver).ConfigureAwait(false);
+        VerifyResult Result = await VerifyFieldBackedProperty.Verify(Driver).ConfigureAwait(false);
 
         Assert.That(Result.Files, Has.Exactly(1).Items);
     }
@@ -317,7 +317,7 @@ internal partial class Program
 
         // Pass the source code to the helper and snapshot test the output.
         GeneratorDriver Driver = TestHelper.GetDriver(Source);
-        VerifyResult Result = await VerifyEnsure.Verify(Driver).ConfigureAwait(false);
+        VerifyResult Result = await VerifyFieldBackedProperty.Verify(Driver).ConfigureAwait(false);
 
         Assert.That(Result.Files, Has.Exactly(1).Items);
     }
@@ -342,7 +342,7 @@ internal partial class Program
 
         // Pass the source code to the helper and snapshot test the output.
         GeneratorDriver Driver = TestHelper.GetDriver(Source, setFieldKeywordSupport: true);
-        VerifyResult Result = await VerifyEnsure.Verify(Driver).ConfigureAwait(false);
+        VerifyResult Result = await VerifyFieldBackedProperty.Verify(Driver).ConfigureAwait(false);
 
         Assert.That(Result.Files, Has.Exactly(1).Items);
     }
@@ -366,7 +366,7 @@ internal partial struct Program
 
         // Pass the source code to the helper and snapshot test the output.
         GeneratorDriver Driver = TestHelper.GetDriver(Source);
-        VerifyResult Result = await VerifyEnsure.Verify(Driver).ConfigureAwait(false);
+        VerifyResult Result = await VerifyFieldBackedProperty.Verify(Driver).ConfigureAwait(false);
 
         Assert.That(Result.Files, Has.Exactly(1).Items);
     }
@@ -390,7 +390,7 @@ internal partial record Program
 
         // Pass the source code to the helper and snapshot test the output.
         GeneratorDriver Driver = TestHelper.GetDriver(Source);
-        VerifyResult Result = await VerifyEnsure.Verify(Driver).ConfigureAwait(false);
+        VerifyResult Result = await VerifyFieldBackedProperty.Verify(Driver).ConfigureAwait(false);
 
         Assert.That(Result.Files, Has.Exactly(1).Items);
     }
@@ -414,7 +414,7 @@ internal partial record struct Program
 
         // Pass the source code to the helper and snapshot test the output.
         GeneratorDriver Driver = TestHelper.GetDriver(Source);
-        VerifyResult Result = await VerifyEnsure.Verify(Driver).ConfigureAwait(false);
+        VerifyResult Result = await VerifyFieldBackedProperty.Verify(Driver).ConfigureAwait(false);
 
         Assert.That(Result.Files, Has.Exactly(1).Items);
     }
@@ -438,7 +438,7 @@ internal partial class Program
 
         // Pass the source code to the helper and snapshot test the output.
         GeneratorDriver Driver = TestHelper.GetDriver(Source);
-        VerifyResult Result = await VerifyEnsure.Verify(Driver).ConfigureAwait(false);
+        VerifyResult Result = await VerifyFieldBackedProperty.Verify(Driver).ConfigureAwait(false);
 
         Assert.That(Result.Files, Has.Exactly(1).Items);
     }
@@ -462,7 +462,7 @@ internal partial class Program
 
         // Pass the source code to the helper and snapshot test the output.
         GeneratorDriver Driver = TestHelper.GetDriver(Source, setFieldKeywordSupport: true);
-        VerifyResult Result = await VerifyEnsure.Verify(Driver).ConfigureAwait(false);
+        VerifyResult Result = await VerifyFieldBackedProperty.Verify(Driver).ConfigureAwait(false);
 
         Assert.That(Result.Files, Has.Exactly(1).Items);
     }
@@ -486,7 +486,7 @@ internal partial class Program
 
         // Pass the source code to the helper and snapshot test the output.
         GeneratorDriver Driver = TestHelper.GetDriver(Source);
-        VerifyResult Result = await VerifyEnsure.Verify(Driver).ConfigureAwait(false);
+        VerifyResult Result = await VerifyFieldBackedProperty.Verify(Driver).ConfigureAwait(false);
 
         Assert.That(Result.Files, Has.Exactly(1).Items);
     }
@@ -510,7 +510,7 @@ internal partial class Program
 
         // Pass the source code to the helper and snapshot test the output.
         GeneratorDriver Driver = TestHelper.GetDriver(Source, setFieldKeywordSupport: true);
-        VerifyResult Result = await VerifyEnsure.Verify(Driver).ConfigureAwait(false);
+        VerifyResult Result = await VerifyFieldBackedProperty.Verify(Driver).ConfigureAwait(false);
 
         Assert.That(Result.Files, Has.Exactly(1).Items);
     }
@@ -534,7 +534,7 @@ internal partial class Program
 
         // Pass the source code to the helper and snapshot test the output.
         GeneratorDriver Driver = TestHelper.GetDriver(Source);
-        VerifyResult Result = await VerifyEnsure.Verify(Driver).ConfigureAwait(false);
+        VerifyResult Result = await VerifyFieldBackedProperty.Verify(Driver).ConfigureAwait(false);
 
         Assert.That(Result.Files, Has.Exactly(1).Items);
     }
@@ -558,7 +558,7 @@ internal partial class Program
 
         // Pass the source code to the helper and snapshot test the output.
         GeneratorDriver Driver = TestHelper.GetDriver(Source, setFieldKeywordSupport: true);
-        VerifyResult Result = await VerifyEnsure.Verify(Driver).ConfigureAwait(false);
+        VerifyResult Result = await VerifyFieldBackedProperty.Verify(Driver).ConfigureAwait(false);
 
         Assert.That(Result.Files, Has.Exactly(1).Items);
     }
@@ -582,7 +582,7 @@ internal partial class Program
 
         // Pass the source code to the helper and snapshot test the output.
         GeneratorDriver Driver = TestHelper.GetDriver(Source);
-        VerifyResult Result = await VerifyEnsure.Verify(Driver).ConfigureAwait(false);
+        VerifyResult Result = await VerifyFieldBackedProperty.Verify(Driver).ConfigureAwait(false);
 
         Assert.That(Result.Files, Has.Exactly(1).Items);
     }
@@ -606,7 +606,7 @@ internal partial class Program
 
         // Pass the source code to the helper and snapshot test the output.
         GeneratorDriver Driver = TestHelper.GetDriver(Source, setFieldKeywordSupport: true);
-        VerifyResult Result = await VerifyEnsure.Verify(Driver).ConfigureAwait(false);
+        VerifyResult Result = await VerifyFieldBackedProperty.Verify(Driver).ConfigureAwait(false);
 
         Assert.That(Result.Files, Has.Exactly(1).Items);
     }
@@ -630,7 +630,7 @@ internal partial class Program
 
         // Pass the source code to the helper and snapshot test the output.
         GeneratorDriver Driver = TestHelper.GetDriver(Source);
-        VerifyResult Result = await VerifyEnsure.Verify(Driver).ConfigureAwait(false);
+        VerifyResult Result = await VerifyFieldBackedProperty.Verify(Driver).ConfigureAwait(false);
 
         Assert.That(Result.Files, Has.Exactly(1).Items);
     }
@@ -654,7 +654,7 @@ internal partial class Program
 
         // Pass the source code to the helper and snapshot test the output.
         GeneratorDriver Driver = TestHelper.GetDriver(Source, setFieldKeywordSupport: true);
-        VerifyResult Result = await VerifyEnsure.Verify(Driver).ConfigureAwait(false);
+        VerifyResult Result = await VerifyFieldBackedProperty.Verify(Driver).ConfigureAwait(false);
 
         Assert.That(Result.Files, Has.Exactly(1).Items);
     }
@@ -678,7 +678,7 @@ internal partial class Program
 
         // Pass the source code to the helper and snapshot test the output.
         GeneratorDriver Driver = TestHelper.GetDriver(Source);
-        VerifyResult Result = await VerifyEnsure.Verify(Driver).ConfigureAwait(false);
+        VerifyResult Result = await VerifyFieldBackedProperty.Verify(Driver).ConfigureAwait(false);
 
         Assert.That(Result.Files, Has.Exactly(1).Items);
     }
@@ -702,7 +702,7 @@ internal partial class Program
 
         // Pass the source code to the helper and snapshot test the output.
         GeneratorDriver Driver = TestHelper.GetDriver(Source, setFieldKeywordSupport: true);
-        VerifyResult Result = await VerifyEnsure.Verify(Driver).ConfigureAwait(false);
+        VerifyResult Result = await VerifyFieldBackedProperty.Verify(Driver).ConfigureAwait(false);
 
         Assert.That(Result.Files, Has.Exactly(1).Items);
     }
@@ -726,7 +726,7 @@ internal partial class Program
 
         // Pass the source code to the helper and snapshot test the output.
         GeneratorDriver Driver = TestHelper.GetDriver(Source);
-        VerifyResult Result = await VerifyEnsure.Verify(Driver).ConfigureAwait(false);
+        VerifyResult Result = await VerifyFieldBackedProperty.Verify(Driver).ConfigureAwait(false);
 
         Assert.That(Result.Files, Has.Exactly(1).Items);
     }
@@ -750,7 +750,7 @@ internal partial class Program
 
         // Pass the source code to the helper and snapshot test the output.
         GeneratorDriver Driver = TestHelper.GetDriver(Source, setFieldKeywordSupport: true);
-        VerifyResult Result = await VerifyEnsure.Verify(Driver).ConfigureAwait(false);
+        VerifyResult Result = await VerifyFieldBackedProperty.Verify(Driver).ConfigureAwait(false);
 
         Assert.That(Result.Files, Has.Exactly(1).Items);
     }
@@ -774,7 +774,7 @@ internal partial class Program
 
         // Pass the source code to the helper and snapshot test the output.
         GeneratorDriver Driver = TestHelper.GetDriver(Source);
-        VerifyResult Result = await VerifyEnsure.Verify(Driver).ConfigureAwait(false);
+        VerifyResult Result = await VerifyFieldBackedProperty.Verify(Driver).ConfigureAwait(false);
 
         Assert.That(Result.Files, Has.Exactly(1).Items);
     }
@@ -798,7 +798,7 @@ internal partial class Program
 
         // Pass the source code to the helper and snapshot test the output.
         GeneratorDriver Driver = TestHelper.GetDriver(Source, setFieldKeywordSupport: true);
-        VerifyResult Result = await VerifyEnsure.Verify(Driver).ConfigureAwait(false);
+        VerifyResult Result = await VerifyFieldBackedProperty.Verify(Driver).ConfigureAwait(false);
 
         Assert.That(Result.Files, Has.Exactly(1).Items);
     }
@@ -822,7 +822,7 @@ internal partial class Program
 
         // Pass the source code to the helper and snapshot test the output.
         GeneratorDriver Driver = TestHelper.GetDriver(Source);
-        VerifyResult Result = await VerifyEnsure.Verify(Driver).ConfigureAwait(false);
+        VerifyResult Result = await VerifyFieldBackedProperty.Verify(Driver).ConfigureAwait(false);
 
         Assert.That(Result.Files, Has.Exactly(1).Items);
     }
@@ -846,7 +846,7 @@ internal partial class Program
 
         // Pass the source code to the helper and snapshot test the output.
         GeneratorDriver Driver = TestHelper.GetDriver(Source, setFieldKeywordSupport: true);
-        VerifyResult Result = await VerifyEnsure.Verify(Driver).ConfigureAwait(false);
+        VerifyResult Result = await VerifyFieldBackedProperty.Verify(Driver).ConfigureAwait(false);
 
         Assert.That(Result.Files, Has.Exactly(1).Items);
     }
@@ -870,7 +870,7 @@ internal partial class Program
 
         // Pass the source code to the helper and snapshot test the output.
         GeneratorDriver Driver = TestHelper.GetDriver(Source);
-        VerifyResult Result = await VerifyEnsure.Verify(Driver).ConfigureAwait(false);
+        VerifyResult Result = await VerifyFieldBackedProperty.Verify(Driver).ConfigureAwait(false);
 
         Assert.That(Result.Files, Has.Exactly(1).Items);
     }
@@ -894,7 +894,7 @@ internal partial class Program<T>
 
         // Pass the source code to the helper and snapshot test the output.
         GeneratorDriver Driver = TestHelper.GetDriver(Source);
-        VerifyResult Result = await VerifyEnsure.Verify(Driver).ConfigureAwait(false);
+        VerifyResult Result = await VerifyFieldBackedProperty.Verify(Driver).ConfigureAwait(false);
 
         Assert.That(Result.Files, Has.Exactly(1).Items);
     }
@@ -919,7 +919,7 @@ internal partial class Program<T>
 
         // Pass the source code to the helper and snapshot test the output.
         GeneratorDriver Driver = TestHelper.GetDriver(Source);
-        VerifyResult Result = await VerifyEnsure.Verify(Driver).ConfigureAwait(false);
+        VerifyResult Result = await VerifyFieldBackedProperty.Verify(Driver).ConfigureAwait(false);
 
         Assert.That(Result.Files, Has.Exactly(1).Items);
     }
@@ -944,7 +944,7 @@ internal partial class Program
 
         // Pass the source code to the helper and snapshot test the output.
         GeneratorDriver Driver = TestHelper.GetDriver(Source);
-        VerifyResult Result = await VerifyEnsure.Verify(Driver).ConfigureAwait(false);
+        VerifyResult Result = await VerifyFieldBackedProperty.Verify(Driver).ConfigureAwait(false);
 
         Assert.That(Result.Files, Has.Exactly(1).Items);
     }
@@ -979,7 +979,7 @@ internal partial class Program
 
         // Pass the source code to the helper and snapshot test the output.
         GeneratorDriver Driver = TestHelper.GetDriver(Source);
-        VerifyResult Result = await VerifyEnsure.Verify(Driver).ConfigureAwait(false);
+        VerifyResult Result = await VerifyFieldBackedProperty.Verify(Driver).ConfigureAwait(false);
 
         Assert.That(Result.Files, Has.Exactly(1).Items);
     }
@@ -1008,7 +1008,7 @@ internal partial class Program
 
         // Pass the source code to the helper and snapshot test the output.
         GeneratorDriver Driver = TestHelper.GetDriver(Source);
-        VerifyResult Result = await VerifyEnsure.Verify(Driver).ConfigureAwait(false);
+        VerifyResult Result = await VerifyFieldBackedProperty.Verify(Driver).ConfigureAwait(false);
 
         Assert.That(Result.Files, Has.Exactly(1).Items);
     }
@@ -1043,7 +1043,7 @@ internal partial class Program
 
         // Pass the source code to the helper and snapshot test the output.
         GeneratorDriver Driver = TestHelper.GetDriver(Source);
-        VerifyResult Result = await VerifyEnsure.Verify(Driver).ConfigureAwait(false);
+        VerifyResult Result = await VerifyFieldBackedProperty.Verify(Driver).ConfigureAwait(false);
 
         Assert.That(Result.Files, Has.Exactly(1).Items);
     }
@@ -1074,7 +1074,7 @@ internal partial class Program
 
         // Pass the source code to the helper and snapshot test the output.
         GeneratorDriver Driver = TestHelper.GetDriver(Source);
-        VerifyResult Result = await VerifyEnsure.Verify(Driver).ConfigureAwait(false);
+        VerifyResult Result = await VerifyFieldBackedProperty.Verify(Driver).ConfigureAwait(false);
 
         Assert.That(Result.Files, Has.Exactly(1).Items);
     }
@@ -1098,7 +1098,7 @@ internal partial class Program
 
         // Pass the source code to the helper and snapshot test the output.
         GeneratorDriver Driver = TestHelper.GetDriver(Source);
-        VerifyResult Result = await VerifyEnsure.Verify(Driver).ConfigureAwait(false);
+        VerifyResult Result = await VerifyFieldBackedProperty.Verify(Driver).ConfigureAwait(false);
 
         Assert.That(Result.Files, Has.Exactly(1).Items);
     }
@@ -1121,7 +1121,7 @@ internal partial class Program
 
         // Pass the source code to the helper and snapshot test the output.
         GeneratorDriver Driver = TestHelper.GetDriver(Source);
-        VerifyResult Result = await VerifyEnsure.Verify(Driver).ConfigureAwait(false);
+        VerifyResult Result = await VerifyFieldBackedProperty.Verify(Driver).ConfigureAwait(false);
 
         Assert.That(Result.Files, Has.Exactly(1).Items);
     }
@@ -1145,7 +1145,7 @@ internal partial class Program
 
         // Pass the source code to the helper and snapshot test the output.
         GeneratorDriver Driver = TestHelper.GetDriver(Source);
-        VerifyResult Result = await VerifyEnsure.Verify(Driver).ConfigureAwait(false);
+        VerifyResult Result = await VerifyFieldBackedProperty.Verify(Driver).ConfigureAwait(false);
 
         Assert.That(Result.Files, Has.Exactly(1).Items);
     }
@@ -1169,7 +1169,7 @@ internal partial class Program
 
         // Pass the source code to the helper and snapshot test the output.
         GeneratorDriver Driver = TestHelper.GetDriver(Source, setFieldKeywordSupport: true);
-        VerifyResult Result = await VerifyEnsure.Verify(Driver).ConfigureAwait(false);
+        VerifyResult Result = await VerifyFieldBackedProperty.Verify(Driver).ConfigureAwait(false);
 
         Assert.That(Result.Files, Has.Exactly(1).Items);
     }

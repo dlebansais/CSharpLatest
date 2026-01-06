@@ -31,7 +31,7 @@ public partial class AsyncEventHandlerGenerator
 
     private static MethodAttributeModel GetMethodAttribute(MethodDeclarationSyntax methodDeclaration)
     {
-        Collection<AttributeSyntax> MemberAttributes = AttributeHelper.GetMemberSupportedAttributes(context: null, methodDeclaration, [typeof(FieldBackedPropertyAttribute)]);
+        Collection<AttributeSyntax> MemberAttributes = AttributeHelper.GetMemberSupportedAttributes(context: null, methodDeclaration, [typeof(AsyncEventHandlerAttribute)]);
         AttributeValidityCheckResult? PropertyAttributeResult = null;
 
         foreach (AttributeSyntax Attribute in MemberAttributes)
@@ -39,6 +39,10 @@ public partial class AsyncEventHandlerGenerator
             {
                 IReadOnlyList<AttributeArgumentSyntax> AttributeArguments = AttributeArgumentList.Arguments;
                 PropertyAttributeResult = IsValidMethodAttribute(methodDeclaration, AttributeArguments);
+            }
+            else
+            {
+                PropertyAttributeResult = new(AttributeGeneration.Valid, (false, false, false), -1);
             }
 
         PropertyAttributeResult = Contract.AssertNotNull(PropertyAttributeResult);
