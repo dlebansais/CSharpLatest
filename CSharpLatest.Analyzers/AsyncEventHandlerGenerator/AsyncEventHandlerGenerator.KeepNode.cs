@@ -22,10 +22,6 @@ public partial class AsyncEventHandlerGenerator
         if (syntaxNode is not MethodDeclarationSyntax MethodDeclaration)
             return false;
 
-        // TODO: remove this.
-        if (syntaxNode is MethodDeclarationSyntax)
-            return false;
-
         // Ignore methods that are not in a class and a namespace.
         if ((syntaxNode.FirstAncestorOrSelf<ClassDeclarationSyntax>() is null &&
              syntaxNode.FirstAncestorOrSelf<StructDeclarationSyntax>() is null &&
