@@ -231,7 +231,7 @@ using CSharpLatest;
 
 public class SimpleTest
 {
-    [AsyncEventHandler(UseDispatcher = 0)]
+    [AsyncEventHandler]
     void FooAsync()
     {
     }
@@ -393,7 +393,34 @@ public class SimpleTest
     public async Task FooAsync()
     {
         await Task.Delay(0);
-        return this;
+    }
+}
+";
+
+        // Pass the source code to the helper and snapshot test the output.
+        GeneratorDriver Driver = TestHelper.GetDriver(Source);
+        VerifyResult Result = await VerifyNoGeneration.Verify(Driver).ConfigureAwait(false);
+
+        Assert.That(Result.Files, Has.Exactly(0).Items);
+    }
+
+    [NUnit.Framework.Test]
+    public async Task TestParameterWithModifier()
+    {
+        // The source code to test
+        const string Source = @"
+namespace Contracts.TestSuite;
+
+using System;
+using CSharpLatest;
+
+public class SimpleTest
+{
+    [AsyncEventHandler]
+    public async Task FooAsync(ref object sender)
+    {
+        sender = null;
+        await Task.Delay(0);
     }
 }
 ";

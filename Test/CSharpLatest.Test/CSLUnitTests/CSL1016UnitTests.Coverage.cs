@@ -6,7 +6,7 @@ extern alias Analyzers;
 
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using VerifyCS = CSharpAnalyzerVerifier<Analyzers::CSharpLatest.CSL1016HandlerAttributeIsMissingArgument>;
+using VerifyCS = CSharpAnalyzerVerifier<Analyzers::CSharpLatest.CSL1016UnsupportedUseOfTheAsyncEventHandlerAttribute>;
 
 internal partial class CSL1016UnitTests
 {

@@ -493,7 +493,7 @@ namespace CSharpLatest {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to AsyncEventHandlerAttribute is missing argument..
+        ///   Looks up a localized string similar to Unsupported use of the AsyncEventHandler attribute..
         /// </summary>
         internal static string CSL1016AnalyzerDescription {
             get {
@@ -502,7 +502,7 @@ namespace CSharpLatest {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Attribute &apos;{0}&apos; is missing argument.
+        ///   Looks up a localized string similar to Unsupported use of the &apos;{0}&apos; attribute.
         /// </summary>
         internal static string CSL1016AnalyzerMessageFormat {
             get {
@@ -511,7 +511,7 @@ namespace CSharpLatest {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to AsyncEventHandlerAttribute is missing argument.
+        ///   Looks up a localized string similar to Unsupported use of the AsyncEventHandler attribute.
         /// </summary>
         internal static string CSL1016AnalyzerTitle {
             get {

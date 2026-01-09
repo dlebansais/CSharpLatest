@@ -27,17 +27,11 @@ public partial class AsyncEventHandlerGenerator
         if (!IsInsideNamespaceAndClass(syntaxNode))
             return false;
 
-        // Ignore methods without the async modifier.
-        if (!MethodDeclaration.Modifiers.Any(modifier => modifier.IsKind(SyntaxKind.AsyncKeyword)))
+        if (!IsValidSignature(MethodDeclaration))
             return false;
 
-        // Ignore methods that do not return Task.
-        if (MethodDeclaration.ReturnType is not IdentifierNameSyntax ReturnTypeName ||
-            ReturnTypeName.Identifier.Text != "Task")
-            return false;
-
-        // Ignore methods without the Async prefix.
-        if (!MethodDeclaration.Identifier.Text.EndsWith("Async", StringComparison.Ordinal))
+        // Ignore methods with parameters that have modifiers.
+        if (IsMethodParametersWithModifier(MethodDeclaration))
             return false;
 
         // Because we set context to null, this check let pass attributes with the same name but from another assembly or namespace.
@@ -52,6 +46,24 @@ public partial class AsyncEventHandlerGenerator
                 syntaxNode.FirstAncestorOrSelf<RecordDeclarationSyntax>() is not null) &&
                 syntaxNode.FirstAncestorOrSelf<BaseNamespaceDeclarationSyntax>() is not null;
     }
+
+    private static bool IsValidSignature(MethodDeclarationSyntax methodDeclaration)
+    {
+        // Ignore methods without the async modifier.
+        if (!methodDeclaration.Modifiers.Any(modifier => modifier.IsKind(SyntaxKind.AsyncKeyword)))
+            return false;
+
+        // Ignore methods that do not return Task.
+        if (methodDeclaration.ReturnType is not IdentifierNameSyntax ReturnTypeName ||
+            ReturnTypeName.Identifier.Text != "Task")
+            return false;
+
+        // Ignore methods without the Async prefix.
+        return methodDeclaration.Identifier.Text.EndsWith("Async", StringComparison.Ordinal);
+    }
+
+    private static bool IsMethodParametersWithModifier(MethodDeclarationSyntax methodDeclaration)
+        => methodDeclaration.ParameterList.Parameters.Any(parameter => parameter.Modifiers.Any());
 
     /// <summary>
     /// Checks whether a method contains at least one attribute we support and returns its name.

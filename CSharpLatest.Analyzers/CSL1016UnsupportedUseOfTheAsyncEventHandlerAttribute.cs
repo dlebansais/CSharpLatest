@@ -1,7 +1,9 @@
 ﻿namespace CSharpLatest;
 
+using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.Linq;
 using Contracts;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -10,10 +12,10 @@ using Microsoft.CodeAnalysis.Diagnostics;
 using RoslynHelpers;
 
 /// <summary>
-/// Analyzer for rule CSL1016: AsyncEventHandlerAttribute is missing argument.
+/// Analyzer for rule CSL1016: Unsupported use of the AsyncEventHandler attribute.
 /// </summary>
 [DiagnosticAnalyzer(LanguageNames.CSharp)]
-public partial class CSL1016HandlerAttributeIsMissingArgument : DiagnosticAnalyzer
+public partial class CSL1016UnsupportedUseOfTheAsyncEventHandlerAttribute : DiagnosticAnalyzer
 {
     /// <summary>
     /// Diagnostic ID for this rule.
@@ -66,9 +68,29 @@ public partial class CSL1016HandlerAttributeIsMissingArgument : DiagnosticAnalyz
 
     private void AnalyzeVerifiedNode(SyntaxNodeAnalysisContext context, AttributeSyntax attribute, IEnumerable<IAnalysisAssertion> analysisAssertions)
     {
-        // No diagnostic if there is no or many argument.
-        if (attribute.ArgumentList is not AttributeArgumentListSyntax AttributeArgumentList || AttributeArgumentList.Arguments.Count > 0)
-            return;
+        // Diagnostic unless for a method.
+        if (attribute.FirstAncestorOrSelf<MethodDeclarationSyntax>() is MethodDeclarationSyntax MethodDeclaration)
+        {
+            // No diagnostic if there is no class/record/struct or namespace.
+            bool ValidEnvironment = (MethodDeclaration.FirstAncestorOrSelf<ClassDeclarationSyntax>() is not null ||
+                                     MethodDeclaration.FirstAncestorOrSelf<StructDeclarationSyntax>() is not null ||
+                                     MethodDeclaration.FirstAncestorOrSelf<RecordDeclarationSyntax>() is not null) &&
+                                    MethodDeclaration.FirstAncestorOrSelf<BaseNamespaceDeclarationSyntax>() is not null;
+
+            // No diagnostic if the signature is valid.
+            bool ValidSignature = MethodDeclaration.Modifiers.Any(modifier => modifier.IsKind(SyntaxKind.AsyncKeyword)) &&
+                                  MethodDeclaration.ReturnType is IdentifierNameSyntax ReturnTypeName &&
+                                  ReturnTypeName.Identifier.Text == "Task" &&
+                                  MethodDeclaration.Identifier.Text.EndsWith("Async", StringComparison.Ordinal);
+
+            // No diagnostic if there is no or many argument.
+            bool ValidArguments = attribute.ArgumentList is not AttributeArgumentListSyntax AttributeArgumentList || AttributeArgumentList.Arguments.Count > 0;
+
+            if (ValidEnvironment &&
+                ValidSignature &&
+                ValidArguments)
+                return;
+        }
 
         context.ReportDiagnostic(Diagnostic.Create(Rule, context.Node.GetLocation(), AttributeHelper.ToAttributeName(attribute)));
     }
