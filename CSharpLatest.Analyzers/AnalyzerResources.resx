@@ -309,4 +309,16 @@
     <value>Do not declare async void methods</value>
     <comment>The title of the diagnostic.</comment>
   </data>
+  <data name="CSL1016AnalyzerDescription" xml:space="preserve">
+    <value>AsyncEventHandlerAttribute is missing argument.</value>
+    <comment>An optional longer localizable description of the diagnostic.</comment>
+  </data>
+  <data name="CSL1016AnalyzerMessageFormat" xml:space="preserve">
+    <value>Attribute '{0}' is missing argument</value>
+    <comment>The format-able message the diagnostic displays.</comment>
+  </data>
+  <data name="CSL1016AnalyzerTitle" xml:space="preserve">
+    <value>AsyncEventHandlerAttribute is missing argument</value>
+    <comment>The title of the diagnostic.</comment>
+  </data>
 </root>

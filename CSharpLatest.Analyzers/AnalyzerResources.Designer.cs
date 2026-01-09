@@ -491,5 +491,32 @@ namespace CSharpLatest {
                 return ResourceManager.GetString("CSL1015AnalyzerTitle", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to AsyncEventHandlerAttribute is missing argument..
+        /// </summary>
+        internal static string CSL1016AnalyzerDescription {
+            get {
+                return ResourceManager.GetString("CSL1016AnalyzerDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Attribute &apos;{0}&apos; is missing argument.
+        /// </summary>
+        internal static string CSL1016AnalyzerMessageFormat {
+            get {
+                return ResourceManager.GetString("CSL1016AnalyzerMessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to AsyncEventHandlerAttribute is missing argument.
+        /// </summary>
+        internal static string CSL1016AnalyzerTitle {
+            get {
+                return ResourceManager.GetString("CSL1016AnalyzerTitle", resourceCulture);
+            }
+        }
     }
 }

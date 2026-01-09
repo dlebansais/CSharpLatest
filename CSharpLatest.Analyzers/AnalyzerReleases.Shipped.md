@@ -1,4 +1,4 @@
-﻿## Release 2.5.0
+﻿## Release 2.5.1
 
 ### New Rules
 
@@ -20,3 +20,4 @@ CSL1012 |  Usage   |  Warning | CSL1012UseSystemThreadingLockToLock, [Documentat
 CSL1013 |  Usage   |  Warning | CSL1013ChangeExtensionFunctionToExtensionMember, [Documentation](doc/CSL1013.md)
 CSL1014 |  Style   |  Warning | CSL1014ConsiderUsingInheritDoc, [Documentation](doc/CSL1014.md)
 CSL1015 |  Usage   |  Warning | CSL1015DoNotDeclareAsyncVoidMethods, [Documentation](doc/CSL1015.md)
+CSL1016 |  Usage   |   Error  | CSL1016HandlerAttributeIsMissingArgument, [Documentation](doc/CSL1016.md)

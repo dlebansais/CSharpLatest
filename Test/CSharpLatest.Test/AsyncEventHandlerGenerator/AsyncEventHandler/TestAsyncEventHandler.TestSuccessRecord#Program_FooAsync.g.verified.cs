@@ -7,7 +7,7 @@ using System.Diagnostics;
 
 partial record Program
 {
-    [GeneratedCodeAttribute("CSharpLatest.Analyzers","2.5.0.37")]
+    [GeneratedCodeAttribute("CSharpLatest.Analyzers","2.5.1.38")]
     public void Foo()
     {
         _ = Task.Run(async () =>

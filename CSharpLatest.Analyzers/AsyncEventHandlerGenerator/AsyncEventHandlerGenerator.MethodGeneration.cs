@@ -12,33 +12,6 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 /// </summary>
 public partial class AsyncEventHandlerGenerator
 {
-    /*
-    private static void Foo()
-    {
-        _ = 1;
-        Task.Run(async () =>
-        {
-            try
-            {
-                Task task = FooAsync();
-                await task.ConfigureAwait(false);
-                task.Exception
-            }
-            catch (System.Exception exception)
-            {
-                System.Diagnostics.Debug.WriteLine($"Fatal: exception in {{symbolName}}Async.\r\n{exception.Message}\r\n{exception.StackTrace}");
-                throw;
-            }
-        }).Wait();
-    }
-
-    private static async Task FooAsync()
-    {
-        _ = 1;
-        await Task.Delay(1000).ConfigureAwait(false);
-    }
-    */
-
     private static string GetGeneratedMethodDeclaration(GeneratorAttributeSyntaxContext context, string symbolName, MethodAttributeModel methodAttributeModel)
     {
         // Foo();
