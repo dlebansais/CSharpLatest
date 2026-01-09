@@ -48,19 +48,7 @@ Since the handler is asynchronous, it can be configured to decide whether to all
 
 ### Handling asynchronous exceptions
 
-There are two different ways async event handlers handle exceptions:
-
-+ **Await and rethrow (default)**: when the handler awaits the completion of an invocation, any exceptions will naturally be thrown on the same synchronization context. That usually means that exceptions being thrown would just crash the app, which is a behavior consistent with that of synchronous handlers (where exceptions being thrown will also crash the app).
-+ **Flow exceptions to task scheduler**: if a handler is configured to flow exceptions to the task scheduler, exceptions being thrown will not crash the app, but instead they will both become available through the exposed `AsyncEventHandler.ExecutionTask` as well as bubbling up to the `TaskScheduler.UnobservedTaskException`. This enables more advanced scenarios (such as having UI components bind to the task and display different results based on the outcome of the operation), but it is more complex to use correctly.
-
-The default behavior is having handlers await and rethrow exceptions. This can be configured via the `FlowExceptionsToTaskScheduler` property:
-
-```cs
-[AsyncEventHandler(FlowExceptionsToTaskScheduler = true)]
-async Task OnWebResponseAsync(object sender, NetworkEventArgs e)
-{
-}
-```
+When the handler awaits the completion of an invocation, any exceptions will naturally be thrown on the same synchronization context. That usually means that exceptions being thrown would just crash the app, which is a behavior consistent with that of synchronous handlers (where exceptions being thrown will also crash the app).
 
 ### WPF GUI thread
 

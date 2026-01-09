@@ -8,12 +8,14 @@ using Microsoft.CodeAnalysis;
 /// </summary>
 public partial class AsyncEventHandlerGenerator
 {
-    private static void OutputEventHandlerMethod(SourceProductionContext context, PropertyModel model)
+    private static void OutputEventHandlerMethod(SourceProductionContext context, MethodModel model)
     {
         string SourceText = $$"""
                 #nullable enable
 
                 namespace {{model.Namespace}};
+
+                using System.Diagnostics;
 
                 partial {{model.DeclarationTokens}} {{model.FullClassName}}
                 {
@@ -22,7 +24,7 @@ public partial class AsyncEventHandlerGenerator
                 """;
         SourceText = Replace(SourceText, "\r\n", "\n");
 
-        context.AddSource($"{model.ClassName}_{model.SymbolName}.g.cs", Microsoft.CodeAnalysis.Text.SourceText.From(SourceText, Encoding.UTF8));
+        context.AddSource($"{model.ClassName}_{model.SymbolName}Async.g.cs", Microsoft.CodeAnalysis.Text.SourceText.From(SourceText, Encoding.UTF8));
     }
 
     /// <summary>

@@ -49,7 +49,10 @@ using CSharpLatest;
 internal partial class Program
 {
     [AsyncEventHandler]
-    public partial static int Test { get; set; }
+    public static async Task FooAsync()
+    {
+        await Task.Delay(0);
+    }
 }
 ";
 
@@ -73,7 +76,10 @@ using CSharpLatest;
 internal partial class Program
 {
     [AsyncEventHandler]
-    protected partial int Test { get; set; }
+    protected async Task FooAsync()
+    {
+        await Task.Delay(0);
+    }
 }
 ";
 
@@ -97,7 +103,10 @@ using CSharpLatest;
 internal partial class Program
 {
     [AsyncEventHandler]
-    internal partial int Test { get; set; }
+    internal async Task FooAsync()
+    {
+        await Task.Delay(0);
+    }
 }
 ";
 
@@ -121,7 +130,10 @@ using CSharpLatest;
 internal partial class Program
 {
     [AsyncEventHandler]
-    file partial int Test { get; set; }
+    file async Task FooAsync()
+    {
+        await Task.Delay(0);
+    }
 }
 ";
 
@@ -145,7 +157,10 @@ using CSharpLatest;
 internal partial class Program
 {
     [AsyncEventHandler]
-    private partial int Test { get; set; }
+    private async Task FooAsync()
+    {
+        await Task.Delay(0);
+    }
 }
 ";
 
@@ -169,8 +184,11 @@ using CSharpLatest;
 internal partial class Program
 {
     [AsyncEventHandler]
-    partial
-    static int Test { get; set; }
+    public
+    static async Task FooAsync()
+    {
+        await Task.Delay(0);
+    }
 }
 ";
 
@@ -194,7 +212,10 @@ using CSharpLatest;
 internal partial struct Program
 {
     [AsyncEventHandler]
-    public partial int Test { get; set; }
+    public async Task FooAsync()
+    {
+        await Task.Delay(0);
+    }
 }
 ";
 
@@ -218,7 +239,10 @@ using CSharpLatest;
 internal partial record Program
 {
     [AsyncEventHandler]
-    public partial int Test { get; set; }
+    public async Task FooAsync()
+    {
+        await Task.Delay(0);
+    }
 }
 ";
 
@@ -242,7 +266,10 @@ using CSharpLatest;
 internal partial record struct Program
 {
     [AsyncEventHandler]
-    public partial int Test { get; set; }
+    public async Task FooAsync()
+    {
+        await Task.Delay(0);
+    }
 }
 ";
 
@@ -266,7 +293,10 @@ using CSharpLatest;
 internal partial class Program
 {
     [AsyncEventHandler]
-    public virtual partial int Test { get; set; }
+    public virtual async Task FooAsync()
+    {
+        await Task.Delay(0);
+    }
 }
 ";
 
@@ -290,7 +320,10 @@ using CSharpLatest;
 internal partial class Program
 {
     [AsyncEventHandler]
-    public override partial int Test { get; set; }
+    public override async Task FooAsync()
+    {
+        await Task.Delay(0);
+    }
 }
 ";
 
@@ -314,7 +347,10 @@ using CSharpLatest;
 internal partial class Program
 {
     [AsyncEventHandler]
-    public sealed partial int Test { get; set; }
+    public sealed async Task FooAsync()
+    {
+        await Task.Delay(0);
+    }
 }
 ";
 
@@ -338,7 +374,10 @@ using CSharpLatest;
 internal partial class Program
 {
     [AsyncEventHandler]
-    public partial unsafe int Test { get; set; }
+    public unsafe async Task FooAsync()
+    {
+        await Task.Delay(0);
+    }
 }
 ";
 
@@ -350,7 +389,7 @@ internal partial class Program
     }
 
     [NUnit.Framework.Test]
-    public async Task TestNoGetter()
+    public async Task TestWaitUntilCompletion()
     {
         // The source code to test
         const string Source = @"
@@ -361,8 +400,11 @@ using CSharpLatest;
 
 internal partial class Program
 {
-    [AsyncEventHandler]
-    public partial int Test { set; }
+    [AsyncEventHandler(WaitUntilCompletion = true)]
+    public async Task FooAsync()
+    {
+        await Task.Delay(0);
+    }
 }
 ";
 
@@ -374,7 +416,7 @@ internal partial class Program
     }
 
     [NUnit.Framework.Test]
-    public async Task TestNoSetter()
+    public async Task TestWaitUntilCompletionFalse()
     {
         // The source code to test
         const string Source = @"
@@ -385,8 +427,92 @@ using CSharpLatest;
 
 internal partial class Program
 {
-    [AsyncEventHandler]
-    public partial int Test { get; }
+    [AsyncEventHandler(WaitUntilCompletion = false)]
+    public async Task FooAsync()
+    {
+        await Task.Delay(0);
+    }
+}
+";
+
+        // Pass the source code to the helper and snapshot test the output.
+        GeneratorDriver Driver = TestHelper.GetDriver(Source);
+        VerifyResult Result = await VerifyAsyncEventHandler.Verify(Driver).ConfigureAwait(false);
+
+        Assert.That(Result.Files, Has.Exactly(1).Items);
+    }
+
+    [NUnit.Framework.Test]
+    public async Task TestWaitUntilCompletionAndUseDispatcher()
+    {
+        // The source code to test
+        const string Source = @"
+namespace CSharpLatest.TestSuite;
+
+using System;
+using CSharpLatest;
+
+internal partial class Program
+{
+    [AsyncEventHandler(WaitUntilCompletion = true, UseDispatcher = true)]
+    public async Task FooAsync()
+    {
+        await Task.Delay(0);
+    }
+}
+";
+
+        // Pass the source code to the helper and snapshot test the output.
+        GeneratorDriver Driver = TestHelper.GetDriver(Source);
+        VerifyResult Result = await VerifyAsyncEventHandler.Verify(Driver).ConfigureAwait(false);
+
+        Assert.That(Result.Files, Has.Exactly(1).Items);
+    }
+
+    [NUnit.Framework.Test]
+    public async Task TestUseDispatcher()
+    {
+        // The source code to test
+        const string Source = @"
+namespace CSharpLatest.TestSuite;
+
+using System;
+using CSharpLatest;
+
+internal partial class Program
+{
+    [AsyncEventHandler(UseDispatcher = true)]
+    public async Task FooAsync()
+    {
+        await Task.Delay(0);
+    }
+}
+";
+
+        // Pass the source code to the helper and snapshot test the output.
+        GeneratorDriver Driver = TestHelper.GetDriver(Source);
+        VerifyResult Result = await VerifyAsyncEventHandler.Verify(Driver).ConfigureAwait(false);
+
+        Assert.That(Result.Files, Has.Exactly(1).Items);
+    }
+
+    [NUnit.Framework.Test]
+    public async Task TestUseDispatcherFalse()
+    {
+        // The source code to test
+        const string Source = @"
+namespace CSharpLatest.TestSuite;
+
+using System;
+using CSharpLatest;
+
+internal partial class Program
+{
+    [AsyncEventHandler(UseDispatcher = false)]
+    public async Task FooAsync()
+    {
+        await Task.Delay(0);
+    }
 }
 ";
 
@@ -410,7 +536,10 @@ using CSharpLatest;
 internal partial class Program<T>
 {
     [AsyncEventHandler]
-    public partial int Test { get; set; }
+    public async Task FooAsync()
+    {
+        await Task.Delay(0);
+    }
 }
 ";
 
@@ -435,7 +564,10 @@ internal partial class Program<T>
     where T : class
 {
     [AsyncEventHandler]
-    public partial int Test { get; set; }
+    public async Task FooAsync()
+    {
+        await Task.Delay(0);
+    }
 }
 ";
 
@@ -460,7 +592,10 @@ internal partial class Program
 {
     [AsyncEventHandler(UseDispatcher = true)]
     [AsyncEventHandler]
-    public partial int Test { get; set; }
+    public async Task FooAsync()
+    {
+        await Task.Delay(0);
+    }
 }
 ";
 
@@ -495,7 +630,10 @@ internal partial class Program
     /// <param name=""value"">The property value.</param>
     /// <returns>The getter.</returns>
     [AsyncEventHandler]
-    public partial int Test { get; set; }
+    public async Task FooAsync()
+    {
+        await Task.Delay(0);
+    }
 }
 ";
 
@@ -524,7 +662,10 @@ internal partial class Program
 /// <param name=""value"">The property value.</param>
 /// <returns>The getter.</returns>
     [AsyncEventHandler]
-    public partial int Test { get; set; }
+    public async Task FooAsync()
+    {
+        await Task.Delay(0);
+    }
 }
 ";
 
@@ -559,7 +700,10 @@ internal partial class Program
 /// <param name=""value"">The property value.</param>
 /// <returns>The getter.</returns>
     [AsyncEventHandler]
-    public partial int Test { get; set; }
+    public async Task FooAsync()
+    {
+        await Task.Delay(0);
+    }
 }
 ";
 
@@ -590,7 +734,10 @@ internal partial class Program
 
     /// <returns>The getter.</returns>
     [AsyncEventHandler]
-    public partial int Test { get; set; }
+    public async Task FooAsync()
+    {
+        await Task.Delay(0);
+    }
 }
 ";
 
@@ -614,7 +761,10 @@ using CSharpLatest;
 internal partial class Program
 {
 /**/[AsyncEventHandler]
-    public partial int Test { get; set; }
+    public async Task FooAsync()
+    {
+        await Task.Delay(0);
+    }
 }
 ";
 
@@ -637,31 +787,10 @@ using CSharpLatest;
 
 internal partial class Program
 {[AsyncEventHandler]
-    public partial int Test { get; set; }
-}
-";
-
-        // Pass the source code to the helper and snapshot test the output.
-        GeneratorDriver Driver = TestHelper.GetDriver(Source);
-        VerifyResult Result = await VerifyAsyncEventHandler.Verify(Driver).ConfigureAwait(false);
-
-        Assert.That(Result.Files, Has.Exactly(1).Items);
-    }
-
-    [NUnit.Framework.Test]
-    public async Task TestSuccessNoInitializer()
+    public async Task FooAsync()
     {
-        // The source code to test
-        const string Source = @"
-namespace CSharpLatest.TestSuite;
-
-using System;
-using CSharpLatest;
-
-internal partial class Program
-{
-    [AsyncEventHandler]
-    public partial int Test { get; set; }
+        await Task.Delay(0);
+    }
 }
 ";
 

@@ -3,6 +3,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Threading;
 using Contracts;
 using Microsoft.CodeAnalysis;
@@ -31,8 +32,18 @@ public partial class AsyncEventHandlerGenerator
             return false;
         }
 
-        // Ignore methods without modifier (it has to be async to work).
-        if (MethodDeclaration.Modifiers.Count == 0)
+        // Ignore methods without the async modifier.
+        if (!MethodDeclaration.Modifiers.Any(modifier => modifier.IsKind(SyntaxKind.AsyncKeyword)))
+            return false;
+
+        // Ignore methods that do not return Task.
+        if (MethodDeclaration.ReturnType is not IdentifierNameSyntax ReturnTypeName)
+            return false;
+        if (ReturnTypeName.Identifier.Text != "Task")
+            return false;
+
+        // Ignore methods without the Async prefix.
+        if (!MethodDeclaration.Identifier.Text.EndsWith("Async", StringComparison.Ordinal))
             return false;
 
         // Because we set context to null, this check let pass attributes with the same name but from another assembly or namespace.
@@ -52,10 +63,10 @@ public partial class AsyncEventHandlerGenerator
         Contract.RequireNotNull(methodDeclaration, out MethodDeclarationSyntax MethodDeclaration);
 
         // Get a list of all supported attributes for this method.
-        Collection<AttributeSyntax> PropertyAttributes = AttributeHelper.GetMemberSupportedAttributes(context, MethodDeclaration, [typeof(AsyncEventHandlerAttribute)]);
+        Collection<AttributeSyntax> MethodAttributes = AttributeHelper.GetMemberSupportedAttributes(context, MethodDeclaration, [typeof(AsyncEventHandlerAttribute)]);
         List<string> AttributeNames = [];
 
-        foreach (AttributeSyntax Attribute in PropertyAttributes)
+        foreach (AttributeSyntax Attribute in MethodAttributes)
             CheckValidAttribute(Attribute, MethodDeclaration, AttributeNames);
 
         return AttributeNames.Count > 0 ? AttributeNames[0] : null;
@@ -111,18 +122,17 @@ public partial class AsyncEventHandlerGenerator
             return AttributeValidityCheckResult.Invalid(-1);
 
         bool WaitUntilCompletion = false;
-        bool FlowExceptionsToTaskScheduler = false;
         bool UseDispatcher = false;
 
         for (int i = 0; i < AttributeArguments.Count; i++)
-            if (!IsValidAsyncEventHandlerArgument(AttributeArguments[i], ref WaitUntilCompletion, ref FlowExceptionsToTaskScheduler, ref UseDispatcher))
+            if (!IsValidAsyncEventHandlerArgument(AttributeArguments[i], ref WaitUntilCompletion, ref UseDispatcher))
                 return AttributeValidityCheckResult.Invalid(i);
 
-        AttributeValidityCheckResult Result = new(AttributeGeneration.Valid, (WaitUntilCompletion, FlowExceptionsToTaskScheduler, UseDispatcher), -1);
+        AttributeValidityCheckResult Result = new(AttributeGeneration.Valid, (WaitUntilCompletion, UseDispatcher), -1);
         return Result;
     }
 
-    private static bool IsValidAsyncEventHandlerArgument(AttributeArgumentSyntax attributeArgument, ref bool waitUntilCompletion, ref bool flowExceptionsToTaskScheduler, ref bool useDispatcher)
+    private static bool IsValidAsyncEventHandlerArgument(AttributeArgumentSyntax attributeArgument, ref bool waitUntilCompletion, ref bool useDispatcher)
     {
         if (attributeArgument.NameEquals is not NameEqualsSyntax NameEquals)
             return false;
@@ -134,8 +144,6 @@ public partial class AsyncEventHandlerGenerator
 
         if (ArgumentName == nameof(AsyncEventHandlerAttribute.WaitUntilCompletion))
             waitUntilCompletion = ArgumentValue;
-        else if (ArgumentName == nameof(AsyncEventHandlerAttribute.FlowExceptionsToTaskScheduler))
-            flowExceptionsToTaskScheduler = ArgumentValue;
         else if (ArgumentName == nameof(AsyncEventHandlerAttribute.UseDispatcher))
             useDispatcher = ArgumentValue;
         else

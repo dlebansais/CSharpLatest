@@ -2,6 +2,7 @@
 
 using System.CodeDom.Compiler;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Contracts;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -12,10 +13,36 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 /// </summary>
 public partial class AsyncEventHandlerGenerator
 {
+    /*
+    private static void Foo()
+    {
+        _ = 1;
+        Task.Run(async () =>
+        {
+            try
+            {
+                Task task = FooAsync();
+                await task.ConfigureAwait(false);
+                task.Exception
+            }
+            catch (System.Exception exception)
+            {
+                System.Diagnostics.Debug.WriteLine($"Fatal: exception in {{symbolName}}Async.\r\n{exception.Message}\r\n{exception.StackTrace}");
+                throw;
+            }
+        }).Wait();
+    }
+
+    private static async Task FooAsync()
+    {
+        _ = 1;
+        await Task.Delay(1000).ConfigureAwait(false);
+    }
+    */
+
     private static string GetGeneratedMethodDeclaration(GeneratorAttributeSyntaxContext context, string symbolName, MethodAttributeModel methodAttributeModel)
     {
-        _ = methodAttributeModel; // TODO: use
-
+        // Foo();
         SyntaxNode TargetNode = context.TargetNode;
         MethodDeclarationSyntax MethodDeclaration = Contract.AssertOfType<MethodDeclarationSyntax>(TargetNode);
 
@@ -27,14 +54,50 @@ public partial class AsyncEventHandlerGenerator
         SyntaxList<AttributeListSyntax> CodeAttributes = GenerateCodeAttributes();
         MethodDeclaration = MethodDeclaration.WithAttributeLists(CodeAttributes);
 
-        SyntaxToken SymbolIdentifier = SyntaxFactory.Identifier(symbolName);
+        MethodDeclaration = MethodDeclaration.WithReturnType(SyntaxFactory.PredefinedType(SyntaxFactory.Token(SyntaxKind.VoidKeyword)));
+
+        SyntaxToken SymbolIdentifier = SyntaxFactory.Identifier(symbolName).WithLeadingTrivia(SyntaxFactory.Whitespace(" "));
         MethodDeclaration = MethodDeclaration.WithIdentifier(SymbolIdentifier);
 
         SyntaxTokenList Modifiers = GenerateMethodModifiers(MethodDeclaration, LeadingTrivia, TrailingTrivia);
         MethodDeclaration = MethodDeclaration.WithModifiers(Modifiers);
         MethodDeclaration = MethodDeclaration.WithLeadingTrivia(LeadingTriviaWithoutLineEnd);
+        MethodDeclaration = MethodDeclaration.WithBody(null);
+        MethodDeclaration = MethodDeclaration.WithExpressionBody(SyntaxFactory.ArrowExpressionClause(SyntaxFactory.LiteralExpression(SyntaxKind.TrueLiteralExpression)));
 
-        return MethodDeclaration.ToFullString();
+        string FullString = MethodDeclaration.ToFullString();
+        string Scheduler = methodAttributeModel.UseDispatcher
+            ? methodAttributeModel.WaitUntilCompletion
+              ? "_ = Dispatcher.Invoke"
+              : "_ = Dispatcher.BeginInvoke"
+            : methodAttributeModel.WaitUntilCompletion
+              ? "Task.Run"
+              : "_ = Task.Run";
+        string Waiter = !methodAttributeModel.UseDispatcher && methodAttributeModel.WaitUntilCompletion
+            ? ".Wait()"
+            : string.Empty;
+
+        string ReplacementText =
+        $$"""
+                {
+                    {{Scheduler}}(async () =>
+                    {
+                        try
+                        {
+                            await {{symbolName}}Async().ConfigureAwait(false);
+                        }
+                        catch (Exception exception)
+                        {
+                            Debug.WriteLine($"Fatal: exception in {{symbolName}}Async.\r\n{exception.Message}\r\n{exception.StackTrace}");
+                            throw;
+                        }
+                    }){{Waiter}};
+                }
+            """;
+
+        FullString = FullString.Replace("=>true", ReplacementText);
+
+        return FullString;
     }
 
     private static SyntaxTriviaList GetLeadingTriviaWithLineEnd(string tab)

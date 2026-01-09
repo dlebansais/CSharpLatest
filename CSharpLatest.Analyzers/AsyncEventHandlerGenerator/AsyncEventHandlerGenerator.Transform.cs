@@ -1,5 +1,6 @@
 ﻿namespace CSharpLatest.AsyncEventHandler;
 
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Threading;
@@ -14,15 +15,18 @@ using RoslynHelpers;
 /// </summary>
 public partial class AsyncEventHandlerGenerator
 {
-    private static PropertyModel TransformAsyncEventHandlerAttribute(GeneratorAttributeSyntaxContext context, CancellationToken cancellationToken)
+    private static MethodModel TransformAsyncEventHandlerAttribute(GeneratorAttributeSyntaxContext context, CancellationToken cancellationToken)
     {
         SyntaxNode TargetNode = context.TargetNode;
         MethodDeclarationSyntax MethodDeclaration = Contract.AssertOfType<MethodDeclarationSyntax>(TargetNode);
         string SymbolName = context.TargetSymbol.Name;
 
+        Contract.Assert(SymbolName.EndsWith("Async", StringComparison.Ordinal));
+        SymbolName = SymbolName[..^"Async".Length];
+
         MethodAttributeModel MethodAttributeModel = GetMethodAttribute(MethodDeclaration);
-        string GeneratedPropertyDeclaration = GetGeneratedMethodDeclaration(context, SymbolName, MethodAttributeModel);
-        PropertyModel Model = GetBareboneModel(context, MethodDeclaration, SymbolName, MethodAttributeModel, GeneratedPropertyDeclaration);
+        string GeneratedMethodDeclaration = GetGeneratedMethodDeclaration(context, SymbolName, MethodAttributeModel);
+        MethodModel Model = GetBareboneModel(context, MethodDeclaration, SymbolName, MethodAttributeModel, GeneratedMethodDeclaration);
         UpdateWithDocumentation(MethodDeclaration, ref Model);
 
         return Model;
@@ -31,32 +35,31 @@ public partial class AsyncEventHandlerGenerator
     private static MethodAttributeModel GetMethodAttribute(MethodDeclarationSyntax methodDeclaration)
     {
         Collection<AttributeSyntax> MemberAttributes = AttributeHelper.GetMemberSupportedAttributes(context: null, methodDeclaration, [typeof(AsyncEventHandlerAttribute)]);
-        AttributeValidityCheckResult? PropertyAttributeResult = null;
+        AttributeValidityCheckResult? MethodAttributeResult = null;
 
         foreach (AttributeSyntax Attribute in MemberAttributes)
             if (Attribute.ArgumentList is AttributeArgumentListSyntax AttributeArgumentList)
             {
                 IReadOnlyList<AttributeArgumentSyntax> AttributeArguments = AttributeArgumentList.Arguments;
-                PropertyAttributeResult = IsValidMethodAttribute(methodDeclaration, AttributeArguments);
+                MethodAttributeResult = IsValidMethodAttribute(methodDeclaration, AttributeArguments);
             }
             else
             {
-                PropertyAttributeResult = new(AttributeGeneration.Valid, (false, false, false), -1);
+                MethodAttributeResult = new(AttributeGeneration.Valid, (false, false), -1);
             }
 
-        PropertyAttributeResult = Contract.AssertNotNull(PropertyAttributeResult);
-        Contract.Assert(PropertyAttributeResult.Result == AttributeGeneration.Valid);
+        MethodAttributeResult = Contract.AssertNotNull(MethodAttributeResult);
+        Contract.Assert(MethodAttributeResult.Result == AttributeGeneration.Valid);
 
-        return new MethodAttributeModel(WaitUntilCompletion: PropertyAttributeResult.ArgumentValues.Item1,
-                                        FlowExceptionsToTaskScheduler: PropertyAttributeResult.ArgumentValues.Item2,
-                                        UseDispatcher: PropertyAttributeResult.ArgumentValues.Item3);
+        return new MethodAttributeModel(WaitUntilCompletion: MethodAttributeResult.ArgumentValues.Item1,
+                                        UseDispatcher: MethodAttributeResult.ArgumentValues.Item2);
     }
 
-    private static PropertyModel GetBareboneModel(GeneratorAttributeSyntaxContext context,
+    private static MethodModel GetBareboneModel(GeneratorAttributeSyntaxContext context,
                                                   MethodDeclarationSyntax methodDeclaration,
                                                   string symbolName,
                                                   MethodAttributeModel methodAttributeModel,
-                                                  string generatedPropertyDeclaration)
+                                                  string generatedMethodDeclaration)
     {
         INamedTypeSymbol ContainingClass = Contract.AssertNotNull(context.TargetSymbol.ContainingType);
         INamespaceSymbol ContainingNamespace = Contract.AssertNotNull(ContainingClass.ContainingNamespace);
@@ -84,7 +87,7 @@ public partial class AsyncEventHandlerGenerator
             FullClassName = ClassNameWithTypeParameters(ClassName, RecordDeclaration.TypeParameterList, RecordDeclaration.ConstraintClauses);
         }
 
-        return new PropertyModel(
+        return new MethodModel(
             Namespace: Namespace,
             ClassName: ClassName,
             DeclarationTokens: Contract.AssertNotNull(DeclarationTokens),
@@ -92,7 +95,7 @@ public partial class AsyncEventHandlerGenerator
             SymbolName: symbolName,
             MethodAttributeModel: methodAttributeModel,
             Documentation: string.Empty,
-            GeneratedMethodDeclaration: generatedPropertyDeclaration);
+            GeneratedMethodDeclaration: generatedMethodDeclaration);
     }
 
     private static string ClassNameWithTypeParameters(string fullClassName, TypeParameterListSyntax? typeParameterList, SyntaxList<TypeParameterConstraintClauseSyntax> constraintClauses)
@@ -111,7 +114,7 @@ public partial class AsyncEventHandlerGenerator
         return Result;
     }
 
-    private static void UpdateWithDocumentation(MethodDeclarationSyntax methodDeclaration, ref PropertyModel model)
+    private static void UpdateWithDocumentation(MethodDeclarationSyntax methodDeclaration, ref MethodModel model)
     {
         if (methodDeclaration.HasLeadingTrivia)
         {

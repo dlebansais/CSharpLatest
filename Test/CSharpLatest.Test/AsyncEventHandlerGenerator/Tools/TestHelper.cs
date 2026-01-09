@@ -12,7 +12,7 @@ internal static class TestHelper
 {
     public static GeneratorDriver GetDriver(string source)
     {
-        CSharpParseOptions CSharpParseOptions = CSharpParseOptions.Default.WithLanguageVersion(LanguageVersion.CSharp5);
+        CSharpParseOptions CSharpParseOptions = CSharpParseOptions.Default.WithLanguageVersion(LanguageVersion.CSharp9);
 
         List<string> PreprocessorSymbols = [];
         CSharpParseOptions = CSharpParseOptions.WithPreprocessorSymbols(PreprocessorSymbols);

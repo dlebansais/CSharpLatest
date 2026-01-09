@@ -11,7 +11,6 @@ internal class TestAttribute
         AsyncEventHandlerAttribute Attribute = new();
 
         Assert.That(Attribute.WaitUntilCompletion, Is.False);
-        Assert.That(Attribute.FlowExceptionsToTaskScheduler, Is.False);
         Assert.That(Attribute.UseDispatcher, Is.False);
     }
 }

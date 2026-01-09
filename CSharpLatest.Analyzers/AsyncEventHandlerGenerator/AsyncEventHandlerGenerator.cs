@@ -11,7 +11,7 @@ public partial class AsyncEventHandlerGenerator : IIncrementalGenerator
     /// <inheritdoc cref="IIncrementalGenerator.Initialize"/>
     public void Initialize(IncrementalGeneratorInitializationContext context)
     {
-        IncrementalValuesProvider<PropertyModel> pipeline = context.SyntaxProvider.ForAttributeWithMetadataName(
+        IncrementalValuesProvider<MethodModel> pipeline = context.SyntaxProvider.ForAttributeWithMetadataName(
             fullyQualifiedMetadataName: FullyQualifiedMetadataName,
             predicate: KeepNodeForPipeline,
             transform: TransformAsyncEventHandlerAttribute);

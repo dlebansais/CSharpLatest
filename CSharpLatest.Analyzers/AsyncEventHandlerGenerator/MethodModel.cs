@@ -11,11 +11,11 @@
 /// <param name="MethodAttributeModel">The method attribute model.</param>
 /// <param name="Documentation">The method documentation, if any.</param>
 /// <param name="GeneratedMethodDeclaration">The generated method.</param>
-internal record PropertyModel(string Namespace,
-                              string ClassName,
-                              string DeclarationTokens,
-                              string FullClassName,
-                              string SymbolName,
-                              MethodAttributeModel MethodAttributeModel,
-                              string Documentation,
-                              string GeneratedMethodDeclaration);
+internal record MethodModel(string Namespace,
+                            string ClassName,
+                            string DeclarationTokens,
+                            string FullClassName,
+                            string SymbolName,
+                            MethodAttributeModel MethodAttributeModel,
+                            string Documentation,
+                            string GeneratedMethodDeclaration);
