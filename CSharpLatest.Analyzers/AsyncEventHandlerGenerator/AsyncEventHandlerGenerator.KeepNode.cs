@@ -24,22 +24,16 @@ public partial class AsyncEventHandlerGenerator
             return false;
 
         // Ignore methods that are not in a class and a namespace.
-        if ((syntaxNode.FirstAncestorOrSelf<ClassDeclarationSyntax>() is null &&
-             syntaxNode.FirstAncestorOrSelf<StructDeclarationSyntax>() is null &&
-             syntaxNode.FirstAncestorOrSelf<RecordDeclarationSyntax>() is null) ||
-            syntaxNode.FirstAncestorOrSelf<BaseNamespaceDeclarationSyntax>() is null)
-        {
+        if (!IsInsideNamespaceAndClass(syntaxNode))
             return false;
-        }
 
         // Ignore methods without the async modifier.
         if (!MethodDeclaration.Modifiers.Any(modifier => modifier.IsKind(SyntaxKind.AsyncKeyword)))
             return false;
 
         // Ignore methods that do not return Task.
-        if (MethodDeclaration.ReturnType is not IdentifierNameSyntax ReturnTypeName)
-            return false;
-        if (ReturnTypeName.Identifier.Text != "Task")
+        if (MethodDeclaration.ReturnType is not IdentifierNameSyntax ReturnTypeName ||
+            ReturnTypeName.Identifier.Text != "Task")
             return false;
 
         // Ignore methods without the Async prefix.
@@ -49,6 +43,14 @@ public partial class AsyncEventHandlerGenerator
         // Because we set context to null, this check let pass attributes with the same name but from another assembly or namespace.
         // That's ok, we'll catch them later.
         return GetFirstSupportedAttribute(context: null, MethodDeclaration) is not null;
+    }
+
+    private static bool IsInsideNamespaceAndClass(SyntaxNode syntaxNode)
+    {
+        return (syntaxNode.FirstAncestorOrSelf<ClassDeclarationSyntax>() is not null ||
+                syntaxNode.FirstAncestorOrSelf<StructDeclarationSyntax>() is not null ||
+                syntaxNode.FirstAncestorOrSelf<RecordDeclarationSyntax>() is not null) &&
+                syntaxNode.FirstAncestorOrSelf<BaseNamespaceDeclarationSyntax>() is not null;
     }
 
     /// <summary>

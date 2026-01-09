@@ -28,13 +28,8 @@ public partial class FieldBackedPropertyGenerator
         Contract.Assert(FieldPrefix != string.Empty);
 
         // Ignore properties that are not in a class and a namespace.
-        if ((syntaxNode.FirstAncestorOrSelf<ClassDeclarationSyntax>() is null &&
-             syntaxNode.FirstAncestorOrSelf<StructDeclarationSyntax>() is null &&
-             syntaxNode.FirstAncestorOrSelf<RecordDeclarationSyntax>() is null) ||
-            syntaxNode.FirstAncestorOrSelf<BaseNamespaceDeclarationSyntax>() is null)
-        {
+        if (!IsInsideNamespaceAndClass(syntaxNode))
             return false;
-        }
 
         // Ignore properties without modifier (it has to be partial to work).
         if (PropertyDeclaration.Modifiers.Count == 0)
@@ -46,13 +41,19 @@ public partial class FieldBackedPropertyGenerator
 
         // Ignore properties with init accessor.
         if (AccessorList.Accessors.Any(accessor => accessor.Keyword.IsKind(SyntaxKind.InitKeyword)))
-        {
             return false;
-        }
 
         // Because we set context to null, this check let pass attributes with the same name but from another assembly or namespace.
         // That's ok, we'll catch them later.
         return GetFirstSupportedAttribute(context: null, PropertyDeclaration) is not null;
+    }
+
+    private static bool IsInsideNamespaceAndClass(SyntaxNode syntaxNode)
+    {
+        return (syntaxNode.FirstAncestorOrSelf<ClassDeclarationSyntax>() is not null ||
+                syntaxNode.FirstAncestorOrSelf<StructDeclarationSyntax>() is not null ||
+                syntaxNode.FirstAncestorOrSelf<RecordDeclarationSyntax>() is not null) &&
+                syntaxNode.FirstAncestorOrSelf<BaseNamespaceDeclarationSyntax>() is not null;
     }
 
     /// <summary>

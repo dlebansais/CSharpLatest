@@ -248,7 +248,6 @@ internal partial class Program
         Assert.That(Result.Files, Has.Exactly(1).Items);
     }
 
-
     [NUnit.Framework.Test]
     public async Task TestPrivateNetFramework()
     {

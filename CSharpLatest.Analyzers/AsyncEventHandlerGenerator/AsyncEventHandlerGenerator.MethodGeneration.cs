@@ -2,7 +2,6 @@
 
 using System.CodeDom.Compiler;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using Contracts;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
