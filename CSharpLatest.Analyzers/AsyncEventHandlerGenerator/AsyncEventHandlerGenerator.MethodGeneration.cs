@@ -14,7 +14,6 @@ public partial class AsyncEventHandlerGenerator
 {
     private static string GetGeneratedMethodDeclaration(GeneratorAttributeSyntaxContext context, string symbolName, MethodAttributeModel methodAttributeModel)
     {
-        // Foo();
         SyntaxNode TargetNode = context.TargetNode;
         MethodDeclarationSyntax MethodDeclaration = Contract.AssertOfType<MethodDeclarationSyntax>(TargetNode);
 
@@ -48,6 +47,7 @@ public partial class AsyncEventHandlerGenerator
         string Waiter = !methodAttributeModel.UseDispatcher && methodAttributeModel.WaitUntilCompletion
             ? ".Wait()"
             : string.Empty;
+        string Arguments = GetMethodArguments(MethodDeclaration);
 
         string ReplacementText =
         $$"""
@@ -56,7 +56,7 @@ public partial class AsyncEventHandlerGenerator
                     {
                         try
                         {
-                            await {{symbolName}}Async().ConfigureAwait(false);
+                            await {{symbolName}}Async({{Arguments}}).ConfigureAwait(false);
                         }
                         catch (Exception exception)
                         {
@@ -70,6 +70,21 @@ public partial class AsyncEventHandlerGenerator
         FullString = FullString.Replace("=>true", ReplacementText);
 
         return FullString;
+    }
+
+    private static string GetMethodArguments(MethodDeclarationSyntax methodDeclaration)
+    {
+        string Arguments = string.Empty;
+
+        foreach (ParameterSyntax parameterSyntax in methodDeclaration.ParameterList.Parameters)
+        {
+            if (Arguments.Length > 0)
+                Arguments += ", ";
+
+            Arguments += parameterSyntax.Identifier.Text;
+        }
+
+        return Arguments;
     }
 
     private static SyntaxTriviaList GetLeadingTriviaWithLineEnd(string tab)

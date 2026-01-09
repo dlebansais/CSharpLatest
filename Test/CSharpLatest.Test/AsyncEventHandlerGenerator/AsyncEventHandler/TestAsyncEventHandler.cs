@@ -37,6 +37,34 @@ internal partial class Program
     }
 
     [NUnit.Framework.Test]
+    public async Task TestSuccessWithParameter()
+    {
+        // The source code to test
+        const string Source = @"
+namespace CSharpLatest.TestSuite;
+
+using System;
+using System.Threading.Tasks;
+using CSharpLatest;
+
+internal partial class Program
+{
+    [AsyncEventHandler]
+    public async Task FooAsync(object? sender, EventArgs args)
+    {
+        await Task.Delay(0);
+    }
+}
+";
+
+        // Pass the source code to the helper and snapshot test the output.
+        GeneratorDriver Driver = TestHelper.GetDriver(Source);
+        VerifyResult Result = await VerifyAsyncEventHandler.Verify(Driver).ConfigureAwait(false);
+
+        Assert.That(Result.Files, Has.Exactly(1).Items);
+    }
+
+    [NUnit.Framework.Test]
     public async Task TestStatic()
     {
         // The source code to test
