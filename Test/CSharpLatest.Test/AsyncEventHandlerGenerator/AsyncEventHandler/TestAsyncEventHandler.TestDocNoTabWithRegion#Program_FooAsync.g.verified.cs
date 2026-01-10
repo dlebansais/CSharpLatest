@@ -12,7 +12,7 @@ partial class Program
 /// </summary>
 /// <param name="value">The property value.</param>
 /// <returns>The getter.</returns>
-    [GeneratedCodeAttribute("CSharpLatest.Analyzers","2.5.1.38")]
+    [GeneratedCodeAttribute("CSharpLatest.Analyzers","2.6.0.39")]
     public void Foo()
     {
         _ = Task.Run(async () =>
