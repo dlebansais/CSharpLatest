@@ -1,4 +1,4 @@
-﻿namespace CSharpLatest.AsyncEventHandlerCodeGeneration;
+﻿namespace CSharpLatest.AsyncEventCodeGeneration;
 
 using System.CodeDom.Compiler;
 using System.Collections.Generic;
@@ -10,81 +10,54 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 /// <summary>
 /// Represents a code generator.
 /// </summary>
-public partial class AsyncEventHandlerGenerator
+public partial class AsyncEventGenerator
 {
-    private static string GetGeneratedMethodDeclaration(GeneratorAttributeSyntaxContext context, string symbolName, MethodAttributeModel methodAttributeModel)
+    private static string GetGeneratedEventDeclaration(GeneratorAttributeSyntaxContext context, string symbolName)
     {
         SyntaxNode TargetNode = context.TargetNode;
-        MethodDeclarationSyntax MethodDeclaration = Contract.AssertOfType<MethodDeclarationSyntax>(TargetNode);
+        EventDeclarationSyntax EventDeclaration = Contract.AssertOfType<EventDeclarationSyntax>(TargetNode);
 
         string Tab = "    ";
         SyntaxTriviaList LeadingTrivia = GetLeadingTriviaWithLineEnd(Tab);
         SyntaxTriviaList LeadingTriviaWithoutLineEnd = GetLeadingTriviaWithoutLineEnd(Tab);
-        SyntaxTriviaList TrailingTrivia = MethodDeclaration.Modifiers.Last().TrailingTrivia;
+        SyntaxTriviaList TrailingTrivia = EventDeclaration.Modifiers.Last().TrailingTrivia;
 
         SyntaxList<AttributeListSyntax> CodeAttributes = GenerateCodeAttributes();
-        MethodDeclaration = MethodDeclaration.WithAttributeLists(CodeAttributes);
-
-        MethodDeclaration = MethodDeclaration.WithReturnType(SyntaxFactory.PredefinedType(SyntaxFactory.Token(SyntaxKind.VoidKeyword)));
+        EventDeclaration = EventDeclaration.WithAttributeLists(CodeAttributes);
 
         SyntaxToken SymbolIdentifier = SyntaxFactory.Identifier(symbolName).WithLeadingTrivia(SyntaxFactory.Whitespace(" "));
-        MethodDeclaration = MethodDeclaration.WithIdentifier(SymbolIdentifier);
+        EventDeclaration = EventDeclaration.WithIdentifier(SymbolIdentifier);
 
-        SyntaxTokenList Modifiers = GenerateMethodModifiers(MethodDeclaration, LeadingTrivia, TrailingTrivia);
-        MethodDeclaration = MethodDeclaration.WithModifiers(Modifiers);
-        MethodDeclaration = MethodDeclaration.WithLeadingTrivia(LeadingTriviaWithoutLineEnd);
-        MethodDeclaration = MethodDeclaration.WithBody(null);
-        MethodDeclaration = MethodDeclaration.WithExpressionBody(SyntaxFactory.ArrowExpressionClause(SyntaxFactory.LiteralExpression(SyntaxKind.TrueLiteralExpression)));
+        SyntaxTokenList Modifiers = GenerateEventModifiers(EventDeclaration, LeadingTrivia, TrailingTrivia);
+        EventDeclaration = EventDeclaration.WithModifiers(Modifiers);
+        EventDeclaration = EventDeclaration.WithLeadingTrivia(LeadingTriviaWithoutLineEnd);
 
-        string FullString = MethodDeclaration.ToFullString();
-        string Scheduler = methodAttributeModel.UseDispatcher
-            ? methodAttributeModel.WaitUntilCompletion
-              ? "_ = Dispatcher.Invoke"
-              : "_ = Dispatcher.BeginInvoke"
-            : methodAttributeModel.WaitUntilCompletion
-              ? "Task.Run"
-              : "_ = Task.Run";
-        string Waiter = !methodAttributeModel.UseDispatcher && methodAttributeModel.WaitUntilCompletion
-            ? ".Wait()"
-            : string.Empty;
-        string Arguments = GetMethodArguments(MethodDeclaration);
+        AccessorListSyntax AccessorList = SyntaxFactory.AccessorList();
+        EventDeclaration = EventDeclaration.WithAccessorList(AccessorList);
+
+        string FullString = EventDeclaration.ToFullString();
 
         string ReplacementText =
         $$"""
                 {
-                    {{Scheduler}}(async () =>
+                    (async () =>
                     {
                         try
                         {
-                            await {{symbolName}}Async({{Arguments}}).ConfigureAwait(false);
+                            await {{symbolName}}Async().ConfigureAwait(false);
                         }
                         catch (Exception exception)
                         {
                             Debug.WriteLine($"Fatal: exception in {{symbolName}}Async.\r\n{exception.Message}\r\n{exception.StackTrace}");
                             throw;
                         }
-                    }){{Waiter}};
+                    })
                 }
             """;
 
         FullString = FullString.Replace("=>true", ReplacementText);
 
         return FullString;
-    }
-
-    private static string GetMethodArguments(MethodDeclarationSyntax methodDeclaration)
-    {
-        string Arguments = string.Empty;
-
-        foreach (ParameterSyntax parameterSyntax in methodDeclaration.ParameterList.Parameters)
-        {
-            if (Arguments.Length > 0)
-                Arguments += ", ";
-
-            Arguments += parameterSyntax.Identifier.Text;
-        }
-
-        return Arguments;
     }
 
     private static SyntaxTriviaList GetLeadingTriviaWithLineEnd(string tab)
@@ -138,14 +111,14 @@ public partial class AsyncEventHandlerGenerator
 
     private static string GetToolVersion() => System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
 
-    private static SyntaxTokenList GenerateMethodModifiers(MemberDeclarationSyntax memberDeclaration, SyntaxTriviaList leadingTrivia, SyntaxTriviaList trailingTrivia)
+    private static SyntaxTokenList GenerateEventModifiers(MemberDeclarationSyntax memberDeclaration, SyntaxTriviaList leadingTrivia, SyntaxTriviaList trailingTrivia)
     {
-        List<SyntaxToken> ModifierTokens = GenerateMethodDefaultModifiers(memberDeclaration, leadingTrivia, trailingTrivia);
+        List<SyntaxToken> ModifierTokens = GenerateEventDefaultModifiers(memberDeclaration, leadingTrivia, trailingTrivia);
 
         return SyntaxFactory.TokenList(ModifierTokens);
     }
 
-    private static List<SyntaxToken> GenerateMethodDefaultModifiers(MemberDeclarationSyntax memberDeclaration, SyntaxTriviaList leadingTrivia, SyntaxTriviaList trailingTrivia)
+    private static List<SyntaxToken> GenerateEventDefaultModifiers(MemberDeclarationSyntax memberDeclaration, SyntaxTriviaList leadingTrivia, SyntaxTriviaList trailingTrivia)
     {
         List<SyntaxToken> ModifierTokens = [];
         SyntaxTriviaList CurrentTrivia = leadingTrivia;

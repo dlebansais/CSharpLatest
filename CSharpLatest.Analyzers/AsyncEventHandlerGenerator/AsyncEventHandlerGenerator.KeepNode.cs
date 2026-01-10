@@ -1,4 +1,4 @@
-﻿namespace CSharpLatest.AsyncEventHandler;
+﻿namespace CSharpLatest.AsyncEventHandlerCodeGeneration;
 
 using System;
 using System.Collections.Generic;

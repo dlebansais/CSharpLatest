@@ -1,4 +1,4 @@
-﻿namespace CSharpLatest.AsyncEventHandler;
+﻿namespace CSharpLatest.AsyncEventHandlerCodeGeneration;
 
 /// <summary>
 /// Describes how to handle an attribute.

@@ -1,4 +1,4 @@
-﻿namespace CSharpLatest.AsyncEventHandler;
+﻿namespace CSharpLatest.AsyncEventHandlerCodeGeneration;
 
 /// <summary>
 /// Represents the result of an attribute validity check.

@@ -75,7 +75,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="System.Formats.Asn1" Version="10.0.1" />
+        <PackageReference Include="System.Formats.Asn1" Version="10.0.1" />
         <ProjectReference Include="..\..\CSharpLatest.Analyzers\CSharpLatest.Analyzers.csproj" Aliases="Analyzers" />
         <ProjectReference Include="..\..\CSharpLatest.CodeFixes\CSharpLatest.CodeFixes.csproj" />
     </ItemGroup>

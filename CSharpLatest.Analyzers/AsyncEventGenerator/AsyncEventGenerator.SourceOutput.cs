@@ -1,4 +1,4 @@
-﻿namespace CSharpLatest.AsyncEventHandlerCodeGeneration;
+﻿namespace CSharpLatest.AsyncEventCodeGeneration;
 
 using System.Text;
 using Microsoft.CodeAnalysis;
@@ -6,9 +6,9 @@ using Microsoft.CodeAnalysis;
 /// <summary>
 /// Represents a code generator.
 /// </summary>
-public partial class AsyncEventHandlerGenerator
+public partial class AsyncEventGenerator
 {
-    private static void OutputEventHandlerMethod(SourceProductionContext context, MethodModel model)
+    private static void OutputEventHandlerEvent(SourceProductionContext context, EventModel model)
     {
         string SourceText = $$"""
                 #nullable enable
@@ -19,7 +19,7 @@ public partial class AsyncEventHandlerGenerator
 
                 partial {{model.DeclarationTokens}} {{model.FullClassName}}
                 {
-                {{model.Documentation}}{{model.GeneratedMethodDeclaration}}
+                {{model.Documentation}}{{model.GeneratedEventDeclaration}}
                 }
                 """;
         SourceText = Replace(SourceText, "\r\n", "\n");

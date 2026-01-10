@@ -1,4 +1,4 @@
-﻿namespace CSharpLatest.AsyncEventHandler;
+﻿namespace CSharpLatest.AsyncEventHandlerCodeGeneration;
 
 /// <summary>
 /// Represents the model of an async event handler.

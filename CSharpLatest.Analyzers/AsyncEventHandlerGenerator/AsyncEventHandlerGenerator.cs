@@ -1,4 +1,4 @@
-﻿namespace CSharpLatest.AsyncEventHandler;
+﻿namespace CSharpLatest.AsyncEventHandlerCodeGeneration;
 
 using Microsoft.CodeAnalysis;
 

@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
-using AsyncEventHandlerGenerator = Analyzers::CSharpLatest.AsyncEventHandler.AsyncEventHandlerGenerator;
+using AsyncEventHandlerGenerator = Analyzers::CSharpLatest.AsyncEventHandlerCodeGeneration.AsyncEventHandlerGenerator;
 
 internal static class TestHelper
 {

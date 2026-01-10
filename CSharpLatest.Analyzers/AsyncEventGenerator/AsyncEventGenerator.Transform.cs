@@ -1,65 +1,38 @@
-﻿namespace CSharpLatest.AsyncEventHandlerCodeGeneration;
+﻿namespace CSharpLatest.AsyncEventCodeGeneration;
 
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Threading;
 using Contracts;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using RoslynHelpers;
 
 /// <summary>
 /// Represents a code generator.
 /// </summary>
-public partial class AsyncEventHandlerGenerator
+public partial class AsyncEventGenerator
 {
-    private static MethodModel TransformAsyncEventHandlerAttribute(GeneratorAttributeSyntaxContext context, CancellationToken cancellationToken)
+    private static EventModel TransformAsyncEventAttribute(GeneratorAttributeSyntaxContext context, CancellationToken cancellationToken)
     {
         SyntaxNode TargetNode = context.TargetNode;
-        MethodDeclarationSyntax MethodDeclaration = Contract.AssertOfType<MethodDeclarationSyntax>(TargetNode);
+        EventDeclarationSyntax EventDeclaration = Contract.AssertOfType<EventDeclarationSyntax>(TargetNode);
         string SymbolName = context.TargetSymbol.Name;
 
         Contract.Assert(SymbolName.EndsWith("Async", StringComparison.Ordinal));
         SymbolName = SymbolName[..^"Async".Length];
 
-        MethodAttributeModel MethodAttributeModel = GetMethodAttribute(MethodDeclaration);
-        string GeneratedMethodDeclaration = GetGeneratedMethodDeclaration(context, SymbolName, MethodAttributeModel);
-        MethodModel Model = GetBareboneModel(context, MethodDeclaration, SymbolName, MethodAttributeModel, GeneratedMethodDeclaration);
-        UpdateWithDocumentation(MethodDeclaration, ref Model);
+        string GeneratedEventDeclaration = GetGeneratedEventDeclaration(context, SymbolName);
+        EventModel Model = GetBareboneModel(context, EventDeclaration, SymbolName, GeneratedEventDeclaration);
+        UpdateWithDocumentation(EventDeclaration, ref Model);
 
         return Model;
     }
 
-    private static MethodAttributeModel GetMethodAttribute(MethodDeclarationSyntax methodDeclaration)
-    {
-        Collection<AttributeSyntax> MemberAttributes = AttributeHelper.GetMemberSupportedAttributes(context: null, methodDeclaration, [typeof(AsyncEventHandlerAttribute)]);
-        AttributeValidityCheckResult? MethodAttributeResult = null;
-
-        foreach (AttributeSyntax Attribute in MemberAttributes)
-            if (Attribute.ArgumentList is AttributeArgumentListSyntax AttributeArgumentList)
-            {
-                IReadOnlyList<AttributeArgumentSyntax> AttributeArguments = AttributeArgumentList.Arguments;
-                MethodAttributeResult = IsValidMethodAttribute(methodDeclaration, AttributeArguments);
-            }
-            else
-            {
-                MethodAttributeResult = new(AttributeGeneration.Valid, (false, false), -1);
-            }
-
-        MethodAttributeResult = Contract.AssertNotNull(MethodAttributeResult);
-        Contract.Assert(MethodAttributeResult.Result == AttributeGeneration.Valid);
-
-        return new MethodAttributeModel(WaitUntilCompletion: MethodAttributeResult.ArgumentValues.Item1,
-                                        UseDispatcher: MethodAttributeResult.ArgumentValues.Item2);
-    }
-
-    private static MethodModel GetBareboneModel(GeneratorAttributeSyntaxContext context,
-                                                  MethodDeclarationSyntax methodDeclaration,
+    private static EventModel GetBareboneModel(GeneratorAttributeSyntaxContext context,
+                                                  EventDeclarationSyntax eventDeclaration,
                                                   string symbolName,
-                                                  MethodAttributeModel methodAttributeModel,
-                                                  string generatedMethodDeclaration)
+                                                  string generatedEventDeclaration)
     {
         INamedTypeSymbol ContainingClass = Contract.AssertNotNull(context.TargetSymbol.ContainingType);
         INamespaceSymbol ContainingNamespace = Contract.AssertNotNull(ContainingClass.ContainingNamespace);
@@ -69,33 +42,32 @@ public partial class AsyncEventHandlerGenerator
         string? DeclarationTokens = null;
         string? FullClassName = null;
 
-        if (methodDeclaration.FirstAncestorOrSelf<ClassDeclarationSyntax>() is ClassDeclarationSyntax ClassDeclaration)
+        if (eventDeclaration.FirstAncestorOrSelf<ClassDeclarationSyntax>() is ClassDeclarationSyntax ClassDeclaration)
         {
             DeclarationTokens = "class";
             FullClassName = ClassNameWithTypeParameters(ClassName, ClassDeclaration.TypeParameterList, ClassDeclaration.ConstraintClauses);
         }
 
-        if (methodDeclaration.FirstAncestorOrSelf<StructDeclarationSyntax>() is StructDeclarationSyntax StructDeclaration)
+        if (eventDeclaration.FirstAncestorOrSelf<StructDeclarationSyntax>() is StructDeclarationSyntax StructDeclaration)
         {
             DeclarationTokens = "struct";
             FullClassName = ClassNameWithTypeParameters(ClassName, StructDeclaration.TypeParameterList, StructDeclaration.ConstraintClauses);
         }
 
-        if (methodDeclaration.FirstAncestorOrSelf<RecordDeclarationSyntax>() is RecordDeclarationSyntax RecordDeclaration)
+        if (eventDeclaration.FirstAncestorOrSelf<RecordDeclarationSyntax>() is RecordDeclarationSyntax RecordDeclaration)
         {
             DeclarationTokens = RecordDeclaration.ClassOrStructKeyword.IsKind(SyntaxKind.StructKeyword) ? "record struct" : "record";
             FullClassName = ClassNameWithTypeParameters(ClassName, RecordDeclaration.TypeParameterList, RecordDeclaration.ConstraintClauses);
         }
 
-        return new MethodModel(
+        return new EventModel(
             Namespace: Namespace,
             ClassName: ClassName,
             DeclarationTokens: Contract.AssertNotNull(DeclarationTokens),
             FullClassName: Contract.AssertNotNull(FullClassName),
             SymbolName: symbolName,
-            MethodAttributeModel: methodAttributeModel,
             Documentation: string.Empty,
-            GeneratedMethodDeclaration: generatedMethodDeclaration);
+            GeneratedEventDeclaration: generatedEventDeclaration);
     }
 
     private static string ClassNameWithTypeParameters(string fullClassName, TypeParameterListSyntax? typeParameterList, SyntaxList<TypeParameterConstraintClauseSyntax> constraintClauses)
@@ -114,11 +86,11 @@ public partial class AsyncEventHandlerGenerator
         return Result;
     }
 
-    private static void UpdateWithDocumentation(MethodDeclarationSyntax methodDeclaration, ref MethodModel model)
+    private static void UpdateWithDocumentation(EventDeclarationSyntax eventDeclaration, ref EventModel model)
     {
-        if (methodDeclaration.HasLeadingTrivia)
+        if (eventDeclaration.HasLeadingTrivia)
         {
-            SyntaxTriviaList LeadingTrivia = methodDeclaration.GetLeadingTrivia();
+            SyntaxTriviaList LeadingTrivia = eventDeclaration.GetLeadingTrivia();
 
             List<SyntaxTrivia> SupportedTrivias = [];
             foreach (SyntaxTrivia trivia in LeadingTrivia)
@@ -188,7 +160,7 @@ public partial class AsyncEventHandlerGenerator
 
     private static bool IsFirstTriviaWhitespace(List<SyntaxTrivia> trivias)
     {
-        // If we reach this method there is at least one end of line, therefore at least one trivia.
+        // If we reach this event there is at least one end of line, therefore at least one trivia.
         Contract.Assert(trivias.Count > 0);
 
         SyntaxTrivia FirstTrivia = trivias[0];
