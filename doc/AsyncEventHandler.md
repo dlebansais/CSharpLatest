@@ -42,15 +42,15 @@ private void OnWebResponse(object sender, NetworkEventArgs e)
 }
 ```
 
-### Concurrency
+## Concurrency
 
 Since the handler is asynchronous, it can be configured to decide whether to allow concurrent executions with other handlers or not. When using the `AsyncEventHandler` attribute, this can be set via the `WaitUntilCompletion` property. The default is `false`, meaning that the generated code returns immediately, allowing other handlers to execute. If it instead is set to `true`, subsequent handlers will execute only after the asynchronous task has completed.
 
-### Handling asynchronous exceptions
+## Handling asynchronous exceptions
 
 When the handler awaits the completion of an invocation, any exceptions will naturally be thrown on the same synchronization context. That usually means that exceptions being thrown would just crash the app, which is a behavior consistent with that of synchronous handlers (where exceptions being thrown will also crash the app).
 
-### WPF GUI thread
+## WPF GUI thread
 
 If the event handler needs to interact with WPF GUI elements, it must ensure that the code runs on the GUI thread. For this purpose, the generated code can use `Dispatcher.InvokeAsync` to marshal the call to the GUI thread, instead of the generic `Task.Run`. This behavior is controlled with the `UseDispatcher` property:
 
