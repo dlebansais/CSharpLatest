@@ -71,27 +71,35 @@ public partial class CSL1016UnsupportedUseOfTheAsyncEventHandlerAttribute : Diag
         // Diagnostic unless for a method.
         if (attribute.FirstAncestorOrSelf<MethodDeclarationSyntax>() is MethodDeclarationSyntax MethodDeclaration)
         {
-            // No diagnostic if there is no class/record/struct or namespace.
-            bool ValidEnvironment = (MethodDeclaration.FirstAncestorOrSelf<ClassDeclarationSyntax>() is not null ||
-                                     MethodDeclaration.FirstAncestorOrSelf<StructDeclarationSyntax>() is not null ||
-                                     MethodDeclaration.FirstAncestorOrSelf<RecordDeclarationSyntax>() is not null) &&
-                                    MethodDeclaration.FirstAncestorOrSelf<BaseNamespaceDeclarationSyntax>() is not null;
-
-            // No diagnostic if the signature is valid.
-            bool ValidSignature = MethodDeclaration.Modifiers.Any(modifier => modifier.IsKind(SyntaxKind.AsyncKeyword)) &&
-                                  MethodDeclaration.ReturnType is IdentifierNameSyntax ReturnTypeName &&
-                                  ReturnTypeName.Identifier.Text == "Task" &&
-                                  MethodDeclaration.Identifier.Text.EndsWith("Async", StringComparison.Ordinal);
-
-            // No diagnostic if there is no or many argument.
-            bool ValidArguments = attribute.ArgumentList is not AttributeArgumentListSyntax AttributeArgumentList || AttributeArgumentList.Arguments.Count > 0;
-
-            if (ValidEnvironment &&
-                ValidSignature &&
-                ValidArguments)
+            if (IsValidEnvironment(MethodDeclaration) &&
+                IsValidSignature(MethodDeclaration) &&
+                IsValidArguments(attribute))
                 return;
         }
 
         context.ReportDiagnostic(Diagnostic.Create(Rule, context.Node.GetLocation(), AttributeHelper.ToAttributeName(attribute)));
     }
+
+    // No diagnostic if there is no class/record/struct or namespace.
+    private static bool IsValidEnvironment(MethodDeclarationSyntax methodDeclaration)
+        => HasClassAncestor(methodDeclaration) && HasNamespaceAncestor(methodDeclaration);
+
+    private static bool HasClassAncestor(MethodDeclarationSyntax methodDeclaration)
+        => methodDeclaration.FirstAncestorOrSelf<ClassDeclarationSyntax>() is not null ||
+           methodDeclaration.FirstAncestorOrSelf<StructDeclarationSyntax>() is not null ||
+           methodDeclaration.FirstAncestorOrSelf<RecordDeclarationSyntax>() is not null;
+
+    private static bool HasNamespaceAncestor(MethodDeclarationSyntax methodDeclaration)
+        => methodDeclaration.FirstAncestorOrSelf<BaseNamespaceDeclarationSyntax>() is not null;
+
+    // No diagnostic if the signature is valid.
+    private static bool IsValidSignature(MethodDeclarationSyntax methodDeclaration)
+        => methodDeclaration.Modifiers.Any(modifier => modifier.IsKind(SyntaxKind.AsyncKeyword)) &&
+           methodDeclaration.ReturnType is IdentifierNameSyntax ReturnTypeName &&
+           ReturnTypeName.Identifier.Text == "Task" &&
+           methodDeclaration.Identifier.Text.EndsWith("Async", StringComparison.Ordinal);
+
+    // No diagnostic if there is no or many argument.
+    private static bool IsValidArguments(AttributeSyntax attribute)
+        => attribute.ArgumentList is not AttributeArgumentListSyntax AttributeArgumentList || AttributeArgumentList.Arguments.Count > 0;
 }
