@@ -19,7 +19,9 @@ ignore:
   - "**/AnalyzerResources.Designer.cs"
   - "**/CodeFixResources.Designer.cs"
   - "./Test/CSharpLatest.Test/ModuleInitializer.cs"
+  - "./Test/CSharpLatest.Test/CSLUnitTests/TestTools.cs"
   - "./Test/CSharpLatest.Test/CSLUnitTests/Verifiers/*"
+  - "./Test/CSharpLatest.Test/FieldBackedPropertyGenerator/Tools/TestHelper.cs"
 parsers:
   gcov:
     branch_detection:
