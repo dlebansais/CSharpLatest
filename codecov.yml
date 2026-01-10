@@ -18,7 +18,8 @@ coverage:
 ignore:
   - "**/AnalyzerResources.Designer.cs"
   - "**/CodeFixResources.Designer.cs"
-  - "./Test/CSharpLatest.Test/Verifiers/*"
+  - "./Test/CSharpLatest.Test/ModuleInitializer.cs"
+  - "./Test/CSharpLatest.Test/CSLUnitTests/Verifiers/*"
 parsers:
   gcov:
     branch_detection:
