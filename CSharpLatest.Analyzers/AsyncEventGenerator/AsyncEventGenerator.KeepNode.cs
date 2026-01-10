@@ -54,12 +54,12 @@ public partial class AsyncEventGenerator
         if (eventDeclaration.Type is GenericNameSyntax GenericName)
         {
             string TypeName = GenericName.Identifier.Text;
-            return TypeName is $"{nameof(AsyncEventHandler)}1" or $"{nameof(AsyncEventHandler)}2";
+            return TypeName is $"{nameof(AsyncEvent.AsyncEventHandler)}1" or $"{nameof(AsyncEvent.AsyncEventHandler)}2";
         }
         else if (eventDeclaration.Type is IdentifierNameSyntax IdentifierName)
         {
             string TypeName = IdentifierName.Identifier.Text;
-            return TypeName == nameof(AsyncEventHandler);
+            return TypeName == nameof(AsyncEvent.AsyncEventHandler);
         }
 
         return false;
