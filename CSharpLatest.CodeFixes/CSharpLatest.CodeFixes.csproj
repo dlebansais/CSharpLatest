@@ -67,6 +67,7 @@
 
         <PackageReference Include="dlebansais.Method.Contracts-Debug" Version="2.0.5" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" />
         <PackageReference Include="dlebansais.Method.Contracts" Version="2.0.5" Condition="'$(Configuration)|$(Platform)'!='Debug|x64'" />
+        <PackageReference Include="dlebansais.CSharpLatest.Attributes" Version="2.6.0" GeneratePathProperty="true" />
     </ItemGroup>
 
     <ItemGroup Condition="'$(Configuration)' == 'Release-4-12-0'">

@@ -39,7 +39,6 @@
 
     <ItemGroup>
         <ProjectReference Include="..\CSharpLatest.Analyzers\CSharpLatest.Analyzers.csproj" />
-        <ProjectReference Include="..\CSharpLatest.Attributes\CSharpLatest.Attributes.csproj" />
         <ProjectReference Include="..\CSharpLatest.CodeFixes\CSharpLatest.CodeFixes.csproj" />
     </ItemGroup>
 

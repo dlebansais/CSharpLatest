@@ -13,8 +13,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CSharpLatest.Vsix", "Test\C
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSharpLatest.Test", "Test\CSharpLatest.Test\CSharpLatest.Test.csproj", "{B17394E1-D659-438C-A06D-D6953DBD470F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSharpLatest.Attributes", "CSharpLatest.Attributes\CSharpLatest.Attributes.csproj", "{ABD1B1CA-9042-4AF6-A8B3-343E35D92BE6}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -67,16 +65,6 @@ Global
 		{B17394E1-D659-438C-A06D-D6953DBD470F}.Release-4-14-0|x64.Build.0 = Release-4-14-0|x64
 		{B17394E1-D659-438C-A06D-D6953DBD470F}.Release-5-0-0|x64.ActiveCfg = Release-5-0-0|x64
 		{B17394E1-D659-438C-A06D-D6953DBD470F}.Release-5-0-0|x64.Build.0 = Release-5-0-0|x64
-		{ABD1B1CA-9042-4AF6-A8B3-343E35D92BE6}.Debug|x64.ActiveCfg = Debug|x64
-		{ABD1B1CA-9042-4AF6-A8B3-343E35D92BE6}.Debug|x64.Build.0 = Debug|x64
-		{ABD1B1CA-9042-4AF6-A8B3-343E35D92BE6}.Release|x64.ActiveCfg = Release|x64
-		{ABD1B1CA-9042-4AF6-A8B3-343E35D92BE6}.Release|x64.Build.0 = Release|x64
-		{ABD1B1CA-9042-4AF6-A8B3-343E35D92BE6}.Release-4-12-0|x64.ActiveCfg = Release-4-12-0|x64
-		{ABD1B1CA-9042-4AF6-A8B3-343E35D92BE6}.Release-4-12-0|x64.Build.0 = Release-4-12-0|x64
-		{ABD1B1CA-9042-4AF6-A8B3-343E35D92BE6}.Release-4-14-0|x64.ActiveCfg = Release-4-14-0|x64
-		{ABD1B1CA-9042-4AF6-A8B3-343E35D92BE6}.Release-4-14-0|x64.Build.0 = Release-4-14-0|x64
-		{ABD1B1CA-9042-4AF6-A8B3-343E35D92BE6}.Release-5-0-0|x64.ActiveCfg = Release-5-0-0|x64
-		{ABD1B1CA-9042-4AF6-A8B3-343E35D92BE6}.Release-5-0-0|x64.Build.0 = Release-5-0-0|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
