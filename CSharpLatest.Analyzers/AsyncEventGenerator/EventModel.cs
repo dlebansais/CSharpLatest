@@ -9,6 +9,9 @@
 /// <param name="FullClassName">The name of the class with type parameter and constraints.</param>
 /// <param name="SymbolName">The mathod name.</param>
 /// <param name="Documentation">The event documentation, if any.</param>
+/// <param name="DispatcherKind">The dispatcher kind.</param>
+/// <param name="SenderType">The sender type.</param>
+/// <param name="ArgumentType">The argument type.</param>
 /// <param name="GeneratedEventDeclaration">The generated event.</param>
 internal record EventModel(string Namespace,
                            string ClassName,
@@ -16,4 +19,7 @@ internal record EventModel(string Namespace,
                            string FullClassName,
                            string SymbolName,
                            string Documentation,
+                           DispatcherKind DispatcherKind,
+                           string SenderType,
+                           string ArgumentType,
                            string GeneratedEventDeclaration);

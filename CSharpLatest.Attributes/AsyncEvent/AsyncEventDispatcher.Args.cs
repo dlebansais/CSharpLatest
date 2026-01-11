@@ -1,7 +1,6 @@
-﻿namespace CSharpLatest.AsyncEvent;
+﻿namespace CSharpLatest.Events;
 
 using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -13,7 +12,13 @@ using System.Threading.Tasks;
 public class AsyncEventDispatcher<TEventArgs>
         where TEventArgs : EventArgs
 {
-    private readonly ConcurrentDictionary<int, WeakReference<AsyncEventHandler<TEventArgs>>> _handlers = new();
+    private readonly WeakCollection<AsyncEventHandler<TEventArgs>> _handlers = new();
+
+    /// <summary>
+    /// Gets the number of register handlers.
+    /// May include handlers for disposed objects that have not been removed yet.
+    /// </summary>
+    public int HandlerCount => _handlers.Count;
 
     /// <summary>
     /// Registers an asynchronous event handler.
@@ -25,9 +30,7 @@ public class AsyncEventDispatcher<TEventArgs>
         if (handler is null)
             throw new ArgumentNullException(nameof(handler));
 
-        WeakReference<AsyncEventHandler<TEventArgs>> weakReference = new(handler);
-        int hashCode = handler.GetHashCode();
-        _handlers[hashCode] = weakReference;
+        _handlers.TryAdd(handler);
     }
 
     /// <summary>
@@ -40,8 +43,7 @@ public class AsyncEventDispatcher<TEventArgs>
         if (handler is null)
             throw new ArgumentNullException(nameof(handler));
 
-        int hashCode = handler.GetHashCode();
-        _ = _handlers.TryRemove(hashCode, out _);
+        _handlers.TryRemove(handler);
     }
 
     /// <summary>
@@ -52,36 +54,16 @@ public class AsyncEventDispatcher<TEventArgs>
     /// <param name="cancellationToken">The cancellation token that will be checked prior to completing the returned task.</param>
     public async Task InvokeAsync(object? sender, TEventArgs args, CancellationToken cancellationToken = default)
     {
-        ICollection<WeakReference<AsyncEventHandler<TEventArgs>>> weakReferenceList = _handlers.Values;
         List<Task> tasks = [];
-        bool isCleanupNeeded = false;
-
-        foreach (WeakReference<AsyncEventHandler<TEventArgs>> weakReference in weakReferenceList)
-            if (weakReference.TryGetTarget(out AsyncEventHandler<TEventArgs>? handler))
-            {
-                Task task = handler.Invoke(sender, args, cancellationToken);
-                tasks.Add(task);
-            }
-            else
-            {
-                isCleanupNeeded = true;
-            }
+        bool isCleanupNeeded = _handlers.ForEach((handler) =>
+        {
+            Task task = handler.Invoke(sender, args, cancellationToken);
+            tasks.Add(task);
+        });
 
         if (isCleanupNeeded)
-            Cleanup();
+            _handlers.Cleanup();
 
         await Task.WhenAll(tasks).ConfigureAwait(false);
-    }
-
-    private void Cleanup()
-    {
-        foreach (KeyValuePair<int, WeakReference<AsyncEventHandler<TEventArgs>>> entry in _handlers)
-        {
-            int key = entry.Key;
-            WeakReference<AsyncEventHandler<TEventArgs>> weakReference = entry.Value;
-
-            if (!weakReference.TryGetTarget(out _))
-                _ = _handlers.TryRemove(key, out _);
-        }
     }
 }

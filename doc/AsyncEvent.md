@@ -29,37 +29,37 @@ Each of these declarations will generate an event handler like this:
 
 ```cs
 // Auto-generated code
-private readonly AsyncEventDispatcher __myEvent = new();
-
 public partial event AsyncEventHandler MyEvent
 {
     add => __myEvent.Register(value);
     remove => __myEvent.Unregister(value);
 }
 
+private readonly AsyncEventDispatcher __myEvent = new();
+
 private async Task RaiseMyEvent(CancellationToken cancellationToken = default)
     => await __myEvent.InvokeAsync(this, cancellationToken).ConfigureAwait(false);
 
 // Auto-generated code with custom parameters
-private readonly AsyncEventDispatcher<MyEventArgs> __myEvent = new();
-
 public partial event AsyncEventHandler<MyEventArgs> MyEvent
 {
     add => __myEvent.Register(value);
     remove => __myEvent.Unregister(value);
 }
 
+private readonly AsyncEventDispatcher<MyEventArgs> __myEvent = new();
+
 private async Task RaiseMyEvent(MyEventArgs args, CancellationToken cancellationToken = default)
     => await __myEvent.InvokeAsync(this, args, cancellationToken).ConfigureAwait(false);
 
 // Auto-generated code with custom sender and parameters
-private readonly AsyncEventDispatcher<MySender, MyEventArgs> __myEvent = new();
-
 public partial event AsyncEventHandler<MySender, MyEventArgs> MyEvent
 {
     add => __myEvent.Register(value);
     remove => __myEvent.Unregister(value);
 }
+
+private readonly AsyncEventDispatcher<MySender, MyEventArgs> __myEvent = new();
 
 private async Task RaiseMyEvent(MySender sender, MyEventArgs args, CancellationToken cancellationToken = default)
     => await __myEvent.InvokeAsync(sender, args, cancellationToken).ConfigureAwait(false);

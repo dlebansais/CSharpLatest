@@ -1,4 +1,4 @@
-﻿namespace CSharpLatest.AsyncEvent;
+﻿namespace CSharpLatest.Events;
 
 using System.Threading;
 using System.Threading.Tasks;

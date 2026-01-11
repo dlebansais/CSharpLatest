@@ -16,23 +16,25 @@ public partial class AsyncEventGenerator
     private static EventModel TransformAsyncEventAttribute(GeneratorAttributeSyntaxContext context, CancellationToken cancellationToken)
     {
         SyntaxNode TargetNode = context.TargetNode;
-        EventDeclarationSyntax EventDeclaration = Contract.AssertOfType<EventDeclarationSyntax>(TargetNode);
+        VariableDeclarationSyntax VariableDeclaration = Contract.AssertOfType<VariableDeclarationSyntax>(TargetNode.FirstAncestorOrSelf<VariableDeclarationSyntax>());
+        EventFieldDeclarationSyntax EventDeclaration = Contract.AssertOfType<EventFieldDeclarationSyntax>(TargetNode.FirstAncestorOrSelf<EventFieldDeclarationSyntax>());
         string SymbolName = context.TargetSymbol.Name;
 
-        Contract.Assert(SymbolName.EndsWith("Async", StringComparison.Ordinal));
-        SymbolName = SymbolName[..^"Async".Length];
+        bool IsReturnType = IsReturnTypeAsyncEventHandler(VariableDeclaration, out DispatcherKind DispatcherKind, out string SenderType, out string ArgumentType);
+        Contract.Assert(IsReturnType, "The return type has been tested before.");
 
-        string GeneratedEventDeclaration = GetGeneratedEventDeclaration(context, SymbolName);
+        string GeneratedEventDeclaration = GetGeneratedEventDeclaration(context, SymbolName, DispatcherKind, SenderType, ArgumentType);
         EventModel Model = GetBareboneModel(context, EventDeclaration, SymbolName, GeneratedEventDeclaration);
         UpdateWithDocumentation(EventDeclaration, ref Model);
 
+        Model = Model with { DispatcherKind = DispatcherKind };
         return Model;
     }
 
     private static EventModel GetBareboneModel(GeneratorAttributeSyntaxContext context,
-                                                  EventDeclarationSyntax eventDeclaration,
-                                                  string symbolName,
-                                                  string generatedEventDeclaration)
+                                               EventFieldDeclarationSyntax eventDeclaration,
+                                               string symbolName,
+                                               string generatedEventDeclaration)
     {
         INamedTypeSymbol ContainingClass = Contract.AssertNotNull(context.TargetSymbol.ContainingType);
         INamespaceSymbol ContainingNamespace = Contract.AssertNotNull(ContainingClass.ContainingNamespace);
@@ -67,6 +69,9 @@ public partial class AsyncEventGenerator
             FullClassName: Contract.AssertNotNull(FullClassName),
             SymbolName: symbolName,
             Documentation: string.Empty,
+            DispatcherKind: default,
+            SenderType: string.Empty,
+            ArgumentType: string.Empty,
             GeneratedEventDeclaration: generatedEventDeclaration);
     }
 
@@ -86,7 +91,7 @@ public partial class AsyncEventGenerator
         return Result;
     }
 
-    private static void UpdateWithDocumentation(EventDeclarationSyntax eventDeclaration, ref EventModel model)
+    private static void UpdateWithDocumentation(EventFieldDeclarationSyntax eventDeclaration, ref EventModel model)
     {
         if (eventDeclaration.HasLeadingTrivia)
         {

@@ -2,6 +2,7 @@
 
 using System.CodeDom.Compiler;
 using System.Collections.Generic;
+using System.Globalization;
 using Contracts;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -12,10 +13,11 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 /// </summary>
 public partial class AsyncEventGenerator
 {
-    private static string GetGeneratedEventDeclaration(GeneratorAttributeSyntaxContext context, string symbolName)
+    private static string GetGeneratedEventDeclaration(GeneratorAttributeSyntaxContext context, string symbolName, DispatcherKind dispatcherKind, string senderType, string argumentType)
     {
         SyntaxNode TargetNode = context.TargetNode;
-        EventDeclarationSyntax EventDeclaration = Contract.AssertOfType<EventDeclarationSyntax>(TargetNode);
+        VariableDeclarationSyntax VariableDeclaration = Contract.AssertOfType<VariableDeclarationSyntax>(TargetNode.FirstAncestorOrSelf<VariableDeclarationSyntax>());
+        EventFieldDeclarationSyntax EventDeclaration = Contract.AssertOfType<EventFieldDeclarationSyntax>(TargetNode.FirstAncestorOrSelf<EventFieldDeclarationSyntax>());
 
         string Tab = "    ";
         SyntaxTriviaList LeadingTrivia = GetLeadingTriviaWithLineEnd(Tab);
@@ -23,39 +25,55 @@ public partial class AsyncEventGenerator
         SyntaxTriviaList TrailingTrivia = EventDeclaration.Modifiers.Last().TrailingTrivia;
 
         SyntaxList<AttributeListSyntax> CodeAttributes = GenerateCodeAttributes();
-        EventDeclaration = EventDeclaration.WithAttributeLists(CodeAttributes);
-
-        SyntaxToken SymbolIdentifier = SyntaxFactory.Identifier(symbolName).WithLeadingTrivia(SyntaxFactory.Whitespace(" "));
-        EventDeclaration = EventDeclaration.WithIdentifier(SymbolIdentifier);
-
         SyntaxTokenList Modifiers = GenerateEventModifiers(EventDeclaration, LeadingTrivia, TrailingTrivia);
-        EventDeclaration = EventDeclaration.WithModifiers(Modifiers);
-        EventDeclaration = EventDeclaration.WithLeadingTrivia(LeadingTriviaWithoutLineEnd);
-
+        TypeSyntax EventType = VariableDeclaration.Type.WithoutTrivia().WithLeadingTrivia(SyntaxFactory.Whitespace(" "));
+        SyntaxToken SymbolIdentifier = SyntaxFactory.Identifier(symbolName).WithLeadingTrivia(SyntaxFactory.Whitespace(" "));
         AccessorListSyntax AccessorList = SyntaxFactory.AccessorList();
-        EventDeclaration = EventDeclaration.WithAccessorList(AccessorList);
 
-        string FullString = EventDeclaration.ToFullString();
+        EventDeclarationSyntax EventDeclarationImplementation = SyntaxFactory.EventDeclaration(CodeAttributes, Modifiers, SyntaxFactory.Token(SyntaxKind.EventKeyword), EventType, null, SymbolIdentifier, AccessorList, SyntaxFactory.Token(SyntaxKind.SemicolonToken));
+        EventDeclarationImplementation = EventDeclarationImplementation.WithLeadingTrivia(LeadingTriviaWithoutLineEnd);
 
-        string ReplacementText =
-        $$"""
-                {
-                    (async () =>
+        string FullString = EventDeclarationImplementation.ToFullString();
+        string FieldName = $"__{char.ToLower(symbolName[0], CultureInfo.InvariantCulture)}{symbolName[1..]}";
+        string ReplacementText = dispatcherKind == DispatcherKind.WithSenderAndEventArgs
+            ? $$"""
+                {{symbolName}}
                     {
-                        try
-                        {
-                            await {{symbolName}}Async().ConfigureAwait(false);
-                        }
-                        catch (Exception exception)
-                        {
-                            Debug.WriteLine($"Fatal: exception in {{symbolName}}Async.\r\n{exception.Message}\r\n{exception.StackTrace}");
-                            throw;
-                        }
-                    })
-                }
-            """;
+                        add => {{FieldName}}.Register(value);
+                        remove => {{FieldName}}.Unregister(value);
+                    }
 
-        FullString = FullString.Replace("=>true", ReplacementText);
+                    private readonly AsyncEventDispatcher<{{senderType}}, {{argumentType}}> {{FieldName}} = new();
+
+                    private async Task Raise{{symbolName}}({{senderType}}? sender, {{argumentType}} args, CancellationToken cancellationToken = default)
+                        => await {{FieldName}}.InvokeAsync(sender, args, cancellationToken).ConfigureAwait(false);
+                """
+            : dispatcherKind == DispatcherKind.WithEventArgs
+                ? $$"""
+                {{symbolName}}
+                    {
+                        add => {{FieldName}}.Register(value);
+                        remove => {{FieldName}}.Unregister(value);
+                    }
+
+                    private readonly AsyncEventDispatcher<{{argumentType}}> {{FieldName}} = new();
+
+                    private async Task Raise{{symbolName}}({{argumentType}} args, CancellationToken cancellationToken = default)
+                        => await {{FieldName}}.InvokeAsync(this, args, cancellationToken).ConfigureAwait(false);
+                """
+                : $$"""
+                {{symbolName}}
+                    {
+                        add => {{FieldName}}.Register(value);
+                        remove => {{FieldName}}.Unregister(value);
+                    }
+
+                    private readonly AsyncEventDispatcher {{FieldName}} = new();
+
+                    private async Task Raise{{symbolName}}(CancellationToken cancellationToken = default)
+                        => await {{FieldName}}.InvokeAsync(this, cancellationToken).ConfigureAwait(false);
+                """;
+        FullString = FullString.Replace($"{symbolName}{{}};", ReplacementText);
 
         return FullString;
     }
