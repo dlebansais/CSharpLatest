@@ -16,7 +16,8 @@ public partial class AsyncEventHandlerGenerator
                 namespace {{model.Namespace}};
 
                 using System.Diagnostics;
-
+                using System.CodeDom.Compiler;
+                
                 partial {{model.DeclarationTokens}} {{model.FullClassName}}
                 {
                 {{model.Documentation}}{{model.GeneratedMethodDeclaration}}

@@ -83,7 +83,7 @@ public partial class FieldBackedPropertyGenerator
 
     private static SyntaxList<AttributeListSyntax> GenerateCodeAttributes()
     {
-        NameSyntax AttributeName = SyntaxFactory.IdentifierName(nameof(GeneratedCodeAttribute));
+        NameSyntax AttributeName = SyntaxFactory.IdentifierName(AnalyzerTools.RemoveAttributeSuffix(nameof(GeneratedCodeAttribute)));
 
         string ToolName = GetToolName();
         SyntaxToken ToolNameToken = SyntaxFactory.Literal(ToolName);

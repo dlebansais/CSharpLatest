@@ -3,9 +3,11 @@
 
 namespace CSharpLatest.TestSuite;
 
+using System.CodeDom.Compiler;
+
 partial class Program
 {
-    [GeneratedCodeAttribute("CSharpLatest.Analyzers","2.6.0.39")]
+    [GeneratedCode("CSharpLatest.Analyzers","2.6.0.39")]
     partial static int Test
     {
         get => field;

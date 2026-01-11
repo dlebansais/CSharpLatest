@@ -4,6 +4,7 @@
 namespace CSharpLatest.TestSuite;
 
 using System.Diagnostics;
+using System.CodeDom.Compiler;
 
 partial class Program
 {
@@ -14,7 +15,7 @@ partial class Program
     /// <param name="value">The property value.</param>
 
     /// <returns>The getter.</returns>
-    [GeneratedCodeAttribute("CSharpLatest.Analyzers","2.6.0.39")]
+    [GeneratedCode("CSharpLatest.Analyzers","2.6.0.39")]
     public void Foo()
     {
         _ = Task.Run(async () =>

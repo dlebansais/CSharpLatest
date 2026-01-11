@@ -219,4 +219,16 @@ internal static class AnalyzerTools
         => trivia.IsKind(SyntaxKind.SingleLineDocumentationCommentTrivia) ||
            trivia.IsKind(SyntaxKind.DocumentationCommentExteriorTrivia) ||
            trivia.IsKind(SyntaxKind.MultiLineDocumentationCommentTrivia);
+
+    /// <summary>
+    /// Returns the name of an attribute type without the 'Attribute' suffix.
+    /// </summary>
+    /// <param name="attributeName">The attribute type name.</param>
+    public static string RemoveAttributeSuffix(string attributeName)
+    {
+        const string AttributeSuffix = "Attribute";
+        Contract.Assert(attributeName.EndsWith(AttributeSuffix, StringComparison.Ordinal));
+
+        return attributeName[..^AttributeSuffix.Length];
+    }
 }

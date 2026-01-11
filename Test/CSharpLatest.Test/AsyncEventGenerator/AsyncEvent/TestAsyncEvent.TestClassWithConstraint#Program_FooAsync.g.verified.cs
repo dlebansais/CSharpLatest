@@ -3,13 +3,14 @@
 
 namespace CSharpLatest.TestSuite;
 
+using System.CodeDom.Compiler;
 using System.Threading;
 using System.Threading.Tasks;
 using CSharpLatest.Events;
 
 partial class Program<T> where T : class
 {
-    [GeneratedCodeAttribute("CSharpLatest.Analyzers","2.6.0.39")]
+    [GeneratedCode("CSharpLatest.Analyzers","2.6.0.39")]
     public event AsyncEventHandler Foo
     {
         add => __foo.Register(value);

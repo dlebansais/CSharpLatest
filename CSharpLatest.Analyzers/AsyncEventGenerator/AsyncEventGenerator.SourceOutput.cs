@@ -15,6 +15,7 @@ public partial class AsyncEventGenerator
 
                 namespace {{model.Namespace}};
 
+                using System.CodeDom.Compiler;
                 using System.Threading;
                 using System.Threading.Tasks;
                 using CSharpLatest.Events;

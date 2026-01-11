@@ -18,6 +18,8 @@ public partial class FieldBackedPropertyGenerator
 
                 namespace {{Model.Namespace}};
 
+                using System.CodeDom.Compiler;
+                
                 partial {{Model.DeclarationTokens}} {{Model.FullClassName}}
                 {
                 {{Model.Documentation}}{{Model.GeneratedPropertyDeclaration}}{{Model.GeneratedFieldDeclaration}}
