@@ -12,14 +12,9 @@ public partial class AsyncEventGenerator
     {
         string SourceText = $$"""
                 #nullable enable
-
+                {{model.UsingsBeforeNamespace}}
                 namespace {{model.Namespace}};
-
-                using System.CodeDom.Compiler;
-                using System.Threading;
-                using System.Threading.Tasks;
-                using CSharpLatest.Events;
-                
+                {{model.UsingsAfterNamespace}}
                 partial {{model.DeclarationTokens}} {{model.FullClassName}}
                 {
                 {{model.Documentation}}{{model.GeneratedEventDeclaration}}

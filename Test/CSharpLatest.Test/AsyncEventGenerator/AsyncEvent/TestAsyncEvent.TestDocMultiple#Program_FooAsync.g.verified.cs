@@ -3,9 +3,11 @@
 
 namespace CSharpLatest.TestSuite;
 
+using System;
 using System.CodeDom.Compiler;
 using System.Threading;
 using System.Threading.Tasks;
+using CSharpLatest;
 using CSharpLatest.Events;
 
 partial class Program
@@ -17,7 +19,7 @@ partial class Program
     /// <param name="value">The property value.</param>
 
     /// <returns>The getter.</returns>
-    [GeneratedCode("CSharpLatest.Analyzers","2.6.0.39")]
+    [GeneratedCode("CSharpLatest.Analyzers","2.6.1.40")]
     public event AsyncEventHandler Foo
     {
         add => __foo.Register(value);

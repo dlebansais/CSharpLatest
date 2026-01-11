@@ -28,6 +28,7 @@ public partial class AsyncEventHandlerGenerator
         string GeneratedMethodDeclaration = GetGeneratedMethodDeclaration(context, SymbolName, MethodAttributeModel);
         MethodModel Model = GetBareboneModel(context, MethodDeclaration, SymbolName, MethodAttributeModel, GeneratedMethodDeclaration);
         UpdateWithDocumentation(MethodDeclaration, ref Model);
+        UpdateUsings(context, ref Model);
 
         return Model;
     }
@@ -89,6 +90,8 @@ public partial class AsyncEventHandlerGenerator
 
         return new MethodModel(
             Namespace: Namespace,
+            UsingsBeforeNamespace: string.Empty,
+            UsingsAfterNamespace: string.Empty,
             ClassName: ClassName,
             DeclarationTokens: Contract.AssertNotNull(DeclarationTokens),
             FullClassName: Contract.AssertNotNull(FullClassName),
@@ -218,5 +221,61 @@ public partial class AsyncEventHandlerGenerator
         }
 
         return false;
+    }
+
+    private static void UpdateUsings(GeneratorAttributeSyntaxContext context, ref MethodModel model)
+    {
+        // We know it's not null from KeepNodeForPipeline().
+        BaseNamespaceDeclarationSyntax BaseNamespaceDeclaration = Contract.AssertNotNull(context.TargetNode.FirstAncestorOrSelf<BaseNamespaceDeclarationSyntax>());
+
+        if (BaseNamespaceDeclaration.Usings.Count > 0)
+        {
+            string UsingString = BaseNamespaceDeclaration.Usings.ToFullString();
+            Contract.Assert(UsingString.Length > 0);
+
+            model = model with { UsingsAfterNamespace = UsingString };
+        }
+
+        if (BaseNamespaceDeclaration.Parent is CompilationUnitSyntax CompilationUnit)
+            model = model with { UsingsBeforeNamespace = CompilationUnit.Usings.ToFullString() };
+
+        AddMissingUsingsAndSort(ref model);
+    }
+
+    private static void AddMissingUsingsAndSort(ref MethodModel model)
+    {
+        model = model with { UsingsBeforeNamespace = GeneratorHelper.SortUsings(model.UsingsBeforeNamespace) };
+        model = model with { UsingsAfterNamespace = GeneratorHelper.SortUsings(model.UsingsAfterNamespace) };
+        bool UseGlobal = GeneratorHelper.HasGlobalSystem(model.UsingsAfterNamespace);
+
+        AddMissingUsing(ref model, "CSharpLatest", isGlobal: false);
+        AddMissingUsing(ref model, "System.CodeDom.Compiler", isGlobal: UseGlobal);
+        AddMissingUsing(ref model, "System.Diagnostics", isGlobal: UseGlobal);
+
+        model = model with { UsingsAfterNamespace = GeneratorHelper.SortUsings(model.UsingsAfterNamespace) };
+    }
+
+    private static void AddMissingUsing(ref MethodModel model, string usingDirective, bool isGlobal)
+    {
+        string GlobalDirective = $"using global::{usingDirective};\n";
+        string NonGlobalDirective = $"using {usingDirective};\n";
+        bool IsDirectiveBeforeNamespace;
+        bool IsDirectiveAfterNamespace;
+
+#if NETSTANDARD2_1_OR_GREATER
+        IsDirectiveBeforeNamespace = model.UsingsBeforeNamespace.Contains(GlobalDirective, StringComparison.Ordinal) || model.UsingsBeforeNamespace.Contains(NonGlobalDirective, StringComparison.Ordinal);
+        IsDirectiveAfterNamespace = model.UsingsAfterNamespace.Contains(GlobalDirective, StringComparison.Ordinal) || model.UsingsAfterNamespace.Contains(NonGlobalDirective, StringComparison.Ordinal);
+#else
+        IsDirectiveBeforeNamespace = model.UsingsBeforeNamespace.Contains(GlobalDirective) || model.UsingsBeforeNamespace.Contains(NonGlobalDirective);
+        IsDirectiveAfterNamespace = model.UsingsAfterNamespace.Contains(GlobalDirective) || model.UsingsAfterNamespace.Contains(NonGlobalDirective);
+#endif
+
+        if (!IsDirectiveBeforeNamespace && !IsDirectiveAfterNamespace)
+        {
+            string LineToAdd = isGlobal ? GlobalDirective : NonGlobalDirective;
+            Contract.Assert(!model.UsingsAfterNamespace.Contains(LineToAdd));
+
+            model = model with { UsingsAfterNamespace = model.UsingsAfterNamespace + LineToAdd };
+        }
     }
 }

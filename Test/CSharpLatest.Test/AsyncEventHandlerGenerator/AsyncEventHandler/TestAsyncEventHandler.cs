@@ -506,11 +506,12 @@ namespace CSharpLatest.TestSuite;
 
 using System;
 using CSharpLatest;
+using System.Windows;
 
 internal partial class Program
 {
     [AsyncEventHandler(UseDispatcher = true)]
-    public async Task FooAsync()
+    public async Task FooAsync(RoutedEventArgs args)
     {
         await Task.Delay(0);
     }
@@ -815,6 +816,175 @@ using CSharpLatest;
 
 internal partial class Program
 {[AsyncEventHandler]
+    public async Task FooAsync()
+    {
+        await Task.Delay(0);
+    }
+}
+";
+
+        // Pass the source code to the helper and snapshot test the output.
+        GeneratorDriver Driver = TestHelper.GetDriver(Source);
+        VerifyResult Result = await VerifyAsyncEventHandler.Verify(Driver).ConfigureAwait(false);
+
+        Assert.That(Result.Files, Has.Exactly(1).Items);
+    }
+
+    [NUnit.Framework.Test]
+    public async Task TestUsingBeforeNamespace()
+    {
+        // The source code to test
+        const string Source = @"
+using System;
+using System.Threading.Tasks;
+using CSharpLatest;
+
+namespace CSharpLatest.TestSuite;
+
+internal partial class Program
+{
+    [AsyncEventHandler]
+    public async Task FooAsync()
+    {
+        await Task.Delay(0);
+    }
+}
+";
+
+        // Pass the source code to the helper and snapshot test the output.
+        GeneratorDriver Driver = TestHelper.GetDriver(Source);
+        VerifyResult Result = await VerifyAsyncEventHandler.Verify(Driver).ConfigureAwait(false);
+
+        Assert.That(Result.Files, Has.Exactly(1).Items);
+    }
+
+    [NUnit.Framework.Test]
+    public async Task TestWithGlobal()
+    {
+        // The source code to test
+        const string Source = @"
+namespace CSharpLatest.TestSuite;
+
+using global::System;
+using System.Threading.Tasks;
+using CSharpLatest;
+
+internal partial class Program
+{
+    [AsyncEventHandler]
+    public async Task FooAsync()
+    {
+        await Task.Delay(0);
+    }
+}
+";
+
+        // Pass the source code to the helper and snapshot test the output.
+        GeneratorDriver Driver = TestHelper.GetDriver(Source);
+        VerifyResult Result = await VerifyAsyncEventHandler.Verify(Driver).ConfigureAwait(false);
+
+        Assert.That(Result.Files, Has.Exactly(1).Items);
+    }
+
+    [NUnit.Framework.Test]
+    public async Task TestNonGlobalBeforeNamespace()
+    {
+        // The source code to test
+        const string Source = @"
+using System;
+using System.Threading.Tasks;
+using CSharpLatest;
+
+namespace CSharpLatest.TestSuite;
+
+internal partial class Program
+{
+    [AsyncEventHandler]
+    public async Task FooAsync()
+    {
+        await Task.Delay(0);
+    }
+}
+";
+
+        // Pass the source code to the helper and snapshot test the output.
+        GeneratorDriver Driver = TestHelper.GetDriver(Source);
+        VerifyResult Result = await VerifyAsyncEventHandler.Verify(Driver).ConfigureAwait(false);
+
+        Assert.That(Result.Files, Has.Exactly(1).Items);
+    }
+
+    [NUnit.Framework.Test]
+    public async Task TestNestedNamespace()
+    {
+        // The source code to test
+        const string Source = @"
+namespace CSharpLatest;
+namespace TestSuite;
+
+using System;
+using System.Threading.Tasks;
+using CSharpLatest;
+
+internal partial class Program
+{
+    [AsyncEventHandler]
+    public async Task FooAsync()
+    {
+        await Task.Delay(0);
+    }
+}
+";
+
+        // Pass the source code to the helper and snapshot test the output.
+        GeneratorDriver Driver = TestHelper.GetDriver(Source);
+        VerifyResult Result = await VerifyAsyncEventHandler.Verify(Driver).ConfigureAwait(false);
+
+        Assert.That(Result.Files, Has.Exactly(1).Items);
+    }
+
+    [NUnit.Framework.Test]
+    public async Task TestWithGlobalThreading()
+    {
+        // The source code to test
+        const string Source = @"
+namespace CSharpLatest.TestSuite;
+
+using global::System.CodeDom.Compiler;
+using global::System.Threading.Tasks;
+using CSharpLatest;
+
+internal partial class Program
+{
+    [AsyncEventHandler]
+    public async Task FooAsync()
+    {
+        await Task.Delay(0);
+    }
+}
+";
+
+        // Pass the source code to the helper and snapshot test the output.
+        GeneratorDriver Driver = TestHelper.GetDriver(Source);
+        VerifyResult Result = await VerifyAsyncEventHandler.Verify(Driver).ConfigureAwait(false);
+
+        Assert.That(Result.Files, Has.Exactly(1).Items);
+    }
+
+    [NUnit.Framework.Test]
+    public async Task TestWithGlobalThreadingBeforeNamespace()
+    {
+        // The source code to test
+        const string Source = @"
+using global::System.CodeDom.Compiler;
+using global::System.Threading.Tasks;
+using CSharpLatest;
+
+namespace CSharpLatest.TestSuite;
+
+internal partial class Program
+{
+    [AsyncEventHandler]
     public async Task FooAsync()
     {
         await Task.Delay(0);

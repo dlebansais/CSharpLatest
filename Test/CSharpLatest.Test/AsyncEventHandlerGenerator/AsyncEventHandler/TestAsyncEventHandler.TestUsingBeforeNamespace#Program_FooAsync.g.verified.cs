@@ -1,0 +1,31 @@
+﻿//HintName: Program_FooAsync.g.cs
+#nullable enable
+
+using System;
+using System.Threading.Tasks;
+using CSharpLatest;
+
+namespace CSharpLatest.TestSuite;
+
+using System.CodeDom.Compiler;
+using System.Diagnostics;
+
+partial class Program
+{
+    [GeneratedCode("CSharpLatest.Analyzers","2.6.1.40")]
+    public void Foo()
+    {
+        _ = Task.Run(async () =>
+        {
+            try
+            {
+                await FooAsync().ConfigureAwait(false);
+            }
+            catch (Exception exception)
+            {
+                Debug.WriteLine($"Fatal: exception in FooAsync.\r\n{exception.Message}\r\n{exception.StackTrace}");
+                throw;
+            }
+        });
+    }
+}

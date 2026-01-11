@@ -3,19 +3,22 @@
 
 namespace CSharpLatest.TestSuite;
 
-using System.Diagnostics;
+using System;
 using System.CodeDom.Compiler;
+using System.Diagnostics;
+using System.Windows;
+using CSharpLatest;
 
 partial class Program
 {
-    [GeneratedCode("CSharpLatest.Analyzers","2.6.0.39")]
-    public void Foo()
+    [GeneratedCode("CSharpLatest.Analyzers","2.6.1.40")]
+    public void Foo(RoutedEventArgs args)
     {
         _ = Dispatcher.BeginInvoke(async () =>
         {
             try
             {
-                await FooAsync().ConfigureAwait(false);
+                await FooAsync(args).ConfigureAwait(false);
             }
             catch (Exception exception)
             {

@@ -3,12 +3,14 @@
 
 namespace CSharpLatest.TestSuite;
 
-using System.Diagnostics;
+using System;
 using System.CodeDom.Compiler;
+using System.Diagnostics;
+using CSharpLatest;
 
 partial class Program
 {
-    [GeneratedCode("CSharpLatest.Analyzers","2.6.0.39")]
+    [GeneratedCode("CSharpLatest.Analyzers","2.6.1.40")]
     public virtual void Foo()
     {
         _ = Task.Run(async () =>

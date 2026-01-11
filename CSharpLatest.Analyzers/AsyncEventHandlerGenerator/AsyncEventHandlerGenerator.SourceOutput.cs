@@ -12,12 +12,9 @@ public partial class AsyncEventHandlerGenerator
     {
         string SourceText = $$"""
                 #nullable enable
-
+                {{model.UsingsBeforeNamespace}}
                 namespace {{model.Namespace}};
-
-                using System.Diagnostics;
-                using System.CodeDom.Compiler;
-                
+                {{model.UsingsAfterNamespace}}
                 partial {{model.DeclarationTokens}} {{model.FullClassName}}
                 {
                 {{model.Documentation}}{{model.GeneratedMethodDeclaration}}
