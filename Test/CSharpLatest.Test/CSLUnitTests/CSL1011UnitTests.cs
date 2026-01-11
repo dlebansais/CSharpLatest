@@ -84,6 +84,21 @@ internal partial class CSL1011UnitTests
     }
 
     [TestMethod]
+    public async Task AsyncMethod_NoDiagnostic()
+    {
+        await VerifyCS.VerifyAnalyzerAsync(@"
+    class Program
+    {
+        public static async Task<int> Foo<T>(params T[] items)
+        {
+            int result = items.Length;
+            return await Task.FromResult(result);
+        }
+    }
+", LanguageVersion.CSharp13).ConfigureAwait(false);
+    }
+
+    [TestMethod]
     public async Task ParameterNotUsed_NoDiagnostic()
     {
         await VerifyCS.VerifyAnalyzerAsync(@"

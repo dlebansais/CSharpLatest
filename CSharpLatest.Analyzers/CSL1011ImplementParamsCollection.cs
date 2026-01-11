@@ -78,6 +78,10 @@ public partial class CSL1011ImplementParamsCollection : DiagnosticAnalyzer
         // Get the method symbol (I could not figure out a way to get null here).
         IMethodSymbol methodSymbol = Contract.AssertNotNull(context.SemanticModel.GetDeclaredSymbol(MethodDeclaration, context.CancellationToken));
 
+        // Ignore async methods (until the language supports them).
+        if (methodSymbol.IsAsync)
+            return;
+
         // No diagnostic if the ReadOnlySpan<T> override already exists.
         int ParameterIndex = MethodDeclaration.ParameterList.Parameters.IndexOf(parameter);
         IEnumerable<ISymbol> Overrides = methodSymbol.ContainingType.GetMembers().Where(member => IsReadOnlySpanOverride(methodSymbol, ParameterIndex, member));
