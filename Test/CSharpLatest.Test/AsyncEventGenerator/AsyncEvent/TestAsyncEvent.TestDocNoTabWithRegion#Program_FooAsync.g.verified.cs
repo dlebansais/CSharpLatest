@@ -17,8 +17,8 @@ partial class Program
 /// </summary>
 /// <param name="value">The property value.</param>
 /// <returns>The getter.</returns>
-    [GeneratedCode("CSharpLatest.Analyzers","2.6.2.41")]
-    public event AsyncEventHandler Foo
+    [GeneratedCode("CSharpLatest.Analyzers","2.6.3.42")]
+    public partial event AsyncEventHandler Foo
     {
         add => __foo.Register(value);
         remove => __foo.Unregister(value);

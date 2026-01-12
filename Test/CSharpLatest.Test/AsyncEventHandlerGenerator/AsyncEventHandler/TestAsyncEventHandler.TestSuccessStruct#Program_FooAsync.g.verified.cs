@@ -10,7 +10,7 @@ using CSharpLatest;
 
 partial struct Program
 {
-    [GeneratedCode("CSharpLatest.Analyzers","2.6.2.41")]
+    [GeneratedCode("CSharpLatest.Analyzers","2.6.3.42")]
     public void Foo()
     {
         _ = Task.Run(async () =>

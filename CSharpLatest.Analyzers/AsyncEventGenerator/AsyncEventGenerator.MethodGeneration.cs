@@ -146,20 +146,21 @@ public partial class AsyncEventGenerator
         {
             string ModifierText = Modifier.Text;
             bool IsAccessModifier = ModifierText is "public" or "protected" or "internal" or "private" or "file";
-            bool IsOtherModifier = ModifierText is "virtual" or "override" or "sealed";
+            bool IsInheritanceModifier = ModifierText is "virtual" or "override" or "sealed";
+            bool IsOtherModifier = ModifierText is "static" or "unsafe";
 
-            if (IsAccessModifier || IsOtherModifier)
+            if (IsAccessModifier || IsInheritanceModifier || IsOtherModifier)
                 AddModifier(ModifierTokens, Modifier, ref CurrentTrivia);
         }
 
         UpdateTrivia(ref CurrentTrivia);
 
-        // Replicate other modifiers that have to be after 'partial' in the generated code.
+        // Replicate the 'partial' in the generated code.
         foreach (SyntaxToken Modifier in memberDeclaration.Modifiers)
         {
             string ModifierText = Modifier.Text;
 
-            if (ModifierText is "static" or "unsafe")
+            if (ModifierText is "partial")
                 AddModifier(ModifierTokens, Modifier, ref CurrentTrivia);
         }
 

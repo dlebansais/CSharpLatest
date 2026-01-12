@@ -8,14 +8,14 @@
         <Platforms>x64</Platforms>
 
         <RootNamespace>CSharpLatest</RootNamespace>
-        <Version>2.6.2</Version>
+        <Version>2.6.3</Version>
         <Authors>David Le Bansais</Authors>
         <Company />
         <Product />
         <Description>Roslyn-based code fixer</Description>
         <Copyright>Copyright © 2026 David Le Bansais</Copyright>
-        <AssemblyVersion>2.6.2.41</AssemblyVersion>
-        <FileVersion>2.6.2.41</FileVersion>
+        <AssemblyVersion>2.6.3.42</AssemblyVersion>
+        <FileVersion>2.6.3.42</FileVersion>
         <RepositoryUrl>https://github.com/dlebansais/CSharpLatest</RepositoryUrl>
         <SuppressTfmSupportBuildWarnings>true</SuppressTfmSupportBuildWarnings>
 
@@ -67,7 +67,7 @@
 
         <PackageReference Include="dlebansais.Method.Contracts-Debug" Version="2.0.5" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" />
         <PackageReference Include="dlebansais.Method.Contracts" Version="2.0.5" Condition="'$(Configuration)|$(Platform)'!='Debug|x64'" />
-        <PackageReference Include="dlebansais.CSharpLatest.Attributes" Version="2.6.2" GeneratePathProperty="true" />
+        <PackageReference Include="dlebansais.CSharpLatest.Attributes" Version="2.6.3" GeneratePathProperty="true" />
     </ItemGroup>
 
     <ItemGroup Condition="'$(Configuration)' == 'Release-4-12-0'">
