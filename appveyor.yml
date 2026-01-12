@@ -44,6 +44,11 @@ environment:
       job_group: Specific-Release-Group
       configuration: Release-5-0-0
 
+# A dummy job that only repeats the Debug job to give artifacts some time to settle on the server.
+    - job_name: Dummy
+      job_group: Specific-Release-Group
+      configuration: Debug
+
     - job_name: Release
       job_depends_on: Specific-Release-Group
       configuration: Release
