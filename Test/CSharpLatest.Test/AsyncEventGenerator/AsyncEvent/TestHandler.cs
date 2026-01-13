@@ -101,7 +101,7 @@ internal class TestHandler
     {
         using TestClient Client2 = new();
 
-        await TestRegisterUnregisterClientNested(Service, Client2).ConfigureAwait(false);
+        TestRegisterUnregisterClientNested(Service, Client2);
         GC.Collect();
 
         _ = Client2.Cleanup(Service);
@@ -115,7 +115,7 @@ internal class TestHandler
         Assert.That(Service.HandlerCount, Is.EqualTo(1));
     }
 
-    private static async Task TestRegisterUnregisterClientNested(TestService Service, TestClient client2)
+    private static void TestRegisterUnregisterClientNested(TestService Service, TestClient client2)
     {
         using TestClient Client1 = new();
 
