@@ -47,26 +47,8 @@ internal class TestHandlerWithArgs
     public async Task TestDispose()
     {
         TestService Service = new();
-        TestClient Client = new();
-        Assert.That(Client.Count, Is.Zero);
 
-        Client.Init(Service);
-
-        Assert.That(Service.HandlerCount, Is.EqualTo(1));
-
-        await Service.Raise().ConfigureAwait(false);
-
-        int LastCount = Client.Cleanup(Service);
-        Assert.That(LastCount, Is.EqualTo(1));
-        Assert.That(Client.Count, Is.EqualTo(LastCount));
-
-        Assert.That(Service.HandlerCount, Is.Zero);
-
-        Client.Init(Service);
-
-        Assert.That(Service.HandlerCount, Is.EqualTo(1));
-
-        Client.Dispose();
+        await RunTestDisposeClient(Service).ConfigureAwait(false);
         GC.Collect();
 
         Assert.That(Service.HandlerCount, Is.EqualTo(1));
@@ -74,7 +56,72 @@ internal class TestHandlerWithArgs
         await Service.Raise().ConfigureAwait(false);
 
         Assert.That(Service.HandlerCount, Is.Zero);
+    }
+
+    private static async Task RunTestDisposeClient(TestService service)
+    {
+        using TestClient Client = new();
         Assert.That(Client.Count, Is.Zero);
+
+        Client.Init(service);
+
+        Assert.That(service.HandlerCount, Is.EqualTo(1));
+
+        await service.Raise().ConfigureAwait(false);
+
+        int LastCount = Client.Cleanup(service);
+        Assert.That(LastCount, Is.EqualTo(1));
+        Assert.That(Client.Count, Is.EqualTo(LastCount));
+
+        Assert.That(service.HandlerCount, Is.Zero);
+
+        Client.Init(service);
+
+        Assert.That(service.HandlerCount, Is.EqualTo(1));
+    }
+
+    [Test]
+    public async Task TestRegisterUnregister()
+    {
+        TestService Service = new();
+
+        await TestRegisterUnregisterClient(Service).ConfigureAwait(false);
+        GC.Collect();
+
+        await Service.Raise().ConfigureAwait(false);
+
+        Assert.That(Service.HandlerCount, Is.Zero);
+    }
+
+    private static async Task TestRegisterUnregisterClient(TestService Service)
+    {
+        using TestClient Client2 = new();
+
+        await TestRegisterUnregisterClientNested(Service, Client2).ConfigureAwait(false);
+        GC.Collect();
+
+        _ = Client2.Cleanup(Service);
+        Client2.Init(Service);
+
+        await Service.Raise().ConfigureAwait(false);
+
+        Assert.That(Service.HandlerCount, Is.EqualTo(1));
+    }
+
+    private static async Task TestRegisterUnregisterClientNested(TestService Service, TestClient client2)
+    {
+        using TestClient Client1 = new();
+
+        Client1.Init(Service);
+        client2.Init(Service);
+
+        Assert.That(Service.HandlerCount, Is.EqualTo(2));
+
+        _ = client2.Cleanup(Service);
+        _ = Client1.Cleanup(Service);
+
+        Client1.Init(Service);
+        client2.Init(Service);
     }
 
     private class TestService

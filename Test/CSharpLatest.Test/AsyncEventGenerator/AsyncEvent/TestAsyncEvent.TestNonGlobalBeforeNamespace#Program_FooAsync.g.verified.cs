@@ -13,7 +13,7 @@ using System.Threading;
 
 partial class Program
 {
-    [GeneratedCode("CSharpLatest.Analyzers","2.6.3.42")]
+    [GeneratedCode("CSharpLatest.Analyzers","2.6.4.43")]
     public partial event AsyncEventHandler Foo
     {
         add => __foo.Register(value);
