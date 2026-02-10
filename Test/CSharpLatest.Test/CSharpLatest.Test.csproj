@@ -47,7 +47,7 @@
         <PackageReference Include="MSTest.TestFramework" Version="4.1.0" />
         <PackageReference Include="NUnit" Version="4.4.0" />
         <PackageReference Include="NUnit3TestAdapter" Version="6.0.0" />
-        <PackageReference Include="Verify.NUnit" Version="31.12.3" />
+        <PackageReference Include="Verify.NUnit" Version="31.12.4" />
         <PackageReference Include="Verify.SourceGenerators" Version="2.5.0" />
         <PackageReference Include="NuGet.Configuration" Version="6.14.0" />
         <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Analyzer.Testing" Version="1.1.3" />
@@ -59,7 +59,7 @@
         <!-- System.Formats.Asn1 is added to mitigate vulnerability. -->
         <!-- Remove as soon as one of the packages above no longer depends on the vulnerable version -->
         <!-- Also reenable NU1510 -->
-        <PackageReference Include="System.Formats.Asn1" Version="10.0.2" />
+        <PackageReference Include="System.Formats.Asn1" Version="10.0.3" />
     </ItemGroup>
 
     <ItemGroup Condition="'$(Configuration)' == 'Release-4-12-0'">
@@ -75,7 +75,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="System.Formats.Asn1" Version="10.0.2" />
+        <PackageReference Include="System.Formats.Asn1" Version="10.0.3" />
         <ProjectReference Include="..\..\CSharpLatest.Analyzers\CSharpLatest.Analyzers.csproj" Aliases="Analyzers" />
         <ProjectReference Include="..\..\CSharpLatest.CodeFixes\CSharpLatest.CodeFixes.csproj" />
     </ItemGroup>
