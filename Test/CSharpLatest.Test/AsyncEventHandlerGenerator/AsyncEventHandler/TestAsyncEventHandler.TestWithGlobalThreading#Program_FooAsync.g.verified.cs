@@ -3,6 +3,7 @@
 
 namespace CSharpLatest.TestSuite;
 
+using global::System;
 using global::System.CodeDom.Compiler;
 using global::System.Diagnostics;
 using global::System.Threading.Tasks;

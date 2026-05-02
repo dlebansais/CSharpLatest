@@ -7,6 +7,7 @@ using CSharpLatest;
 
 namespace CSharpLatest.TestSuite;
 
+using System;
 using System.Diagnostics;
 
 partial class Program

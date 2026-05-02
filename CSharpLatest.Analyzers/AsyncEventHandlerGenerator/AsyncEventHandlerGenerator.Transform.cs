@@ -249,6 +249,7 @@ public partial class AsyncEventHandlerGenerator
         bool UseGlobal = GeneratorHelper.HasGlobalSystem(model.UsingsAfterNamespace);
 
         AddMissingUsing(ref model, "CSharpLatest", isGlobal: false);
+        AddMissingUsing(ref model, "System", isGlobal: UseGlobal);
         AddMissingUsing(ref model, "System.CodeDom.Compiler", isGlobal: UseGlobal);
         AddMissingUsing(ref model, "System.Diagnostics", isGlobal: UseGlobal);
 
