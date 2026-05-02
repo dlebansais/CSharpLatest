@@ -17,7 +17,7 @@ partial class Program
     /// <param name="value">The property value.</param>
 
     /// <returns>The getter.</returns>
-    [GeneratedCode("CSharpLatest.Analyzers","2.6.4.43")]
+    [GeneratedCode("CSharpLatest.Analyzers","2.6.5.44")]
     public void Foo()
     {
         _ = Task.Run(async () =>

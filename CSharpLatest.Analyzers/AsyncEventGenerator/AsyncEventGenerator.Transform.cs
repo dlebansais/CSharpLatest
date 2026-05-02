@@ -226,6 +226,7 @@ public partial class AsyncEventGenerator
 
         AddMissingUsing(ref model, "CSharpLatest", isGlobal: false);
         AddMissingUsing(ref model, "CSharpLatest.Events", isGlobal: false);
+        AddMissingUsing(ref model, "System", isGlobal: UseGlobal);
         AddMissingUsing(ref model, "System.CodeDom.Compiler", isGlobal: UseGlobal);
         AddMissingUsing(ref model, "System.Threading", isGlobal: UseGlobal);
         AddMissingUsing(ref model, "System.Threading.Tasks", isGlobal: UseGlobal);
