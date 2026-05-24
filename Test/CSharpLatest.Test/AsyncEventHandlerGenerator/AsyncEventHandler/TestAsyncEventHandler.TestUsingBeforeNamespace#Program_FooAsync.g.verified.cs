@@ -12,7 +12,7 @@ using System.Diagnostics;
 
 partial class Program
 {
-    [GeneratedCode("CSharpLatest.Analyzers","2.6.5.44")]
+    [GeneratedCode("CSharpLatest.Analyzers","2.6.6.45")]
     public void Foo()
     {
         _ = Task.Run(async () =>

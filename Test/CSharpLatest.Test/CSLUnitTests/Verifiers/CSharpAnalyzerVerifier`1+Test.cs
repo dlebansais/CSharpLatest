@@ -35,7 +35,7 @@ internal static partial class CSharpAnalyzerVerifier<TAnalyzer>
                     solution = solution.WithProjectParseOptions(projectId, ParseOptions ?? throw new InvalidOperationException());
                 }
 
-                if (FrameworkChoiceInternal == FrameworkChoice.None)
+                if (FrameworkChoice == FrameworkChoice.None)
                 {
                     List<MetadataReference> DefaultReferences =
                     [
@@ -53,14 +53,12 @@ internal static partial class CSharpAnalyzerVerifier<TAnalyzer>
 
         public LanguageVersion Version { get; set; } = LanguageVersion.Default;
 
-        private FrameworkChoice FrameworkChoiceInternal = FrameworkChoice.Default;
-
         public FrameworkChoice FrameworkChoice
         {
-            get => FrameworkChoiceInternal;
+            get;
             set
             {
-                FrameworkChoiceInternal = value;
+                field = value;
 
                 switch (value)
                 {
@@ -89,7 +87,7 @@ internal static partial class CSharpAnalyzerVerifier<TAnalyzer>
                         break;
                 }
             }
-        }
+        } = FrameworkChoice.Default;
 
         public bool IsDiagnosticEnabledd
         {

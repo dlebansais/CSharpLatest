@@ -7,7 +7,7 @@ using System.CodeDom.Compiler;
 
 partial record struct Program
 {
-    [GeneratedCode("CSharpLatest.Analyzers","2.6.5.44")]
+    [GeneratedCode("CSharpLatest.Analyzers","2.6.6.45")]
     public partial int Test
     {
         get => fieldTest;
