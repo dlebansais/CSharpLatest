@@ -90,7 +90,7 @@ before_test:
   - nuget install CodecovUploader -Version %codecov_uploader_version% -OutputDirectory packages
   - nuget install ReportGenerator -Version %report_generator_version% -OutputDirectory packages
   - |-
-    printf "pushd .\Test\%APPVEYOR_PROJECT_NAME%.Test && dotnet test ./bin/x64/%CONFIGURATION%/net10.0/%APPVEYOR_PROJECT_NAME%.Test.dll -l console;verbosity=detailed && popd\n" > run-tests.bat
+    printf "pushd .\Test\%APPVEYOR_PROJECT_NAME%.Test && dotnet test ./bin/x64/%CONFIGURATION%/net10.0/%APPVEYOR_PROJECT_NAME%.Test.dll -l console;verbosity=detailed && popd\n" > runtests.bat
   - |-
     printf "@echo ************************************************************** Starting Tests..\n" > runtests1.bat
     printf "call runtests.bat\n" >> runtests1.bat
