@@ -103,10 +103,12 @@ before_test:
     printf "if not exist .\CoverageReports\Summary.txt exit /b -10\n" >> after-test.bat
     printf "powershell $opencover_summary = Get-Content .\CoverageReports\Summary.txt -Raw ; Write-Output $opencover_summary ; $pattern = 'Branch coverage' + [char]0x003A + ' 100' + [char]0x0025 ; if ($opencover_summary -NotMatch $pattern) { Remove-Item .\CoverageReports\Summary.txt -Force }\n" >> after-test.bat
     printf "if not exist .\CoverageReports\Summary.txt exit /b -11\n" >> after-test.bat
+    printf "if ""%STRYKER_OPTIONS%"" == ""skip"" goto end\n" >> after-test.bat
     printf "dotnet stryker --configuration:%CONFIGURATION% --output . --reporter ""markdown""\n" >> after-test.bat
     printf "if not exist ./reports/mutation-report.md exit /b -20\n" >> after-test.bat
     printf "powershell $stryker_summary = Get-Content ./reports/mutation-report.md -Raw ; Write-Output $stryker_summary ; $pattern = 'The final mutation score is 100' ; if ($stryker_summary -NotMatch $pattern) { Remove-Item ./reports/mutation-report.md -Force }\n" >> after-test.bat
     printf "if not exist ./reports/mutation-report.md exit /b -21\n" >> after-test.bat
+    printf ":end\n" >> after-test.bat
 
 test_script:
   - if '%APPVEYOR_REPO_BRANCH%/%CONFIGURATION%' == 'master/Debug' call opencover.bat runtests1.bat
