@@ -83,11 +83,11 @@
             <TfmSpecificPackageFile Include="$(SolutionDir)\CSharpLatest.CodeFixes\bin\$(Platform)\Release-5-0-0\netstandard2.0\RoslynHelpers.dll" PackagePath="analyzers/dotnet/cs/roslyn5.0" />
             <TfmSpecificPackageFile Include="$(SolutionDir)\CSharpLatest.CodeFixes\bin\$(Platform)\Release-5-0-0\netstandard2.0\Method.Contracts.dll" PackagePath="analyzers/dotnet/cs/roslyn5.0" />
 
-            <TfmSpecificPackageFile Include="$(SolutionDir)\CSharpLatest.CodeFixes\bin\$(Platform)\Release-5-3-0\netstandard2.0\CSharpLatest.Analyzers.dll" PackagePath="analyzers/dotnet/cs/roslyn5.0" />
-            <TfmSpecificPackageFile Include="$(SolutionDir)\CSharpLatest.CodeFixes\bin\$(Platform)\Release-5-3-0\netstandard2.0\CSharpLatest.Attributes.dll" PackagePath="analyzers/dotnet/cs/roslyn5.0" />
-            <TfmSpecificPackageFile Include="$(SolutionDir)\CSharpLatest.CodeFixes\bin\$(Platform)\Release-5-3-0\netstandard2.0\CSharpLatest.CodeFixes.dll" PackagePath="analyzers/dotnet/cs/roslyn5.0" />
-            <TfmSpecificPackageFile Include="$(SolutionDir)\CSharpLatest.CodeFixes\bin\$(Platform)\Release-5-3-0\netstandard2.0\RoslynHelpers.dll" PackagePath="analyzers/dotnet/cs/roslyn5.0" />
-            <TfmSpecificPackageFile Include="$(SolutionDir)\CSharpLatest.CodeFixes\bin\$(Platform)\Release-5-3-0\netstandard2.0\Method.Contracts.dll" PackagePath="analyzers/dotnet/cs/roslyn5.0" />
+            <TfmSpecificPackageFile Include="$(SolutionDir)\CSharpLatest.CodeFixes\bin\$(Platform)\Release-5-3-0\netstandard2.0\CSharpLatest.Analyzers.dll" PackagePath="analyzers/dotnet/cs/roslyn5.3" />
+            <TfmSpecificPackageFile Include="$(SolutionDir)\CSharpLatest.CodeFixes\bin\$(Platform)\Release-5-3-0\netstandard2.0\CSharpLatest.Attributes.dll" PackagePath="analyzers/dotnet/cs/roslyn5.3" />
+            <TfmSpecificPackageFile Include="$(SolutionDir)\CSharpLatest.CodeFixes\bin\$(Platform)\Release-5-3-0\netstandard2.0\CSharpLatest.CodeFixes.dll" PackagePath="analyzers/dotnet/cs/roslyn5.3" />
+            <TfmSpecificPackageFile Include="$(SolutionDir)\CSharpLatest.CodeFixes\bin\$(Platform)\Release-5-3-0\netstandard2.0\RoslynHelpers.dll" PackagePath="analyzers/dotnet/cs/roslyn5.3" />
+            <TfmSpecificPackageFile Include="$(SolutionDir)\CSharpLatest.CodeFixes\bin\$(Platform)\Release-5-3-0\netstandard2.0\Method.Contracts.dll" PackagePath="analyzers/dotnet/cs/roslyn5.3" />
         </ItemGroup>
         <ItemGroup Condition="'$(Configuration)'=='Release-5-3-0'">
           <TfmSpecificPackageFile Include="package-icon.png">
