@@ -2,7 +2,7 @@
 
     <PropertyGroup>
         <TargetFrameworks>netstandard2.0</TargetFrameworks>
-        <Configurations>Debug;Release-4-12-0;Release-4-14-0;Release-5-0-0;Release</Configurations>
+        <Configurations>Debug;Release-4-12-0;Release-4-14-0;Release-5-0-0;Release-5-3-0;Release</Configurations>
         <LangVersion>14</LangVersion>
         <Nullable>enable</Nullable>
         <Platforms>x64</Platforms>
@@ -72,11 +72,11 @@
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="dlebansais.Method.Contracts.Analyzers-Debug" Version="2.0.8" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+        <PackageReference Include="dlebansais.Method.Contracts.Analyzers-Debug" Version="2.0.9" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="dlebansais.Method.Contracts.Analyzers" Version="2.0.8" Condition="'$(Configuration)|$(Platform)'!='Debug|x64'">
+        <PackageReference Include="dlebansais.Method.Contracts.Analyzers" Version="2.0.9" Condition="'$(Configuration)|$(Platform)'!='Debug|x64'">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
@@ -85,24 +85,17 @@
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
 
-        <PackageReference Include="dlebansais.RoslynHelpers-Debug" Version="2.2.12" GeneratePathProperty="true" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" />
-        <PackageReference Include="dlebansais.RoslynHelpers" Version="2.2.12" GeneratePathProperty="true" Condition="'$(Configuration)|$(Platform)'!='Debug|x64'" />
+        <!-- Use 5.0.0 for Debug until AppVeyor is updated to 5.3.0 -->
+        <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.12.0" Condition="'$(Configuration)' == 'Release-4-12-0'" />
+        <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.14.0" Condition="'$(Configuration)' == 'Release-4-14-0'" />
+        <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="5.0.0" Condition="'$(Configuration)' == 'Release-5-0-0' Or '$(Configuration)' == 'Debug'" />
+        <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="5.3.0" Condition="'$(Configuration)' != 'Release-4-12-0' And '$(Configuration)' != 'Release-4-14-0' And '$(Configuration)' != 'Release-5-0-0' And '$(Configuration)' != 'Debug'" />
+
+        <PackageReference Include="dlebansais.RoslynHelpers-Debug" Version="2.2.14" GeneratePathProperty="true" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" />
+        <PackageReference Include="dlebansais.RoslynHelpers" Version="2.2.14" GeneratePathProperty="true" Condition="'$(Configuration)|$(Platform)'!='Debug|x64'" />
         <PackageReference Include="dlebansais.Method.Contracts-Debug" Version="2.0.7" GeneratePathProperty="true" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" />
         <PackageReference Include="dlebansais.Method.Contracts" Version="2.0.7" GeneratePathProperty="true" Condition="'$(Configuration)|$(Platform)'!='Debug|x64'" />
         <PackageReference Include="dlebansais.CSharpLatest.Attributes" Version="2.6.4" GeneratePathProperty="true" />
-    </ItemGroup>
-
-    <ItemGroup Condition="'$(Configuration)' == 'Release-4-12-0'">
-        <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.12.0" />
-    </ItemGroup>
-
-    <ItemGroup Condition="'$(Configuration)' == 'Release-4-14-0'">
-        <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.14.0" />
-    </ItemGroup>
-
-    <ItemGroup Condition="'$(Configuration)' != 'Release-4-12-0' And '$(Configuration)' != 'Release-4-14-0'">
-        <!-- Only use 5.0.0 until AppVeyor is upgraded -->
-        <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="5.0.0" />
     </ItemGroup>
 
     <ItemGroup>
@@ -114,7 +107,10 @@
         <None Include="$(Pkgdlebansais_Method_Contracts-Debug)\lib\netstandard2.0\Method.Contracts.dll" CopyToOutputDirectory="PreserveNewest" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" />
         <None Include="$(Pkgdlebansais_Method_Contracts)\lib\netstandard2.0\Method.Contracts.dll" CopyToOutputDirectory="PreserveNewest" Condition="'$(Configuration)|$(Platform)'!='Debug|x64'" />
         <None Include="$(Pkgdlebansais_RoslynHelpers-Debug)\lib\netstandard2.0\RoslynHelpers.dll" CopyToOutputDirectory="PreserveNewest" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" />
-        <None Include="$(Pkgdlebansais_RoslynHelpers)\lib\netstandard2.0\RoslynHelpers.dll" CopyToOutputDirectory="PreserveNewest" Condition="'$(Configuration)|$(Platform)'!='Debug|x64'" />
+        <None Include="$(Pkgdlebansais_RoslynHelpers)\lib\netstandard2.0\roslyn4.12\RoslynHelpers.dll" CopyToOutputDirectory="PreserveNewest" Condition="'$(Configuration)|$(Platform)'=='Release-4-12-0|x64'" />
+        <None Include="$(Pkgdlebansais_RoslynHelpers)\lib\netstandard2.0\roslyn4.14\RoslynHelpers.dll" CopyToOutputDirectory="PreserveNewest" Condition="'$(Configuration)|$(Platform)'=='Release-4-14-0|x64'" />
+        <None Include="$(Pkgdlebansais_RoslynHelpers)\lib\netstandard2.0\roslyn5.0\RoslynHelpers.dll" CopyToOutputDirectory="PreserveNewest" Condition="'$(Configuration)|$(Platform)'=='Release-5-0-0|x64'" />
+        <None Include="$(Pkgdlebansais_RoslynHelpers)\lib\netstandard2.0\roslyn5.3\RoslynHelpers.dll" CopyToOutputDirectory="PreserveNewest" Condition="'$(Configuration)|$(Platform)'=='Release-5-3-0|x64'" />
         <None Include="$(Pkgdlebansais_CSharpLatest_Attributes)\lib\netstandard2.0\CSharpLatest.Attributes.dll" CopyToOutputDirectory="PreserveNewest" />
     </ItemGroup>
 
