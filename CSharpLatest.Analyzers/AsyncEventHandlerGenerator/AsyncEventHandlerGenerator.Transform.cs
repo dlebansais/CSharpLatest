@@ -121,12 +121,7 @@ public partial class AsyncEventHandlerGenerator
     {
         if (methodDeclaration.HasLeadingTrivia)
         {
-            SyntaxTriviaList LeadingTrivia = methodDeclaration.GetLeadingTrivia();
-
-            List<SyntaxTrivia> SupportedTrivias = [];
-            foreach (SyntaxTrivia trivia in LeadingTrivia)
-                if (IsSupportedTrivia(trivia))
-                    SupportedTrivias.Add(trivia);
+            List<SyntaxTrivia> SupportedTrivias = GeneratorHelper.GetSupportedTrivias(methodDeclaration);
 
             // Trim consecutive end of lines until there is only at most one at the beginning.
             bool HadEndOfLine = false;
@@ -174,19 +169,11 @@ public partial class AsyncEventHandlerGenerator
                 Contract.Assert(Remaining + 1 == PreviousRemaining);
             }
 
-            LeadingTrivia = SyntaxFactory.TriviaList(SupportedTrivias);
+            SyntaxTriviaList LeadingTrivia = SyntaxFactory.TriviaList(SupportedTrivias);
 
             if (LeadingTrivia.Any(SyntaxKind.SingleLineDocumentationCommentTrivia))
                 model = model with { Documentation = LeadingTrivia.ToFullString().Trim('\r').Trim('\n').TrimEnd(' ') };
         }
-    }
-
-    private static bool IsSupportedTrivia(SyntaxTrivia trivia)
-    {
-        return trivia.IsKind(SyntaxKind.EndOfLineTrivia) ||
-               trivia.IsKind(SyntaxKind.WhitespaceTrivia) ||
-               trivia.IsKind(SyntaxKind.SingleLineDocumentationCommentTrivia) ||
-               trivia.IsKind(SyntaxKind.MultiLineDocumentationCommentTrivia);
     }
 
     private static bool IsFirstTriviaWhitespace(List<SyntaxTrivia> trivias)

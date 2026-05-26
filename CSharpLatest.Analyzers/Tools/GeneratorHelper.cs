@@ -4,6 +4,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Contracts;
+using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
 
 /// <summary>
 /// Helper class for the code generator.
@@ -102,4 +104,28 @@ internal static class GeneratorHelper
     /// <param name="s">The string.</param>
     /// <param name="prefix">The prefix.</param>
     public static bool StringStartsWith(string s, string prefix) => s.StartsWith(prefix, StringComparison.Ordinal);
+
+    /// <summary>
+    /// Gets supported trivias of a node.
+    /// </summary>
+    /// <param name="syntaxNode">The node.</param>
+    public static List<SyntaxTrivia> GetSupportedTrivias(SyntaxNode syntaxNode)
+    {
+        SyntaxTriviaList LeadingTrivia = syntaxNode.GetLeadingTrivia();
+
+        List<SyntaxTrivia> SupportedTrivias = [];
+        foreach (SyntaxTrivia trivia in LeadingTrivia)
+            if (IsSupportedTrivia(trivia))
+                SupportedTrivias.Add(trivia);
+
+        return SupportedTrivias;
+    }
+
+    private static bool IsSupportedTrivia(SyntaxTrivia trivia)
+    {
+        return trivia.IsKind(SyntaxKind.EndOfLineTrivia) ||
+               trivia.IsKind(SyntaxKind.WhitespaceTrivia) ||
+               trivia.IsKind(SyntaxKind.SingleLineDocumentationCommentTrivia) ||
+               trivia.IsKind(SyntaxKind.MultiLineDocumentationCommentTrivia);
+    }
 }
