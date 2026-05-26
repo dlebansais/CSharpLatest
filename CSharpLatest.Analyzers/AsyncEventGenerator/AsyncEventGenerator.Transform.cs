@@ -1,6 +1,5 @@
 ﻿namespace CSharpLatest.AsyncEventCodeGeneration;
 
-using System.Collections.Generic;
 using System.Threading;
 using Contracts;
 using Microsoft.CodeAnalysis;
@@ -95,95 +94,8 @@ public partial class AsyncEventGenerator
 
     private static void UpdateWithDocumentation(EventFieldDeclarationSyntax eventDeclaration, ref EventModel model)
     {
-        if (eventDeclaration.HasLeadingTrivia)
-        {
-            List<SyntaxTrivia> SupportedTrivias = GeneratorHelper.GetSupportedTrivias(eventDeclaration);
-
-            // Trim consecutive end of lines until there is only at most one at the beginning.
-            bool HadEndOfLine = false;
-            while (HasStartingEndOfLineTrivias(SupportedTrivias))
-            {
-                int PreviousRemaining = SupportedTrivias.Count;
-
-                HadEndOfLine = true;
-                SupportedTrivias.RemoveAt(0);
-
-                // Ensures that this while loop is not infinite.
-                int Remaining = SupportedTrivias.Count;
-                Contract.Assert(Remaining + 1 == PreviousRemaining);
-            }
-
-            if (HadEndOfLine)
-            {
-                // Trim whitespace trivias at start.
-                while (IsFirstTriviaWhitespace(SupportedTrivias))
-                {
-                    int PreviousRemaining = SupportedTrivias.Count;
-
-                    SupportedTrivias.RemoveAt(0);
-
-                    // Ensures that this while loop is not infinite.
-                    int Remaining = SupportedTrivias.Count;
-                    Contract.Assert(Remaining + 1 == PreviousRemaining);
-                }
-            }
-
-            // Remove successive whitespace trivias.
-            int i = 0;
-            while (i + 1 < SupportedTrivias.Count)
-            {
-                int PreviousRemaining = SupportedTrivias.Count - i;
-
-                if (SupportedTrivias[i].IsKind(SyntaxKind.WhitespaceTrivia) && SupportedTrivias[i + 1].IsKind(SyntaxKind.WhitespaceTrivia))
-                    SupportedTrivias.RemoveAt(i);
-                else
-                    i++;
-
-                int Remaining = SupportedTrivias.Count - i;
-
-                // Ensures that this while loop is not infinite.
-                Contract.Assert(Remaining + 1 == PreviousRemaining);
-            }
-
-            SyntaxTriviaList LeadingTrivia = SyntaxFactory.TriviaList(SupportedTrivias);
-
-            if (LeadingTrivia.Any(SyntaxKind.SingleLineDocumentationCommentTrivia))
-                model = model with { Documentation = LeadingTrivia.ToFullString().Trim('\r').Trim('\n').TrimEnd(' ') };
-        }
-    }
-
-    private static bool IsFirstTriviaWhitespace(List<SyntaxTrivia> trivias)
-    {
-        // If we reach this event there is at least one end of line, therefore at least one trivia.
-        Contract.Assert(trivias.Count > 0);
-
-        SyntaxTrivia FirstTrivia = trivias[0];
-
-        return FirstTrivia.IsKind(SyntaxKind.WhitespaceTrivia);
-    }
-
-    private static bool HasStartingEndOfLineTrivias(List<SyntaxTrivia> trivias)
-    {
-        int Count = 0;
-
-        for (int i = 0; i < trivias.Count; i++)
-        {
-            SyntaxTrivia Trivia = trivias[i];
-
-            if (Trivia.IsKind(SyntaxKind.EndOfLineTrivia))
-            {
-                Count++;
-
-                if (Count > 1)
-                    return true;
-            }
-            else if (!Trivia.IsKind(SyntaxKind.WhitespaceTrivia))
-            {
-                return false;
-            }
-        }
-
-        return false;
+        if (GeneratorHelper.HasUpdatedNodeDocumentation(eventDeclaration, out string? documentation))
+            model = model with { Documentation = documentation };
     }
 
     private static void UpdateUsings(GeneratorAttributeSyntaxContext context, ref EventModel model)
