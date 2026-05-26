@@ -1,12 +1,14 @@
 ﻿namespace CSharpLatest;
 
 using System;
+using System.CodeDom.Compiler;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Contracts;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 /// <summary>
 /// Helper class for the code generator.
@@ -234,4 +236,72 @@ internal static class GeneratorHelper
 
         return FirstTrivia.IsKind(SyntaxKind.WhitespaceTrivia);
     }
+
+    /// <summary>
+    /// Gets the leading trivia with a line end and a tab.
+    /// </summary>
+    /// <param name="tab">The tab to use.</param>
+    public static SyntaxTriviaList GetLeadingTriviaWithLineEnd(string tab)
+    {
+        List<SyntaxTrivia> Trivias =
+        [
+            SyntaxFactory.EndOfLine("\n"),
+            SyntaxFactory.Whitespace(tab),
+        ];
+
+        return SyntaxFactory.TriviaList(Trivias);
+    }
+
+    /// <summary>
+    /// Gets the leading trivia without a line end and a tab.
+    /// </summary>
+    /// <param name="tab">The tab to use.</param>
+    public static SyntaxTriviaList GetLeadingTriviaWithoutLineEnd(string tab)
+    {
+        List<SyntaxTrivia> Trivias =
+        [
+            SyntaxFactory.Whitespace(tab),
+        ];
+
+        return SyntaxFactory.TriviaList(Trivias);
+    }
+
+    /// <summary>
+    /// Generates code attributes.
+    /// </summary>
+    public static SyntaxList<AttributeListSyntax> GenerateCodeAttributes()
+    {
+        NameSyntax AttributeName = SyntaxFactory.IdentifierName(AnalyzerTools.RemoveAttributeSuffix(nameof(GeneratedCodeAttribute)));
+
+        string ToolName = GetToolName();
+        SyntaxToken ToolNameToken = SyntaxFactory.Literal(ToolName);
+        LiteralExpressionSyntax ToolNameExpression = SyntaxFactory.LiteralExpression(SyntaxKind.StringLiteralExpression, ToolNameToken);
+        AttributeArgumentSyntax ToolNameAttributeArgument = SyntaxFactory.AttributeArgument(ToolNameExpression);
+
+        string ToolVersion = GetToolVersion();
+        SyntaxToken ToolVersionToken = SyntaxFactory.Literal(ToolVersion);
+        LiteralExpressionSyntax ToolVersionExpression = SyntaxFactory.LiteralExpression(SyntaxKind.StringLiteralExpression, ToolVersionToken);
+        AttributeArgumentSyntax ToolVersionAttributeArgument = SyntaxFactory.AttributeArgument(ToolVersionExpression);
+
+        AttributeArgumentListSyntax ArgumentList = SyntaxFactory.AttributeArgumentList(SyntaxFactory.SeparatedList([ToolNameAttributeArgument, ToolVersionAttributeArgument]));
+        AttributeSyntax Attribute = SyntaxFactory.Attribute(AttributeName, ArgumentList);
+        AttributeListSyntax AttributeList = SyntaxFactory.AttributeList(SyntaxFactory.SeparatedList([Attribute]));
+        SyntaxList<AttributeListSyntax> Attributes = SyntaxFactory.List([AttributeList]);
+
+        return Attributes;
+    }
+
+    /// <summary>
+    /// Gets the executing assembly name.
+    /// </summary>
+    public static string GetToolName()
+    {
+        System.Reflection.AssemblyName ExecutingAssemblyName = System.Reflection.Assembly.GetExecutingAssembly().GetName();
+        return ExecutingAssemblyName.Name.ToString();
+    }
+
+    /// <summary>
+    /// Gets the executing assembly version.
+    /// </summary>
+    public static string GetToolVersion() => System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
 }

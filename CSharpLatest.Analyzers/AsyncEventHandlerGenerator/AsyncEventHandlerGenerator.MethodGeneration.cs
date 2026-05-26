@@ -1,6 +1,5 @@
 ﻿namespace CSharpLatest.AsyncEventHandlerCodeGeneration;
 
-using System.CodeDom.Compiler;
 using System.Collections.Generic;
 using Contracts;
 using Microsoft.CodeAnalysis;
@@ -18,11 +17,11 @@ public partial class AsyncEventHandlerGenerator
         MethodDeclarationSyntax MethodDeclaration = Contract.AssertOfType<MethodDeclarationSyntax>(TargetNode);
 
         string Tab = "    ";
-        SyntaxTriviaList LeadingTrivia = GetLeadingTriviaWithLineEnd(Tab);
-        SyntaxTriviaList LeadingTriviaWithoutLineEnd = GetLeadingTriviaWithoutLineEnd(Tab);
+        SyntaxTriviaList LeadingTrivia = GeneratorHelper.GetLeadingTriviaWithLineEnd(Tab);
+        SyntaxTriviaList LeadingTriviaWithoutLineEnd = GeneratorHelper.GetLeadingTriviaWithoutLineEnd(Tab);
         SyntaxTriviaList TrailingTrivia = MethodDeclaration.Modifiers.Last().TrailingTrivia;
 
-        SyntaxList<AttributeListSyntax> CodeAttributes = GenerateCodeAttributes();
+        SyntaxList<AttributeListSyntax> CodeAttributes = GeneratorHelper.GenerateCodeAttributes();
         MethodDeclaration = MethodDeclaration.WithAttributeLists(CodeAttributes);
 
         MethodDeclaration = MethodDeclaration.WithReturnType(SyntaxFactory.PredefinedType(SyntaxFactory.Token(SyntaxKind.VoidKeyword)));
@@ -86,57 +85,6 @@ public partial class AsyncEventHandlerGenerator
 
         return Arguments;
     }
-
-    private static SyntaxTriviaList GetLeadingTriviaWithLineEnd(string tab)
-    {
-        List<SyntaxTrivia> Trivias =
-        [
-            SyntaxFactory.EndOfLine("\n"),
-            SyntaxFactory.Whitespace(tab),
-        ];
-
-        return SyntaxFactory.TriviaList(Trivias);
-    }
-
-    private static SyntaxTriviaList GetLeadingTriviaWithoutLineEnd(string tab)
-    {
-        List<SyntaxTrivia> Trivias =
-        [
-            SyntaxFactory.Whitespace(tab),
-        ];
-
-        return SyntaxFactory.TriviaList(Trivias);
-    }
-
-    private static SyntaxList<AttributeListSyntax> GenerateCodeAttributes()
-    {
-        NameSyntax AttributeName = SyntaxFactory.IdentifierName(AnalyzerTools.RemoveAttributeSuffix(nameof(GeneratedCodeAttribute)));
-
-        string ToolName = GetToolName();
-        SyntaxToken ToolNameToken = SyntaxFactory.Literal(ToolName);
-        LiteralExpressionSyntax ToolNameExpression = SyntaxFactory.LiteralExpression(SyntaxKind.StringLiteralExpression, ToolNameToken);
-        AttributeArgumentSyntax ToolNameAttributeArgument = SyntaxFactory.AttributeArgument(ToolNameExpression);
-
-        string ToolVersion = GetToolVersion();
-        SyntaxToken ToolVersionToken = SyntaxFactory.Literal(ToolVersion);
-        LiteralExpressionSyntax ToolVersionExpression = SyntaxFactory.LiteralExpression(SyntaxKind.StringLiteralExpression, ToolVersionToken);
-        AttributeArgumentSyntax ToolVersionAttributeArgument = SyntaxFactory.AttributeArgument(ToolVersionExpression);
-
-        AttributeArgumentListSyntax ArgumentList = SyntaxFactory.AttributeArgumentList(SyntaxFactory.SeparatedList([ToolNameAttributeArgument, ToolVersionAttributeArgument]));
-        AttributeSyntax Attribute = SyntaxFactory.Attribute(AttributeName, ArgumentList);
-        AttributeListSyntax AttributeList = SyntaxFactory.AttributeList(SyntaxFactory.SeparatedList([Attribute]));
-        SyntaxList<AttributeListSyntax> Attributes = SyntaxFactory.List([AttributeList]);
-
-        return Attributes;
-    }
-
-    private static string GetToolName()
-    {
-        System.Reflection.AssemblyName ExecutingAssemblyName = System.Reflection.Assembly.GetExecutingAssembly().GetName();
-        return ExecutingAssemblyName.Name.ToString();
-    }
-
-    private static string GetToolVersion() => System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
 
     private static SyntaxTokenList GenerateMethodModifiers(MemberDeclarationSyntax memberDeclaration, SyntaxTriviaList leadingTrivia, SyntaxTriviaList trailingTrivia)
     {

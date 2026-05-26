@@ -1,6 +1,5 @@
 ﻿namespace CSharpLatest.AsyncEventCodeGeneration;
 
-using System.CodeDom.Compiler;
 using System.Collections.Generic;
 using System.Globalization;
 using Contracts;
@@ -20,11 +19,11 @@ public partial class AsyncEventGenerator
         EventFieldDeclarationSyntax EventDeclaration = Contract.AssertOfType<EventFieldDeclarationSyntax>(TargetNode.FirstAncestorOrSelf<EventFieldDeclarationSyntax>());
 
         string Tab = "    ";
-        SyntaxTriviaList LeadingTrivia = GetLeadingTriviaWithLineEnd(Tab);
-        SyntaxTriviaList LeadingTriviaWithoutLineEnd = GetLeadingTriviaWithoutLineEnd(Tab);
+        SyntaxTriviaList LeadingTrivia = GeneratorHelper.GetLeadingTriviaWithLineEnd(Tab);
+        SyntaxTriviaList LeadingTriviaWithoutLineEnd = GeneratorHelper.GetLeadingTriviaWithoutLineEnd(Tab);
         SyntaxTriviaList TrailingTrivia = EventDeclaration.Modifiers.Last().TrailingTrivia;
 
-        SyntaxList<AttributeListSyntax> CodeAttributes = GenerateCodeAttributes();
+        SyntaxList<AttributeListSyntax> CodeAttributes = GeneratorHelper.GenerateCodeAttributes();
         SyntaxTokenList Modifiers = GenerateEventModifiers(EventDeclaration, LeadingTrivia, TrailingTrivia);
         TypeSyntax EventType = VariableDeclaration.Type.WithoutTrivia().WithLeadingTrivia(SyntaxFactory.Whitespace(" "));
         SyntaxToken SymbolIdentifier = SyntaxFactory.Identifier(symbolName).WithLeadingTrivia(SyntaxFactory.Whitespace(" "));
@@ -77,57 +76,6 @@ public partial class AsyncEventGenerator
 
         return FullString;
     }
-
-    private static SyntaxTriviaList GetLeadingTriviaWithLineEnd(string tab)
-    {
-        List<SyntaxTrivia> Trivias =
-        [
-            SyntaxFactory.EndOfLine("\n"),
-            SyntaxFactory.Whitespace(tab),
-        ];
-
-        return SyntaxFactory.TriviaList(Trivias);
-    }
-
-    private static SyntaxTriviaList GetLeadingTriviaWithoutLineEnd(string tab)
-    {
-        List<SyntaxTrivia> Trivias =
-        [
-            SyntaxFactory.Whitespace(tab),
-        ];
-
-        return SyntaxFactory.TriviaList(Trivias);
-    }
-
-    private static SyntaxList<AttributeListSyntax> GenerateCodeAttributes()
-    {
-        NameSyntax AttributeName = SyntaxFactory.IdentifierName(AnalyzerTools.RemoveAttributeSuffix(nameof(GeneratedCodeAttribute)));
-
-        string ToolName = GetToolName();
-        SyntaxToken ToolNameToken = SyntaxFactory.Literal(ToolName);
-        LiteralExpressionSyntax ToolNameExpression = SyntaxFactory.LiteralExpression(SyntaxKind.StringLiteralExpression, ToolNameToken);
-        AttributeArgumentSyntax ToolNameAttributeArgument = SyntaxFactory.AttributeArgument(ToolNameExpression);
-
-        string ToolVersion = GetToolVersion();
-        SyntaxToken ToolVersionToken = SyntaxFactory.Literal(ToolVersion);
-        LiteralExpressionSyntax ToolVersionExpression = SyntaxFactory.LiteralExpression(SyntaxKind.StringLiteralExpression, ToolVersionToken);
-        AttributeArgumentSyntax ToolVersionAttributeArgument = SyntaxFactory.AttributeArgument(ToolVersionExpression);
-
-        AttributeArgumentListSyntax ArgumentList = SyntaxFactory.AttributeArgumentList(SyntaxFactory.SeparatedList([ToolNameAttributeArgument, ToolVersionAttributeArgument]));
-        AttributeSyntax Attribute = SyntaxFactory.Attribute(AttributeName, ArgumentList);
-        AttributeListSyntax AttributeList = SyntaxFactory.AttributeList(SyntaxFactory.SeparatedList([Attribute]));
-        SyntaxList<AttributeListSyntax> Attributes = SyntaxFactory.List([AttributeList]);
-
-        return Attributes;
-    }
-
-    private static string GetToolName()
-    {
-        System.Reflection.AssemblyName ExecutingAssemblyName = System.Reflection.Assembly.GetExecutingAssembly().GetName();
-        return ExecutingAssemblyName.Name.ToString();
-    }
-
-    private static string GetToolVersion() => System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
 
     private static SyntaxTokenList GenerateEventModifiers(MemberDeclarationSyntax memberDeclaration, SyntaxTriviaList leadingTrivia, SyntaxTriviaList trailingTrivia)
     {
