@@ -68,7 +68,7 @@ public partial class CSL1007AddMissingBraces : BraceDiagnosticAnalyzer
         //    }
         //
         // The first statement needs no block as it formatted with the same indentation.
-        if (EmbeddedStatementKind is SyntaxKind.LockStatement or SyntaxKind.UsingStatement or SyntaxKind.FixedStatement && EmbeddedStatementKind == syntaxNode.Kind())
+        if (IsRepeatedStatement(syntaxNode, EmbeddedStatementKind))
             return;
 
         SyntaxToken LastSignificantToken = GetLastSignificantToken(braceSettingValue, embeddedStatement);
@@ -89,6 +89,9 @@ public partial class CSL1007AddMissingBraces : BraceDiagnosticAnalyzer
         SyntaxToken FirstToken = syntaxNode.GetFirstToken();
         context.ReportDiagnostic(Diagnostic.Create(Rule, FirstToken.GetLocation(), SyntaxFacts.GetText(FirstToken.Kind())));
     }
+
+    private static bool IsRepeatedStatement(CSharpSyntaxNode syntaxNode, SyntaxKind embeddedStatementKind)
+        => embeddedStatementKind is SyntaxKind.LockStatement or SyntaxKind.UsingStatement or SyntaxKind.FixedStatement && embeddedStatementKind == syntaxNode.Kind();
 
     private static SyntaxToken GetLastSignificantToken(string braceSettingValue, StatementSyntax embeddedStatement)
         => braceSettingValue is BraceAnalysis.PreferBraceRecursive
