@@ -71,9 +71,7 @@ public partial class CSL1007AddMissingBraces : BraceDiagnosticAnalyzer
         if (EmbeddedStatementKind is SyntaxKind.LockStatement or SyntaxKind.UsingStatement or SyntaxKind.FixedStatement && EmbeddedStatementKind == syntaxNode.Kind())
             return;
 
-        SyntaxToken LastSignificantToken = braceSettingValue is BraceAnalysis.PreferBraceRecursive
-            ? BraceAnalysis.GetStatementLastSignificantToken(embeddedStatement)
-            : embeddedStatement.GetLastToken();
+        SyntaxToken LastSignificantToken = GetLastSignificantToken(braceSettingValue, embeddedStatement);
 
         if ((braceSettingValue is BraceAnalysis.PreferBraceWhenMultiline or BraceAnalysis.PreferBraceRecursive)
             && !BraceAnalysis.IsConsideredMultiLine(syntaxNode, embeddedStatement, LastSignificantToken)
@@ -91,4 +89,9 @@ public partial class CSL1007AddMissingBraces : BraceDiagnosticAnalyzer
         SyntaxToken FirstToken = syntaxNode.GetFirstToken();
         context.ReportDiagnostic(Diagnostic.Create(Rule, FirstToken.GetLocation(), SyntaxFacts.GetText(FirstToken.Kind())));
     }
+
+    private static SyntaxToken GetLastSignificantToken(string braceSettingValue, StatementSyntax embeddedStatement)
+        => braceSettingValue is BraceAnalysis.PreferBraceRecursive
+            ? BraceAnalysis.GetStatementLastSignificantToken(embeddedStatement)
+            : embeddedStatement.GetLastToken();
 }
