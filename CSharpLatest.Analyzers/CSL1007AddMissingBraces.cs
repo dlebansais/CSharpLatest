@@ -1,6 +1,5 @@
 ﻿namespace CSharpLatest;
 
-using System.Collections.Generic;
 using System.Collections.Immutable;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -38,14 +37,12 @@ public partial class CSL1007AddMissingBraces : BraceDiagnosticAnalyzer
     public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => [Rule];
 
     /// <inheritdoc />
-    private protected override void AnalyzeVerifiedNode(SyntaxNodeAnalysisContext context, CSharpSyntaxNode syntaxNode, IEnumerable<IAnalysisAssertion> analysisAssertions)
+    private protected override void AnalyzeVerifiedNode(SyntaxNodeAnalysisContext context, CSharpSyntaxNode syntaxNode, string braceSettingValue, StatementSyntax embeddedStatement)
     {
-        string BraceSettingValue = AnalyzerTools.GetUserPreference(context, BraceAnalysis.PreferBraceSetting, BraceAnalysis.PreferBraceAlways);
-        StatementSyntax EmbeddedStatement = BraceAnalysis.GetEmbeddedStatement(syntaxNode);
-        SyntaxKind EmbeddedStatementKind = EmbeddedStatement.Kind();
+        SyntaxKind EmbeddedStatementKind = embeddedStatement.Kind();
 
         // PreferBraceNever is handled in CSL1008.
-        if (BraceSettingValue is BraceAnalysis.PreferBraceNone or BraceAnalysis.PreferBraceNever)
+        if (braceSettingValue is BraceAnalysis.PreferBraceNone or BraceAnalysis.PreferBraceNever)
             return;
 
         // The embedded statement already has braces, which is always allowed.
@@ -74,12 +71,12 @@ public partial class CSL1007AddMissingBraces : BraceDiagnosticAnalyzer
         if (EmbeddedStatementKind is SyntaxKind.LockStatement or SyntaxKind.UsingStatement or SyntaxKind.FixedStatement && EmbeddedStatementKind == syntaxNode.Kind())
             return;
 
-        SyntaxToken LastSignificantToken = BraceSettingValue is BraceAnalysis.PreferBraceRecursive
-            ? BraceAnalysis.GetStatementLastSignificantToken(EmbeddedStatement)
-            : EmbeddedStatement.GetLastToken();
+        SyntaxToken LastSignificantToken = braceSettingValue is BraceAnalysis.PreferBraceRecursive
+            ? BraceAnalysis.GetStatementLastSignificantToken(embeddedStatement)
+            : embeddedStatement.GetLastToken();
 
-        if ((BraceSettingValue is BraceAnalysis.PreferBraceWhenMultiline or BraceAnalysis.PreferBraceRecursive)
-            && !BraceAnalysis.IsConsideredMultiLine(syntaxNode, EmbeddedStatement, LastSignificantToken)
+        if ((braceSettingValue is BraceAnalysis.PreferBraceWhenMultiline or BraceAnalysis.PreferBraceRecursive)
+            && !BraceAnalysis.IsConsideredMultiLine(syntaxNode, embeddedStatement, LastSignificantToken)
             && !BraceAnalysis.RequiresBracesToMatchContext(syntaxNode))
         {
             return;

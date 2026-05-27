@@ -3,6 +3,7 @@
 using System.Collections.Generic;
 using Contracts;
 using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 /// <summary>
@@ -36,11 +37,20 @@ public abstract class BraceDiagnosticAnalyzer : DiagnosticAnalyzer
 
     private void AnalyzeNode(SyntaxNodeAnalysisContext context) => AnalyzerTools.AssertSyntaxRequirements<CSharpSyntaxNode>(context, AnalyzerTools.MinimumVersionAnalyzed, AnalyzeVerifiedNode);
 
+    private void AnalyzeVerifiedNode(SyntaxNodeAnalysisContext context, CSharpSyntaxNode syntaxNode, IEnumerable<IAnalysisAssertion> analysisAssertions)
+    {
+        string BraceSettingValue = AnalyzerTools.GetUserPreference(context, BraceAnalysis.PreferBraceSetting, BraceAnalysis.PreferBraceAlways);
+        StatementSyntax EmbeddedStatement = BraceAnalysis.GetEmbeddedStatement(syntaxNode);
+
+        AnalyzeVerifiedNode(context, syntaxNode, BraceSettingValue, EmbeddedStatement);
+    }
+
     /// <summary>
     /// Analyzes the syntax node after verifying that it meets the necessary requirements for analysis.
     /// </summary>
     /// <param name="context">The context.</param>
     /// <param name="syntaxNode">The syntax node.</param>
-    /// <param name="analysisAssertions">The analysis assertions.</param>
-    private protected abstract void AnalyzeVerifiedNode(SyntaxNodeAnalysisContext context, CSharpSyntaxNode syntaxNode, IEnumerable<IAnalysisAssertion> analysisAssertions);
+    /// <param name="braceSettingValue">The brace setting value.</param>
+    /// <param name="embeddedStatement">The embedded statement.</param>
+    private protected abstract void AnalyzeVerifiedNode(SyntaxNodeAnalysisContext context, CSharpSyntaxNode syntaxNode, string braceSettingValue, StatementSyntax embeddedStatement);
 }

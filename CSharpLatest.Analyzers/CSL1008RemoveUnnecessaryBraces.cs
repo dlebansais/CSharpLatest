@@ -1,8 +1,6 @@
 ﻿namespace CSharpLatest;
 
-using System.Collections.Generic;
 using System.Collections.Immutable;
-using Contracts;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -38,44 +36,15 @@ public partial class CSL1008RemoveUnnecessaryBraces : BraceDiagnosticAnalyzer
     /// </summary>
     public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => [Rule];
 
-    /// <summary>
-    /// Initializes the rule analyzer.
-    /// </summary>
-    /// <param name="context">The analysis context.</param>
-    public override void Initialize(AnalysisContext context)
-    {
-        context = Contract.AssertNotNull(context);
-
-        context.ConfigureGeneratedCodeAnalysis(GeneratedCodeAnalysisFlags.None);
-        context.EnableConcurrentExecution();
-
-        context.RegisterSyntaxNodeAction(AnalyzeNode,
-                                         SyntaxKind.DoStatement,
-                                         SyntaxKind.ElseClause,
-                                         SyntaxKind.FixedStatement,
-                                         SyntaxKind.ForEachStatement,
-                                         SyntaxKind.ForEachVariableStatement,
-                                         SyntaxKind.ForStatement,
-                                         SyntaxKind.IfStatement,
-                                         SyntaxKind.LockStatement,
-                                         SyntaxKind.UsingStatement,
-                                         SyntaxKind.WhileStatement);
-    }
-
-    private void AnalyzeNode(SyntaxNodeAnalysisContext context) => AnalyzerTools.AssertSyntaxRequirements<CSharpSyntaxNode>(context, AnalyzerTools.MinimumVersionAnalyzed, AnalyzeVerifiedNode);
-
     /// <inheritdoc />
-    private protected override void AnalyzeVerifiedNode(SyntaxNodeAnalysisContext context, CSharpSyntaxNode syntaxNode, IEnumerable<IAnalysisAssertion> analysisAssertions)
+    private protected override void AnalyzeVerifiedNode(SyntaxNodeAnalysisContext context, CSharpSyntaxNode syntaxNode, string braceSettingValue, StatementSyntax embeddedStatement)
     {
-        string BraceSettingValue = AnalyzerTools.GetUserPreference(context, BraceAnalysis.PreferBraceSetting, BraceAnalysis.PreferBraceAlways);
-        StatementSyntax EmbeddedStatement = BraceAnalysis.GetEmbeddedStatement(syntaxNode);
-
         // Other cases are handled in CSL1007.
-        if (BraceSettingValue != BraceAnalysis.PreferBraceNever)
+        if (braceSettingValue != BraceAnalysis.PreferBraceNever)
             return;
 
         // The embedded statement has braces, but has several statements or is the empty block.
-        if (EmbeddedStatement is not BlockSyntax Block || Block.Statements.Count != 1)
+        if (embeddedStatement is not BlockSyntax Block || Block.Statements.Count != 1)
             return;
 
         StatementSyntax SingleStatement = Block.Statements[0];
