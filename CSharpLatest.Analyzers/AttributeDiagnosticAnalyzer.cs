@@ -25,16 +25,11 @@ public abstract class AttributeDiagnosticAnalyzer : DiagnosticAnalyzer
         context.RegisterSyntaxNodeAction(AnalyzeNode, SyntaxKind.Attribute);
     }
 
-    private void AnalyzeNode(SyntaxNodeAnalysisContext context)
-    {
-        AnalyzerTools.AssertSyntaxRequirements<AttributeSyntax>(
-            context,
-            LanguageVersion.CSharp7,
-            AnalyzeVerifiedNode,
-            new SimpleAnalysisAssertion(context => IsPropertyAttribute(context, (AttributeSyntax)context.Node)));
-    }
-
-    private static bool IsPropertyAttribute(SyntaxNodeAnalysisContext context, AttributeSyntax attribute) => AnalyzerTools.IsExpectedAttribute(context, typeof(FieldBackedPropertyAttribute), attribute);
+    /// <summary>
+    /// Analyzes the node for the attribute syntax.
+    /// </summary>
+    /// <param name="context">The context.</param>
+    private protected abstract void AnalyzeNode(SyntaxNodeAnalysisContext context);
 
     /// <summary>
     /// Analyzes the syntax node after verifying that it meets the necessary requirements for analysis.

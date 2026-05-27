@@ -3,6 +3,7 @@
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 using RoslynHelpers;
@@ -36,6 +37,18 @@ public partial class CSL1009FieldBackedPropertyAttributeIsMissingArgument : Attr
     /// Gets the list of supported diagnostic.
     /// </summary>
     public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => [Rule];
+
+    /// <inheritdoc />
+    private protected override void AnalyzeNode(SyntaxNodeAnalysisContext context)
+    {
+        AnalyzerTools.AssertSyntaxRequirements<AttributeSyntax>(
+            context,
+            LanguageVersion.CSharp7,
+            AnalyzeVerifiedNode,
+            new SimpleAnalysisAssertion(context => IsPropertyAttribute(context, (AttributeSyntax)context.Node)));
+    }
+
+    private static bool IsPropertyAttribute(SyntaxNodeAnalysisContext context, AttributeSyntax attribute) => AnalyzerTools.IsExpectedAttribute(context, typeof(FieldBackedPropertyAttribute), attribute);
 
     /// <inheritdoc />
     private protected override void AnalyzeVerifiedNode(SyntaxNodeAnalysisContext context, AttributeSyntax attribute, IEnumerable<IAnalysisAssertion> analysisAssertions)

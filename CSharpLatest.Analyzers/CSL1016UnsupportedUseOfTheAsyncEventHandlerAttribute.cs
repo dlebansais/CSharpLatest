@@ -41,6 +41,18 @@ public partial class CSL1016UnsupportedUseOfTheAsyncEventHandlerAttribute : Attr
     public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => [Rule];
 
     /// <inheritdoc />
+    private protected override void AnalyzeNode(SyntaxNodeAnalysisContext context)
+    {
+        AnalyzerTools.AssertSyntaxRequirements<AttributeSyntax>(
+            context,
+            LanguageVersion.CSharp7,
+            AnalyzeVerifiedNode,
+            new SimpleAnalysisAssertion(context => IsHandlerAttribute(context, (AttributeSyntax)context.Node)));
+    }
+
+    private static bool IsHandlerAttribute(SyntaxNodeAnalysisContext context, AttributeSyntax attribute) => AnalyzerTools.IsExpectedAttribute(context, typeof(AsyncEventHandlerAttribute), attribute);
+
+    /// <inheritdoc />
     private protected override void AnalyzeVerifiedNode(SyntaxNodeAnalysisContext context, AttributeSyntax attribute, IEnumerable<IAnalysisAssertion> analysisAssertions)
     {
         // Diagnostic unless for a method.
