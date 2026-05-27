@@ -74,10 +74,13 @@ internal class TestHandler
         await service.Raise().ConfigureAwait(false);
 
         int LastCount = Client.Cleanup(service);
-        Assert.That(LastCount, Is.EqualTo(1));
-        Assert.That(Client.Count, Is.EqualTo(LastCount));
+        using (Assert.EnterMultipleScope())
+        {
+            Assert.That(LastCount, Is.EqualTo(1));
+            Assert.That(Client.Count, Is.EqualTo(LastCount));
 
-        Assert.That(service.HandlerCount, Is.Zero);
+            Assert.That(service.HandlerCount, Is.Zero);
+        }
 
         Client.Init(service);
 

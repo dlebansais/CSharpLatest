@@ -12,8 +12,15 @@ using VerifyCS = CSharpCodeFixVerifier<Analyzers::CSharpLatest.CSL1008RemoveUnne
 [TestClass]
 internal partial class CSL1008UnitTests
 {
+    private const string Empty = ";;";
+    private const string True = "true;;";
+    private const string False = "false;;";
+    private const string Never = "never;;";
+    private const string WhenMultiline = "when_multiline;;";
+    private const string Recursive = "recursive;;";
+
     [TestMethod]
-    [DataRow("never;;")]
+    [DataRow(Never)]
     public async Task IfWithBraces_Diagnostic(string args)
     {
         Dictionary<string, string> Options = TestTools.ToOptions(args);
@@ -46,11 +53,11 @@ class Program
     }
 
     [TestMethod]
-    [DataRow(";;")]
-    [DataRow("true;;")]
-    [DataRow("false;;")]
-    [DataRow("when_multiline;;")]
-    [DataRow("recursive;;")]
+    [DataRow(Empty)]
+    [DataRow(True)]
+    [DataRow(False)]
+    [DataRow(WhenMultiline)]
+    [DataRow(Recursive)]
     public async Task IfWithBraces_NoDiagnostic(string args)
     {
         Dictionary<string, string> Options = TestTools.ToOptions(args);
@@ -72,7 +79,7 @@ class Program
     }
 
     [TestMethod]
-    [DataRow("never;;")]
+    [DataRow(Never)]
     public async Task OneLineIfAndElse_Diagnostic(string args)
     {
         Dictionary<string, string> Options = TestTools.ToOptions(args);
@@ -107,11 +114,11 @@ class Program
     }
 
     [TestMethod]
-    [DataRow(";;")]
-    [DataRow("true;;")]
-    [DataRow("false;;")]
-    [DataRow("when_multiline;;")]
-    [DataRow("recursive;;")]
+    [DataRow(Empty)]
+    [DataRow(True)]
+    [DataRow(False)]
+    [DataRow(WhenMultiline)]
+    [DataRow(Recursive)]
     public async Task OneLineIfAndElse_NoDiagnostic(string args)
     {
         Dictionary<string, string> Options = TestTools.ToOptions(args);
@@ -135,7 +142,7 @@ class Program
     }
 
     [TestMethod]
-    [DataRow("never;;")]
+    [DataRow(Never)]
     public async Task OneLineIfElseIfElse_Diagnostic(string args)
     {
         Dictionary<string, string> Options = TestTools.ToOptions(args);
@@ -172,11 +179,11 @@ class Program
     }
 
     [TestMethod]
-    [DataRow(";;")]
-    [DataRow("true;;")]
-    [DataRow("false;;")]
-    [DataRow("when_multiline;;")]
-    [DataRow("recursive;;")]
+    [DataRow(Empty)]
+    [DataRow(True)]
+    [DataRow(False)]
+    [DataRow(WhenMultiline)]
+    [DataRow(Recursive)]
     public async Task OneLineIfElseIfElse_NoDiagnostic(string args)
     {
         Dictionary<string, string> Options = TestTools.ToOptions(args);
@@ -200,12 +207,12 @@ class Program
     }
 
     [TestMethod]
-    [DataRow(";;")]
-    [DataRow("true;;")]
-    [DataRow("false;;")]
-    [DataRow("when_multiline;;")]
-    [DataRow("recursive;;")]
-    [DataRow("never;;")]
+    [DataRow(Empty)]
+    [DataRow(True)]
+    [DataRow(False)]
+    [DataRow(WhenMultiline)]
+    [DataRow(Recursive)]
+    [DataRow(Never)]
     public async Task NestedIfNoElse_NoDiagnostic(string args)
     {
         Dictionary<string, string> Options = TestTools.ToOptions(args);
@@ -230,7 +237,7 @@ class Program
     }
 
     [TestMethod]
-    [DataRow("never;;")]
+    [DataRow(Never)]
     public async Task NestedIfElse_Diagnostic(string args)
     {
         Dictionary<string, string> Options = TestTools.ToOptions(args);
@@ -269,11 +276,11 @@ class Program
     }
 
     [TestMethod]
-    [DataRow(";;")]
-    [DataRow("true;;")]
-    [DataRow("false;;")]
-    [DataRow("when_multiline;;")]
-    [DataRow("recursive;;")]
+    [DataRow(Empty)]
+    [DataRow(True)]
+    [DataRow(False)]
+    [DataRow(WhenMultiline)]
+    [DataRow(Recursive)]
     public async Task NestedIfElse_NoDiagnostic(string args)
     {
         Dictionary<string, string> Options = TestTools.ToOptions(args);
@@ -298,12 +305,12 @@ class Program
     }
 
     [TestMethod]
-    [DataRow(";;")]
-    [DataRow("true;;")]
-    [DataRow("false;;")]
-    [DataRow("when_multiline;;")]
-    [DataRow("recursive;;")]
-    [DataRow("never;;")]
+    [DataRow(Empty)]
+    [DataRow(True)]
+    [DataRow(False)]
+    [DataRow(WhenMultiline)]
+    [DataRow(Recursive)]
+    [DataRow(Never)]
     public async Task MultiLineIfCondition_NoDiagnostic(string args)
     {
         Dictionary<string, string> Options = TestTools.ToOptions(args);
@@ -327,12 +334,12 @@ class Program
     }
 
     [TestMethod]
-    [DataRow(";;")]
-    [DataRow("true;;")]
-    [DataRow("false;;")]
-    [DataRow("when_multiline;;")]
-    [DataRow("recursive;;")]
-    [DataRow("never;;")]
+    [DataRow(Empty)]
+    [DataRow(True)]
+    [DataRow(False)]
+    [DataRow(WhenMultiline)]
+    [DataRow(Recursive)]
+    [DataRow(Never)]
     public async Task MultiLineWhileCondition_NoDiagnostic(string args)
     {
         Dictionary<string, string> Options = TestTools.ToOptions(args);
@@ -359,7 +366,7 @@ class Program
     }
 
     [TestMethod]
-    [DataRow("never;;")]
+    [DataRow(Never)]
     public async Task SingleLineWhileCondition_Diagnostic(string args)
     {
         Dictionary<string, string> Options = TestTools.ToOptions(args);
@@ -398,11 +405,11 @@ class Program
     }
 
     [TestMethod]
-    [DataRow(";;")]
-    [DataRow("true;;")]
-    [DataRow("false;;")]
-    [DataRow("when_multiline;;")]
-    [DataRow("recursive;;")]
+    [DataRow(Empty)]
+    [DataRow(True)]
+    [DataRow(False)]
+    [DataRow(WhenMultiline)]
+    [DataRow(Recursive)]
     public async Task SingleLineWhileCondition_NoDiagnostic(string args)
     {
         Dictionary<string, string> Options = TestTools.ToOptions(args);
@@ -427,7 +434,7 @@ class Program
     }
 
     [TestMethod]
-    [DataRow("never;;")]
+    [DataRow(Never)]
     public async Task WhileWithMultipleLineStatement_Diagnostic(string args)
     {
         Dictionary<string, string> Options = TestTools.ToOptions(args);
@@ -474,11 +481,11 @@ class Program
     }
 
     [TestMethod]
-    [DataRow(";;")]
-    [DataRow("true;;")]
-    [DataRow("false;;")]
-    [DataRow("when_multiline;;")]
-    [DataRow("recursive;;")]
+    [DataRow(Empty)]
+    [DataRow(True)]
+    [DataRow(False)]
+    [DataRow(WhenMultiline)]
+    [DataRow(Recursive)]
     public async Task WhileWithMultipleLineStatement_NoDiagnostic(string args)
     {
         Dictionary<string, string> Options = TestTools.ToOptions(args);
@@ -507,7 +514,7 @@ class Program
     }
 
     [TestMethod]
-    [DataRow("never;;")]
+    [DataRow(Never)]
     public async Task RepeatedUsing_Diagnostic(string args)
     {
         Dictionary<string, string> Options = TestTools.ToOptions(args);
@@ -542,11 +549,11 @@ class Program
     }
 
     [TestMethod]
-    [DataRow(";;")]
-    [DataRow("true;;")]
-    [DataRow("false;;")]
-    [DataRow("when_multiline;;")]
-    [DataRow("recursive;;")]
+    [DataRow(Empty)]
+    [DataRow(True)]
+    [DataRow(False)]
+    [DataRow(WhenMultiline)]
+    [DataRow(Recursive)]
     public async Task RepeatedUsing_NoDiagnostic(string args)
     {
         Dictionary<string, string> Options = TestTools.ToOptions(args);
@@ -569,12 +576,12 @@ class Program
     }
 
     [TestMethod]
-    [DataRow(";;")]
-    [DataRow("true;;")]
-    [DataRow("false;;")]
-    [DataRow("when_multiline;;")]
-    [DataRow("recursive;;")]
-    [DataRow("never;;")]
+    [DataRow(Empty)]
+    [DataRow(True)]
+    [DataRow(False)]
+    [DataRow(WhenMultiline)]
+    [DataRow(Recursive)]
+    [DataRow(Never)]
     public async Task IfWithTrivia1_NoDiagnostic(string args)
     {
         Dictionary<string, string> Options = TestTools.ToOptions(args);
@@ -597,7 +604,7 @@ class Program
     }
 
     [TestMethod]
-    [DataRow("never;;")]
+    [DataRow(Never)]
     public async Task IfWithTrivia2_Diagnostic(string args)
     {
         Dictionary<string, string> Options = TestTools.ToOptions(args);
@@ -619,11 +626,11 @@ class Program
     }
 
     [TestMethod]
-    [DataRow(";;")]
-    [DataRow("true;;")]
-    [DataRow("false;;")]
-    [DataRow("when_multiline;;")]
-    [DataRow("recursive;;")]
+    [DataRow(Empty)]
+    [DataRow(True)]
+    [DataRow(False)]
+    [DataRow(WhenMultiline)]
+    [DataRow(Recursive)]
     public async Task IfWithTrivia2_NoDiagnostic(string args)
     {
         Dictionary<string, string> Options = TestTools.ToOptions(args);
@@ -645,7 +652,7 @@ class Program
     }
 
     [TestMethod]
-    [DataRow("never;;")]
+    [DataRow(Never)]
     public async Task IfMultiline_Diagnostic(string args)
     {
         Dictionary<string, string> Options = TestTools.ToOptions(args);
@@ -680,11 +687,11 @@ class Program
     }
 
     [TestMethod]
-    [DataRow(";;")]
-    [DataRow("true;;")]
-    [DataRow("false;;")]
-    [DataRow("when_multiline;;")]
-    [DataRow("recursive;;")]
+    [DataRow(Empty)]
+    [DataRow(True)]
+    [DataRow(False)]
+    [DataRow(WhenMultiline)]
+    [DataRow(Recursive)]
     public async Task IfMultiline_NoDiagnostic(string args)
     {
         Dictionary<string, string> Options = TestTools.ToOptions(args);
