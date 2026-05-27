@@ -12,7 +12,7 @@ using Microsoft.CodeAnalysis.Diagnostics;
 /// Analyzer for rule CSL1008: Remove Unnecessary Braces.
 /// </summary>
 [DiagnosticAnalyzer(LanguageNames.CSharp)]
-public partial class CSL1008RemoveUnnecessaryBraces : DiagnosticAnalyzer
+public partial class CSL1008RemoveUnnecessaryBraces : BraceDiagnosticAnalyzer
 {
     /// <summary>
     /// Diagnostic ID for this rule.
@@ -64,7 +64,8 @@ public partial class CSL1008RemoveUnnecessaryBraces : DiagnosticAnalyzer
 
     private void AnalyzeNode(SyntaxNodeAnalysisContext context) => AnalyzerTools.AssertSyntaxRequirements<CSharpSyntaxNode>(context, AnalyzerTools.MinimumVersionAnalyzed, AnalyzeVerifiedNode);
 
-    private void AnalyzeVerifiedNode(SyntaxNodeAnalysisContext context, CSharpSyntaxNode syntaxNode, IEnumerable<IAnalysisAssertion> analysisAssertions)
+    /// <inheritdoc />
+    private protected override void AnalyzeVerifiedNode(SyntaxNodeAnalysisContext context, CSharpSyntaxNode syntaxNode, IEnumerable<IAnalysisAssertion> analysisAssertions)
     {
         string BraceSettingValue = AnalyzerTools.GetUserPreference(context, BraceAnalysis.PreferBraceSetting, BraceAnalysis.PreferBraceAlways);
         StatementSyntax EmbeddedStatement = BraceAnalysis.GetEmbeddedStatement(syntaxNode);

@@ -2,7 +2,6 @@
 
 using System.Collections.Generic;
 using System.Collections.Immutable;
-using Contracts;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -12,7 +11,7 @@ using Microsoft.CodeAnalysis.Diagnostics;
 /// Analyzer for rule CSL1007: Add Missing Braces.
 /// </summary>
 [DiagnosticAnalyzer(LanguageNames.CSharp)]
-public partial class CSL1007AddMissingBraces : DiagnosticAnalyzer
+public partial class CSL1007AddMissingBraces : BraceDiagnosticAnalyzer
 {
     /// <summary>
     /// Diagnostic ID for this rule.
@@ -38,33 +37,8 @@ public partial class CSL1007AddMissingBraces : DiagnosticAnalyzer
     /// </summary>
     public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => [Rule];
 
-    /// <summary>
-    /// Initializes the rule analyzer.
-    /// </summary>
-    /// <param name="context">The analysis context.</param>
-    public override void Initialize(AnalysisContext context)
-    {
-        context = Contract.AssertNotNull(context);
-
-        context.ConfigureGeneratedCodeAnalysis(GeneratedCodeAnalysisFlags.None);
-        context.EnableConcurrentExecution();
-
-        context.RegisterSyntaxNodeAction(AnalyzeNode,
-                                         SyntaxKind.DoStatement,
-                                         SyntaxKind.ElseClause,
-                                         SyntaxKind.FixedStatement,
-                                         SyntaxKind.ForEachStatement,
-                                         SyntaxKind.ForEachVariableStatement,
-                                         SyntaxKind.ForStatement,
-                                         SyntaxKind.IfStatement,
-                                         SyntaxKind.LockStatement,
-                                         SyntaxKind.UsingStatement,
-                                         SyntaxKind.WhileStatement);
-    }
-
-    private void AnalyzeNode(SyntaxNodeAnalysisContext context) => AnalyzerTools.AssertSyntaxRequirements<CSharpSyntaxNode>(context, AnalyzerTools.MinimumVersionAnalyzed, AnalyzeVerifiedNode);
-
-    private void AnalyzeVerifiedNode(SyntaxNodeAnalysisContext context, CSharpSyntaxNode syntaxNode, IEnumerable<IAnalysisAssertion> analysisAssertions)
+    /// <inheritdoc />
+    private protected override void AnalyzeVerifiedNode(SyntaxNodeAnalysisContext context, CSharpSyntaxNode syntaxNode, IEnumerable<IAnalysisAssertion> analysisAssertions)
     {
         string BraceSettingValue = AnalyzerTools.GetUserPreference(context, BraceAnalysis.PreferBraceSetting, BraceAnalysis.PreferBraceAlways);
         StatementSyntax EmbeddedStatement = BraceAnalysis.GetEmbeddedStatement(syntaxNode);
