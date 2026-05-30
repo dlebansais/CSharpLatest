@@ -7,6 +7,7 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
+using Microsoft.CodeAnalysis.Text;
 
 /// <summary>
 /// Analyzer for the inheritdoc tag.
@@ -87,4 +88,44 @@ public abstract class InheritDocDiagnosticAnalyzer : DiagnosticAnalyzer
     /// <param name="memberDeclaration">The declaration.</param>
     /// <param name="symbol">The associated symbol.</param>
     private protected abstract void AnalyzeVerifiedNode(SyntaxNodeAnalysisContext context, MemberDeclarationSyntax memberDeclaration, ISymbol symbol);
+
+    /// <summary>
+    /// Checks whether a symbol's documentation can be replaced with the inheritdoc tag.
+    /// </summary>
+    /// <param name="symbol">The symbol.</param>
+    private protected static bool IsDocReplaceable(ISymbol symbol)
+    {
+        // Ignore symbols without documentation comments.
+        string? XmlDoc = symbol.GetDocumentationCommentXml(expandIncludes: false);
+        if (string.IsNullOrEmpty(XmlDoc))
+            return false;
+
+        XmlDoc = Contract.AssertNotNull(XmlDoc);
+
+        // Ignore documentation already containing <inheritdoc />.
+        return !XmlDoc.Contains("<inheritdoc");
+    }
+
+    /// <summary>
+    /// Gets the location of the documentation comment for a member declaration.
+    /// </summary>
+    /// <param name="context">The context.</param>
+    /// <param name="memberDeclaration">The member declaration.</param>
+    private protected static Location GetDocLocation(SyntaxNodeAnalysisContext context, MemberDeclarationSyntax memberDeclaration)
+    {
+        // Gets the location of the documentation comment.
+        SyntaxTriviaList xmlTrivia = memberDeclaration.GetLeadingTrivia();
+        SyntaxTrivia First = TriviaToolsFirst.FirstTrivia(xmlTrivia);
+        SyntaxTrivia Last = TriviaToolsLast.LastTrivia(xmlTrivia);
+
+        // Adjust for trailing newlines in the last trivia.
+        string LastTriviaString = Last.ToFullString();
+        string TrimmedLastTriviaString = LastTriviaString.TrimEnd('\r', '\n');
+        int TrimmedLength = LastTriviaString.Length - TrimmedLastTriviaString.Length;
+
+        TextSpan DocSpan = TextSpan.FromBounds(First.FullSpan.Start, Last.Span.End - TrimmedLength);
+        Location DocLocation = Location.Create(context.Node.SyntaxTree, DocSpan);
+
+        return DocLocation;
+    }
 }

@@ -6,22 +6,22 @@ extern alias Analyzers;
 
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using VerifyCS = CSharpAnalyzerVerifier<Analyzers::CSharpLatest.CSL1014ConsiderUsingInheritDoc>;
+using VerifyCS = CSharpAnalyzerVerifier<Analyzers::CSharpLatest.CSL1017ConsiderUsingInheritDoc>;
 
 [TestClass]
-internal partial class CSL1014UnitTests
+internal partial class CSL1017UnitTests
 {
     [TestMethod]
-    public async Task MethodExistingDoc_NoDiagnostic()
+    public async Task MethodExistingDoc_Diagnostic()
     {
         await VerifyCS.VerifyAnalyzerAsync(@"
 namespace TestSuite;
 
 internal partial class Program : IDisposable
 {
-    /// <summary>
+    [|/// <summary>
     /// Disposes resources.
-    /// </summary>
+    /// </summary>|]
     public void Dispose()
     {
     }
@@ -46,7 +46,7 @@ internal partial class Program : IDisposable
     }
 
     [TestMethod]
-    public async Task PropertyExistingDoc_NoDiagnostic()
+    public async Task PropertyExistingDoc_Diagnostic()
     {
         await VerifyCS.VerifyAnalyzerAsync(@"
 namespace TestSuite;
@@ -61,9 +61,9 @@ internal interface IDigit
 
 internal class Digit : IDigit
 {
-    /// <summary>
+    [|/// <summary>
     /// Gets the digit value.
-    /// </summary>
+    /// </summary>|]
     public int Value { get; }
 }
 ").ConfigureAwait(false);
@@ -92,7 +92,7 @@ internal class Digit : IDigit
     }
 
     [TestMethod]
-    public async Task IndexerExistingDoc_Diagnostic()
+    public async Task IndexerExistingDoc_NoDiagnostic()
     {
         await VerifyCS.VerifyAnalyzerAsync(@"
 namespace TestSuite;
@@ -107,9 +107,9 @@ internal class BaseDigit
 
 internal class Digit : BaseDigit
 {
-    [|/// <summary>
+    /// <summary>
     /// Gets the digit value.
-    /// </summary>|]
+    /// </summary>
     public override int this[int index] => index;
 }
 ").ConfigureAwait(false);
@@ -138,7 +138,7 @@ internal class Digit : BaseDigit
     }
 
     [TestMethod]
-    public async Task FieldEventExistingDoc_NoDiagnostic()
+    public async Task FieldEventExistingDoc_Diagnostic()
     {
         await VerifyCS.VerifyAnalyzerAsync(@"
 namespace TestSuite;
@@ -153,9 +153,9 @@ internal interface IDigit
 
 internal class Digit : IDigit
 {
-    /// <summary>
+    [|/// <summary>
     /// Event raised when threshold is reached.
-    /// </summary>
+    /// </summary>|]
     public event System.EventHandler? ThresholdReached;
 }
 ").ConfigureAwait(false);
@@ -208,7 +208,7 @@ internal class Digit : IDigit
     }
 
     [TestMethod]
-    public async Task PropertyEventExistingDoc_Diagnostic()
+    public async Task PropertyEventExistingDoc_NoDiagnostic()
     {
         await VerifyCS.VerifyAnalyzerAsync(@"
 namespace TestSuite;
@@ -229,9 +229,9 @@ internal class BaseDigit
 
 internal class Digit : BaseDigit
 {
-    [|/// <summary>
+    /// <summary>
     /// Event raised when threshold is reached.
-    /// </summary>|]
+    /// </summary>
     public override event System.EventHandler? ThresholdReached
     {
         add => eventList.Add(value);

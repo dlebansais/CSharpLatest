@@ -439,7 +439,7 @@ namespace CSharpLatest {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Consider using the &lt;inheritdoc/&gt; tag to document your code..
+        ///   Looks up a localized string similar to Consider using the &lt;inheritdoc/&gt; tag to document your member override..
         /// </summary>
         internal static string CSL1014AnalyzerDescription {
             get {
@@ -516,6 +516,33 @@ namespace CSharpLatest {
         internal static string CSL1016AnalyzerTitle {
             get {
                 return ResourceManager.GetString("CSL1016AnalyzerTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Consider using the &lt;inheritdoc/&gt; tag to document your interface implementation..
+        /// </summary>
+        internal static string CSL1017AnalyzerDescription {
+            get {
+                return ResourceManager.GetString("CSL1017AnalyzerDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Consider using the &lt;inheritdoc/&gt; tag to document &apos;{0}&apos;.
+        /// </summary>
+        internal static string CSL1017AnalyzerMessageFormat {
+            get {
+                return ResourceManager.GetString("CSL1017AnalyzerMessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Consider using the &lt;inheritdoc/&gt; tag.
+        /// </summary>
+        internal static string CSL1017AnalyzerTitle {
+            get {
+                return ResourceManager.GetString("CSL1017AnalyzerTitle", resourceCulture);
             }
         }
     }

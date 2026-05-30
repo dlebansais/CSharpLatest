@@ -286,7 +286,7 @@
     <comment>The title of the diagnostic.</comment>
   </data>
   <data name="CSL1014AnalyzerDescription" xml:space="preserve">
-    <value>Consider using the &lt;inheritdoc/&gt; tag to document your code.</value>
+    <value>Consider using the &lt;inheritdoc/&gt; tag to document your member override.</value>
     <comment>An optional longer localizable description of the diagnostic.</comment>
   </data>
   <data name="CSL1014AnalyzerMessageFormat" xml:space="preserve">
@@ -319,6 +319,18 @@
   </data>
   <data name="CSL1016AnalyzerTitle" xml:space="preserve">
     <value>Unsupported use of the AsyncEventHandler attribute</value>
+    <comment>The title of the diagnostic.</comment>
+  </data>
+  <data name="CSL1017AnalyzerDescription" xml:space="preserve">
+    <value>Consider using the &lt;inheritdoc/&gt; tag to document your interface implementation.</value>
+    <comment>An optional longer localizable description of the diagnostic.</comment>
+  </data>
+  <data name="CSL1017AnalyzerMessageFormat" xml:space="preserve">
+    <value>Consider using the &lt;inheritdoc/&gt; tag to document '{0}'</value>
+    <comment>The format-able message the diagnostic displays.</comment>
+  </data>
+  <data name="CSL1017AnalyzerTitle" xml:space="preserve">
+    <value>Consider using the &lt;inheritdoc/&gt; tag</value>
     <comment>The title of the diagnostic.</comment>
   </data>
 </root>

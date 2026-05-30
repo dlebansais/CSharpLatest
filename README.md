@@ -44,9 +44,10 @@ To uninstall this analyzer, in Visual Studio:
 | [CSL1011](doc/CSL1011.md) | Implement `params` collection.                                   |
 | [CSL1012](doc/CSL1012.md) | Use `System.Threading.Lock` to lock.                             |
 | [CSL1013](doc/CSL1013.md) | Change extension function to extension member                    |
-| [CSL1014](doc/CSL1014.md) | Consider using `<inheritdoc />`                                  |
+| [CSL1014](doc/CSL1014.md) | Consider using `<inheritdoc />` (for member override)            |
 | [CSL1015](doc/CSL1015.md) | Do not declare `async void` methods                              |
 | [CSL1016](doc/CSL1016.md) | Unsupported use of the `AsyncEventHandler` attribute.            |
+| [CSL1017](doc/CSL1017.md) | Consider using `<inheritdoc />` (for interface implementation)   |
 
 ### CSL1000: Variables that are not modified should be made constants
 
@@ -96,7 +97,7 @@ Feature available since C# 13: [New lock object](https://learn.microsoft.com/en-
 
 Feature available since C# 14: [Extension members](https://learn.microsoft.com/en-us/dotnet/csharp/whats-new/csharp-14#extension-members).
 
-### CSL1014: Consider using `<inheritdoc />`
+### CSL1014 and CSL1017: Consider using `<inheritdoc />`
 
 Improve your code documentation with Visual Studio 2022 full support of this tag.
 

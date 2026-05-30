@@ -1,24 +1,25 @@
 ﻿namespace CSharpLatest;
 
 using System.Collections.Immutable;
+using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 /// <summary>
-/// Analyzer for rule CSL1014: Consider using inheritdoc.
+/// Analyzer for rule CSL1017: Consider using inheritdoc.
 /// </summary>
 [DiagnosticAnalyzer(LanguageNames.CSharp)]
-public partial class CSL1014ConsiderUsingInheritDoc : InheritDocDiagnosticAnalyzer
+public partial class CSL1017ConsiderUsingInheritDoc : InheritDocDiagnosticAnalyzer
 {
     /// <summary>
     /// Diagnostic ID for this rule.
     /// </summary>
-    public const string DiagnosticId = "CSL1014";
+    public const string DiagnosticId = "CSL1017";
 
-    private static readonly LocalizableString Title = new LocalizableResourceString(nameof(AnalyzerResources.CSL1014AnalyzerTitle), AnalyzerResources.ResourceManager, typeof(AnalyzerResources));
-    private static readonly LocalizableString MessageFormat = new LocalizableResourceString(nameof(AnalyzerResources.CSL1014AnalyzerMessageFormat), AnalyzerResources.ResourceManager, typeof(AnalyzerResources));
-    private static readonly LocalizableString Description = new LocalizableResourceString(nameof(AnalyzerResources.CSL1014AnalyzerDescription), AnalyzerResources.ResourceManager, typeof(AnalyzerResources));
+    private static readonly LocalizableString Title = new LocalizableResourceString(nameof(AnalyzerResources.CSL1017AnalyzerTitle), AnalyzerResources.ResourceManager, typeof(AnalyzerResources));
+    private static readonly LocalizableString MessageFormat = new LocalizableResourceString(nameof(AnalyzerResources.CSL1017AnalyzerMessageFormat), AnalyzerResources.ResourceManager, typeof(AnalyzerResources));
+    private static readonly LocalizableString Description = new LocalizableResourceString(nameof(AnalyzerResources.CSL1017AnalyzerDescription), AnalyzerResources.ResourceManager, typeof(AnalyzerResources));
     private const string Category = "Style";
 
     private static readonly DiagnosticDescriptor Rule = new(DiagnosticId,
@@ -38,9 +39,9 @@ public partial class CSL1014ConsiderUsingInheritDoc : InheritDocDiagnosticAnalyz
     /// <inheritdoc />
     private protected override void AnalyzeVerifiedNode(SyntaxNodeAnalysisContext context, MemberDeclarationSyntax memberDeclaration, ISymbol symbol)
     {
-        // Only analyze members that override a base member.
-        bool HasAncestor = symbol.IsOverride;
-        if (!HasAncestor)
+        // Only analyze members that implement an interface member.
+        bool HasInterface = ImplementsInterfaceMember(symbol);
+        if (!HasInterface)
             return;
 
         if (!IsDocReplaceable(symbol))
@@ -48,5 +49,17 @@ public partial class CSL1014ConsiderUsingInheritDoc : InheritDocDiagnosticAnalyz
 
         Location DocLocation = GetDocLocation(context, memberDeclaration);
         context.ReportDiagnostic(Diagnostic.Create(Rule, DocLocation, symbol.Name));
+    }
+
+    private static bool ImplementsInterfaceMember(ISymbol symbol)
+    {
+        INamedTypeSymbol containingType = symbol.ContainingType;
+        var col = from INamedTypeSymbol CandidateInterface in containingType.AllInterfaces
+                  from ISymbol Member in CandidateInterface.GetMembers()
+                  let Implementation = containingType.FindImplementationForInterfaceMember(Member)
+                  where SymbolEqualityComparer.Default.Equals(Implementation, symbol)
+                  select new { };
+
+        return col.Any();
     }
 }

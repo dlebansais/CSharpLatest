@@ -21,3 +21,4 @@ CSL1013 |  Usage   |  Warning | CSL1013ChangeExtensionFunctionToExtensionMember,
 CSL1014 |  Style   |  Warning | CSL1014ConsiderUsingInheritDoc, [Documentation](doc/CSL1014.md)
 CSL1015 |  Usage   |  Warning | CSL1015DoNotDeclareAsyncVoidMethods, [Documentation](doc/CSL1015.md)
 CSL1016 |  Usage   |   Error  | CSL1016UnsupportedUseOfTheAsyncEventHandlerAttribute, [Documentation](doc/CSL1016.md)
+CSL1017 |  Style   |  Warning | CSL1017ConsiderUsingInheritDoc, [Documentation](doc/CSL1017.md)
