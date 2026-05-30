@@ -11,7 +11,7 @@ using CSharpLatest;
 
 partial class Program
 {
-    [GeneratedCode("CSharpLatest.Analyzers","2.6.6.45")]
+    [GeneratedCode("CSharpLatest.Analyzers","2.7.0.46")]
     public void Foo()
     {
         _ = Task.Run(async () =>
