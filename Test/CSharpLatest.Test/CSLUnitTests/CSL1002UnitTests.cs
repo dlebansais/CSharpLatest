@@ -329,4 +329,28 @@ class Program
 }
 ").ConfigureAwait(false);
     }
+
+    [TestMethod]
+    public async Task Generic_Diagnostic()
+    {
+        await VerifyCS.VerifyCodeFixAsync(Prologs.Nullable, @"
+class Program<T>
+{
+    static void Main(T[] args, T item)
+    {
+        if ([|item != null|])
+            Console.WriteLine(string.Empty);
+    }
+}
+", @"
+class Program<T>
+{
+    static void Main(T[] args, T item)
+    {
+        if (item is not null)
+            Console.WriteLine(string.Empty);
+    }
+}
+").ConfigureAwait(false);
+    }
 }
