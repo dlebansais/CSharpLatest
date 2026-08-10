@@ -26,6 +26,8 @@ environment:
   opencover_version: 4.7.1221
   codecov_uploader_version: 0.8.0
   report_generator_version: 5.5.10
+  DOTNET_CLI_TELEMETRY_OPTOUT: true
+  CUSTOM_PACKAGER_OPTIONS: "[]"           # Override in settings -> Environment -> Environment variables
   PACKAGE_PREFIX: dlebansais
 
   matrix:
@@ -57,8 +59,12 @@ matrix:
   fast_finish: true
 
 before_build:
-  - nuget restore %APPVEYOR_PROJECT_NAME%.sln
+  - nuget restore %APPVEYOR_PROJECT_NAME%.slnx
   - nuget install dlebansais.GitCommitId -DependencyVersion Highest -OutputDirectory packages
+  - nuget install dlebansais.Packager -DependencyVersion Highest -OutputDirectory packages
+  - nuget install OpenCover -Version %opencover_version% -OutputDirectory packages
+  - nuget install CodecovUploader -Version %codecov_uploader_version% -OutputDirectory packages
+  - nuget install ReportGenerator -Version %report_generator_version% -OutputDirectory packages
   - dotnet restore
   - dotnet tool install -g dotnet-stryker
 # Extract signing.snk to the current directory. Do not extract for a PR because they don't have access to secrets, but we don't need to sign assemblies in that case.
@@ -76,7 +82,7 @@ before_build:
     if exist Release-5-3-0.zip C:/PROGRA~1/7-Zip/7z.exe  -o%APPVEYOR_PROJECT_NAME%.CodeFixes/bin/x64/Release-5-3-0\netstandard2.0  e Release-5-3-0.zip
 
 build:
-  project: $(APPVEYOR_PROJECT_NAME).sln
+  project: $(APPVEYOR_PROJECT_NAME).slnx
 
 after_build:
   - ps: |-
@@ -88,9 +94,6 @@ after_build:
   - echo Version is "%VERSION_TAG%"
 
 before_test:
-  - nuget install OpenCover -Version %opencover_version% -OutputDirectory packages
-  - nuget install CodecovUploader -Version %codecov_uploader_version% -OutputDirectory packages
-  - nuget install ReportGenerator -Version %report_generator_version% -OutputDirectory packages
   - |-
     printf "pushd .\Test\%APPVEYOR_PROJECT_NAME%.Test && dotnet test ./bin/x64/%CONFIGURATION%/net10.0/%APPVEYOR_PROJECT_NAME%.Test.dll -l console;verbosity=detailed && popd\n" > runtests.bat
   - |-
@@ -101,14 +104,10 @@ before_test:
   - |-
     printf ".\packages\CodecovUploader.%codecov_uploader_version%\Tools\Codecov.exe -f ""Coverage-%APPVEYOR_PROJECT_NAME%.xml""\n" > after-test.bat
     printf ".\packages\ReportGenerator.%report_generator_version%\Tools\Net8.0\ReportGenerator.exe ""-reports:Coverage-%APPVEYOR_PROJECT_NAME%.xml"" -targetdir:.\CoverageReports ""-assemblyfilters:-Microsoft*;+%APPVEYOR_PROJECT_NAME%.Analyzers;+%APPVEYOR_PROJECT_NAME%.CodeFixes"" ""-filefilters:-*.g.cs"" -reporttypes:textsummary\n" >> after-test.bat
-    printf "if not exist .\CoverageReports\Summary.txt exit /b -10\n" >> after-test.bat
-    printf "powershell $opencover_summary = Get-Content .\CoverageReports\Summary.txt -Raw ; Write-Output $opencover_summary ; $pattern = 'Branch coverage' + [char]0x003A + ' 100' + [char]0x0025 ; if ($opencover_summary -NotMatch $pattern) { Remove-Item .\CoverageReports\Summary.txt -Force }\n" >> after-test.bat
-    printf "if not exist .\CoverageReports\Summary.txt exit /b -11\n" >> after-test.bat
+    printf "powershell $ErrorActionPreference = 'Stop'; $opencover_summary = Get-Content .\CoverageReports\Summary.txt -Raw ; Write-Output $opencover_summary ; $pattern = 'Branch coverage' + [char]0x003A + ' 100' + [char]0x0025 ; if ($opencover_summary -NotMatch $pattern) { exit -1 }\n" >> after-test.bat
     printf "if ""%STRYKER_OPTIONS%"" == ""skip"" goto end\n" >> after-test.bat
     printf "dotnet stryker --configuration:%CONFIGURATION% --output . --reporter ""markdown""\n" >> after-test.bat
-    printf "if not exist ./reports/mutation-report.md exit /b -20\n" >> after-test.bat
-    printf "powershell $stryker_summary = Get-Content ./reports/mutation-report.md -Raw ; Write-Output $stryker_summary ; $pattern = 'The final mutation score is 100' ; if ($stryker_summary -NotMatch $pattern) { Remove-Item ./reports/mutation-report.md -Force }\n" >> after-test.bat
-    printf "if not exist ./reports/mutation-report.md exit /b -21\n" >> after-test.bat
+    printf "powershell $ErrorActionPreference = 'Stop'; $stryker_summary = Get-Content ./reports/mutation-report.md -Raw ; Write-Output $stryker_summary ; $pattern = 'The final mutation score is 100' ; if ($stryker_summary -NotMatch $pattern) { exit -1 }\n" >> after-test.bat
     printf ":end\n" >> after-test.bat
 
 test_script:
