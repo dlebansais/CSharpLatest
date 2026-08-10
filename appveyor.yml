@@ -24,8 +24,8 @@ environment:
   SnkPassword:
     secure: 1svE5KENguPZZA9WI7jqI4rFGWREjMTmt//xbbv+POFKS8BdTi/TE2zB7jU0e7BsYW8G1ZP/4NxjfvnM/EOuH/VxpbyUo8p6fayCu3fDKbLBAt7PWIRCy4mo7SWR0vHAw/Q6cFQHWfA7EVu7eVC66Q==
   opencover_version: 4.7.1221
-  codecov_uploader_version: 0.7.1
-  report_generator_version: 5.2.0
+  codecov_uploader_version: 0.8.0
+  report_generator_version: 5.5.10
   PACKAGE_PREFIX: dlebansais
 
   matrix:
