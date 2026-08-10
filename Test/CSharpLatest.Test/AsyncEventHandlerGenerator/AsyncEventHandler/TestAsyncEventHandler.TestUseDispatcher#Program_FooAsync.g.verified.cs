@@ -11,7 +11,7 @@ using CSharpLatest;
 
 partial class Program
 {
-    [GeneratedCode("CSharpLatest.Analyzers","2.7.1.47")]
+    [GeneratedCode("CSharpLatest.Analyzers","3.0.0.48")]
     public void Foo(RoutedEventArgs args)
     {
         _ = Dispatcher.BeginInvoke(async () =>

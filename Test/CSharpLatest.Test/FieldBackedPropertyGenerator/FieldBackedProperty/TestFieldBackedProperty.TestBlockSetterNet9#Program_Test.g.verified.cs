@@ -7,7 +7,7 @@ using System.CodeDom.Compiler;
 
 partial class Program
 {
-    [GeneratedCode("CSharpLatest.Analyzers","2.7.1.47")]
+    [GeneratedCode("CSharpLatest.Analyzers","3.0.0.48")]
     public partial int Test
     {
         get => field;
