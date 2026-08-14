@@ -12,7 +12,7 @@ using CSharpLatest.Events;
 
 partial class Program
 {
-    [GeneratedCode("CSharpLatest.Analyzers","3.0.0.48")]
+    [GeneratedCode("CSharpLatest.Analyzers","3.0.1.49")]
     file partial event AsyncEventHandler<string, EventArgs> Foo
     {
         add => __foo.Register(value);

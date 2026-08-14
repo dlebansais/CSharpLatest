@@ -8,14 +8,14 @@
         <Platforms>x64</Platforms>
 
         <RootNamespace>CSharpLatest</RootNamespace>
-        <Version>3.0.0</Version>
+        <Version>3.0.1</Version>
         <Authors>David Le Bansais</Authors>
         <Company />
         <Product />
         <Description>Roslyn-based analysis of C# code to suggest the use of features in the latest version of the language</Description>
         <Copyright>Copyright © 2026 David Le Bansais</Copyright>
-        <AssemblyVersion>3.0.0.48</AssemblyVersion>
-        <FileVersion>3.0.0.48</FileVersion>
+        <AssemblyVersion>3.0.1.49</AssemblyVersion>
+        <FileVersion>3.0.1.49</FileVersion>
         <RepositoryUrl>https://github.com/dlebansais/CSharpLatest</RepositoryUrl>
         <SuppressTfmSupportBuildWarnings>true</SuppressTfmSupportBuildWarnings>
 
@@ -72,11 +72,11 @@
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="dlebansais.Method.Contracts.Analyzers-Debug" Version="3.0.3" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+        <PackageReference Include="dlebansais.Method.Contracts.Analyzers-Debug" Version="3.0.7" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="dlebansais.Method.Contracts.Analyzers" Version="3.0.3" Condition="'$(Configuration)|$(Platform)'!='Debug|x64'">
+        <PackageReference Include="dlebansais.Method.Contracts.Analyzers" Version="3.0.7" Condition="'$(Configuration)|$(Platform)'!='Debug|x64'">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
@@ -91,8 +91,8 @@
         <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="5.0.0" Condition="'$(Configuration)' == 'Release-5-0-0' Or '$(Configuration)' == 'Debug' Or '$(Configuration)' == 'Release'" />
         <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="5.3.0" Condition="'$(Configuration)' != 'Release-4-12-0' And '$(Configuration)' != 'Release-4-14-0' And '$(Configuration)' != 'Release-5-0-0' And '$(Configuration)' != 'Debug' And '$(Configuration)' != 'Release'" />
 
-        <PackageReference Include="dlebansais.RoslynHelpers-Debug" Version="3.0.0" GeneratePathProperty="true" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" />
-        <PackageReference Include="dlebansais.RoslynHelpers" Version="3.0.0" GeneratePathProperty="true" Condition="'$(Configuration)|$(Platform)'!='Debug|x64'" />
+        <PackageReference Include="dlebansais.RoslynHelpers-Debug" Version="3.0.2" GeneratePathProperty="true" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" />
+        <PackageReference Include="dlebansais.RoslynHelpers" Version="3.0.2" GeneratePathProperty="true" Condition="'$(Configuration)|$(Platform)'!='Debug|x64'" />
         <PackageReference Include="dlebansais.Method.Contracts-Debug" Version="3.0.0" GeneratePathProperty="true" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" />
         <PackageReference Include="dlebansais.Method.Contracts" Version="3.0.0" GeneratePathProperty="true" Condition="'$(Configuration)|$(Platform)'!='Debug|x64'" />
         <PackageReference Include="dlebansais.CSharpLatest.Attributes" Version="2.6.4" GeneratePathProperty="true" />
