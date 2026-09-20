@@ -13,6 +13,7 @@ updates:
       - dependency-name: "Microsoft.CodeAnalysis.CSharp.Workspaces"
       - dependency-name: "Microsoft.CodeAnalysis.Workspaces.Common"
       - dependency-name: "NUnit3TestAdapter"
+      - dependency-name: "Verify.NUnit"
     open-pull-requests-limit: 1
     groups:
         all-dependencies:
