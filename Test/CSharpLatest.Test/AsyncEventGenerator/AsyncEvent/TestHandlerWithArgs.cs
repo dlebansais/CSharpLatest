@@ -10,7 +10,7 @@ using NUnit.Framework;
 internal class TestHandlerWithArgs
 {
     [Test]
-    public void TestDispatcher()
+    public async Task TestDispatcher()
     {
         AsyncEventDispatcher<EventArgs> Dispatcher = new();
         Assert.That(Dispatcher.HandlerCount, Is.Zero);
@@ -21,7 +21,7 @@ internal class TestHandlerWithArgs
         Dispatcher.Register(TestEventHandler);
         Assert.That(Dispatcher.HandlerCount, Is.EqualTo(1));
 
-        Assert.DoesNotThrowAsync(async () => await Dispatcher.InvokeAsync(this, EventArgs.Empty).ConfigureAwait(false));
+        await Assert.DoesNotThrowAsync(async () => await Dispatcher.InvokeAsync(this, EventArgs.Empty).ConfigureAwait(false)).ConfigureAwait(false);
         Assert.That(Dispatcher.HandlerCount, Is.EqualTo(1));
 
         Dispatcher.Unregister(TestEventHandler);
