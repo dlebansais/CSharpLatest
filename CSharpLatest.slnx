@@ -6,6 +6,8 @@
     <BuildType Name="Release-4-14-0" />
     <BuildType Name="Release-5-0-0" />
     <BuildType Name="Release-5-3-0" />
+    <BuildType Name="Release-5-6-0" />
+    <BuildType Name="Release-5-9-0" />
     <Platform Name="x64" />
   </Configurations>
   <Project Path="CSharpLatest.Analyzers/CSharpLatest.Analyzers.csproj">
@@ -19,11 +21,15 @@
     <BuildType Solution="Release-4-14-0|*" Project="Release" />
     <BuildType Solution="Release-5-0-0|*" Project="Release" />
     <BuildType Solution="Release-5-3-0|*" Project="Release" />
+    <BuildType Solution="Release-5-6-0|*" Project="Release" />
+    <BuildType Solution="Release-5-9-0|*" Project="Release" />
     <Platform Project="x64" />
     <Build Solution="Release-4-12-0|*" Project="false" />
     <Build Solution="Release-4-14-0|*" Project="false" />
     <Build Solution="Release-5-0-0|*" Project="false" />
     <Build Solution="Release-5-3-0|*" Project="false" />
+    <Build Solution="Release-5-6-0|*" Project="false" />
+    <Build Solution="Release-5-9-0|*" Project="false" />
   </Project>
   <Project Path="Test/CSharpLatest.Test/CSharpLatest.Test.csproj">
     <Platform Project="x64" />
@@ -33,6 +39,8 @@
     <BuildType Solution="Release-4-14-0|*" Project="Release" />
     <BuildType Solution="Release-5-0-0|*" Project="Release" />
     <BuildType Solution="Release-5-3-0|*" Project="Release" />
+    <BuildType Solution="Release-5-6-0|*" Project="Release" />
+    <BuildType Solution="Release-5-9-0|*" Project="Release" />
     <Platform Project="x64" />
     <Build Project="false" />
     <Deploy Solution="Release|*" />
